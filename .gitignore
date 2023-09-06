@@ -1,7 +1,11 @@
 ################# Our ignore #################
 
 # Pytorch lightining logs
-lightning_logs/*
+lightning_logs/
+
+# Datasets
+data/
+datasets/
 
 
 
