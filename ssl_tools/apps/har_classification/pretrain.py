@@ -2,12 +2,8 @@
 
 # TODO: A way of removing the need to add the path to the root of
 # the project
-from pathlib import Path
 import sys
-import os
-import numpy as np
 
-import pandas as pd
 
 sys.path.append("../../../")
 
@@ -19,10 +15,10 @@ from jsonargparse import CLI
 
 from ssl_tools.networks.layers.gru import GRUEncoder
 from ssl_tools.utils.lightining_logger import performance_lightining_logger
+from ssl_tools.data.datasets.har_multi_csv import MultiModalHARDataModule
 from pytorch_lightning.loggers import CSVLogger
-from ssl_tools.data.simple import SimpleDataset
-from torch.utils.data import DataLoader
-import pytorch_lightning as pl
+import lightning as L
+from lightning.pytorch.callbacks import ModelCheckpoint
 
 
 class PretrainerMain:
@@ -35,6 +31,13 @@ class PretrainerMain:
         log_dir: str = "logs",
         name: str = None,
         version: Union[str, int] = None,
+        monitor_metric: str = None,
+        accelerator: str = "cpu",
+        devices: int = 1,
+        strategy: str = "auto",
+        limit_train_batches: Union[float, int] = 1.0,
+        limit_val_batches: Union[float, int] = 1.0,
+        num_nodes: int = 1,
     ):
         """Pre-train self-supervised models with a HAR dataset
 
@@ -54,6 +57,22 @@ class PretrainerMain:
             The name of the experiment (will be used as a prefix for the logs and checkpoints). If not provided, the name of the model will be used
         version: Union[int, str], optional
             The version of the experiment. If not is provided the current date and time will be used as the version
+        monitor_metric: str, optional
+            The metric to monitor for checkpointing. If not provided, the last model will be saved
+        accelerator: str, optional
+            The accelerator to use. Defaults to "cpu"
+        devices: int, optional
+            The number of devices to use. Defaults to 1
+        strategy: str, optional
+            The strategy to use. Defaults to "auto"
+        limit_train_batches: Union[float, int], optional
+            The number of batches to use for training. Defaults to 1.0 (use all batches)
+        limit_val_batches: Union[float, int], optional
+            The number of batches to use for validation. Defaults to 1.0 (use all batches)
+        num_nodes: int, optional
+            The number of nodes to use. Defaults to 1
+
+
         """
         self.data = data
         self.epochs = epochs
@@ -62,56 +81,59 @@ class PretrainerMain:
         self.log_dir = log_dir
         self.experiment_name = name
         self.experiment_version = version
-
-    def _train_lightning_module(self, model):
-        pass
-
-    def _train_torch(self, model):
-        pass
-
-    def _get_data(self):
-        data_path = Path(self.data)
-        x_train = []
-        for f in data_path.glob("*.csv"):
-            data = pd.read_csv(f)
-            x = data[
-                ["accel-x", "accel-y", "accel-z", "gyro-x", "gyro-y", "gyro-z"]
-            ].values
-            x = np.swapaxes(x, 1, 0)
-            x_train.append(x)
-        dataset = SimpleDataset(x_train)
-        dataloader = DataLoader(
-            dataset,
-            batch_size=self.batch_size,
-            shuffle=True,
-            num_workers=os.cpu_count(),
-        )
-
-        return dataloader
+        self.monitor_metric = monitor_metric
+        self.accelerator = accelerator
+        self.devices = devices
+        self.strategy = strategy
+        self.limit_train_batches = limit_train_batches
+        self.limit_val_batches = limit_val_batches
+        self.num_nodes = num_nodes
 
     def _get_logger(self):
         logger = CSVLogger(
             save_dir=self.log_dir,
             name=self.experiment_name,
             version=self.experiment_version,
-            flush_logs_every_n_steps=100,
+            # flush_logs_every_n_steps=100,
         )
         return logger
 
-    def cpc(self, encoding_size: int = 10, window_size: int = 4):
+    def _get_callbacks(self):
+        # Get the checkpoint callback
+        checkpoint_callback = ModelCheckpoint(
+            monitor=self.monitor_metric,
+            mode="min",
+            dirpath=f"{self.log_dir}/{self.experiment_name}/{self.experiment_version}/checkpoints",
+            save_last=True,
+        )
+        return [checkpoint_callback]
+
+    def cpc(
+        self,
+        encoding_size: int = 10,
+        window_size: int = 4,
+        pad_length: bool = False,
+    ):
         from ssl_tools.ssl.system.cpc import CPC
+
+        if self.batch_size != 1:
+            raise ValueError(
+                "CPC only supports batch size of 1. Please set batch_size=1"
+            )
 
         # Set the experiment name and version
         self.experiment_name = self.experiment_name or "CPC"
-        self.experiment_version = self.experiment_version or datetime.now().strftime(
-            "%Y%m%d.%H%M%S"
+        self.experiment_version = (
+            self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
         )
 
         # build the model
         encoder = GRUEncoder(encoding_size=encoding_size)
         density_estimator = torch.nn.Linear(encoding_size, encoding_size)
         auto_regressor = torch.nn.GRU(
-            input_size=encoding_size, hidden_size=encoding_size, batch_first=True
+            input_size=encoding_size,
+            hidden_size=encoding_size,
+            batch_first=True,
         )
         # Wraps CPC in a lightning module
         CPC = performance_lightining_logger(CPC)
@@ -124,34 +146,48 @@ class PretrainerMain:
         )
 
         # Get the data
-        dataloader = self._get_data()
+        data_module = MultiModalHARDataModule(
+            self.data, batch_size=self.batch_size, fix_length=pad_length
+        )
+
         # Get the logger
         logger = self._get_logger()
+
+        # Get the callbacks
+        callbacks = self._get_callbacks()
 
         # Get the hyperparameters and log them
         hyperparams = self.__dict__.copy()
         hyperparams.update(model.get_config())
         logger.log_hyperparams(hyperparams)
 
-        trainer = pl.Trainer(
+        # Set the trainer
+        trainer = L.Trainer(
             max_epochs=self.epochs,
             logger=logger,
-            enable_checkpointing=True,
-            # TODO do this automatically
-            accelerator="gpu",
-            devices=1,
-            strategy="ddp",
-            # profiler="simple",
+            # enable_checkpointing=True,
+            callbacks=callbacks,
+            accelerator=self.accelerator,
+            devices=self.devices,
+            strategy=self.strategy,
+            limit_train_batches=self.limit_train_batches,
+            limit_val_batches=self.limit_val_batches,
+            num_nodes=self.num_nodes,
         )
 
         # Start training
         print(
             f"** Start training model CPC for {self.epochs} epochs. The name of the experiment name is {self.experiment_name} and version is {self.experiment_version} **"
         )
-        trainer.fit(model, dataloader)
+
+        print(type(model))
+        trainer.fit(model, data_module)
 
     def tnc(
-        self, encoding_size: int = 10, window_size: int = 4, mc_sample_size: int = 20
+        self,
+        encoding_size: int = 10,
+        window_size: int = 4,
+        mc_sample_size: int = 20,
     ):
         pass
 
