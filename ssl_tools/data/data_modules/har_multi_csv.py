@@ -41,7 +41,7 @@ class MultiModalHARDataModule(L.LightningDataModule):
             dataset,
             batch_size=self.batch_size,
             num_workers=self.num_workers,
-            shuffle=False,
+            shuffle=True,
             pin_memory=True,
         )
 
