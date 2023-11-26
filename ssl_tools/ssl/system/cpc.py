@@ -49,14 +49,7 @@ class CPC(L.LightningModule, Configurable):
         weight_decay : float, optional
             Weight decay, by default 0.0
         window_size : int, optional
-            Size of the window which will be used to generate the Z-vector.
-            Samples are divided into windows of size window_size and than
-            encoded into a Z-vector. The Z-vector is used to train the
-            density_estimator and auto_regressor models. The Z-vector is also
-            used to train the encoder model, but the encoder model is trained
-            to maximize the mutual information between the Z-vector and the
-            future Z-vector, not to minimize the density estimation error.
-            By default 4
+            Size of the input windows (X_t) to be fed to the encoder
         """
         super().__init__()
         self.encoder = encoder
@@ -72,53 +65,69 @@ class CPC(L.LightningModule, Configurable):
         loss = self.loss_func(X_N.view(1, -1), labels)
         return loss
 
-    def forward(self, sample):
-        # Remove dimension of size 1, if present
-        sample = sample.squeeze(0)
+    def forward(self, sample: torch.Tensor) -> torch.Tensor:
+        """Perform a forward pass through the model.
 
-        # Select a random timestamp to subsample the sample in order to not
-        # use the full sample. The random timestamp is an index in the range
-        # [5 * window_size,  sample_size - 5 * window_size]. Thus, we ensure
-        # that the random timestamp is not too close to the beginning or end
-        # of the sample.
-        random_timestamp = np.random.randint(
-            5 * self.window_size, sample.shape[-1] - 5 * self.window_size
+        Parameters
+        ----------
+        sample : torch.Tensor
+            A tensor of shape (B, C, T), where B is the batch size, C is the
+            number of channels and T is the number of time steps. Note that T
+            may vary between samples of the dataset. If this is the case, the
+            B dimension must be 1.
+
+        Returns
+        -------
+        torch.Tensor
+            A tensor of size (B, encoder_output_size), with the samples encoded
+        """
+        # ----------------------------------------------------------------------
+        # 1. Split the sample X into windows of size window_size (X_t)
+        # ----------------------------------------------------------------------
+        
+        
+        # Remove the batch dimension if it is 1, and get the sample size (T)
+        sample = sample.squeeze(0)
+        time_len = sample.shape[-1]
+
+        # Select a random time step in the range
+        # [5 * window_size, T - 5 * window_size]
+        # Just to make sure we have enough samples before and after the random
+        # time step
+        random_centering_t = np.random.randint(
+            5 * self.window_size, time_len - 5 * self.window_size
         )
 
-        # Resample the sample. We remove timestamps 20 * window_size before and
-        # after the random timestamp. The sample will have a new length of
-        # 40 * window_size (20 * window_size before and after the random), or
-        # less if the sample is too short or the random timestamp is too close
-        # to the beginning or end of the sample.
+        # Here we center the sample around the random timestamp, and only keep
+        # 40 * window_size time steps around it (20 before and 20 after)
+        # +-------------------------------------------------------------------+
+        # | 20 * window_size ...  random_centering_t  ... 20 * window_size    |
+        # +-------------------------------------------------------------------+
         sample = sample[
-            :,
-            max(0, (random_timestamp - 20 * self.window_size)) : min(
-                sample.shape[-1], random_timestamp + 20 * self.window_size
+            :,  # The channels are not affected
+            max(0, (random_centering_t - 20 * self.window_size)) : min(
+                sample.shape[-1], random_centering_t + 20 * self.window_size
             ),
         ]
-        # Convert to tensor and move to device (cpu)
-        sample = torch.tensor(sample).cpu()
+        # Update the time_len (40 * window_size or less), and move sample to CPU
+        time_len = sample.shape[-1]
+        sample = sample.cpu()
 
-        # Get the length of the sample
-        sample_length = sample.shape[-1]
-
-        # Split the array into windows of size window_size. These windows will be
-        # used to generate the Z-vector. The last window is discarded if it is
-        # not complete.
-        windowed_sample = np.split(
-            ary=sample[
-                :, : (sample_length // self.window_size) * self.window_size
-            ],
-            indices_or_sections=(sample_length // self.window_size),
+        # Split the sample into windows of size ``window_size``. This generates 
+        # the inputs (X_t, X_{t+1}, ..., X_{t+window_size-1}), which is a list 
+        # of 40 tensors of shape (C, window_size)
+        X_ts = np.split(
+            # Crop the end in order to have a multiple of window_size
+            ary=sample[:, : (time_len // self.window_size) * self.window_size],
+            # Number of windows
+            indices_or_sections=(time_len // self.window_size),
             axis=-1,
         )
-        # As result is a list of windows, we stack them to get a tensor and move
-        # to desired device
-        windowed_sample = torch.tensor(
-            np.stack(windowed_sample, 0), device=self.device
-        )
+        
+        # Stack the list into a tensor of shape (40, C, window_size)
+        X_ts = torch.tensor(np.stack(X_ts, 0), device=self.device)
         # Encode the windows into a Z-vector.
-        encodings = self.encoder(windowed_sample)
+        encodings = self.encoder(X_ts)
 
         # Given the z-vector of windows, we select a random window to be our
         # random timestamp. Elements before and after the random timestamp are
@@ -128,15 +137,29 @@ class CPC(L.LightningModule, Configurable):
         # the density_estimator and auto_regressor models.
         # We select a random window in the range [2, len(encodings) - 2].
         # Thus, we ensure that "past" and "future" have at least 2 elements.
-        window_ind = torch.randint(2, len(encodings) - 2, size=(1,))
+        
+        # Select a random time step t, spliting the sample into past and future.
+        # t is in the range [2, len(encodings) - 2], thus ensuring that "past"
+        # and "future" have at least 2 elements.
+        random_t = np.random.randint(2, len(encodings) - 2)
+        
+        # Split the encodings into past and future
+        past = encodings[:random_t]
+        future = encodings[random_t + 1 :]
 
-        # Generate the context vector c_t using the "past" representations.
-        _, c_t = self.auto_regressor(
-            encodings[max(0, window_ind[0] - 10) : window_ind[0] + 1].unsqueeze(
-                0
-            )
-        )
-        densities = self.density_estimator(c_t.squeeze(1).squeeze(0))
+        
+        # new_coding = encodings[max(0, random_t[0] - 10) : random_t + 1].unsqueeze(
+        #         0
+        #     )
+        
+        # Generate the context vector (c_t) using the "past" representations.
+        _, c_t = self.auto_regressor(past)
+        # Flatten it to pass to a linear layer
+        c_t = c_t.view(-1)
+        # Generate the density ratios
+        densities = self.density_estimator(c_t)
+        
+         # TODO -------- From here, these lines are quite wierd ---------
         density_ratios = torch.bmm(
             encodings.unsqueeze(1),
             densities.expand_as(encodings).unsqueeze(-1),
@@ -144,34 +167,35 @@ class CPC(L.LightningModule, Configurable):
         density_ratios = density_ratios.view(
             -1,
         )
-        r = set(range(0, window_ind[0] - 2))
-        r.update(set(range(window_ind[0] + 3, len(encodings))))
+        
+        r = set(range(0, random_t - 2))
+        r.update(set(range(random_t + 3, len(encodings))))
         rnd_n = np.random.choice(list(r), self.n_size)
         # Generate the encoded representations
         X_N = torch.cat(
             [
                 density_ratios[rnd_n],
-                density_ratios[window_ind[0] + 1].unsqueeze(0),
+                density_ratios[random_t + 1].unsqueeze(0),
             ],
             0,
         )
         return X_N
 
     def training_step(self, batch, batch_idx):
-        loss = self._shared_step(batch, batch_idx, "train")
+        X_N, loss = self._shared_step(batch, batch_idx, "train")
         return loss
-    
+
     def validation_step(self, batch, batch_idx):
-        loss = self._shared_step(batch, batch_idx, "val")
+        X_N, loss = self._shared_step(batch, batch_idx, "val")
         return loss
-    
+
     def test_step(self, batch, batch_idx):
-        loss = self._shared_step(batch, batch_idx, "test")
+        X_N, loss = self._shared_step(batch, batch_idx, "test")
         return loss
-    
+
     def predict_step(self, batch, batch_idx):
         return self.forward(batch)
-    
+
     def _shared_step(self, batch, batch_idx, prefix):
         assert len(batch) == 1, "Batch must be 1 sample only"
         assert batch.shape[-1] > 5 * self.window_size, "Sample too short"
@@ -192,7 +216,7 @@ class CPC(L.LightningModule, Configurable):
             logger=True,
         )
 
-        return loss
+        return X_N, loss
 
     def configure_optimizers(self):
         # learnable_parameters = (
@@ -213,6 +237,7 @@ class CPC(L.LightningModule, Configurable):
             "weight_decay": self.weight_decay,
             "window_size": self.window_size,
         }
+
 
 # class CPC_Classifier(L.LightningModule):
 #     def __init__(

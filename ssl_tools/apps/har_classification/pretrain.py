@@ -25,6 +25,92 @@ from lightning.pytorch.callbacks import ModelCheckpoint
 import numpy as np
 
 
+class TNCModel(L.LightningModule):
+    def __init__(
+        self, discriminator, encoder, mc_sample_size, w, learning_rate=1e-3
+    ):
+        super().__init__()
+        self.discriminator = discriminator
+        self.encoder = encoder
+        self.mc_sample_size = mc_sample_size
+        self.w = w
+        self.learning_rate = learning_rate
+        self.loss_func = torch.nn.BCEWithLogitsLoss()
+
+    def loss_function(self, y, y_hat):
+        return self.loss_func(y, y_hat)
+
+    def forward(self, x):
+        return self.encoder(x)
+
+    def _shared_step(self, x_t, x_p, x_n):
+        batch_size, f_size, len_size = x_t.shape
+        x_p = x_p.reshape((-1, f_size, len_size))
+        x_n = x_n.reshape((-1, f_size, len_size))
+        x_t = np.repeat(x_t, self.mc_sample_size, axis=0)
+        neighbors = torch.ones((len(x_p)), device=self.device)
+        non_neighbors = torch.zeros((len(x_n)), device=self.device)
+
+        # Encoding features
+        z_t = self.forward(x_t)
+        z_p = self.forward(x_p)
+        z_n = self.forward(x_n)
+
+        # Discriminate features
+        d_p = self.discriminator(z_t, z_p)
+        d_n = self.discriminator(z_t, z_n)
+
+        # Compute loss
+        p_loss = self.loss_function(d_p, neighbors)
+        n_loss = self.loss_function(d_n, non_neighbors)
+        n_loss_u = self.loss_function(d_n, neighbors)
+        loss = (p_loss + self.w * n_loss_u + (1 - self.w) * n_loss) / 2
+        return loss
+
+    def training_step(self, batch, batch_idx):
+        x_t, x_p, x_n = batch
+        loss = self._shared_step(x_t, x_p, x_n)
+        self.log(
+            "train_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+        )
+        return loss
+
+    def validation_step(self, batch, batch_idx):
+        x_t, x_p, x_n = batch
+        loss = self._shared_step(x_t, x_p, x_n)
+        self.log(
+            "val_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+        )
+        return loss
+
+    def test_step(self, batch, batch_idx):
+        x_t, x_p, x_n = batch
+        loss = self._shared_step(x_t, x_p, x_n)
+        self.log("test_loss", loss)
+        return loss
+
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
+        return optimizer
+
+    def get_config(self) -> dict:
+        return {
+            "mc_sample_size": self.mc_sample_size,
+            "w": self.w,
+            "learning_rate": self.learning_rate,
+        }
+
+
 class PretrainerMain:
     def __init__(
         self,
@@ -204,7 +290,7 @@ class PretrainerMain:
         #     )
 
         # Set the experiment name and version
-        self.experiment_name = self.experiment_name or "CPC"
+        self.experiment_name = self.experiment_name or "TNC"
         self.experiment_version = (
             self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
         )
@@ -344,6 +430,85 @@ class PretrainerMain:
             print(
                 f'Loss =====> Training Loss: {losses["train"][-1]:.3f} \t Training Accuracy: {accs["train"][-1]:.3f} \t Val Loss: {losses["val"][-1]:.3f} \t Val Accuracy: {accs["val"][-1]:.3f}'
             )
+
+    def tnc_light(
+        self,
+        encoding_size: int = 10,
+        window_size: int = 60,
+        mc_sample_size: int = 20,
+        significance_level: float = 0.01,
+        repeat: int = 1,
+        pad_length: bool = True,
+    ):
+        from ssl_tools.ssl.builders.common import Discriminator
+        import lightning as L
+
+        # if self.batch_size != 1:
+        #     raise ValueError(
+        #         "CPC only supports batch size of 1. Please set batch_size=1"
+        #     )
+
+        # Set the experiment name and version
+        self.experiment_name = self.experiment_name or "TNC"
+        self.experiment_version = (
+            self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
+        )
+
+        ### Instantiate model
+        discriminator = Discriminator(input_size=encoding_size)
+        encoder = GRUEncoder(encoding_size=encoding_size)
+        model = TNCModel(
+            discriminator=discriminator,
+            encoder=encoder,
+            mc_sample_size=mc_sample_size,
+            w=0.05,
+            learning_rate=self.learning_rate,
+        )
+
+        #####################
+
+        # Get the data
+        data_module = TNCHARDataModule(
+            self.data,
+            batch_size=self.batch_size,
+            fix_length=pad_length,
+            window_size=window_size,
+            mc_sample_size=mc_sample_size,
+            significance_level=significance_level,
+            repeat=repeat,
+        )
+
+        # Get the logger
+        logger = self._get_logger()
+
+        # Get the callbacks
+        callbacks = self._get_callbacks()
+        # Get the hyperparameters and log them
+        hyperparams = self.__dict__.copy()
+        hyperparams.update(model.get_config())
+        logger.log_hyperparams(hyperparams)
+
+        # Set the trainer
+        trainer = L.Trainer(
+            max_epochs=self.epochs,
+            logger=logger,
+            # enable_checkpointing=True,
+            callbacks=callbacks,
+            accelerator=self.accelerator,
+            devices=self.devices,
+            strategy=self.strategy,
+            limit_train_batches=self.limit_train_batches,
+            limit_val_batches=self.limit_val_batches,
+            num_nodes=self.num_nodes,
+        )
+
+        # Start training
+        print(
+            f"** Start training model CPC for {self.epochs} epochs. The name of the experiment name is {self.experiment_name} and version is {self.experiment_version} **"
+        )
+
+        print(type(model))
+        trainer.fit(model, data_module)
 
     def tfc(
         self,
