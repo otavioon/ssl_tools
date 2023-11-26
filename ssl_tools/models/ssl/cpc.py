@@ -164,12 +164,17 @@ class CPC(L.LightningModule, Configurable):
             encodings.unsqueeze(1),
             densities.expand_as(encodings).unsqueeze(-1),
         )
+        
+        # Ravel density ratios
         density_ratios = density_ratios.view(
             -1,
         )
         
+        # r is a set with all time steps except the random_t and its neighbors
+        # (random_t-1, random_t+1)
         r = set(range(0, random_t - 2))
         r.update(set(range(random_t + 3, len(encodings))))
+        # Select n_size random elements from r
         rnd_n = np.random.choice(list(r), self.n_size)
         # Generate the encoded representations
         X_N = torch.cat(

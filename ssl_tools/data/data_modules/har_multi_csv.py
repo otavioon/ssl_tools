@@ -6,7 +6,7 @@ import lightning as L
 from torch.utils.data import DataLoader
 
 from ssl_tools.data.datasets.har_multi_csv import MultiCSVHARDataset
-from ssl_tools.data.datasets.tnc_dataset import TNCDataset
+from ssl_tools.data.datasets.tnc import TNCDataset
 
 
 class MultiModalHARDataModule(L.LightningDataModule):

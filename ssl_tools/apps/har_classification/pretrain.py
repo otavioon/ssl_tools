@@ -13,9 +13,9 @@ import torch
 from datetime import datetime
 from jsonargparse import CLI
 
-from ssl_tools.networks.layers.gru import GRUEncoder
+from ssl_tools.models.layers import GRUEncoder
 from ssl_tools.utils.lightining_logger import performance_lightining_logger
-from ssl_tools.data.data_modules.har_multi_csv import (
+from ssl_tools.data.data_modules import (
     MultiModalHARDataModule,
     TNCHARDataModule,
 )
@@ -118,7 +118,7 @@ class PretrainerMain:
         window_size: int = 4,
         pad_length: bool = False,
     ):
-        from ssl_tools.ssl.system.cpc import CPC
+        from ssl_tools.models.ssl.cpc import CPC
 
         if self.batch_size != 1:
             raise ValueError(
@@ -196,8 +196,8 @@ class PretrainerMain:
         repeat: int = 1,
         pad_length: bool = True,
     ):
-        from ssl_tools.ssl.system.tnc import TNC
-        from ssl_tools.ssl.builders.common import Discriminator
+        from ssl_tools.models.ssl.tnc import TNC
+        from ssl_tools.models.layers.linear import Discriminator
 
         # Set the experiment name and version
         self.experiment_name = self.experiment_name or "TNC"

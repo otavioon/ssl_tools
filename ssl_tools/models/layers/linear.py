@@ -53,6 +53,3 @@ class SimpleClassifier(torch.nn.Module):
         x = torch.sigmoid(x)
         y = self.fc2(x)
         return y
-
-
-
