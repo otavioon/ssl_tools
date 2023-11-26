@@ -1,11 +1,8 @@
 from typing import List, Optional, Tuple, Union
 from pathlib import Path
-import lightning as L
-from torch.utils.data import DataLoader
 
 import numpy as np
 import pandas as pd
-import os
 import contextlib
 
 
@@ -212,54 +209,3 @@ class MultiCSVHARDataset:
     def __repr__(self) -> str:
         return str(self)
 
-
-class MultiModalHARDataModule(L.LightningDataModule):
-    def __init__(
-        self,
-        data_path: Union[Path, str],
-        batch_size: int = 32,
-        num_workers: int = None,
-        fix_length: bool = False,
-    ):
-        super().__init__()
-        self.data_path = Path(data_path)
-        self.batch_size = batch_size
-        self.num_workers = num_workers or os.cpu_count()
-        self.fix_length = fix_length
-
-    def _load_dataset(self, name: str):
-        path = self.data_path / name
-        dataset = MultiCSVHARDataset(
-            path, swapaxes=(1, 0), fix_length=self.fix_length
-        )
-        return dataset
-
-    def train_dataloader(self):
-        dataset = self._load_dataset("train")
-        return DataLoader(
-            dataset,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            shuffle=True,
-            pin_memory=True,
-        )
-
-    def val_dataloader(self):
-        dataset = self._load_dataset("validation")
-        return DataLoader(
-            dataset,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            shuffle=False,
-            pin_memory=True,
-        )
-
-    def test_dataloader(self):
-        dataset = self._load_dataset("test")
-        return DataLoader(
-            dataset,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            shuffle=False,
-            pin_memory=True,
-        )

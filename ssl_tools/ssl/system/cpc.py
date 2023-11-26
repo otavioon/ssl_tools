@@ -214,7 +214,6 @@ class CPC(L.LightningModule, Configurable):
             "window_size": self.window_size,
         }
 
-
 # class CPC_Classifier(L.LightningModule):
 #     def __init__(
 #         self,

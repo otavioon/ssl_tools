@@ -13,12 +13,13 @@ class TNCDataset(Dataset):
         data: Dataset,
         window_size: int,
         mc_sample_size: int = 20,
-        state: float = None,
         significance_level: float = 0.01,
         repeat: int = 1,  # Simply repeat the vecvor 'augmentation' times
         cast_to: str = "float32",
     ):
-        """_summary_
+        """Temporal Neighbourhood Coding (TNC) dataset. This dataset is used
+        to pre-train self-supervised models. The dataset obtain close and
+        distant samples from a time series.
 
         Parameters
         ----------
@@ -45,7 +46,6 @@ class TNCDataset(Dataset):
         self.data = data
         self.window_size = window_size
         self.mc_sample_size = mc_sample_size
-        self.state = state
         self.significance_level = significance_level
         assert isinstance(repeat, int), "Repeat must be an integer"
         self.repeat = repeat
@@ -107,7 +107,7 @@ class TNCDataset(Dataset):
             x_t = x_t.astype(self.cast_to)
             X_close = X_close.astype(self.cast_to)
             X_distant = X_distant.astype(self.cast_to)
-        
+
         # Returns the sample, a 3-element tuple
         return x_t, X_close, X_distant
 
@@ -155,7 +155,7 @@ class TNCDataset(Dataset):
                     # current feature. Note that if t - wsize < 0 or t +
                     # wsize > time_len, the window will be truncated. Thus,
                     # it is possible that the window is not centered at t.
-                    data = np.array(
+                    window_sample = np.array(
                         data[
                             feat_idx,
                             max(0, t - wsize) : min(time_len, t + wsize),
@@ -163,12 +163,12 @@ class TNCDataset(Dataset):
                     )
 
                     # Reshape the data to be a 1D array
-                    data = data.reshape(-1)
+                    window_sample = window_sample.reshape(-1)
 
                     # Execute the ADF test on data. The ADF test returns a
                     # tuple with 5 values. The second value (index 1) is the
                     # p-value.
-                    p_val = adfuller(np.array(data))[1]
+                    p_val = adfuller(np.array(window_sample))[1]
                     # Add the p-value to the sum. If the p-value is NaN, add
                     # ``self.significance_level`` (value used to accept the
                     # null hypothesis)

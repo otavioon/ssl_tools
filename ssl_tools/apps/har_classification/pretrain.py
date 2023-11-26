@@ -15,10 +15,14 @@ from jsonargparse import CLI
 
 from ssl_tools.networks.layers.gru import GRUEncoder
 from ssl_tools.utils.lightining_logger import performance_lightining_logger
-from ssl_tools.data.datasets.har_multi_csv import MultiModalHARDataModule
+from ssl_tools.data.data_modules.har_multi_csv import (
+    MultiModalHARDataModule,
+    TNCHARDataModule,
+)
 from pytorch_lightning.loggers import CSVLogger
 import lightning as L
 from lightning.pytorch.callbacks import ModelCheckpoint
+import numpy as np
 
 
 class PretrainerMain:
@@ -186,10 +190,160 @@ class PretrainerMain:
     def tnc(
         self,
         encoding_size: int = 10,
-        window_size: int = 4,
+        window_size: int = 60,
         mc_sample_size: int = 20,
+        significance_level: float = 0.01,
+        repeat: int = 1,
+        pad_length: bool = True,
     ):
-        pass
+        from ssl_tools.ssl.builders.common import Discriminator
+
+        # if self.batch_size != 1:
+        #     raise ValueError(
+        #         "CPC only supports batch size of 1. Please set batch_size=1"
+        #     )
+
+        # Set the experiment name and version
+        self.experiment_name = self.experiment_name or "CPC"
+        self.experiment_version = (
+            self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
+        )
+
+        ### Instantiate model
+        discriminator = Discriminator(input_size=encoding_size).to("cuda")
+        encoder = GRUEncoder(encoding_size=encoding_size).to("cuda")
+
+        #####################
+
+        # Get the data
+        data_module = TNCHARDataModule(
+            self.data,
+            batch_size=self.batch_size,
+            fix_length=pad_length,
+            window_size=window_size,
+            mc_sample_size=mc_sample_size,
+            significance_level=significance_level,
+            repeat=repeat,
+        )
+
+        # Get the logger
+        logger = self._get_logger()
+
+        # Get the callbacks
+        callbacks = self._get_callbacks()
+
+        # Get the hyperparameters and log them
+        # hyperparams = self.__dict__.copy()
+        # hyperparams.update(model.get_config())
+        # logger.log_hyperparams(hyperparams)
+
+        # Do the training
+        def train_one_epoch(
+            train_dataloader,
+            val_dataloader,
+            encoder: torch.nn.Module,
+            discriminator: torch.nn.Module,
+            device: str,
+            w: float = 0.0,
+            optimizer: torch.optim.Optimizer = None,
+        ):
+            # loss_fn = torch.nn.BCELoss()
+            loss_fn = torch.nn.BCEWithLogitsLoss()
+
+            epoch_loss = {"train": [], "val": []}
+            epoch_acc = {"train": [], "val": []}
+
+            for phase in ["train", "val"]:
+                if phase == "train":
+                    encoder.train()
+                    discriminator.train()
+                    loader = train_dataloader
+                else:
+                    encoder.eval()
+                    discriminator.eval()
+                    loader = val_dataloader
+
+                for i, (x_t, x_p, x_n) in enumerate(loader):
+                    batch_size, f_size, len_size = x_t.shape
+                    x_p = x_p.reshape((-1, f_size, len_size))
+                    x_n = x_n.reshape((-1, f_size, len_size))
+                    x_t = np.repeat(x_t, mc_sample_size, axis=0)
+                    neighbors = torch.ones((len(x_p))).to(device)
+                    non_neighbors = torch.zeros((len(x_n))).to(device)
+                    x_t, x_p, x_n = (
+                        x_t.to(device),
+                        x_p.to(device),
+                        x_n.to(device),
+                    )
+
+                    z_t = encoder(x_t)
+                    z_p = encoder(x_p)
+                    z_n = encoder(x_n)
+
+                    d_p = discriminator(z_t, z_p)
+                    d_n = discriminator(z_t, z_n)
+
+                    p_loss = loss_fn(d_p, neighbors)
+                    n_loss = loss_fn(d_n, non_neighbors)
+                    n_loss_u = loss_fn(d_n, neighbors)
+                    loss = (p_loss + w * n_loss_u + (1 - w) * n_loss) / 2
+
+                    if phase == "train":
+                        optimizer.zero_grad()
+                        loss.backward()
+                        optimizer.step()
+
+                    # logging the loss
+                    epoch_loss[phase].append(loss)
+
+                    # logging the accuracy
+                    p_acc = torch.sum(
+                        torch.nn.Sigmoid()(d_p) > 0.5
+                    ).item() / len(z_p)
+                    n_acc = torch.sum(
+                        torch.nn.Sigmoid()(d_n) < 0.5
+                    ).item() / len(z_n)
+                    epoch_acc[phase].append((p_acc + n_acc) / 2)
+
+            return epoch_loss, epoch_acc
+
+        ####### Training loop #########
+        parameters_to_optimize = list(encoder.parameters()) + list(
+            discriminator.parameters()
+        )
+
+        optimizer = torch.optim.Adam(
+            parameters_to_optimize, lr=self.learning_rate
+        )
+
+        losses = {"train": [], "val": []}
+        accs = {"train": [], "val": []}
+
+        best_acc = 0.0
+        best_loss = np.inf
+
+        print("****************** Starting training loop ******************")
+        print(f"Training for {self.epochs} epochs")
+
+        for epoch in range(self.epochs):
+            epoch_losses, epoch_accs = train_one_epoch(
+                train_dataloader=data_module.train_dataloader(),
+                val_dataloader=data_module.val_dataloader(),
+                encoder=encoder,
+                discriminator=discriminator,
+                device="cuda",
+                w=0.05,
+                optimizer=optimizer,
+            )
+
+            for phase in ["train", "val"]:
+                losses[phase].append(torch.stack(epoch_losses[phase]).mean())
+                accs[phase].append(torch.Tensor(epoch_accs[phase]).mean())
+
+            print(f"Epoch {epoch+1}/{self.epochs}")
+            print(
+                f'Loss =====> Training Loss: {losses["train"][-1]:.3f} \t Training Accuracy: {accs["train"][-1]:.3f} \t Val Loss: {losses["val"][-1]:.3f} \t Val Accuracy: {accs["val"][-1]:.3f}'
+            )
 
     def tfc(
         self,
