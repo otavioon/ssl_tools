@@ -30,7 +30,7 @@ class PretrainerMain:
         self,
         data: str,
         epochs: int = 1,
-        batch_size: int = 32,
+        batch_size: int = 1,
         learning_rate: float = 1e-3,
         log_dir: str = "logs",
         name: str = None,
@@ -187,7 +187,7 @@ class PretrainerMain:
         print(type(model))
         trainer.fit(model, data_module)
 
-    def tnc_light(
+    def tnc(
         self,
         encoding_size: int = 10,
         window_size: int = 60,
@@ -198,11 +198,6 @@ class PretrainerMain:
     ):
         from ssl_tools.ssl.system.tnc import TNC
         from ssl_tools.ssl.builders.common import Discriminator
-
-        # if self.batch_size != 1:
-        #     raise ValueError(
-        #         "CPC only supports batch size of 1. Please set batch_size=1"
-        #     )
 
         # Set the experiment name and version
         self.experiment_name = self.experiment_name or "TNC"
