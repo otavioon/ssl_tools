@@ -1,3 +1,101 @@
+import torch
+import lightning as L
+import numpy as np
+
+class TNC(L.LightningModule):
+    def __init__(
+        self, discriminator, encoder, mc_sample_size, w, learning_rate=1e-3
+    ):
+        super().__init__()
+        self.discriminator = discriminator
+        self.encoder = encoder
+        self.mc_sample_size = mc_sample_size
+        self.w = w
+        self.learning_rate = learning_rate
+        self.loss_func = torch.nn.BCEWithLogitsLoss()
+
+    def loss_function(self, y, y_hat):
+        return self.loss_func(y, y_hat)
+
+    def forward(self, x):
+        return self.encoder(x)
+
+    def _shared_step(self, x_t, x_p, x_n):
+        batch_size, f_size, len_size = x_t.shape
+        x_p = x_p.reshape((-1, f_size, len_size))
+        x_n = x_n.reshape((-1, f_size, len_size))
+        x_t = np.repeat(x_t, self.mc_sample_size, axis=0)
+        neighbors = torch.ones((len(x_p)), device=self.device)
+        non_neighbors = torch.zeros((len(x_n)), device=self.device)
+
+        # Encoding features
+        z_t = self.forward(x_t)
+        z_p = self.forward(x_p)
+        z_n = self.forward(x_n)
+
+        # Discriminate features
+        d_p = self.discriminator(z_t, z_p)
+        d_n = self.discriminator(z_t, z_n)
+
+        # Compute loss
+        p_loss = self.loss_function(d_p, neighbors)
+        n_loss = self.loss_function(d_n, non_neighbors)
+        n_loss_u = self.loss_function(d_n, neighbors)
+        loss = (p_loss + self.w * n_loss_u + (1 - self.w) * n_loss) / 2
+        return loss
+
+    def training_step(self, batch, batch_idx):
+        x_t, x_p, x_n = batch
+        loss = self._shared_step(x_t, x_p, x_n)
+        self.log(
+            "train_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+        )
+        return loss
+
+    def validation_step(self, batch, batch_idx):
+        x_t, x_p, x_n = batch
+        loss = self._shared_step(x_t, x_p, x_n)
+        self.log(
+            "val_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+        )
+        return loss
+
+    def test_step(self, batch, batch_idx):
+        x_t, x_p, x_n = batch
+        loss = self._shared_step(x_t, x_p, x_n)
+        self.log("test_loss", loss)
+        return loss
+
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
+        return optimizer
+
+    def get_config(self) -> dict:
+        return {
+            "mc_sample_size": self.mc_sample_size,
+            "w": self.w,
+            "learning_rate": self.learning_rate,
+        }
+
+
+
+
+
+
+
+
+
+
 # from typing import Any
 # import torch
 # import pytorch_lightning as pl
