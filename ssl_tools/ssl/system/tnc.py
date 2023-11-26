@@ -24,7 +24,7 @@ class TNC(L.LightningModule):
         batch_size, f_size, len_size = x_t.shape
         x_p = x_p.reshape((-1, f_size, len_size))
         x_n = x_n.reshape((-1, f_size, len_size))
-        x_t = np.repeat(x_t, self.mc_sample_size, axis=0)
+        x_t = torch.repeat_interleave(x_t, self.mc_sample_size, axis=0)
         neighbors = torch.ones((len(x_p)), device=self.device)
         non_neighbors = torch.zeros((len(x_n)), device=self.device)
 
