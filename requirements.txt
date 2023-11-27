@@ -8,3 +8,4 @@ pandas
 PyYAML
 statsmodels
 jsonargparse[all]
+zarr
