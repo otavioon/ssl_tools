@@ -46,7 +46,8 @@ class HARDataset:
         data_path : Union[Path, str]
             The location of the CSV file
         feature_prefixes : Union[str, List[str]], optional
-            The prefix of the feature columns that will be used
+            The prefix of the column names in the dataframe that will be used 
+            to become features.  
         label : str, optional
             The label column, by default "standard activity code"
         cast_to: str, optional

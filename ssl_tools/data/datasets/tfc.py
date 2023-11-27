@@ -22,19 +22,19 @@ class TFCDataset(Dataset):
         cast_to: str = "float32",
     ):
         """Time-Frequency Contrastive (TFC) Dataset. This dataset is intented
-        to be used using TFC technique. Given a time-domain signal, the
-        dataset will calculate the FFT of the signal and apply the specified
-        transforms to the time and frequency domain.
+        to be used using TFC technique. Given a dataset with time-domain signal,
+        this dataset will calculate the FFT of the signal and apply the
+        specified transforms to the time and frequency domainof each sample.
         It will return a 5-element tuple with the following elements:
         - The original time-domain signal
         - The label of the signal
         - Time augmented signal
         - The frequency signal
         - The frequency augmented signal
-        
+
         Note that, if samples are 1-D arrays, the transforms will be applied
         directly to the data. If samples are 2-D arrays, the transforms will
-        be applied to each channel separately. 
+        be applied to each channel separately.
 
         Parameters
         ----------
@@ -46,7 +46,7 @@ class TFCDataset(Dataset):
         length_alignment : int, optional
             _description_, by default 178
         time_transforms : Union[Transform, List[Transform]], optional
-            List of transforms to apply to the time domain,
+            List of transforms to apply to the time domain.
         frequency_transforms : Union[Transform, List[Transform]], optional
             List of transforms to apply to the frequency domain
         cast_to : str, optional
@@ -73,7 +73,6 @@ class TFCDataset(Dataset):
         self.aug_frequency_transforms = [
             self.FFT(absolute=True)
         ] + self.aug_frequency_transforms
-
 
     class FFT(Transform):
         def __init__(self, absolute: bool = True):
@@ -144,7 +143,7 @@ class TFCDataset(Dataset):
         Returns
         -------
         np.ndarray
-            An 2-D array with the transformed data. The array has the number of 
+            An 2-D array with the transformed data. The array has the number of
             channels as the first dimension.
         """
         datas = []
@@ -169,8 +168,8 @@ class TFCDataset(Dataset):
             data = data[:, : self.length_alignment]
 
         # Is the data a 1-D array or a 2-D array?
-        
-        # If the data is a 1-D array, apply the transforms directly and 
+
+        # If the data is a 1-D array, apply the transforms directly and
         # generate the augmented data, frequency and frequency augmented data
         if data.ndim == 1:
             time_aug = self._apply_transforms(data, self.aug_time_transforms)

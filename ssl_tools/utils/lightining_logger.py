@@ -3,6 +3,14 @@ import time
 
 
 def performance_lightining_logger(cls):
+    """Decorator to add performance logging to a LightningModule. It adds the
+    following attributesto the log:
+        - train_step_epoch_time: duration of the last training step
+        - train_epoch_time: duration of the last training epoch
+        
+    At the end of the training, it also prints the overall fit time.
+    It can be used to decorate any LightningModule class.
+    """
     class Logged(cls):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
