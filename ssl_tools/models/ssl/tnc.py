@@ -1,11 +1,41 @@
+from typing import Tuple
 import torch
 import lightning as L
 import numpy as np
 
+
 class TNC(L.LightningModule):
     def __init__(
-        self, discriminator, encoder, mc_sample_size, w, learning_rate=1e-3
+        self,
+        discriminator: torch.nn.Module,
+        encoder: torch.nn.Module,
+        mc_sample_size: int = 20,
+        w: float = 0.05,
+        learning_rate=1e-3,
     ):
+        """Implements the Temporal Neighbourhood Contrastive (TNC) model, as
+        described in https://arxiv.org/pdf/2106.00750.pdf. The implementation
+        was adapted from https://github.com/sanatonek/TNC_representation_learning
+
+        Parameters
+        ----------
+        discriminator : torch.nn.Module
+            A discriminator model that takes as input the concatenation of the
+            representation of the current time step and the representation of
+            the positive/negative samples. It is a binary classifier that
+            predict if the samples are neighbors or not.
+        encoder : torch.nn.Module
+            Encode a window of samples into a representation. This model is 
+            usually a GRU that encodes the samples into a representation of 
+            fixed encoding size.
+        mc_sample_size : int
+            The number of close and distant samples selected in the dataset.
+        w : float
+            This parameter is used in loss and represent probability of 
+            sampling a positive window from the non-neighboring region.
+        learning_rate : _type_, optional
+            The learning rate of the optimizer, by default 1e-3
+        """
         super().__init__()
         self.discriminator = discriminator
         self.encoder = encoder
@@ -20,60 +50,104 @@ class TNC(L.LightningModule):
     def forward(self, x):
         return self.encoder(x)
 
-    def _shared_step(self, x_t, x_p, x_n):
+    def _shared_step(
+        self,
+        x_t: torch.Tensor,
+        x_p: torch.Tensor,
+        x_n: torch.Tensor,
+        stage: str,
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Runs TNC and returns the representation and the loss.
+
+        Parameters
+        ----------
+        x_t : torch.Tensor
+            A tensor with the sample of the current time step. It is expected
+            to be the shape (B, C, T), where B is the batch size, C is the
+            number of channels (features) and T is the number of time steps.
+        x_p : torch.Tensor
+            A set of positive samples. It is expected to be the shape
+            (B * mc_sample_size, C, T), where B is the batch size, C is the
+            number of channels (features) and T is the number of time steps.
+        x_n : torch.Tensor
+            A set of negative samples. It is expected to be the shape
+            (B * mc_sample_size, C, T), where B is the batch size, C is the
+            number of channels (features) and T is the number of time steps.
+        stage : str
+            Stage of the training (train, val, test)
+
+        Returns
+        -------
+        Tuple[torch.Tensor, torch.Tensor]
+            A 2-element tuple containing the representation and the loss,
+            respectively.
+        """
         batch_size, f_size, len_size = x_t.shape
+
+        # Ensures x_p and x_n to be of shape
+        # (batch_size * mc_sample_size, f_size, len_size)
         x_p = x_p.reshape((-1, f_size, len_size))
         x_n = x_n.reshape((-1, f_size, len_size))
+
+        # X_t is a single sample, so we need to repeat it mc_sample_size times
+        # to match the shape of x_p and x_n
         x_t = torch.repeat_interleave(x_t, self.mc_sample_size, axis=0)
+
+        # Vectors with neighbors (1s) and non-neighbors labels (0s)
         neighbors = torch.ones((len(x_p)), device=self.device)
         non_neighbors = torch.zeros((len(x_n)), device=self.device)
 
-        # Encoding features
+        # Encoding features (usually using a GRU encoding) that will return a
+        # representation of shape (batch_size, encoding_size)
         z_t = self.forward(x_t)
         z_p = self.forward(x_p)
         z_n = self.forward(x_n)
 
-        # Discriminate features
-        d_p = self.discriminator(z_t, z_p)
-        d_n = self.discriminator(z_t, z_n)
+        # Discriminate features. The discriminator is usually an MLP that,
+        # performs a binary classification of the samples (return 0s and 1s).
+        # In fact, we try to discriminate if the samples are neighbors or not.
+        # Positive samples (1/2 original, 1/2 positive ones)
+        z_tp = torch.cat([z_t, z_p], -1)
+        d_p = self.discriminator(z_tp)
+        # Negative samples (1/2 original, 1/2 negative ones)
+        z_tn = torch.cat([z_t, z_n], -1)
+        d_n = self.discriminator(z_tn)
 
-        # Compute loss
+        # Compute loss positive loss (positive pairs vs. neighbours)
         p_loss = self.loss_function(d_p, neighbors)
+        # Compute loss negative loss (negative pairs vs. non_neighbors)
         n_loss = self.loss_function(d_n, non_neighbors)
+        # Compute loss of negative pairs vs. neighbours (probability of 
+        # sampling a positive window from the non-neighboring region)
         n_loss_u = self.loss_function(d_n, neighbors)
+        # Compute the final loss
         loss = (p_loss + self.w * n_loss_u + (1 - self.w) * n_loss) / 2
-        return loss
 
-    def training_step(self, batch, batch_idx):
-        x_t, x_p, x_n = batch
-        loss = self._shared_step(x_t, x_p, x_n)
+        # Log the loss
         self.log(
-            "train_loss",
+            f"{stage}_loss",
             loss,
-            on_step=False,
             on_epoch=True,
+            on_step=False,
             prog_bar=True,
             logger=True,
         )
+
+        return (z_t, loss)
+
+    def training_step(self, batch, batch_idx):
+        x_t, x_p, x_n = batch
+        _, loss = self._shared_step(x_t, x_p, x_n, "train")
         return loss
 
     def validation_step(self, batch, batch_idx):
         x_t, x_p, x_n = batch
-        loss = self._shared_step(x_t, x_p, x_n)
-        self.log(
-            "val_loss",
-            loss,
-            on_step=False,
-            on_epoch=True,
-            prog_bar=True,
-            logger=True,
-        )
+        _, loss = self._shared_step(x_t, x_p, x_n, "val")
         return loss
 
     def test_step(self, batch, batch_idx):
         x_t, x_p, x_n = batch
-        loss = self._shared_step(x_t, x_p, x_n)
-        self.log("test_loss", loss)
+        _, loss = self._shared_step(x_t, x_p, x_n, "test")
         return loss
 
     def configure_optimizers(self):
@@ -86,14 +160,6 @@ class TNC(L.LightningModule):
             "w": self.w,
             "learning_rate": self.learning_rate,
         }
-
-
-
-
-
-
-
-
 
 
 # from typing import Any
@@ -122,9 +188,9 @@ class TNC(L.LightningModule):
 #         self.learning_rate = lr
 #         self.weight_decay = weight_decay
 #         self.loss_func = torch.nn.BCEWithLogitsLoss()
-        
+
 #     def loss_function(self, y, y_hat):
-#         return self.loss_func(y_hat, y)      
+#         return self.loss_func(y_hat, y)
 
 #     def training_step(self, batch, batch_idx):
 #         x_t, x_p, x_n, _ = batch
@@ -181,9 +247,6 @@ class TNC(L.LightningModule):
 #             weight_decay=self.weight_decay,
 #         )
 #         return optimizer
-    
-    
-    
 
 
 # # class TNC_Classifier(pl.LightningModule):
