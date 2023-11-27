@@ -27,7 +27,31 @@ from ssl_tools.apps import LightningTrainCLI
 from ssl_tools.models.layers.linear import Discriminator
 
 
-class PretrainCLI(LightningTrainCLI):
+class LightningPretrainCLI(LightningTrainCLI):    
+    """Defines a Main CLI for pre-training Self-supervised Pytorch Lightning 
+    models
+
+    Model and its speficic parameters are defined inner functions. Any inner 
+    function is callable from the command line and its parameters are exposed 
+    as command line arguments. Functions with names beginning with an underscore
+    are not callable from the command line.
+    
+    In general, the train of models is done as follows:
+        1. Assert the validity of the parameters
+        2. Set the experiment name and version
+        3. Instantiate the model
+        4. Instantiate the data modules
+        5. Instantiate trainer specific resources (logger, callbacks, etc.)
+        6. Log the hyperparameters (for reproducibility purposes)
+        7. Instantiate the trainer
+        8. Train the model
+    """   
+    def _set_experiment(self, model_name: str):
+        self.experiment_name = self.experiment_name or model_name
+        self.experiment_version = (
+            self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
+        )
+    
     def _get_logger(self):
         logger = CSVLogger(
             save_dir=self.log_dir,
@@ -46,6 +70,37 @@ class PretrainCLI(LightningTrainCLI):
             save_last=True,
         )
         return [checkpoint_callback]
+    
+    def _log_hyperparams(self, model, logger):
+        hyperparams = self.__dict__.copy()
+        if getattr(model, "get_config", None):
+            hyperparams.update(model.get_config())
+        logger.log_hyperparams(hyperparams)
+        return hyperparams
+    
+    def _get_trainer(self, logger, callbacks):
+        trainer = L.Trainer(
+            max_epochs=self.epochs,
+            logger=logger,
+            # enable_checkpointing=True,
+            callbacks=callbacks,
+            accelerator=self.accelerator,
+            devices=self.devices,
+            strategy=self.strategy,
+            limit_train_batches=self.limit_train_batches,
+            limit_val_batches=self.limit_val_batches,
+            num_nodes=self.num_nodes,
+        )
+        return trainer
+    
+    def _train(self, model, data_module, trainer):
+        print(
+            f"** Start training. \n" + \
+            f"\tExperiment: {self.experiment_name} \n" + \
+            f"\tVersion is {self.experiment_version} **"
+        )
+        
+        return trainer.fit(model, data_module)
 
     def cpc(
         self,
@@ -54,21 +109,24 @@ class PretrainCLI(LightningTrainCLI):
         pad_length: bool = False,
     ):
         from ssl_tools.models.ssl import CPC
-        # Wraps CPC in a lightning module
+        # Wraps CPC in a lightning module for logging purposes
         CPC = performance_lightining_logger(CPC)
         
-        if self.batch_size != 1:
-            raise ValueError(
-                "CPC only supports batch size of 1. Please set batch_size=1"
-            )
-
-        # Set the experiment name and version
-        self.experiment_name = self.experiment_name or "CPC"
-        self.experiment_version = (
-            self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
+        # ----------------------------------------------------------------------
+        # 1. Assert the validity of the parameters
+        # ----------------------------------------------------------------------
+        assert self.batch_size == 1, (
+            "CPC only supports batch size of 1. Please set batch_size=1"
         )
+        
+        # ----------------------------------------------------------------------
+        # 2. Set experiment name and version
+        # ----------------------------------------------------------------------
+        self._set_experiment("CPC_Pretrain")
 
-        # build the model
+        # ----------------------------------------------------------------------
+        # 3. Instantiate model
+        # ----------------------------------------------------------------------
         encoder = GRUEncoder(encoding_size=encoding_size)
         density_estimator = torch.nn.Linear(encoding_size, encoding_size)
         auto_regressor = torch.nn.GRU(
@@ -84,43 +142,33 @@ class PretrainCLI(LightningTrainCLI):
             lr=self.learning_rate,
         )
 
-        # Get the data
+        # ----------------------------------------------------------------------
+        # 4. Instantiate data modules
+        # ----------------------------------------------------------------------
         data_module = MultiModalHARDataModule(
             self.data, batch_size=self.batch_size, fix_length=pad_length
         )
 
-        # Get the logger
+        # ----------------------------------------------------------------------
+        # 5. Instantiate trainer specific resources (logger, callbacks, etc.)
+        # ----------------------------------------------------------------------
         logger = self._get_logger()
-
-        # Get the callbacks
         callbacks = self._get_callbacks()
-
-        # Get the hyperparameters and log them
-        hyperparams = self.__dict__.copy()
-        hyperparams.update(model.get_config())
-        logger.log_hyperparams(hyperparams)
-
-        # Set the trainer
-        trainer = L.Trainer(
-            max_epochs=self.epochs,
-            logger=logger,
-            # enable_checkpointing=True,
-            callbacks=callbacks,
-            accelerator=self.accelerator,
-            devices=self.devices,
-            strategy=self.strategy,
-            limit_train_batches=self.limit_train_batches,
-            limit_val_batches=self.limit_val_batches,
-            num_nodes=self.num_nodes,
-        )
-
-        # Start training
-        print(
-            f"** Start training model CPC for {self.epochs} epochs. The name of the experiment name is {self.experiment_name} and version is {self.experiment_version} **"
-        )
-
-        print(type(model))
-        trainer.fit(model, data_module)
+        
+        # ----------------------------------------------------------------------
+        # 6. Log the hyperparameters (for reproducibility purposes)
+        # ----------------------------------------------------------------------
+        hyperparams = self._log_hyperparams(model, logger)
+        
+        # ----------------------------------------------------------------------
+        # 7. Instantiate the trainer
+        # ----------------------------------------------------------------------
+        trainer = self._get_trainer(logger, callbacks)
+        
+        # ----------------------------------------------------------------------
+        # 8. Train the model
+        # ----------------------------------------------------------------------
+        self._train(model, data_module, trainer)
 
     def tnc(
         self,
@@ -132,16 +180,24 @@ class PretrainCLI(LightningTrainCLI):
         pad_length: bool = True,
     ):
         from ssl_tools.models.ssl import TNC
-        # Wraps TNC in a lightning module
+        # Wraps TNC in a lightning module for logging purposes
         TNC = performance_lightining_logger(TNC)
         
-        # Set the experiment name and version
-        self.experiment_name = self.experiment_name or "TNC"
-        self.experiment_version = (
-            self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
+        # ----------------------------------------------------------------------
+        # 1. Assert the validity of the parameters
+        # ----------------------------------------------------------------------
+        assert significance_level > 0 and significance_level < 1, (
+            "The significance level must be between 0 and 1"
         )
+        
+        # ----------------------------------------------------------------------
+        # 2. Set experiment name and version
+        # ----------------------------------------------------------------------
+        self._set_experiment("TNC_Pretrain")
 
-        ### Instantiate model
+        # ----------------------------------------------------------------------
+        # 3. Instantiate model
+        # ----------------------------------------------------------------------
         discriminator = Discriminator(input_size=encoding_size)
         encoder = GRUEncoder(encoding_size=encoding_size)
         model = TNC(
@@ -152,9 +208,9 @@ class PretrainCLI(LightningTrainCLI):
             learning_rate=self.learning_rate,
         )
 
-        #####################
-
-        # Get the data
+        # ----------------------------------------------------------------------
+        # 4. Instantiate data modules
+        # ----------------------------------------------------------------------
         data_module = TNCHARDataModule(
             self.data,
             batch_size=self.batch_size,
@@ -165,37 +221,26 @@ class PretrainCLI(LightningTrainCLI):
             repeat=repeat,
         )
 
-        # Get the logger
+        # ----------------------------------------------------------------------
+        # 5. Instantiate trainer specific resources (logger, callbacks, etc.)
+        # ----------------------------------------------------------------------
         logger = self._get_logger()
-
-        # Get the callbacks
         callbacks = self._get_callbacks()
-        # Get the hyperparameters and log them
-        hyperparams = self.__dict__.copy()
-        hyperparams.update(model.get_config())
-        logger.log_hyperparams(hyperparams)
+        
+        # ----------------------------------------------------------------------
+        # 6. Log the hyperparameters (for reproducibility purposes)
+        # ----------------------------------------------------------------------
+        hyperparams = self._log_hyperparams(model, logger)
 
-        # Set the trainer
-        trainer = L.Trainer(
-            max_epochs=self.epochs,
-            logger=logger,
-            # enable_checkpointing=True,
-            callbacks=callbacks,
-            accelerator=self.accelerator,
-            devices=self.devices,
-            strategy=self.strategy,
-            limit_train_batches=self.limit_train_batches,
-            limit_val_batches=self.limit_val_batches,
-            num_nodes=self.num_nodes,
-        )
-
-        # Start training
-        print(
-            f"** Start training model TNC for {self.epochs} epochs. The name of the experiment name is {self.experiment_name} and version is {self.experiment_version} **"
-        )
-
-        print(type(model))
-        trainer.fit(model, data_module)
+        # ----------------------------------------------------------------------
+        # 7. Instantiate the trainer
+        # ----------------------------------------------------------------------
+        trainer = self._get_trainer(logger, callbacks)
+        
+        # ----------------------------------------------------------------------
+        # 8. Train the model
+        # ----------------------------------------------------------------------
+        self._train(model, data_module, trainer)
 
     def tfc(
         self,
@@ -207,4 +252,4 @@ class PretrainCLI(LightningTrainCLI):
 
 
 if __name__ == "__main__":
-    CLI(PretrainCLI, as_positional=False)
+    CLI(LightningPretrainCLI, as_positional=False)

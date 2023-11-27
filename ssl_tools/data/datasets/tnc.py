@@ -29,13 +29,15 @@ class TNCDataset(Dataset):
             we have tri-axial accelerometer and gyroscope data, the shape of
             each sample should be (6, time_steps). the time_steps may vary
         window_size : int
-            Size of the window (δ). The window will be centered at t, with window_size / 2 elements before and after t (X[t - δ, t + δ]])
+            Size of the window (δ). The window will be centered at t, with 
+            window_size / 2 elements before and after t (X[t - δ, t + δ]])
         mc_sample_size : int
             The number of close and distant samples to be selected. This is
             the maximum number of samples that will be selected.
         significance_level: float, optional
             The significance level of the ADF test. It is used to reject the
-            null hypothesis of the test if p-value is less than this value, by  default 0.01
+            null hypothesis of the test if p-value is less than this value, by  
+            default 0.01
         repeat : int, optional
             Simple repeat the element of the dataset ``repeat`` times,
             by default 1

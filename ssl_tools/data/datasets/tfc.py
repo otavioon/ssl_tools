@@ -31,7 +31,10 @@ class TFCDataset(Dataset):
         - Time augmented signal
         - The frequency signal
         - The frequency augmented signal
-
+        
+        Note that, if samples are 1-D arrays, the transforms will be applied
+        directly to the data. If samples are 2-D arrays, the transforms will
+        be applied to each channel separately. 
 
         Parameters
         ----------
@@ -71,36 +74,79 @@ class TFCDataset(Dataset):
             self.FFT(absolute=True)
         ] + self.aug_frequency_transforms
 
-        # This could be done in the __getitem__ method
-        # For now, we do it here to be more similar to the original implementation
-        # self.data_time_augmented = self.apply_transforms(
-        #     self.data_time, self.time_transforms
-        # )
-        # self.data_freq_augmented = self.apply_transforms(
-        #     self.data_freq, self.frequency_transforms
-        # )
 
     class FFT(Transform):
         def __init__(self, absolute: bool = True):
+            """Simple wrapper to apply the FFT to the data
+
+            Parameters
+            ----------
+            absolute : bool, optional
+                If True, returns the absolute value of FFT, by default True
+            """
             self.absolute = absolute
 
         def transform(self, x: np.ndarray) -> np.ndarray:
+            """Apply the FFT to the data
+
+            Parameters
+            ----------
+            x : np.ndarray
+                A 1-D array with the data
+
+            Returns
+            -------
+            np.ndarray
+                The FFT of the data
+            """
             result = np.fft.fft(x)
             if self.absolute:
                 result = np.abs(result)
             return result
 
     def _apply_transforms(
-        self, x: torch.Tensor, transforms: List[Transform]
-    ) -> torch.Tensor:
+        self, x: np.ndarray, transforms: List[Transform]
+    ) -> np.ndarray:
+        """Apply a list of transforms to the data
+
+        Parameters
+        ----------
+        x : np.ndarray
+            The 1-D array with the data
+        transforms : List[Transform]
+            A sequence of transforms to apply in the data
+
+        Returns
+        -------
+        np.ndarray
+            The transformed data
+        """
+        # Apply the transforms on the data, one by one
         for transform in transforms:
             x = transform.fit_transform(x)
         return x
 
     def _apply_transforms_per_axis(
         self, data: np.ndarray, transforms: List[Transform]
-    ):
-        """Apply the transforms to each axis of the data"""
+    ) -> np.ndarray:
+        """Split the data into channels and apply the transforms to each channel
+        separately.
+
+        Parameters
+        ----------
+        data : np.ndarray
+            The data to be transformed. It must be a 2-D array with the shape
+            (C, T), where C is the number of channels and T is the number of
+            time steps.
+        transforms : List[Transform]
+            A sequence of transforms to apply in the data
+
+        Returns
+        -------
+        np.ndarray
+            An 2-D array with the transformed data. The array has the number of 
+            channels as the first dimension.
+        """
         datas = []
 
         for i in range(data.shape[0]):
@@ -122,12 +168,19 @@ class TFCDataset(Dataset):
         else:
             data = data[:, : self.length_alignment]
 
+        # Is the data a 1-D array or a 2-D array?
+        
+        # If the data is a 1-D array, apply the transforms directly and 
+        # generate the augmented data, frequency and frequency augmented data
         if data.ndim == 1:
             time_aug = self._apply_transforms(data, self.aug_time_transforms)
             freq = self._apply_transforms(data, self.frequency_transform)
             freq_aug = self._apply_transforms(
                 data, self.aug_frequency_transforms
             )
+        # Else if the data is a 2-D array, apply the transforms to each channel
+        # separately and generate the augmented data, frequency and frequency
+        # augmented data
         else:
             time_aug = self._apply_transforms_per_axis(
                 data, self.aug_time_transforms
@@ -139,11 +192,13 @@ class TFCDataset(Dataset):
                 data, self.aug_frequency_transforms
             )
 
+        # Cast the data to the specified type
         if self.cast_to:
             data = data.astype(self.cast_to)
             time_aug = time_aug.astype(self.cast_to)
             freq = freq.astype(self.cast_to)
             freq_aug = freq_aug.astype(self.cast_to)
 
-        # Time processing
+        # Returns the data, the label, the time augmented data, the frequency
+        # data and the frequency augmented data
         return data, label, time_aug, freq, freq_aug

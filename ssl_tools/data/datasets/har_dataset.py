@@ -68,9 +68,18 @@ class HARDataset:
         self.features_as_channels = features_as_channels
         self.data, self.labels = self._load_data()
 
-    def _load_data(self):
-        """Loads the data from the CSV file"""
+    def _load_data(self) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+        """Load data from the CSV file
+
+        Returns
+        -------
+        Tuple[np.ndarray, Optional[np.ndarray]]
+            A 2-element tuple with the data and the labels. The second element
+            is None if the label is not specified.
+        """
         df = pd.read_csv(self.data_path)
+        
+        # Select columns with the given prefixes
         selected_columns = [
             col
             for col in df.columns
@@ -78,6 +87,9 @@ class HARDataset:
         ]
         data = df[selected_columns].to_numpy()
 
+        # If features_as_channels is True, reshape the data to (N, C, T)
+        # where N is the number of samples, C is the number of channels and
+        # T is the number of time steps
         if self.features_as_channels:
             data = data.reshape(
                 -1,
@@ -85,12 +97,15 @@ class HARDataset:
                 data.shape[1] // len(self.feature_prefixes),
             )
 
+        # Cast the data to the specified type
         if self.cast_to:
             data = data.astype(self.cast_to)
 
+        # If label is specified, return the data and the labels
         if self.label:
             labels = df[self.label].to_numpy()
             return data, labels
+        # If label is not specified, return only the data
         else:
             return data, None
 
