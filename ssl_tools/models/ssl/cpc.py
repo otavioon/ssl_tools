@@ -1,9 +1,7 @@
 import torch
 import lightning as L
 import numpy as np
-from typing import Any
 
-from torchmetrics.functional import accuracy
 from ssl_tools.utils.configurable import Configurable
 
 

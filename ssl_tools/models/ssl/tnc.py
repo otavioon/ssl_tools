@@ -3,8 +3,9 @@ import torch
 import lightning as L
 import numpy as np
 
+from ssl_tools.utils.configurable import Configurable
 
-class TNC(L.LightningModule):
+class TNC(L.LightningModule, Configurable):
     def __init__(
         self,
         discriminator: torch.nn.Module,
