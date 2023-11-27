@@ -176,7 +176,7 @@ class LightningPretrainCLI(LightningTrainCLI):
         window_size: int = 60,
         mc_sample_size: int = 20,
         significance_level: float = 0.01,
-        repeat: int = 1,
+        repeat: int = 5,
         pad_length: bool = True,
     ):
         from ssl_tools.models.ssl import TNC
