@@ -191,7 +191,7 @@ class PretrainCLI(LightningTrainCLI):
 
         # Start training
         print(
-            f"** Start training model CPC for {self.epochs} epochs. The name of the experiment name is {self.experiment_name} and version is {self.experiment_version} **"
+            f"** Start training model TNC for {self.epochs} epochs. The name of the experiment name is {self.experiment_name} and version is {self.experiment_version} **"
         )
 
         print(type(model))
