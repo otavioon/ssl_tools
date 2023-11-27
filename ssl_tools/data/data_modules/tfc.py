@@ -67,10 +67,12 @@ class TFCDataModule(L.LightningDataModule):
             _description_, by default 178
         time_transforms : Union[Transform, List[Transform]], optional
             List of transforms to apply to the time domain. Used to instantiate
-            ``TFCDataset`` dataset.
+            ``TFCDataset`` dataset. If None. an ``AddGaussianNoise`` transform
+            will be used with the given ``jitter_ratio``.
         frequency_transforms : Union[Transform, List[Transform]], optional
             List of transforms to apply to the frequency domain. Used to
-            instantiate  ``TFCDataset`` dataset.
+            instantiate  ``TFCDataset`` dataset. If None, an
+            ``AddRemoveFrequency`` transform will be used.
         cast_to : str, optional
             Cast the data to the given type, by default "float32"
         jitter_ratio : float, optional

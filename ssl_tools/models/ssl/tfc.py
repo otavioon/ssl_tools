@@ -1,11 +1,11 @@
 from typing import Any, Tuple
-import pytorch_lightning as pl
+import lightning as L
 import torch
 
 from ssl_tools.utils.configurable import Configurable
 
 
-class TFC(pl.LightningModule, Configurable):
+class TFC(L.LightningModule, Configurable):
     def __init__(
         self,
         time_encoder: torch.nn.Module,

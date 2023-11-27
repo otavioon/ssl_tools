@@ -11,7 +11,8 @@ class LightningTrainCLI:
         log_dir: str = "logs",
         name: str = None,
         version: Union[str, int] = None,
-        monitor_metric: str = None,
+        checkpoint_metric: str = None,
+        checkpoint_metric_mode: str = "min",
         accelerator: str = "cpu",
         devices: int = 1,
         strategy: str = "auto",
@@ -34,11 +35,18 @@ class LightningTrainCLI:
         log_dir : str, optional
             Path to the location where logs will be stored
         name: str, optional
-            The name of the experiment (will be used as a prefix for the logs and checkpoints). If not provided, the name of the model will be used
+            The name of the experiment (will be used as a prefix for the logs 
+            and checkpoints). If not provided, the name of the model will be 
+            used
         version: Union[int, str], optional
-            The version of the experiment. If not is provided the current date and time will be used as the version
-        monitor_metric: str, optional
-            The metric to monitor for checkpointing. If not provided, the last model will be saved
+            The version of the experiment. If not is provided the current date 
+            and time will be used as the version
+        checkpoint_metric: str, optional
+            The metric to monitor for checkpointing. If not provided, the last 
+            model will be saved
+        checkpoint_metric_mode: str, optional
+            The mode of the metric to monitor (min, max or mean). Defaults to 
+            "min"
         accelerator: str, optional
             The accelerator to use. Defaults to "cpu"
         devices: int, optional
@@ -46,9 +54,11 @@ class LightningTrainCLI:
         strategy: str, optional
             The strategy to use. Defaults to "auto"
         limit_train_batches: Union[float, int], optional
-            The number of batches to use for training. Defaults to 1.0 (use all batches)
+            The number of batches to use for training. Defaults to 1.0 (use 
+            all batches)
         limit_val_batches: Union[float, int], optional
-            The number of batches to use for validation. Defaults to 1.0 (use all batches)
+            The number of batches to use for validation. Defaults to 1.0 (use 
+            all batches)
         num_nodes: int, optional
             The number of nodes to use. Defaults to 1
         """
@@ -59,7 +69,8 @@ class LightningTrainCLI:
         self.log_dir = log_dir
         self.experiment_name = name
         self.experiment_version = version
-        self.monitor_metric = monitor_metric
+        self.checkpoint_metric = checkpoint_metric
+        self.checkpoint_metric_mode = checkpoint_metric_mode
         self.accelerator = accelerator
         self.devices = devices
         self.strategy = strategy
