@@ -27,7 +27,7 @@ from ssl_tools.apps import LightningTrainCLI
 from ssl_tools.models.layers.linear import Discriminator
 
 
-class PretrainerMain(LightningTrainCLI):
+class PretrainCLI(LightningTrainCLI):
     def _get_logger(self):
         logger = CSVLogger(
             save_dir=self.log_dir,
@@ -207,4 +207,4 @@ class PretrainerMain(LightningTrainCLI):
 
 
 if __name__ == "__main__":
-    CLI(PretrainerMain, as_positional=False)
+    CLI(PretrainCLI, as_positional=False)

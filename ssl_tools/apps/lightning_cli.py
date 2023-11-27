@@ -19,7 +19,7 @@ class LightningTrainCLI:
         limit_val_batches: Union[float, int] = 1.0,
         num_nodes: int = 1,
     ):
-        """Pre-train self-supervised models with a HAR dataset
+        """Defines a Main CLI for pre-training Pytorch Lightning models
 
         Parameters
         ----------
