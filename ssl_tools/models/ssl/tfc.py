@@ -1,10 +1,11 @@
-from typing import Any
+from typing import Any, Tuple
 import pytorch_lightning as pl
 import torch
-from torchmetrics.functional import accuracy
+
+from ssl_tools.utils.configurable import Configurable
 
 
-class TFC(pl.LightningModule):
+class TFC(pl.LightningModule, Configurable):
     def __init__(
         self,
         time_encoder: torch.nn.Module,
@@ -12,9 +13,35 @@ class TFC(pl.LightningModule):
         time_projector: torch.nn.Module,
         frequency_projector: torch.nn.Module,
         nxtent_criterion: torch.nn.Module,
-        lr: float = 1e-3,
+        learning_rate: float = 1e-3,
         loss_lambda: float = 0.2,
     ):
+        """Implements the Time-Frequency Contrastive model, as described in:
+        Zhang, Xiang, et al. "Self-supervised contrastive pre-training for time 
+        series via time-frequency consistency." Advances in Neural Information 
+        Processing Systems 35 (2022): 3988-4003.
+
+        Parameters
+        ----------
+        time_encoder : torch.nn.Module
+            The encoder for the time-domain data. It is usually a convolutional
+            encoder such as a resnet1D or a transformer.
+        frequency_encoder : torch.nn.Module
+            The encoder for the frequency-domain data. It is usually a
+            convolutional encoder such as a resnet1D or a transformer.
+        time_projector : torch.nn.Module
+            The projector for the time-domain data. Usually the projector is a
+            linear layer with the desired output dimensionality.
+        frequency_projector : torch.nn.Module
+            The projector for the frequency-domain data. Usually the projector
+            is a linear layer with the desired output dimensionality.
+        nxtent_criterion : torch.nn.Module
+            The Normalized Temperature-scaled Cross Entropy Loss.
+        learning_rate : float, optional
+            The learning rate for the optimizer, by default 1e-3
+        loss_lambda : float, optional
+            The consistency threshold, by default 0.2
+        """
         super().__init__()
 
         self.time_encoder = time_encoder
@@ -22,154 +49,345 @@ class TFC(pl.LightningModule):
         self.frequency_encoder = frequency_encoder
         self.frequency_projector = frequency_projector
         self.nxtent_criterion = nxtent_criterion
-        self.learning_rate = lr
+        self.learning_rate = learning_rate
         self.loss_lambda = loss_lambda
 
-    def forward(self, x_in_t, x_in_f):
-        """Use Transformer"""
-        x = self.time_encoder(x_in_t)
-        h_time = x.reshape(x.shape[0], -1)
+    def forward(
+        self, x_in_t: torch.Tensor, x_in_f: torch.Tensor
+    ) -> torch.Tensor:
+        """Generate the final representation of the model.
 
-        """Cross-space projector"""
-        z_time = self.time_projector(h_time)
+        Parameters
+        ----------
+        x_in_t : torch.Tensor
+            The time-domain data.
+        x_in_f : torch.Tensor
+            The frequency-domain data.
 
-        """Frequency-based contrastive encoder"""
-        f = self.frequency_encoder(x_in_f)
-        h_freq = f.reshape(f.shape[0], -1)
-
-        """Cross-space projector"""
-        z_freq = self.frequency_projector(h_freq)
-
-        return h_time, z_time, h_freq, z_freq
-
-    def configure_optimizers(self) -> Any:
-        learnable_parameters = (
-            list(self.time_encoder.parameters()) +
-            list(self.time_projector.parameters()) +
-            list(self.frequency_encoder.parameters()) +
-            list(self.frequency_projector.parameters())
-        )
-        optimizer = torch.optim.Adam(learnable_parameters, lr=self.learning_rate)
-        return optimizer
+        Returns
+        -------
+        torch.Tensor
+            The final representation of the model (z_t, z_f concatenated)
+        """
+        h_t, z_t, h_f, z_f = self._generate_representations(x_in_t, x_in_f)
+        return torch.cat((z_t, z_f), dim=1)
 
     def training_step(self, batch, batch_idx):
+        # Batch is a 5-element tuple with the following elements:
+        # - The original time-domain signal
+        # - The label of the signal
+        # - Time augmented signal
+        # - The frequency signal
+        # - The frequency augmented signal
         data, labels, aug1, data_f, aug1_f = batch
-        
-        """Producing embeddings"""
-        h_t, z_t, h_f, z_f = self.forward(data, data_f)
-        h_t_aug, z_t_aug, h_f_aug, z_f_aug = self.forward(aug1, aug1_f)
-        
-        """Calculate losses"""
-        loss_time = self.nxtent_criterion(h_t, h_t_aug)
-        loss_freq = self.nxtent_criterion(h_f, h_f_aug)
-        loss_consistency = self.nxtent_criterion(z_t, z_f)
-        loss = (self.loss_lambda * (loss_time + loss_freq)) + loss_consistency
-        
-        # log loss, only to appear on epoch
-        self.log('time_loss', loss_time, on_step=False, on_epoch=True, prog_bar=True, logger=True)
-        self.log('freq_loss', loss_freq, on_step=False, on_epoch=True, prog_bar=True, logger=True)
-        self.log('consistency_loss', loss_consistency, on_step=False, on_epoch=True, prog_bar=True, logger=True)
-        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        return loss
-    
-
-class TFC_classifier(pl.LightningModule):
-    def __init__(
-        self,
-        tfc_model: torch.nn.Module,
-        classifier: torch.nn.Module,
-        nxtent_criterion: torch.nn.Module,
-        lr: float = 1e-3,
-        loss_lambda: float = 0.1,
-        n_classes: int = 2,
-    ):
-        super().__init__()
-        self.tfc_model = tfc_model
-        self.classifier = classifier
-        self.nxtent_criterion = nxtent_criterion
-        self.learning_rate = lr
-        self.n_classes = n_classes
-        self.loss_lambda = loss_lambda
-        self.loss_func = torch.nn.CrossEntropyLoss()
-
-    def configure_optimizers(self) -> Any:
-        learnable_parameters = list(self.tfc_model.parameters()) + list(
-            self.classifier.parameters()
-        )
-        optimizer = torch.optim.Adam(learnable_parameters, lr=self.learning_rate)
-        return optimizer
-
-    def forward(self, x_in_t, x_in_f):
-        return self.tfc_model(x_in_t, x_in_f)
-
-    def training_step(self, batch, batch_idx):
-        data, labels, aug1, data_f, aug1_f = batch
-
-        """Producing embeddings"""
-        h_t, z_t, h_f, z_f = self(data, data_f)
-        h_t_aug, z_t_aug, h_f_aug, z_f_aug = self(aug1, aug1_f)
-
-        """Add supervised loss"""
-        fea_concat = torch.cat((z_t, z_f), dim=1)
-        predictions = self.classifier(fea_concat)
-        # fea_concat_flat = fea_concat.reshape(fea_concat.shape[0], -1)
-
-        """Calculate losses"""
-        loss_time = self.nxtent_criterion(h_t, h_t_aug)
-        loss_freq = self.nxtent_criterion(h_f, h_f_aug)
-        loss_consistency = self.nxtent_criterion(z_t, z_f)
-        loss_p = self.loss_func(predictions, labels)
-        loss = loss_p + self.loss_lambda * (loss_time + loss_freq) + loss_consistency
-
-        self.log(
-            "train_loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True
+        (h_t, z_t, h_f, z_f), loss = self._shared_step(
+            data, aug1, data_f, aug1_f, "train"
         )
         return loss
 
     def validation_step(self, batch, batch_idx):
-        loss, acc = self._shared_eval_step(batch, batch_idx)
-        self.log(
-            "val_loss", loss, on_step=False, on_epoch=True, prog_bar=True, logger=True
+        # Batch is a 5-element tuple with the following elements:
+        # - The original time-domain signal
+        # - The label of the signal
+        # - Time augmented signal
+        # - The frequency signal
+        # - The frequency augmented signal
+        data, labels, aug1, data_f, aug1_f = batch
+        (h_t, z_t, h_f, z_f), loss = self._shared_step(
+            data, aug1, data_f, aug1_f, "val"
         )
-        self.log(
-            "val_acc", acc, on_step=False, on_epoch=True, prog_bar=True, logger=True
-        )
-        return {"val_loss": loss, "val_acc": acc}
+        return loss
 
     def test_step(self, batch, batch_idx):
-        loss, acc = self._shared_eval_step(batch, batch_idx)
-        self.log(
-            "test_loss", loss, on_step=False, on_epoch=True, prog_bar=True, logger=True
-        )
-        self.log(
-            "test_acc", acc, on_step=False, on_epoch=True, prog_bar=True, logger=True
-        )
-        return {"test_loss": loss, "test_acc": acc}
-
-    def _shared_eval_step(self, batch, batch_idx):
+        # Batch is a 5-element tuple with the following elements:
+        # - The original time-domain signal
+        # - The label of the signal
+        # - Time augmented signal
+        # - The frequency signal
+        # - The frequency augmented signal
         data, labels, aug1, data_f, aug1_f = batch
+        (h_t, z_t, h_f, z_f), loss = self._shared_step(
+            data, aug1, data_f, aug1_f, "test"
+        )
+        return loss
 
-        """Producing embeddings"""
-        h_t, z_t, h_f, z_f = self(data, data_f)
-        h_t_aug, z_t_aug, h_f_aug, z_f_aug = self(aug1, aug1_f)
-        
-        # print(h_t.shape, z_t.shape, h_f.shape, z_f.shape, h_t_aug.shape, z_t_aug.shape, h_f_aug.shape, z_f_aug.shape)
+    def _generate_representations(
+        self, x_in_t: torch.Tensor, x_in_f: torch.Tensor
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Returns the intermediate representations of the model.
+
+        Parameters
+        ----------
+        x_in_t : torch.Tensor
+            A tensor with the time-domain data. Usually has shape: (B, C, T),
+            where B is the batch size, C is the number of channels and T is the
+            number of time steps.
+        x_in_f : _type_
+            A tensor with the frequency-domain data. Usually has shape:
+            (B, C, F), where B is the batch size, C is the number of channels
+            F is the number of frequency bins.
+
+        Returns
+        -------
+        Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]
+            A 4-tuple with the intermediate representations of the model:
+            (h_time, z_time, h_freq, z_freq).
+        """
+
+        # Encodes the time-domain data. It is usually a convolutional encoder
+        # such as a resnet1D or a transformer
+        x = self.time_encoder(x_in_t)
+        # Reshape the input to be (B, C*T)
+        h_time = x.reshape(x.shape[0], -1)
+        # Project the time-domain data. Usually the projector is a linear layer
+        # with the desired output dimensionality
+        z_time = self.time_projector(h_time)
+
+        # Encodes the frequency-domain data. It is usually a convolutional
+        # encoder such as a resnet1D or a transformer
+        f = self.frequency_encoder(x_in_f)
+        # Reshape the input to be (B, C*F)
+        h_freq = f.reshape(f.shape[0], -1)
+        # Project the frequency-domain data. Usually the projector is a linear
+        # layer with the desired output dimensionality
+        z_freq = self.frequency_projector(h_freq)
+
+        # Concatenate the time and frequency representations (final
+        # representation)
+        return h_time, z_time, h_freq, z_freq
+
+    def _shared_step(
+        self,
+        data: torch.Tensor,
+        aug1: torch.Tensor,
+        data_f: torch.Tensor,
+        aug1_f: torch.Tensor,
+        stage: str,
+    ) -> Tuple[
+        Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor],
+        torch.Tensor,
+    ]:
+        """Compute the representations and the loss.
+
+        Parameters
+        ----------
+        data : torch.Tensor
+            The original time-domain data
+        aug1 : torch.Tensor
+            The augmented time-domain data
+        data_f : torch.Tensor
+            The original frequency-domain data
+        aug1_f : torch.Tensor
+            The augmented frequency-domain data
+        stage : str
+            Stage of the training (train, val, test)
+
+        Returns
+        -------
+        Tuple[ Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor], torch.Tensor, ]
+            Returns a 2-element tuple. The first element is a 4-element tuple
+            with the intermediate representations of the model: (h_time,
+            z_time, h_freq, z_freq). The second element is the loss.
+        """
+        # Get intermetiate representations for non-augmented and augmented data
+        # h_* is the intermediate representation of the encoder
+        # z_* is the intermediate representation of the projector
+        h_t, z_t, h_f, z_f = self._generate_representations(data, data_f)
+        h_t_aug, z_t_aug, h_f_aug, z_f_aug = self._generate_representations(
+            aug1, aug1_f
+        )
+
+        # Calculate the Normalized Temperature-scaled Cross Entropy Loss for
+        # between: encoded representations of non-augmented and augmented tima data
+        # and frequency data. Also, between: projected representations of
+        # non-augmented and augmented data.
         loss_time = self.nxtent_criterion(h_t, h_t_aug)
         loss_freq = self.nxtent_criterion(h_f, h_f_aug)
         loss_consistency = self.nxtent_criterion(z_t, z_f)
+        # Calculate the total loss
+        loss = (self.loss_lambda * (loss_time + loss_freq)) + loss_consistency
 
-        """Add supervised loss"""
-        fea_concat = torch.cat((z_t, z_f), dim=1)
-        predictions = self.classifier(fea_concat)
-        loss_p = self.loss_func(predictions, labels)
-        
-        loss = loss_p + self.loss_lambda * (loss_time + loss_freq) + loss_consistency
-
-        acc = accuracy(
-            torch.argmax(predictions, dim=1),
-            labels,
-            task="multiclass",
-            num_classes=self.n_classes,
+        # log loss, only to appear on epoch
+        # self.log(
+        #     f"{stage}_time_loss",
+        #     loss_time,
+        #     on_step=False,
+        #     on_epoch=True,
+        #     prog_bar=True,
+        #     logger=True,
+        # )
+        # self.log(
+        #     f"{stage}_freq_loss",
+        #     loss_freq,
+        #     on_step=False,
+        #     on_epoch=True,
+        #     prog_bar=True,
+        #     logger=True,
+        # )
+        # self.log(
+        #     f"{stage}_consistency_loss",
+        #     loss_consistency,
+        #     on_step=False,
+        #     on_epoch=True,
+        #     prog_bar=True,
+        #     logger=True,
+        # )
+        self.log(
+            f"{stage}_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
         )
+        return (h_t, z_t, h_f, z_f), loss
 
-        return loss, acc
+    def configure_optimizers(self) -> Any:
+        learnable_parameters = self.parameters()
+        optimizer = torch.optim.Adam(
+            learnable_parameters, lr=self.learning_rate
+        )
+        return optimizer
+
+    def get_config(self) -> dict:
+        return {
+            "learning_rate": self.learning_rate,
+            "loss_lambda": self.loss_lambda,
+        }
+
+
+# class TFC_classifier(pl.LightningModule):
+#     def __init__(
+#         self,
+#         tfc_model: torch.nn.Module,
+#         classifier: torch.nn.Module,
+#         nxtent_criterion: torch.nn.Module,
+#         lr: float = 1e-3,
+#         loss_lambda: float = 0.1,
+#         n_classes: int = 2,
+#     ):
+#         super().__init__()
+#         self.tfc_model = tfc_model
+#         self.classifier = classifier
+#         self.nxtent_criterion = nxtent_criterion
+#         self.learning_rate = lr
+#         self.n_classes = n_classes
+#         self.loss_lambda = loss_lambda
+#         self.loss_func = torch.nn.CrossEntropyLoss()
+
+#     def configure_optimizers(self) -> Any:
+#         learnable_parameters = list(self.tfc_model.parameters()) + list(
+#             self.classifier.parameters()
+#         )
+#         optimizer = torch.optim.Adam(
+#             learnable_parameters, lr=self.learning_rate
+#         )
+#         return optimizer
+
+#     def forward(self, x_in_t, x_in_f):
+#         return self.tfc_model(x_in_t, x_in_f)
+
+#     def training_step(self, batch, batch_idx):
+#         data, labels, aug1, data_f, aug1_f = batch
+
+#         """Producing embeddings"""
+#         h_t, z_t, h_f, z_f = self(data, data_f)
+#         h_t_aug, z_t_aug, h_f_aug, z_f_aug = self(aug1, aug1_f)
+
+#         """Add supervised loss"""
+#         fea_concat = torch.cat((z_t, z_f), dim=1)
+#         predictions = self.classifier(fea_concat)
+#         # fea_concat_flat = fea_concat.reshape(fea_concat.shape[0], -1)
+
+#         """Calculate losses"""
+#         loss_time = self.nxtent_criterion(h_t, h_t_aug)
+#         loss_freq = self.nxtent_criterion(h_f, h_f_aug)
+#         loss_consistency = self.nxtent_criterion(z_t, z_f)
+#         loss_p = self.loss_func(predictions, labels)
+#         loss = (
+#             loss_p
+#             + self.loss_lambda * (loss_time + loss_freq)
+#             + loss_consistency
+#         )
+
+#         self.log(
+#             "train_loss",
+#             loss,
+#             on_step=True,
+#             on_epoch=True,
+#             prog_bar=True,
+#             logger=True,
+#         )
+#         return loss
+
+#     def validation_step(self, batch, batch_idx):
+#         loss, acc = self._shared_eval_step(batch, batch_idx)
+#         self.log(
+#             "val_loss",
+#             loss,
+#             on_step=False,
+#             on_epoch=True,
+#             prog_bar=True,
+#             logger=True,
+#         )
+#         self.log(
+#             "val_acc",
+#             acc,
+#             on_step=False,
+#             on_epoch=True,
+#             prog_bar=True,
+#             logger=True,
+#         )
+#         return {"val_loss": loss, "val_acc": acc}
+
+#     def test_step(self, batch, batch_idx):
+#         loss, acc = self._shared_eval_step(batch, batch_idx)
+#         self.log(
+#             "test_loss",
+#             loss,
+#             on_step=False,
+#             on_epoch=True,
+#             prog_bar=True,
+#             logger=True,
+#         )
+#         self.log(
+#             "test_acc",
+#             acc,
+#             on_step=False,
+#             on_epoch=True,
+#             prog_bar=True,
+#             logger=True,
+#         )
+#         return {"test_loss": loss, "test_acc": acc}
+
+#     def _shared_eval_step(self, batch, batch_idx):
+#         data, labels, aug1, data_f, aug1_f = batch
+
+#         """Producing embeddings"""
+#         h_t, z_t, h_f, z_f = self(data, data_f)
+#         h_t_aug, z_t_aug, h_f_aug, z_f_aug = self(aug1, aug1_f)
+
+#         # print(h_t.shape, z_t.shape, h_f.shape, z_f.shape, h_t_aug.shape, z_t_aug.shape, h_f_aug.shape, z_f_aug.shape)
+#         loss_time = self.nxtent_criterion(h_t, h_t_aug)
+#         loss_freq = self.nxtent_criterion(h_f, h_f_aug)
+#         loss_consistency = self.nxtent_criterion(z_t, z_f)
+
+#         """Add supervised loss"""
+#         fea_concat = torch.cat((z_t, z_f), dim=1)
+#         predictions = self.classifier(fea_concat)
+#         loss_p = self.loss_func(predictions, labels)
+
+#         loss = (
+#             loss_p
+#             + self.loss_lambda * (loss_time + loss_freq)
+#             + loss_consistency
+#         )
+
+#         acc = accuracy(
+#             torch.argmax(predictions, dim=1),
+#             labels,
+#             task="multiclass",
+#             num_classes=self.n_classes,
+#         )
+
+#         return loss, acc
