@@ -10,6 +10,8 @@ class LightningTrainCLI:
         learning_rate: float = 1e-3,
         log_dir: str = "logs",
         name: str = None,
+        load: str = None,
+        resume: str = None,
         version: Union[str, int] = None,
         checkpoint_metric: str = None,
         checkpoint_metric_mode: str = "min",
@@ -41,6 +43,10 @@ class LightningTrainCLI:
         version: Union[int, str], optional
             The version of the experiment. If not is provided the current date 
             and time will be used as the version
+        load: str, optional
+            The path to a checkpoint to load
+        resume: str, optional
+            The path to a checkpoint to resume training
         checkpoint_metric: str, optional
             The metric to monitor for checkpointing. If not provided, the last 
             model will be saved
@@ -68,6 +74,8 @@ class LightningTrainCLI:
         self.learning_rate = learning_rate
         self.log_dir = log_dir
         self.experiment_name = name
+        self.load = load
+        self.resume = resume
         self.experiment_version = version
         self.checkpoint_metric = checkpoint_metric
         self.checkpoint_metric_mode = checkpoint_metric_mode

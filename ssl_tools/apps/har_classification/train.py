@@ -31,8 +31,8 @@ from lightning.pytorch.loggers import CSVLogger
 from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
 
 
-class LightningPretrainCLI(LightningTrainCLI):
-    """Defines a Main CLI for pre-training Self-supervised Pytorch Lightning
+class LightningTrainCLI(LightningTrainCLI):
+    """Defines a Main CLI for (pre-)training Self-supervised Pytorch Lightning
     models
 
     Model and its speficic parameters are defined inner functions. Any inner
@@ -43,13 +43,21 @@ class LightningPretrainCLI(LightningTrainCLI):
     In general, the train of models is done as follows:
         1. Assert the validity of the parameters
         2. Set the experiment name and version
-        3. Instantiate the model
+        3. Instantiate the model (load from checkpoint if `load` is provided)
         4. Instantiate the data modules
         5. Instantiate trainer specific resources (logger, callbacks, etc.)
         6. Log the hyperparameters (for reproducibility purposes)
         7. Instantiate the trainer
         8. Train the model
     """
+
+    def __init__(self, training_mode: str = "pretrain", *args, **kwargs):
+        assert training_mode in ["pretrain", "finetune"], (
+            f"training_mode must be either 'pretrain' or 'finetune'. "
+            + f"Got {training_mode}"
+        )
+        self.training_mode = training_mode
+        super().__init__(*args, **kwargs)
 
     def _set_experiment(self, model_name: str):
         self.experiment_name = self.experiment_name or model_name
@@ -104,14 +112,19 @@ class LightningPretrainCLI(LightningTrainCLI):
         )
         return trainer
 
-    def _train(self, model, data_module, trainer):
+    def _train(self, model: L.LightningModule, data_module, trainer: L.Trainer):
         print(
             f"Start training. \n"
             + f"\tExperiment: {self.experiment_name} \n"
             + f"\tVersion is {self.experiment_version}"
         )
+        return trainer.fit(model, data_module, ckpt_path=self.resume)
 
-        return trainer.fit(model, data_module)
+    def _load_model(self, model: L.LightningModule):
+        print(f"Loading model from: {self.load}")
+        state_dict = torch.load(self.load)["state_dict"]
+        model.load_state_dict(state_dict)
+        print("Model loaded successfully")
 
     def cpc(
         self,
@@ -119,6 +132,18 @@ class LightningPretrainCLI(LightningTrainCLI):
         window_size: int = 4,
         pad_length: bool = False,
     ):
+        """Trains the constrastive predictive coding model
+
+        Parameters
+        ----------
+        encoding_size : int, optional
+            Size of the encoding (output of the linear layer)
+        window_size : int, optional
+            Size of the input windows (X_t) to be fed to the encoder
+        pad_length : bool, optional
+            If True, the samples are padded to the length of the longest sample
+            in the dataset.
+        """
         from ssl_tools.models.ssl import CPC
 
         # Wraps CPC in a lightning module for logging purposes
@@ -134,11 +159,12 @@ class LightningPretrainCLI(LightningTrainCLI):
         # ----------------------------------------------------------------------
         # 2. Set experiment name and version
         # ----------------------------------------------------------------------
-        self._set_experiment("CPC_Pretrain")
+        self._set_experiment(f"CPC_{self.training_mode}")
 
         # ----------------------------------------------------------------------
         # 3. Instantiate model
         # ----------------------------------------------------------------------
+
         encoder = GRUEncoder(encoding_size=encoding_size)
         density_estimator = torch.nn.Linear(encoding_size, encoding_size)
         auto_regressor = torch.nn.GRU(
@@ -146,6 +172,7 @@ class LightningPretrainCLI(LightningTrainCLI):
             hidden_size=encoding_size,
             batch_first=True,
         )
+
         model = CPC(
             encoder=encoder,
             density_estimator=density_estimator,
@@ -153,6 +180,9 @@ class LightningPretrainCLI(LightningTrainCLI):
             window_size=window_size,
             lr=self.learning_rate,
         )
+
+        if self.load:
+            self._load_model(model)
 
         # ----------------------------------------------------------------------
         # 4. Instantiate data modules
@@ -187,10 +217,33 @@ class LightningPretrainCLI(LightningTrainCLI):
         encoding_size: int = 10,
         window_size: int = 60,
         mc_sample_size: int = 20,
+        w: float = 0.05,
         significance_level: float = 0.01,
         repeat: int = 5,
         pad_length: bool = True,
     ):
+        """Trains the Temporal Neighborhood Coding model
+
+        Parameters
+        ----------
+        encoding_size : int, optional
+            Size of the encoding (output of the linear layer) .
+        window_size : int, optional
+            Size of the input windows (X_t) to be fed to the encoder.
+        mc_sample_size : int
+            The number of close and distant samples selected in the dataset.
+        w : float
+            This parameter is used in loss and represent probability of
+            sampling a positive window from the non-neighboring region.
+        significance_level: float, optional
+            The significance level of the ADF test. It is used to reject the
+            null hypothesis of the test if p-value is less than this value.
+        repeat : int, optional
+            Simple repeat the element of the dataset ``repeat`` times.
+        pad_length : bool, optional
+            If True, the samples are padded to the length of the longest sample
+            in the dataset.
+        """
         from ssl_tools.models.ssl import TNC
 
         # Wraps TNC in a lightning module for logging purposes
@@ -217,7 +270,7 @@ class LightningPretrainCLI(LightningTrainCLI):
             discriminator=discriminator,
             encoder=encoder,
             mc_sample_size=mc_sample_size,
-            w=0.05,
+            w=w,
             learning_rate=self.learning_rate,
         )
 
@@ -264,6 +317,27 @@ class LightningPretrainCLI(LightningTrainCLI):
         features_as_channels: bool = True,
         jitter_ratio: float = 2,
     ):
+        """Trains the Temporal Frequency Coding model
+
+        Parameters
+        ----------
+        length_alignment : int, optional
+            Truncate the features to this value.
+        use_cosine_similarity : bool, optional
+            If True use cosine similarity, otherwise use dot product in the
+            NXTent loss.
+        temperature : float, optional
+            Temperature parameter of the NXTent loss.
+        label : str, optional
+            Name of the column with the labels.
+        features_as_channels : bool, optional
+            If true, features will be transposed to (C, T), where C is the
+            number of features and T is the number of time steps. If False,
+            features will be (T*C, )
+        jitter_ratio : float, optional
+            Ratio of the standard deviation of the gaussian noise that will be
+            added to the data.
+        """
         from ssl_tools.models.ssl import TFC
 
         # Wraps TFC in a lightning module for logging purposes
@@ -361,4 +435,4 @@ class LightningPretrainCLI(LightningTrainCLI):
 
 
 if __name__ == "__main__":
-    CLI(LightningPretrainCLI, as_positional=False)
+    CLI(LightningTrainCLI, as_positional=False)
