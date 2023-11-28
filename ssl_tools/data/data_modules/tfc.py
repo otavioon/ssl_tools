@@ -64,7 +64,7 @@ class TFCDataModule(L.LightningDataModule):
             the number of time steps. If False, the data will be returned as a
             vector of shape  T*C. Used to instantiate ``HARDataset`` dataset.
         length_alignment : int, optional
-            _description_, by default 178
+            Truncate the features to this value, by default 178
         time_transforms : Union[Transform, List[Transform]], optional
             List of transforms to apply to the time domain. Used to instantiate
             ``TFCDataset`` dataset. If None. an ``AddGaussianNoise`` transform
