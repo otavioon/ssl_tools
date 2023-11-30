@@ -111,9 +111,9 @@ class MultiCSVHARDataset:
             A 2-element tuple with the data and the label. If the label is not specified, the second element is None.
         """
         # Read the data
-        data = pd.read_csv(path)
+        original_data = pd.read_csv(path)
         # Collect the features
-        data = data[self.features].values
+        data = original_data[self.features].values
         # Cast the data to the specified type
         data = data.astype(self.cast_to)
         # If swap axes is specified, swap the axes
@@ -122,7 +122,7 @@ class MultiCSVHARDataset:
 
         # Read the label if specified and return the data and the label
         if self.label is not None:
-            return data, data[self.label].values
+            return data, original_data[[self.label]].values
         # If label is not specified, return only the data
         else:
             return data, None
