@@ -14,6 +14,7 @@ class SSLDiscriminator(L.LightningModule):
         update_backbone: bool = True,
         metrics: List[Metric] = None,
     ):
+        super().__init__()
         self.backbone = backbone
         self.head = head
         self.loss_fn = loss_fn
