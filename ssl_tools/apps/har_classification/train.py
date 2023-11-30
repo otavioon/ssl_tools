@@ -29,6 +29,7 @@ from ssl_tools.models.layers.linear import Discriminator
 import lightning as L
 from lightning.pytorch.loggers import CSVLogger
 from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
+from torchmetrics import Accuracy
 
 
 class LightningTrainCLI(LightningTrainCLI):
@@ -51,12 +52,30 @@ class LightningTrainCLI(LightningTrainCLI):
         8. Train the model
     """
 
-    def __init__(self, training_mode: str = "pretrain", *args, **kwargs):
+    def __init__(
+        self,
+        training_mode: str = "pretrain",
+        load_backbone: str = None,
+        *args,
+        **kwargs,
+    ):
+        """Defines a Main CLI for (pre-)training Self-supervised Pytorch
+
+        Parameters
+        ----------
+        training_mode : str, optional
+            The training mode ("pretrain" or "finetune"), by default "pretrain"
+        load_pretrain : str, optional
+            Path to load the pre-trained backbone. The ``load`` parameter loads
+            the whole model for downstream task, while this parameter only
+            loads the backbone.
+        """
         assert training_mode in ["pretrain", "finetune"], (
             f"training_mode must be either 'pretrain' or 'finetune'. "
             + f"Got {training_mode}"
         )
         self.training_mode = training_mode
+        self.load_backbone = load_backbone
         super().__init__(*args, **kwargs)
 
     def _set_experiment(self, model_name: str):
@@ -120,9 +139,9 @@ class LightningTrainCLI(LightningTrainCLI):
         )
         return trainer.fit(model, data_module, ckpt_path=self.resume)
 
-    def _load_model(self, model: L.LightningModule):
-        print(f"Loading model from: {self.load}")
-        state_dict = torch.load(self.load)["state_dict"]
+    def _load_model(self, model: L.LightningModule, path: str):
+        print(f"Loading model from: {path}")
+        state_dict = torch.load(path)["state_dict"]
         model.load_state_dict(state_dict)
         print("Model loaded successfully")
 
@@ -131,6 +150,8 @@ class LightningTrainCLI(LightningTrainCLI):
         encoding_size: int = 10,
         window_size: int = 4,
         pad_length: bool = False,
+        num_classes: int = 6,
+        update_backbone: bool = False,
     ):
         """Trains the constrastive predictive coding model
 
@@ -143,8 +164,15 @@ class LightningTrainCLI(LightningTrainCLI):
         pad_length : bool, optional
             If True, the samples are padded to the length of the longest sample
             in the dataset.
+        num_classes : int, optional
+            Number of classes in the dataset. Only used in finetune mode.
+        update_backbone : bool, optional
+            If True, the backbone will be updated during training. Only used in
+            finetune mode.
         """
         from ssl_tools.models.ssl import CPC
+        from ssl_tools.models.ssl.classifier import SSLDiscriminator
+        from ssl_tools.models.layers.linear import StateClassifier
 
         # Wraps CPC in a lightning module for logging purposes
         CPC = performance_lightining_logger(CPC)
@@ -181,14 +209,41 @@ class LightningTrainCLI(LightningTrainCLI):
             lr=self.learning_rate,
         )
 
+        if self.training_mode == "finetune":
+            if self.load_backbone:
+                self._load_model(model, self.load_backbone)
+
+            classifier = StateClassifier(
+                input_size=encoding_size,
+                n_classes=num_classes,
+            )
+
+            task = "multiclass" if num_classes > 2 else "binary"
+            model = SSLDiscriminator(
+                backbone=model,
+                head=classifier,
+                loss_fn=torch.nn.CrossEntropyLoss(),
+                learning_rate=self.learning_rate,
+                metrics=[Accuracy(task=task, num_classes=num_classes)],
+                update_backbone=update_backbone,
+            )
+
         if self.load:
-            self._load_model(model)
+            self._load_model(model, self.load)
 
         # ----------------------------------------------------------------------
         # 4. Instantiate data modules
         # ----------------------------------------------------------------------
+        label = (
+            "standard activity code"
+            if self.training_mode == "finetune"
+            else None
+        )
         data_module = MultiModalHARDataModule(
-            self.data, batch_size=self.batch_size, fix_length=pad_length
+            self.data,
+            batch_size=self.batch_size,
+            fix_length=pad_length,
+            label=label,
         )
 
         # ----------------------------------------------------------------------

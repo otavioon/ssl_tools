@@ -64,6 +64,9 @@ class CPC(L.LightningModule, Configurable):
         return loss
 
     def forward(self, sample: torch.Tensor) -> torch.Tensor:
+        return self.encoder(sample)
+
+    def _step(self, sample: torch.Tensor) -> torch.Tensor:
         """Perform a forward pass through the model.
 
         Parameters
@@ -196,15 +199,12 @@ class CPC(L.LightningModule, Configurable):
         X_N, loss = self._shared_step(batch, batch_idx, "test")
         return loss
 
-    def predict_step(self, batch, batch_idx):
-        return self.forward(batch)
-
     def _shared_step(self, batch, batch_idx, prefix):
         assert len(batch) == 1, "Batch must be 1 sample only"
         assert batch.shape[-1] > 5 * self.window_size, "Sample too short"
 
         # Generate the encoded representations
-        X_N = self.forward(batch)
+        X_N = self._step(batch)
         # Generate the labels
         labels = torch.Tensor([len(X_N) - 1]).to(self.device).long()
         # Calculate the loss
