@@ -26,13 +26,13 @@ class SSLDiscriminator(L.LightningModule):
         return self.loss_fn(y_hat, y)
 
     def forward(self, x):
-        encodings = self.backbone(x)
-        predictions = self.head(encodings)
+        encodings = self.backbone.forward(x)
+        predictions = self.head.forward(encodings)
         return predictions
 
     def training_step(self, batch, batch_idx):
         x, y = batch
-        predictions = self(x)
+        predictions = self.forward(x)
         loss = self._loss_func(predictions, y)
         self.log(
             "train_loss",
@@ -46,7 +46,7 @@ class SSLDiscriminator(L.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
-        predictions = self(x)
+        predictions = self.forward(x)
         loss = self._loss_func(predictions, y)
         self.log(
             "val_loss",
@@ -72,7 +72,7 @@ class SSLDiscriminator(L.LightningModule):
 
     def test_step(self, batch, batch_idx):
         x, y = batch
-        predictions = self(x)
+        predictions = self.forward(x)
         loss = self._loss_func(predictions, y)
         self.log(
             "test_loss",
@@ -97,7 +97,7 @@ class SSLDiscriminator(L.LightningModule):
     
     def predict_step(self, batch: Any, batch_idx: int):
         x, y = batch
-        predictions = self(x)
+        predictions = self.forwardf(x)
         return predictions
 
     def _freeze(self, model):
