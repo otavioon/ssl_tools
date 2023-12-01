@@ -27,6 +27,7 @@ import numpy as np
 from ssl_tools.apps import LightningTrainCLI
 from ssl_tools.losses.nxtent import NTXentLoss_poly
 from ssl_tools.models.layers.linear import Discriminator
+from ssl_tools.callbacks.performance import PerformanceLog
 import lightning as L
 from lightning.pytorch.loggers import CSVLogger
 from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
@@ -116,11 +117,13 @@ class LightningTrainCLI(LightningTrainCLI):
             save_last=True,
         )
 
+        performance_log = PerformanceLog()
+
         rich_progress_bar = RichProgressBar(
             leave=False, console_kwargs={"soft_wrap": True}
         )
 
-        return [checkpoint_callback, rich_progress_bar]
+        return [checkpoint_callback, rich_progress_bar, performance_log]
 
     def _log_hyperparams(self, model, logger):
         hyperparams = self.__dict__.copy()
@@ -160,7 +163,7 @@ class LightningTrainCLI(LightningTrainCLI):
 
     def cpc(
         self,
-        encoding_size: int = 10,
+        encoding_size: int = 150,
         window_size: int = 4,
         pad_length: bool = False,
         num_classes: int = 6,
@@ -186,9 +189,6 @@ class LightningTrainCLI(LightningTrainCLI):
         from ssl_tools.models.ssl import CPC
         from ssl_tools.models.ssl.classifier import SSLDiscriminator
         from ssl_tools.models.layers.linear import StateClassifier
-
-        # Wraps CPC in a lightning module for logging purposes
-        CPC = performance_lightining_logger(CPC)
 
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
@@ -315,9 +315,6 @@ class LightningTrainCLI(LightningTrainCLI):
         """
         from ssl_tools.models.ssl import TNC
 
-        # Wraps TNC in a lightning module for logging purposes
-        TNC = performance_lightining_logger(TNC)
-
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
         # ----------------------------------------------------------------------
@@ -409,9 +406,6 @@ class LightningTrainCLI(LightningTrainCLI):
             added to the data.
         """
         from ssl_tools.models.ssl import TFC
-
-        # Wraps TFC in a lightning module for logging purposes
-        TFC = performance_lightining_logger(TFC)
 
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
