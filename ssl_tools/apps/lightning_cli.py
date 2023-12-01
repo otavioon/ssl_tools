@@ -1,10 +1,9 @@
 from typing import Union
-
+import os
 
 class LightningTrainCLI:
     def __init__(
         self,
-        data: str,
         epochs: int = 1,
         batch_size: int = 1,
         learning_rate: float = 1e-3,
@@ -21,13 +20,13 @@ class LightningTrainCLI:
         limit_train_batches: Union[float, int] = 1.0,
         limit_val_batches: Union[float, int] = 1.0,
         num_nodes: int = 1,
+        num_workers: int = None,
+        seed: int = None,
     ):
         """Defines a Main CLI for pre-training Pytorch Lightning models
 
         Parameters
         ----------
-        data : str
-            The location of the data
         epochs : int, optional
             Number of epochs to pre-train the model
         batch_size : int, optional
@@ -67,8 +66,12 @@ class LightningTrainCLI:
             all batches)
         num_nodes: int, optional
             The number of nodes to use. Defaults to 1
+        num_workers: int, optional
+            The number of workers to use for the dataloader. If no provided, 
+            the number of workers will be set to the number of cpus
+        seed: int, optional
+            The seed to use. Defaults to 42
         """
-        self.data = data
         self.epochs = epochs
         self.batch_size = batch_size
         self.learning_rate = learning_rate
@@ -85,3 +88,5 @@ class LightningTrainCLI:
         self.limit_train_batches = limit_train_batches
         self.limit_val_batches = limit_val_batches
         self.num_nodes = num_nodes
+        self.num_workers = num_workers or os.cpu_count()
+        self.seed = seed

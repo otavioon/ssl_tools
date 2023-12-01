@@ -2,6 +2,7 @@
 
 # TODO: A way of removing the need to add the path to the root of
 # the project
+from pathlib import Path
 import sys
 
 
@@ -54,6 +55,7 @@ class LightningTrainCLI(LightningTrainCLI):
 
     def __init__(
         self,
+        data: str,
         training_mode: str = "pretrain",
         load_backbone: str = None,
         *args,
@@ -63,6 +65,8 @@ class LightningTrainCLI(LightningTrainCLI):
 
         Parameters
         ----------
+        data : str
+            The location of the data
         training_mode : str, optional
             The training mode ("pretrain" or "finetune"), by default "pretrain"
         load_pretrain : str, optional
@@ -70,19 +74,29 @@ class LightningTrainCLI(LightningTrainCLI):
             the whole model for downstream task, while this parameter only
             loads the backbone.
         """
+        
         assert training_mode in ["pretrain", "finetune"], (
             f"training_mode must be either 'pretrain' or 'finetune'. "
             + f"Got {training_mode}"
         )
+        
+        super().__init__(*args, **kwargs)
+        self.data = data
         self.training_mode = training_mode
         self.load_backbone = load_backbone
-        super().__init__(*args, **kwargs)
+        self.checkpoint_path = None
+        
 
     def _set_experiment(self, model_name: str):
+        # Set the experiment variables (name, version and checkpoint path)
         self.experiment_name = self.experiment_name or model_name
         self.experiment_version = (
             self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
         )
+        self.checkpoint_path = Path(self.log_dir) / self.experiment_name / self.experiment_version / "checkpoints"
+        # Defines the seed for reproducibility
+        if self.seed:
+            L.seed_everything(self.seed)
 
     def _get_logger(self):
         logger = CSVLogger(
@@ -95,11 +109,10 @@ class LightningTrainCLI(LightningTrainCLI):
 
     def _get_callbacks(self):
         # Get the checkpoint callback
-        checkpoints_path = f"{self.log_dir}/{self.experiment_name}/{self.experiment_version}/checkpoints"
         checkpoint_callback = ModelCheckpoint(
             monitor=self.checkpoint_metric,
             mode=self.checkpoint_metric_mode,
-            dirpath=checkpoints_path,
+            dirpath=self.checkpoint_path,
             save_last=True,
         )
 
@@ -244,6 +257,7 @@ class LightningTrainCLI(LightningTrainCLI):
             batch_size=self.batch_size,
             fix_length=pad_length,
             label=label,
+            num_workers=self.num_workers
         )
 
         # ----------------------------------------------------------------------
@@ -340,6 +354,7 @@ class LightningTrainCLI(LightningTrainCLI):
             mc_sample_size=mc_sample_size,
             significance_level=significance_level,
             repeat=repeat,
+            num_workers=self.num_workers
         )
 
         # ----------------------------------------------------------------------
@@ -465,6 +480,7 @@ class LightningTrainCLI(LightningTrainCLI):
             frequency_transforms=None,  # None, use default transforms
             # Check TFCDataModule for details
             jitter_ratio=jitter_ratio,
+            num_workers=self.num_workers
         )
 
         # ----------------------------------------------------------------------
