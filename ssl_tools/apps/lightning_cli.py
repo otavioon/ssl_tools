@@ -67,10 +67,9 @@ class LightningTrainCLI:
         num_nodes: int, optional
             The number of nodes to use. Defaults to 1
         num_workers: int, optional
-            The number of workers to use for the dataloader. If no provided, 
-            the number of workers will be set to the number of cpus
+            The number of workers to use for the dataloader. 
         seed: int, optional
-            The seed to use. Defaults to 42
+            The seed to use.
         """
         self.epochs = epochs
         self.batch_size = batch_size
@@ -88,5 +87,5 @@ class LightningTrainCLI:
         self.limit_train_batches = limit_train_batches
         self.limit_val_batches = limit_val_batches
         self.num_nodes = num_nodes
-        self.num_workers = num_workers or os.cpu_count()
+        self.num_workers = num_workers
         self.seed = seed

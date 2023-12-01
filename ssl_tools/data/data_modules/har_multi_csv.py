@@ -66,7 +66,7 @@ class MultiModalHARDataModule(L.LightningDataModule):
         super().__init__()
         self.data_path = Path(data_path)
         self.batch_size = batch_size
-        self.num_workers = num_workers or os.cpu_count()
+        self.num_workers = num_workers if num_workers is not None else os.cpu_count()
         self.fix_length = fix_length
         self.label = label
         self.cast_to = cast_to

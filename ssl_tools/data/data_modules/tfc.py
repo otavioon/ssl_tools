@@ -83,7 +83,7 @@ class TFCDataModule(L.LightningDataModule):
         super().__init__()
         self.data_path = Path(data_path)
         self.batch_size = batch_size
-        self.num_workers = num_workers or os.cpu_count()
+        self.num_workers = num_workers if num_workers is not None else os.cpu_count()
         self.feature_prefixes = feature_prefixes
         self.label = label
         self.features_as_channels = features_as_channels
