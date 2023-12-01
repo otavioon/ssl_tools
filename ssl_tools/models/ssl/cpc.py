@@ -60,7 +60,7 @@ class CPC(L.LightningModule, Configurable):
         self.loss_func = torch.nn.CrossEntropyLoss()
 
     def loss_function(self, X_N, labels):
-        loss = self.loss_func(X_N.view(1, -1), labels)
+        loss = self.loss_func(X_N, labels)
         return loss
 
     def forward(self, sample: torch.Tensor) -> torch.Tensor:
@@ -128,7 +128,7 @@ class CPC(L.LightningModule, Configurable):
         # Stack the list into a tensor of shape (40, C, window_size)
         X_ts = torch.tensor(np.stack(X_ts, 0), device=self.device)
         # Encode the windows into a Z-vector.
-        encodings = self.encoder(X_ts)
+        encodings = self.forward(X_ts)
 
         # Given the z-vector of windows, we select a random window to be our
         # random timestamp. Elements before and after the random timestamp are
@@ -208,7 +208,7 @@ class CPC(L.LightningModule, Configurable):
         # Generate the labels
         labels = torch.Tensor([len(X_N) - 1]).to(self.device).long()
         # Calculate the loss
-        loss = self.loss_function(X_N, labels)
+        loss = self.loss_function(X_N.view(1, -1), labels)
         # Log the loss
         self.log(
             f"{prefix}_loss",
