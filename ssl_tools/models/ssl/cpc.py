@@ -48,6 +48,9 @@ class CPC(L.LightningModule, Configurable):
             Weight decay, by default 0.0
         window_size : int, optional
             Size of the input windows (X_t) to be fed to the encoder
+        n_size : int, optional
+            Number of negative samples to be used in the contrastive loss 
+            (steps to predict)
         """
         super().__init__()
         self.encoder = encoder
@@ -144,11 +147,13 @@ class CPC(L.LightningModule, Configurable):
         # and "future" have at least 2 elements.
         random_t = np.random.randint(2, len(encodings) - 2)
         
-        # Split the encodings into past and future
-        past = encodings[:random_t]
-        future = encodings[random_t + 1 :]
-
-        
+        # Split the encodings into "past" and "future"
+        # Pick 10 elements before the random_t and 1 element after it
+        # Past shape = (S, encoding_size), where 2 < S < 12
+        past = encodings[max(0, random_t - 10) : random_t + 1]
+        # Add the batch dimension (batch=1). 
+        # Past shape = (1, S, encoding_size)
+        past = past.unsqueeze(0)         
         # new_coding = encodings[max(0, random_t[0] - 10) : random_t + 1].unsqueeze(
         #         0
         #     )
@@ -156,18 +161,18 @@ class CPC(L.LightningModule, Configurable):
         # Generate the context vector (c_t) using the "past" representations.
         _, c_t = self.auto_regressor(past)
         # Flatten it to pass to a linear layer
-        c_t = c_t.view(-1)
+        c_t = c_t.squeeze(1).squeeze(0) # Equivalent to c_t.view(-1)
         # Generate the density ratios
         densities = self.density_estimator(c_t)
         
          # TODO -------- From here, these lines are quite wierd ---------
-        density_ratios = torch.bmm(
+        log_density_ratios = torch.bmm(
             encodings.unsqueeze(1),
             densities.expand_as(encodings).unsqueeze(-1),
         )
         
         # Ravel density ratios
-        density_ratios = density_ratios.view(
+        log_density_ratios = log_density_ratios.view(
             -1,
         )
         
@@ -177,11 +182,14 @@ class CPC(L.LightningModule, Configurable):
         r.update(set(range(random_t + 3, len(encodings))))
         # Select n_size random elements from r
         rnd_n = np.random.choice(list(r), self.n_size)
-        # Generate the encoded representations
+
+        # Create a tensor with ``self.n_size`` densitity ratio elements (except 
+        # the random_t and its neighbors), that constitute the negative samples 
+        # and the density ratio of the random_t, which is the positive sample.
         X_N = torch.cat(
             [
-                density_ratios[rnd_n],
-                density_ratios[random_t + 1].unsqueeze(0),
+                log_density_ratios[rnd_n],
+                log_density_ratios[random_t + 1].unsqueeze(0),
             ],
             0,
         )
