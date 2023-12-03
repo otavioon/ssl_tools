@@ -8,9 +8,11 @@ cd ..
     --batch_size 100 \
     --accelerator gpu \
     --devices 1 \
-    --load_backbone /workspaces/hiaac-m4/ssl_tools/ssl_tools/apps/har_classification/logs/CPC_pretrain/20231201.181642/checkpoints/last.ckpt \
+    --load_backbone /workspaces/hiaac-m4/ssl_tools/ssl_tools/apps/har_classification/logs/TNC_pretrain/20231203.233329/checkpoints/last.ckpt \
     --training_mode finetune \
-    cpc \
+    tnc \
+    --repeat 5 \
+    --mc_sample_size 20 \
     --window_size 60 \
-    --num_classes 6 \
-    --encoding_size 150 
+    --encoding_size 150 \
+    --w 0.05
