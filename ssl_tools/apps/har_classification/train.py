@@ -9,7 +9,6 @@ import sys
 sys.path.append("../../../")
 
 
-from typing import Union
 import torch
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
 
@@ -17,13 +16,12 @@ from datetime import datetime
 from jsonargparse import CLI
 
 from ssl_tools.models.layers import GRUEncoder
-from ssl_tools.utils.lightining_logger import performance_lightining_logger
 from ssl_tools.data.data_modules import (
     MultiModalHARDataModule,
     TNCHARDataModule,
     TFCDataModule,
+    HARDataModule,
 )
-import numpy as np
 from ssl_tools.apps import LightningTrainCLI
 from ssl_tools.losses.nxtent import NTXentLoss_poly
 from ssl_tools.models.layers.linear import Discriminator
@@ -75,18 +73,17 @@ class LightningTrainCLI(LightningTrainCLI):
             the whole model for downstream task, while this parameter only
             loads the backbone.
         """
-        
+
         assert training_mode in ["pretrain", "finetune"], (
             f"training_mode must be either 'pretrain' or 'finetune'. "
             + f"Got {training_mode}"
         )
-        
+
         super().__init__(*args, **kwargs)
         self.data = data
         self.training_mode = training_mode
         self.load_backbone = load_backbone
         self.checkpoint_path = None
-        
 
     def _set_experiment(self, model_name: str):
         # Set the experiment variables (name, version and checkpoint path)
@@ -94,7 +91,12 @@ class LightningTrainCLI(LightningTrainCLI):
         self.experiment_version = (
             self.experiment_version or datetime.now().strftime("%Y%m%d.%H%M%S")
         )
-        self.checkpoint_path = Path(self.log_dir) / self.experiment_name / self.experiment_version / "checkpoints"
+        self.checkpoint_path = (
+            Path(self.log_dir)
+            / self.experiment_name
+            / self.experiment_version
+            / "checkpoints"
+        )
         # Defines the seed for reproducibility
         if self.seed:
             L.seed_everything(self.seed)
@@ -193,10 +195,10 @@ class LightningTrainCLI(LightningTrainCLI):
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
         # ----------------------------------------------------------------------
-        assert (
-            self.batch_size == 1
-        ), "CPC only supports batch size of 1. Please set batch_size=1"
-
+        if self.training_mode == "pretrain":
+            assert self.batch_size == 1, (
+                "CPC only supports batch size of 1. Please set batch_size=1"
+            )
         # ----------------------------------------------------------------------
         # 2. Set experiment name and version
         # ----------------------------------------------------------------------
@@ -237,7 +239,7 @@ class LightningTrainCLI(LightningTrainCLI):
                 head=classifier,
                 loss_fn=torch.nn.CrossEntropyLoss(),
                 learning_rate=self.learning_rate,
-                metrics=[Accuracy(task=task, num_classes=num_classes)],
+                metrics={"acc": Accuracy(task=task, num_classes=num_classes)},
                 update_backbone=update_backbone,
             )
 
@@ -247,18 +249,20 @@ class LightningTrainCLI(LightningTrainCLI):
         # ----------------------------------------------------------------------
         # 4. Instantiate data modules
         # ----------------------------------------------------------------------
-        label = (
-            "standard activity code"
-            if self.training_mode == "finetune"
-            else None
-        )
-        data_module = MultiModalHARDataModule(
-            self.data,
-            batch_size=self.batch_size,
-            fix_length=pad_length,
-            label=label,
-            num_workers=self.num_workers
-        )
+        if self.training_mode == "pretrain":
+            data_module = MultiModalHARDataModule(
+                self.data,
+                batch_size=self.batch_size,
+                fix_length=pad_length,
+                num_workers=self.num_workers,
+            )
+        else:
+            data_module = HARDataModule(
+                self.data,
+                batch_size=self.batch_size,
+                label="standard activity code",
+                features_as_channels=True,
+            )
 
         # ----------------------------------------------------------------------
         # 5. Instantiate trainer specific resources (logger, callbacks, etc.)
@@ -351,7 +355,7 @@ class LightningTrainCLI(LightningTrainCLI):
             mc_sample_size=mc_sample_size,
             significance_level=significance_level,
             repeat=repeat,
-            num_workers=self.num_workers
+            num_workers=self.num_workers,
         )
 
         # ----------------------------------------------------------------------
@@ -474,7 +478,7 @@ class LightningTrainCLI(LightningTrainCLI):
             frequency_transforms=None,  # None, use default transforms
             # Check TFCDataModule for details
             jitter_ratio=jitter_ratio,
-            num_workers=self.num_workers
+            num_workers=self.num_workers,
         )
 
         # ----------------------------------------------------------------------

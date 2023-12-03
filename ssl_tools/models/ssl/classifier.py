@@ -1,4 +1,4 @@
-from typing import Any, Callable, List
+from typing import Any, Dict
 import lightning as L
 import torch
 from torchmetrics import Metric
@@ -12,7 +12,7 @@ class SSLDiscriminator(L.LightningModule):
         loss_fn,
         learning_rate: float = 1e-3,
         update_backbone: bool = True,
-        metrics: List[Metric] = None,
+        metrics: Dict[str, Metric] = None,
     ):
         super().__init__()
         self.backbone = backbone
@@ -24,6 +24,14 @@ class SSLDiscriminator(L.LightningModule):
 
     def _loss_func(self, y_hat, y):
         return self.loss_fn(y_hat, y)
+    
+    def _compute_metrics(self, y_hat, y, stage: str):
+        return {
+            f"{stage}_{metric_name}": metric.to(self.device)(y_hat, y)
+            for metric_name, metric in self.metrics.items()
+        }
+            
+            
 
     def forward(self, x):
         encodings = self.backbone.forward(x)
@@ -41,7 +49,7 @@ class SSLDiscriminator(L.LightningModule):
             on_epoch=True,
             prog_bar=True,
             logger=True,
-        )       
+        )
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -57,17 +65,15 @@ class SSLDiscriminator(L.LightningModule):
             logger=True,
         )
         if self.metrics is not None:
-            for metric in self.metrics:
-                metric(predictions, y)
-                self.log(
-                    f"train_{metric.name}",
-                    metric,
-                    on_step=False,
-                    on_epoch=True,
-                    prog_bar=True,
-                    logger=True,
-                )
-        
+            results = self._compute_metrics(predictions, y, "val")
+            self.log_dict(
+                results,
+                on_step=False,
+                on_epoch=True,
+                prog_bar=True,
+                logger=True,
+            )
+
         return loss
 
     def test_step(self, batch, batch_idx):
@@ -94,7 +100,7 @@ class SSLDiscriminator(L.LightningModule):
                     logger=True,
                 )
         return loss
-    
+
     def predict_step(self, batch: Any, batch_idx: int):
         x, y = batch
         predictions = self.forwardf(x)

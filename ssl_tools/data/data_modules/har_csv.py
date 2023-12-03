@@ -7,15 +7,12 @@ from pathlib import Path
 
 import os
 
-from librep.base import Transform
 import lightning as L
 
 
-from ssl_tools.transforms.time_1d import AddGaussianNoise
-from ssl_tools.transforms.signal_1d import AddRemoveFrequency
 
 
-class TFCDataModule(L.LightningDataModule):
+class HARDataModule(L.LightningDataModule):
     def __init__(
         self,
         data_path: Union[Path, str],
@@ -31,11 +28,7 @@ class TFCDataModule(L.LightningDataModule):
         ),
         label: str = "standard activity code",
         features_as_channels: bool = True,
-        length_alignment: int = 178,
-        time_transforms: Union[Transform, List[Transform]] = None,
-        frequency_transforms: Union[Transform, List[Transform]] = None,
         cast_to: str = "float32",
-        jitter_ratio: float = 2,
     ):
         """Define a dataloader for ``TFCDataset``. This is a wrapper around
         ``TFCDataset`` class that defines the dataloaders for Pytorch Lightning.
@@ -56,27 +49,8 @@ class TFCDataModule(L.LightningDataModule):
             to become features. Used to instantiate ``HARDataset`` dataset.
         label : str, optional
             The label column, by default "standard activity code"
-        features_as_channels : bool, optional
-            If True, the data will be returned as a vector of shape (C, T),
-            where C is the number of features (in feature_prefixes) and T is
-            the number of time steps. If False, the data will be returned as a
-            vector of shape  T*C. Used to instantiate ``HARDataset`` dataset.
-        length_alignment : int, optional
-            Truncate the features to this value, by default 178
-        time_transforms : Union[Transform, List[Transform]], optional
-            List of transforms to apply to the time domain. Used to instantiate
-            ``TFCDataset`` dataset. If None. an ``AddGaussianNoise`` transform
-            will be used with the given ``jitter_ratio``.
-        frequency_transforms : Union[Transform, List[Transform]], optional
-            List of transforms to apply to the frequency domain. Used to
-            instantiate  ``TFCDataset`` dataset. If None, an
-            ``AddRemoveFrequency`` transform will be used.
         cast_to : str, optional
             Cast the data to the given type, by default "float32"
-        jitter_ratio : float, optional
-            If no time transforms are given (``time_transforms``),
-            this parameter will be used to instantiate an ``AddGaussianNoise``
-            transform with the given ``jitter_ratio``.
         """
         super().__init__()
         self.data_path = Path(data_path)
@@ -85,16 +59,7 @@ class TFCDataModule(L.LightningDataModule):
         self.feature_prefixes = feature_prefixes
         self.label = label
         self.features_as_channels = features_as_channels
-        self.time_transforms = time_transforms
-        self.frequency_transforms = frequency_transforms
         self.cast_to = cast_to
-        self.length_alignment = length_alignment
-
-        if self.time_transforms is None:
-            self.time_transforms = [AddGaussianNoise(std=jitter_ratio)]
-
-        if self.frequency_transforms is None:
-            self.frequency_transforms = [AddRemoveFrequency()]
 
     def _load_dataset(self, name: str) -> TFCDataset:
         """Load a ``TFCDataset``
@@ -118,14 +83,7 @@ class TFCDataModule(L.LightningDataModule):
             cast_to=self.cast_to,
             features_as_channels=self.features_as_channels,
         )
-        tfc_dataset = TFCDataset(
-            dataset,
-            length_alignment=self.length_alignment,
-            time_transforms=self.time_transforms,
-            frequency_transforms=self.frequency_transforms,
-            cast_to=self.cast_to,
-        )
-        return tfc_dataset
+        return dataset
 
     def train_dataloader(self) -> DataLoader:
         """Train dataloader for Pytorch Lightning
