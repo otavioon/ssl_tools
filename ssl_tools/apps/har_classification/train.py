@@ -294,6 +294,8 @@ class LightningTrainCLI(LightningTrainCLI):
         significance_level: float = 0.01,
         repeat: int = 5,
         pad_length: bool = True,
+        num_classes: int = 6,
+        update_backbone: bool = False,
     ):
         """Trains the Temporal Neighborhood Coding model
 
@@ -316,8 +318,15 @@ class LightningTrainCLI(LightningTrainCLI):
         pad_length : bool, optional
             If True, the samples are padded to the length of the longest sample
             in the dataset.
+        num_classes : int, optional
+            Number of classes in the dataset. Only used in finetune mode.
+        update_backbone : bool, optional
+            If True, the backbone will be updated during training. Only used in
+            finetune mode.
         """
         from ssl_tools.models.ssl import TNC
+        from ssl_tools.models.ssl.classifier import SSLDiscriminator
+        from ssl_tools.models.layers.linear import StateClassifier
 
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
@@ -329,7 +338,7 @@ class LightningTrainCLI(LightningTrainCLI):
         # ----------------------------------------------------------------------
         # 2. Set experiment name and version
         # ----------------------------------------------------------------------
-        self._set_experiment("TNC_Pretrain")
+        self._set_experiment(f"TNC_{self.training_mode}")
 
         # ----------------------------------------------------------------------
         # 3. Instantiate model
@@ -343,20 +352,50 @@ class LightningTrainCLI(LightningTrainCLI):
             w=w,
             learning_rate=self.learning_rate,
         )
+        
+        if self.training_mode == "finetune":
+            if self.load_backbone:
+                self._load_model(model, self.load_backbone)
+            
+            classifier = StateClassifier(
+                input_size=encoding_size,
+                n_classes=num_classes,
+            )         
+            
+            task = "multiclass" if num_classes > 2 else "binary"
+            model = SSLDiscriminator(
+                backbone=model,
+                head=classifier,
+                loss_fn=torch.nn.CrossEntropyLoss(),
+                learning_rate=self.learning_rate,
+                metrics={"acc": Accuracy(task=task, num_classes=num_classes)},
+                update_backbone=update_backbone,
+            )   
+            
+        if self.load:
+            self._load_model(model, self.load)
 
         # ----------------------------------------------------------------------
         # 4. Instantiate data modules
         # ----------------------------------------------------------------------
-        data_module = TNCHARDataModule(
-            self.data,
-            batch_size=self.batch_size,
-            fix_length=pad_length,
-            window_size=window_size,
-            mc_sample_size=mc_sample_size,
-            significance_level=significance_level,
-            repeat=repeat,
-            num_workers=self.num_workers,
-        )
+        if self.training_mode == "pretrain":
+            data_module = TNCHARDataModule(
+                self.data,
+                batch_size=self.batch_size,
+                fix_length=pad_length,
+                window_size=window_size,
+                mc_sample_size=mc_sample_size,
+                significance_level=significance_level,
+                repeat=repeat,
+                num_workers=self.num_workers,
+            )
+        else:
+            data_module = HARDataModule(
+                self.data,
+                batch_size=self.batch_size,
+                label="standard activity code",
+                features_as_channels=True,
+            )
 
         # ----------------------------------------------------------------------
         # 5. Instantiate trainer specific resources (logger, callbacks, etc.)
