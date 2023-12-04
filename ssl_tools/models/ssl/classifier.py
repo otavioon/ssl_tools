@@ -30,11 +30,12 @@ class SSLDiscriminator(L.LightningModule):
             f"{stage}_{metric_name}": metric.to(self.device)(y_hat, y)
             for metric_name, metric in self.metrics.items()
         }
-            
-            
 
-    def forward(self, x):
-        encodings = self.backbone.forward(x)
+    def forward(self, x):        
+        if isinstance(x, tuple) or isinstance(x, list):
+            encodings = self.backbone.forward(*x)
+        else:
+            encodings = self.backbone.forward(x)
         predictions = self.head.forward(encodings)
         return predictions
 
