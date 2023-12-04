@@ -23,7 +23,6 @@ from ssl_tools.data.data_modules import (
 )
 from ssl_tools.apps import LightningTrainCLI
 from ssl_tools.losses.nxtent import NTXentLoss_poly
-from ssl_tools.models.layers.linear import Discriminator
 from ssl_tools.callbacks.performance import PerformanceLog
 import lightning as L
 from lightning.pytorch.loggers import CSVLogger
@@ -31,6 +30,7 @@ from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
 from torchmetrics import Accuracy
 
 from ssl_tools.models.ssl.cpc import build_cpc
+from ssl_tools.models.ssl.tnc import build_tnc
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
 from ssl_tools.models.layers.linear import StateClassifier
 
@@ -316,10 +316,6 @@ class LightningTrainCLI(LightningTrainCLI):
             If True, the backbone will be updated during training. Only used in
             finetune mode.
         """
-        from ssl_tools.models.ssl import TNC
-        from ssl_tools.models.ssl.classifier import SSLDiscriminator
-        from ssl_tools.models.layers.linear import StateClassifier
-
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
         # ----------------------------------------------------------------------
@@ -335,15 +331,14 @@ class LightningTrainCLI(LightningTrainCLI):
         # ----------------------------------------------------------------------
         # 3. Instantiate model
         # ----------------------------------------------------------------------
-        discriminator = Discriminator(input_size=encoding_size)
-        encoder = GRUEncoder(encoding_size=encoding_size)
-        model = TNC(
-            discriminator=discriminator,
-            encoder=encoder,
+        model = build_tnc(
+            encoding_size=encoding_size,
+            in_channel=6,
             mc_sample_size=mc_sample_size,
             w=w,
             learning_rate=self.learning_rate,
         )
+        
         
         if self.training_mode == "finetune":
             if self.load_backbone:
