@@ -3,7 +3,7 @@ import lightning as L
 import numpy as np
 
 from ssl_tools.utils.configurable import Configurable
-
+from ssl_tools.models.layers.gru import GRUEncoder
 
 class CPC(L.LightningModule, Configurable):
     """Implements the Contrastive Predictive Coding (CPC) model, as described in
@@ -49,7 +49,7 @@ class CPC(L.LightningModule, Configurable):
         window_size : int, optional
             Size of the input windows (X_t) to be fed to the encoder
         n_size : int, optional
-            Number of negative samples to be used in the contrastive loss 
+            Number of negative samples to be used in the contrastive loss
             (steps to predict)
         """
         super().__init__()
@@ -67,6 +67,21 @@ class CPC(L.LightningModule, Configurable):
         return loss
 
     def forward(self, sample: torch.Tensor) -> torch.Tensor:
+        """Perform a forward pass through the model. This method is used to
+        encode a sample into a representation.
+
+        Parameters
+        ----------
+        sample : torch.Tensor
+            The sample to be encoded. A tensor of shape (B, C, T), where B is
+            the batch size, C is the number of channels and T is the number of
+            time steps.
+
+        Returns
+        -------
+        torch.Tensor
+            A tensor of size (B, encoder_output_size), with the samples encoded.
+        """
         return self.encoder(sample)
 
     def _step(self, sample: torch.Tensor) -> torch.Tensor:
@@ -88,8 +103,7 @@ class CPC(L.LightningModule, Configurable):
         # ----------------------------------------------------------------------
         # 1. Split the sample X into windows of size window_size (X_t)
         # ----------------------------------------------------------------------
-        
-        
+
         # Remove the batch dimension if it is 1, and get the sample size (T)
         sample = sample.squeeze(0)
         time_len = sample.shape[-1]
@@ -117,8 +131,8 @@ class CPC(L.LightningModule, Configurable):
         time_len = sample.shape[-1]
         sample = sample.cpu()
 
-        # Split the sample into windows of size ``window_size``. This generates 
-        # the inputs (X_t, X_{t+1}, ..., X_{t+window_size-1}), which is a list 
+        # Split the sample into windows of size ``window_size``. This generates
+        # the inputs (X_t, X_{t+1}, ..., X_{t+window_size-1}), which is a list
         # of 40 tensors of shape (C, window_size)
         X_ts = np.split(
             # Crop the end in order to have a multiple of window_size
@@ -127,55 +141,43 @@ class CPC(L.LightningModule, Configurable):
             indices_or_sections=(time_len // self.window_size),
             axis=-1,
         )
-        
+
         # Stack the list into a tensor of shape (40, C, window_size)
         X_ts = torch.tensor(np.stack(X_ts, 0), device=self.device)
         # Encode the windows into a Z-vector.
         encodings = self.forward(X_ts)
 
-        # Given the z-vector of windows, we select a random window to be our
-        # random timestamp. Elements before and after the random timestamp are
-        # considered "past" and "future" respectively. We use the "past" to
-        # train the encoder model to maximize the mutual information between
-        # the "past" and "future" representations. We use the "future" to train
-        # the density_estimator and auto_regressor models.
-        # We select a random window in the range [2, len(encodings) - 2].
-        # Thus, we ensure that "past" and "future" have at least 2 elements.
-        
         # Select a random time step t, spliting the sample into past and future.
         # t is in the range [2, len(encodings) - 2], thus ensuring that "past"
         # and "future" have at least 2 elements.
         random_t = np.random.randint(2, len(encodings) - 2)
-        
+
         # Split the encodings into "past" and "future"
         # Pick 10 elements before the random_t and 1 element after it
         # Past shape = (S, encoding_size), where 2 < S < 12
         past = encodings[max(0, random_t - 10) : random_t + 1]
-        # Add the batch dimension (batch=1). 
+        # Add the batch dimension (batch=1).
         # Past shape = (1, S, encoding_size)
-        past = past.unsqueeze(0)         
-        # new_coding = encodings[max(0, random_t[0] - 10) : random_t + 1].unsqueeze(
-        #         0
-        #     )
-        
+        past = past.unsqueeze(0)
+
         # Generate the context vector (c_t) using the "past" representations.
         _, c_t = self.auto_regressor(past)
         # Flatten it to pass to a linear layer
-        c_t = c_t.squeeze(1).squeeze(0) # Equivalent to c_t.view(-1)
+        c_t = c_t.squeeze(1).squeeze(0)  # Equivalent to c_t.view(-1)
         # Generate the density ratios
         densities = self.density_estimator(c_t)
-        
-         # TODO -------- From here, these lines are quite wierd ---------
+
+        # TODO -------- From here, these lines are quite wierd ---------
         log_density_ratios = torch.bmm(
             encodings.unsqueeze(1),
             densities.expand_as(encodings).unsqueeze(-1),
         )
-        
+
         # Ravel density ratios
         log_density_ratios = log_density_ratios.view(
             -1,
         )
-        
+
         # r is a set with all time steps except the random_t and its neighbors
         # (random_t-1, random_t+1)
         r = set(range(0, random_t - 2))
@@ -183,8 +185,8 @@ class CPC(L.LightningModule, Configurable):
         # Select n_size random elements from r
         rnd_n = np.random.choice(list(r), self.n_size)
 
-        # Create a tensor with ``self.n_size`` densitity ratio elements (except 
-        # the random_t and its neighbors), that constitute the negative samples 
+        # Create a tensor with ``self.n_size`` densitity ratio elements (except
+        # the random_t and its neighbors), that constitute the negative samples
         # and the density ratio of the random_t, which is the positive sample.
         X_N = torch.cat(
             [
@@ -247,5 +249,48 @@ class CPC(L.LightningModule, Configurable):
             "learning_rate": self.learning_rate,
             "weight_decay": self.weight_decay,
             "window_size": self.window_size,
+            "n_size": self.n_size,
         }
+
+
+def build_cpc(
+    encoding_size: int = 150,
+    in_channel: int = 6,
+    gru_hidden_size: int = 100,
+    gru_num_layers: int = 1,
+    gru_bidirectional: bool = True,
+    dropout: float = 0.0, 
+    learning_rate: float = 1e-3,
+    weight_decay: float = 0.0,
+    window_size: int = 4,
+    n_size: int = 5,
+):
+    encoder = GRUEncoder(
+        hidden_size=gru_hidden_size, 
+        in_channel=in_channel,
+        encoding_size=encoding_size,
+        num_layers=gru_num_layers,
+        dropout=dropout,
+        bidirectional=gru_bidirectional,
+    )
+    
+    density_estimator = torch.nn.Linear(encoding_size, encoding_size)
+    
+    auto_regressor = torch.nn.GRU(
+        input_size=encoding_size,
+        hidden_size=encoding_size,
+        batch_first=True,
+    )
+    
+    model = CPC(
+        encoder=encoder,
+        density_estimator=density_estimator,
+        auto_regressor=auto_regressor,
+        lr=learning_rate,
+        weight_decay=weight_decay,
+        window_size=window_size,
+        n_size=n_size
+    )
+    
+    return model
 

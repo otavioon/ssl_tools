@@ -15,7 +15,6 @@ from torch.nn import TransformerEncoder, TransformerEncoderLayer
 from datetime import datetime
 from jsonargparse import CLI
 
-from ssl_tools.models.layers import GRUEncoder
 from ssl_tools.data.data_modules import (
     MultiModalHARDataModule,
     TNCHARDataModule,
@@ -30,6 +29,10 @@ import lightning as L
 from lightning.pytorch.loggers import CSVLogger
 from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
 from torchmetrics import Accuracy
+
+from ssl_tools.models.ssl.cpc import build_cpc
+from ssl_tools.models.ssl.classifier import SSLDiscriminator
+from ssl_tools.models.layers.linear import StateClassifier
 
 
 class LightningTrainCLI(LightningTrainCLI):
@@ -188,9 +191,6 @@ class LightningTrainCLI(LightningTrainCLI):
             If True, the backbone will be updated during training. Only used in
             finetune mode.
         """
-        from ssl_tools.models.ssl import CPC
-        from ssl_tools.models.ssl.classifier import SSLDiscriminator
-        from ssl_tools.models.layers.linear import StateClassifier
 
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
@@ -208,20 +208,12 @@ class LightningTrainCLI(LightningTrainCLI):
         # 3. Instantiate model
         # ----------------------------------------------------------------------
 
-        encoder = GRUEncoder(encoding_size=encoding_size)
-        density_estimator = torch.nn.Linear(encoding_size, encoding_size)
-        auto_regressor = torch.nn.GRU(
-            input_size=encoding_size,
-            hidden_size=encoding_size,
-            batch_first=True,
-        )
-
-        model = CPC(
-            encoder=encoder,
-            density_estimator=density_estimator,
-            auto_regressor=auto_regressor,
+        model = build_cpc(
+            encoding_size=encoding_size,
+            in_channel=6,
+            learning_rate=self.learning_rate,
             window_size=window_size,
-            lr=self.learning_rate,
+            n_size=5
         )
 
         if self.training_mode == "finetune":
