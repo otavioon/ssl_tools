@@ -36,6 +36,7 @@ class TFCDataModule(L.LightningDataModule):
         frequency_transforms: Union[Transform, List[Transform]] = None,
         cast_to: str = "float32",
         jitter_ratio: float = 2,
+        only_time_frequency: bool = False,
     ):
         """Define a dataloader for ``TFCDataset``. This is a wrapper around
         ``TFCDataset`` class that defines the dataloaders for Pytorch Lightning.
@@ -77,6 +78,10 @@ class TFCDataModule(L.LightningDataModule):
             If no time transforms are given (``time_transforms``),
             this parameter will be used to instantiate an ``AddGaussianNoise``
             transform with the given ``jitter_ratio``.
+        only_time_frequency : bool, optional
+            If True, the data returned will be a 2-element tuple with the
+            (time, frequency) data as the first element and the label as the
+            second element, by default False
         """
         super().__init__()
         self.data_path = Path(data_path)
@@ -89,6 +94,7 @@ class TFCDataModule(L.LightningDataModule):
         self.frequency_transforms = frequency_transforms
         self.cast_to = cast_to
         self.length_alignment = length_alignment
+        self.only_time_frequency = only_time_frequency
 
         if self.time_transforms is None:
             self.time_transforms = [AddGaussianNoise(std=jitter_ratio)]
@@ -124,6 +130,7 @@ class TFCDataModule(L.LightningDataModule):
             time_transforms=self.time_transforms,
             frequency_transforms=self.frequency_transforms,
             cast_to=self.cast_to,
+            only_time_frequency=self.only_time_frequency,
         )
         return tfc_dataset
 

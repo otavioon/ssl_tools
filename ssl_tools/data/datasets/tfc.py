@@ -20,6 +20,7 @@ class TFCDataset(Dataset):
         time_transforms: Union[Transform, List[Transform]] = None,
         frequency_transforms: Union[Transform, List[Transform]] = None,
         cast_to: str = "float32",
+        only_time_frequency: bool = False,
     ):
         """Time-Frequency Contrastive (TFC) Dataset. This dataset is intented
         to be used using TFC technique. Given a dataset with time-domain signal,
@@ -51,10 +52,15 @@ class TFCDataset(Dataset):
             List of transforms to apply to the frequency domain
         cast_to : str, optional
             Cast the data to the given type, by default "float32"
+        only_time_frequency : bool, optional
+            If True, the data returned will be a 2-element tuple with the
+            (time, frequency) data as the first element and the label as the
+            second element, by default False
         """
         self.dataset = data
         self.length_alignment = length_alignment
         self.cast_to = cast_to
+        self.only_time_frequency = only_time_frequency
 
         # Augmented time transforms
         self.aug_time_transforms = time_transforms or []
@@ -197,6 +203,9 @@ class TFCDataset(Dataset):
             time_aug = time_aug.astype(self.cast_to)
             freq = freq.astype(self.cast_to)
             freq_aug = freq_aug.astype(self.cast_to)
+            
+        if self.only_time_frequency:
+            return (data, freq), label
 
         # Returns the data, the label, the time augmented data, the frequency
         # data and the frequency augmented data
