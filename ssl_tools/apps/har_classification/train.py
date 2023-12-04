@@ -420,11 +420,12 @@ class LightningTrainCLI(LightningTrainCLI):
 
     def tfc(
         self,
+        encoding_size: int = 128,
         length_alignment: int = 178,
         use_cosine_similarity: bool = True,
         temperature: float = 0.5,
         label: str = "standard activity code",
-        features_as_channels: bool = True,
+        features_as_channels: bool = False,
         jitter_ratio: float = 2,
         num_classes: int = 6,
         update_backbone: bool = False,
@@ -433,6 +434,11 @@ class LightningTrainCLI(LightningTrainCLI):
 
         Parameters
         ----------
+        encoding_size : int, optional
+            Size of the encoding (output of the linear layer). Note that the
+            representation will be of size 2*encoding_size, since the
+            representation is the concatenation of the time and frequency
+            encodings.
         length_alignment : int, optional
             Truncate the features to this value.
         use_cosine_similarity : bool, optional
@@ -489,13 +495,13 @@ class LightningTrainCLI(LightningTrainCLI):
             torch.nn.Linear(length_alignment, 256),
             torch.nn.BatchNorm1d(256),
             torch.nn.ReLU(),
-            torch.nn.Linear(256, 128),
+            torch.nn.Linear(256, encoding_size),
         )
         frequency_projector = torch.nn.Sequential(
             torch.nn.Linear(length_alignment, 256),
             torch.nn.BatchNorm1d(256),
             torch.nn.ReLU(),
-            torch.nn.Linear(256, 128),
+            torch.nn.Linear(256, encoding_size),
         )
 
         nxtent = NTXentLoss_poly(
@@ -517,7 +523,7 @@ class LightningTrainCLI(LightningTrainCLI):
                 self._load_model(model, self.load_backbone)
                 
             classifier = SimpleClassifier(
-                input_size=2*128,
+                input_size=2*encoding_size,
                 num_classes=num_classes,
             )
             
@@ -550,13 +556,22 @@ class LightningTrainCLI(LightningTrainCLI):
                 # Check TFCDataModule for details
                 jitter_ratio=jitter_ratio,
                 num_workers=self.num_workers,
+                only_time_frequency=False
             )
         else:
-            data_module = HARDataModule(
+            data_module = TFCDataModule(
                 self.data,
                 batch_size=self.batch_size,
-                label="standard activity code",
+                label=label,
                 features_as_channels=features_as_channels,
+                length_alignment=length_alignment,
+                time_transforms=None,  # None, use default transforms.
+                # Check TFCDataModule for details
+                frequency_transforms=None,  # None, use default transforms
+                # Check TFCDataModule for details
+                jitter_ratio=jitter_ratio,
+                num_workers=self.num_workers,
+                only_time_frequency=True,
             )
 
         # ----------------------------------------------------------------------
