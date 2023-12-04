@@ -10,7 +10,6 @@ sys.path.append("../../../")
 
 
 import torch
-from torch.nn import TransformerEncoder, TransformerEncoderLayer
 
 from datetime import datetime
 from jsonargparse import CLI
@@ -22,7 +21,6 @@ from ssl_tools.data.data_modules import (
     HARDataModule,
 )
 from ssl_tools.apps import LightningTrainCLI
-from ssl_tools.losses.nxtent import NTXentLoss_poly
 from ssl_tools.callbacks.performance import PerformanceLog
 import lightning as L
 from lightning.pytorch.loggers import CSVLogger
@@ -31,8 +29,9 @@ from torchmetrics import Accuracy
 
 from ssl_tools.models.ssl.cpc import build_cpc
 from ssl_tools.models.ssl.tnc import build_tnc
+from ssl_tools.models.ssl.tfc import build_tfc_transformer
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
-from ssl_tools.models.layers.linear import StateClassifier
+from ssl_tools.models.layers.linear import StateClassifier, SimpleClassifier
 
 
 class LightningTrainCLI(LightningTrainCLI):
@@ -196,9 +195,9 @@ class LightningTrainCLI(LightningTrainCLI):
         # 1. Assert the validity of the parameters
         # ----------------------------------------------------------------------
         if self.training_mode == "pretrain":
-            assert self.batch_size == 1, (
-                "CPC only supports batch size of 1. Please set batch_size=1"
-            )
+            assert (
+                self.batch_size == 1
+            ), "CPC only supports batch size of 1. Please set batch_size=1"
         # ----------------------------------------------------------------------
         # 2. Set experiment name and version
         # ----------------------------------------------------------------------
@@ -213,7 +212,7 @@ class LightningTrainCLI(LightningTrainCLI):
             in_channel=6,
             learning_rate=self.learning_rate,
             window_size=window_size,
-            n_size=5
+            n_size=5,
         )
 
         if self.training_mode == "finetune":
@@ -338,17 +337,16 @@ class LightningTrainCLI(LightningTrainCLI):
             w=w,
             learning_rate=self.learning_rate,
         )
-        
-        
+
         if self.training_mode == "finetune":
             if self.load_backbone:
                 self._load_model(model, self.load_backbone)
-            
+
             classifier = StateClassifier(
                 input_size=encoding_size,
                 n_classes=num_classes,
-            )         
-            
+            )
+
             task = "multiclass" if num_classes > 2 else "binary"
             model = SSLDiscriminator(
                 backbone=model,
@@ -357,8 +355,8 @@ class LightningTrainCLI(LightningTrainCLI):
                 learning_rate=self.learning_rate,
                 metrics={"acc": Accuracy(task=task, num_classes=num_classes)},
                 update_backbone=update_backbone,
-            )   
-            
+            )
+
         if self.load:
             self._load_model(model, self.load)
 
@@ -448,10 +446,6 @@ class LightningTrainCLI(LightningTrainCLI):
             If True, the backbone will be updated during training. Only used in
             finetune mode.
         """
-        from ssl_tools.models.ssl import TFC
-        from ssl_tools.models.ssl.classifier import SSLDiscriminator
-        from ssl_tools.models.layers.linear import SimpleClassifier
-
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
         # ----------------------------------------------------------------------
@@ -465,55 +459,23 @@ class LightningTrainCLI(LightningTrainCLI):
         # ----------------------------------------------------------------------
         # 3. Instantiate model
         # ----------------------------------------------------------------------
-        time_encoder = TransformerEncoder(
-            TransformerEncoderLayer(
-                length_alignment, dim_feedforward=2 * length_alignment, nhead=2
-            ),
-            num_layers=2,
-        )
-        frequency_encoder = TransformerEncoder(
-            TransformerEncoderLayer(
-                length_alignment, dim_feedforward=2 * length_alignment, nhead=2
-            ),
-            num_layers=2,
-        )
-
-        time_projector = torch.nn.Sequential(
-            torch.nn.Linear(length_alignment, 256),
-            torch.nn.BatchNorm1d(256),
-            torch.nn.ReLU(),
-            torch.nn.Linear(256, encoding_size),
-        )
-        frequency_projector = torch.nn.Sequential(
-            torch.nn.Linear(length_alignment, 256),
-            torch.nn.BatchNorm1d(256),
-            torch.nn.ReLU(),
-            torch.nn.Linear(256, encoding_size),
-        )
-
-        nxtent = NTXentLoss_poly(
-            temperature=temperature,
+        model = build_tfc_transformer(
+            encoding_size=encoding_size,
+            length_alignment=length_alignment,
             use_cosine_similarity=use_cosine_similarity,
+            temperature=temperature,
+            learning_rate=self.learning_rate
         )
 
-        model = TFC(
-            time_encoder=time_encoder,
-            frequency_encoder=frequency_encoder,
-            time_projector=time_projector,
-            frequency_projector=frequency_projector,
-            nxtent_criterion=nxtent,
-            learning_rate=self.learning_rate,
-        )
-        
         if self.training_mode == "finetune":
             if self.load_backbone:
                 self._load_model(model, self.load_backbone)
-                
+
             classifier = SimpleClassifier(
-                input_size=2*encoding_size,
+                input_size=2 * encoding_size,
                 num_classes=num_classes,
             )
-            
+
             task = "multiclass" if num_classes > 2 else "binary"
             model = SSLDiscriminator(
                 backbone=model,
@@ -521,9 +483,9 @@ class LightningTrainCLI(LightningTrainCLI):
                 loss_fn=torch.nn.CrossEntropyLoss(),
                 learning_rate=self.learning_rate,
                 metrics={"acc": Accuracy(task=task, num_classes=num_classes)},
-                update_backbone=update_backbone,
+                update_backbone=True,
             )
-            
+
         if self.load:
             self._load_model(model, self.load)
 
@@ -543,7 +505,7 @@ class LightningTrainCLI(LightningTrainCLI):
                 # Check TFCDataModule for details
                 jitter_ratio=jitter_ratio,
                 num_workers=self.num_workers,
-                only_time_frequency=False
+                only_time_frequency=False,
             )
         else:
             data_module = TFCDataModule(
