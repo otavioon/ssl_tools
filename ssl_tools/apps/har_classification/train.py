@@ -426,6 +426,8 @@ class LightningTrainCLI(LightningTrainCLI):
         label: str = "standard activity code",
         features_as_channels: bool = True,
         jitter_ratio: float = 2,
+        num_classes: int = 6,
+        update_backbone: bool = False,
     ):
         """Trains the Temporal Frequency Coding model
 
@@ -447,8 +449,15 @@ class LightningTrainCLI(LightningTrainCLI):
         jitter_ratio : float, optional
             Ratio of the standard deviation of the gaussian noise that will be
             added to the data.
+        num_classes : int, optional
+            Number of classes in the dataset. Only used in finetune mode.
+        update_backbone : bool, optional
+            If True, the backbone will be updated during training. Only used in
+            finetune mode.
         """
         from ssl_tools.models.ssl import TFC
+        from ssl_tools.models.ssl.classifier import SSLDiscriminator
+        from ssl_tools.models.layers.linear import SimpleClassifier
 
         # ----------------------------------------------------------------------
         # 1. Assert the validity of the parameters
@@ -458,7 +467,7 @@ class LightningTrainCLI(LightningTrainCLI):
         # ----------------------------------------------------------------------
         # 2. Set experiment name and version
         # ----------------------------------------------------------------------
-        self._set_experiment("TFC_Pretrain")
+        self._set_experiment(f"TFC_{self.training_mode}")
 
         # ----------------------------------------------------------------------
         # 3. Instantiate model
@@ -502,23 +511,53 @@ class LightningTrainCLI(LightningTrainCLI):
             nxtent_criterion=nxtent,
             learning_rate=self.learning_rate,
         )
+        
+        if self.training_mode == "finetune":
+            if self.load_backbone:
+                self._load_model(model, self.load_backbone)
+                
+            classifier = SimpleClassifier(
+                input_size=2*128,
+                num_classes=num_classes,
+            )
+            
+            task = "multiclass" if num_classes > 2 else "binary"
+            model = SSLDiscriminator(
+                backbone=model,
+                head=classifier,
+                loss_fn=torch.nn.CrossEntropyLoss(),
+                learning_rate=self.learning_rate,
+                metrics={"acc": Accuracy(task=task, num_classes=num_classes)},
+                update_backbone=update_backbone,
+            )
+            
+        if self.load:
+            self._load_model(model, self.load)
 
         # ----------------------------------------------------------------------
         # 4. Instantiate data modules
         # ----------------------------------------------------------------------
-        data_module = TFCDataModule(
-            self.data,
-            batch_size=self.batch_size,
-            label=label,
-            features_as_channels=features_as_channels,
-            length_alignment=length_alignment,
-            time_transforms=None,  # None, use default transforms.
-            # Check TFCDataModule for details
-            frequency_transforms=None,  # None, use default transforms
-            # Check TFCDataModule for details
-            jitter_ratio=jitter_ratio,
-            num_workers=self.num_workers,
-        )
+        if self.training_mode == "pretrain":
+            data_module = TFCDataModule(
+                self.data,
+                batch_size=self.batch_size,
+                label=label,
+                features_as_channels=features_as_channels,
+                length_alignment=length_alignment,
+                time_transforms=None,  # None, use default transforms.
+                # Check TFCDataModule for details
+                frequency_transforms=None,  # None, use default transforms
+                # Check TFCDataModule for details
+                jitter_ratio=jitter_ratio,
+                num_workers=self.num_workers,
+            )
+        else:
+            data_module = HARDataModule(
+                self.data,
+                batch_size=self.batch_size,
+                label="standard activity code",
+                features_as_channels=features_as_channels,
+            )
 
         # ----------------------------------------------------------------------
         # 5. Instantiate trainer specific resources (logger, callbacks, etc.)

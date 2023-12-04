@@ -52,9 +52,7 @@ class TFC(L.LightningModule, Configurable):
         self.learning_rate = learning_rate
         self.loss_lambda = loss_lambda
 
-    def forward(
-        self, x_in_t: torch.Tensor, x_in_f: torch.Tensor
-    ) -> torch.Tensor:
+    def forward(self, x_in_t) -> torch.Tensor:
         """Generate the final representation of the model.
 
         Parameters
@@ -69,6 +67,9 @@ class TFC(L.LightningModule, Configurable):
         torch.Tensor
             The final representation of the model (z_t, z_f concatenated)
         """
+        # TODO remvoe the FFT from here
+        x_in_f = torch.fft.fft(x_in_t, dim=-1).abs()
+        
         h_t, z_t, h_f, z_f = self._generate_representations(x_in_t, x_in_f)
         return torch.cat((z_t, z_f), dim=1)
 
