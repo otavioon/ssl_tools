@@ -42,37 +42,6 @@ class Discriminator(torch.nn.Module):
         return self.model(x).view((-1,))
 
 
-# class StateClassifier(torch.nn.Module):
-#     def __init__(self, input_size: int = 10, n_classes: int = 6):
-#         """Simple discriminator network.
-
-#         It is composed by:
-#             - BatchNorm1d(``input_size``)
-#             - Linear(``input_size``, ``n_classes``)
-
-#         Parameters
-#         ----------
-#         input_size : int, optional
-#             Size of the input sample, by default 10
-#         n_classes : int, optional
-#             Number of output classes (output_size), by default 1
-#         """
-#         super(StateClassifier, self).__init__()
-#         self.input_size = input_size
-#         self.n_classes = n_classes
-
-#         # Defines the model
-#         self.model = torch.nn.Sequential(
-#             torch.nn.BatchNorm1d(self.input_size),
-#             torch.nn.Linear(self.input_size, self.n_classes),
-#         )
-#         # Init the weights of linear layers with xavier uniform method
-#         torch.nn.init.xavier_uniform_(self.model[1].weight)
-
-#     def forward(self, x):
-#         return self.model(x)
-
-
 class StateClassifier(torch.nn.Module):
     def __init__(
         self,
