@@ -1,7 +1,10 @@
 from typing import Union
-import os
+import logging
 
 class LightningTrainCLI:
+    _APP_NAME = "LightningTrainCLI"
+    _LOG_FORMAT = "[%(name)s] %(asctime)s - %(levelname)s - %(message)s"
+    
     def __init__(
         self,
         epochs: int = 1,
@@ -22,6 +25,7 @@ class LightningTrainCLI:
         num_nodes: int = 1,
         num_workers: int = None,
         seed: int = None,
+        verbose: int = 1
     ):
         """Defines a Main CLI for pre-training Pytorch Lightning models
 
@@ -70,15 +74,20 @@ class LightningTrainCLI:
             The number of workers to use for the dataloader. 
         seed: int, optional
             The seed to use.
+        verbose: int, optional
+            The verbosity level. Defaults to 1
+            0: CRITICAL; ERROR
+            1: CRITICAL; ERROR; INFO
+            2. CRITICAL; ERROR; INFO; DEBUG
         """
         self.epochs = epochs
         self.batch_size = batch_size
         self.learning_rate = learning_rate
         self.log_dir = log_dir
         self.experiment_name = name
+        self.experiment_version = version
         self.load = load
         self.resume = resume
-        self.experiment_version = version
         self.checkpoint_metric = checkpoint_metric
         self.checkpoint_metric_mode = checkpoint_metric_mode
         self.accelerator = accelerator
@@ -89,3 +98,37 @@ class LightningTrainCLI:
         self.num_nodes = num_nodes
         self.num_workers = num_workers
         self.seed = seed
+        self.verbose = verbose
+        self._logger = self._setup_log()
+
+    def _convert_log_level(self, verbose):
+        if verbose == 0:
+            return "ERROR"
+        elif verbose == 1:
+            return "INFO"
+        elif verbose == 2:
+            return "DEBUG"
+        else:
+            raise ValueError(f"Invalid verbose level: {verbose}")
+        
+    def _setup_log(self):
+        level = self._convert_log_level(self.verbose)
+
+        logger = logging.getLogger(self._APP_NAME)
+        logger.setLevel(level)
+        
+        ch = logging.StreamHandler()
+        ch.setLevel(level)
+        
+        formatter = logging.Formatter(self._LOG_FORMAT)
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+        return logger 
+
+    @property
+    def log(self):
+        return self._logger.info
+    
+    @property
+    def logger(self):
+        return self._logger
