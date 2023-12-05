@@ -57,8 +57,6 @@ class SSLTrain(LightningTrainCLI):
         )
         self.checkpoint_path = self.experiment_path / "checkpoints"
 
-        self.log(f"Setting experiment path to: {self.experiment_path}")
-
     def _get_logger(self):
         logger = CSVLogger(
             save_dir=self.log_dir,
@@ -132,11 +130,7 @@ class SSLTrain(LightningTrainCLI):
         model: L.LightningModule,
         data_module: L.LightningDataModule,
         trainer: L.Trainer,
-    ):
-        self.log("Start Training")
-        self.log(f"\tExperiment: {self.experiment_name}")
-        self.log(f"\tVersion: {self.experiment_version}")
-        
+    ):        
         return trainer.fit(model, data_module, ckpt_path=self.resume)
 
     def _run(self):

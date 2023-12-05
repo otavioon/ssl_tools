@@ -1,5 +1,6 @@
 from typing import Union
 import logging
+import os
 
 class LightningTrainCLI:
     _APP_NAME = "LightningTrainCLI"
@@ -98,37 +99,3 @@ class LightningTrainCLI:
         self.num_nodes = num_nodes
         self.num_workers = num_workers
         self.seed = seed
-        self.verbose = verbose
-        self._logger = self._setup_log()
-
-    def _convert_log_level(self, verbose):
-        if verbose == 0:
-            return "ERROR"
-        elif verbose == 1:
-            return "INFO"
-        elif verbose == 2:
-            return "DEBUG"
-        else:
-            raise ValueError(f"Invalid verbose level: {verbose}")
-        
-    def _setup_log(self):
-        level = self._convert_log_level(self.verbose)
-
-        logger = logging.getLogger(self._APP_NAME)
-        logger.setLevel(level)
-        
-        ch = logging.StreamHandler()
-        ch.setLevel(level)
-        
-        formatter = logging.Formatter(self._LOG_FORMAT)
-        ch.setFormatter(formatter)
-        logger.addHandler(ch)
-        return logger 
-
-    @property
-    def log(self):
-        return self._logger.info
-    
-    @property
-    def logger(self):
-        return self._logger
