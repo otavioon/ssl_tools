@@ -1,20 +1,12 @@
 import torch
 
 from datetime import datetime
-from jsonargparse import CLI
 
-from ssl_tools.data.data_modules import (
-    MultiModalHARDataModule,
-    TNCHARDataModule,
-    TFCDataModule,
-    HARDataModule,
-)
 from ssl_tools.apps import LightningTrainCLI
 from ssl_tools.callbacks.performance import PerformanceLog
 import lightning as L
 from lightning.pytorch.loggers import CSVLogger
 from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
-from torchmetrics import Accuracy
 
 from .lightning_cli import LightningTrainCLI
 
@@ -40,6 +32,9 @@ class SSLTrain(LightningTrainCLI):
         self.checkpoint_path = None
 
     def _set_experiment(self):
+        if self.seed is not None:
+            L.seed_everything(self.seed)
+        
         self.log_dir = Path(self.log_dir)
 
         if self.experiment_name is None:

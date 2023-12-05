@@ -25,12 +25,12 @@ from ssl_tools.models.layers.linear import StateClassifier
 @final
 class CPC(SSLTrain):
     _MODEL_NAME = "CPC"
-    _APP_NAME = "CPC"
 
     def __init__(
         self,
         data: str,
         encoding_size: int = 150,
+        in_channel: int = 6,
         window_size: int = 4,
         pad_length: bool = False,
         num_classes: int = 6,
@@ -44,6 +44,8 @@ class CPC(SSLTrain):
         ----------
         encoding_size : int, optional
             Size of the encoding (output of the linear layer)
+        in_channel : int, optional
+            Number of channels in the input data
         window_size : int, optional
             Size of the input windows (X_t) to be fed to the encoder
         pad_length : bool, optional
@@ -58,6 +60,7 @@ class CPC(SSLTrain):
         super().__init__(*args, **kwargs)
         self.data = data
         self.encoding_size = encoding_size
+        self.in_channel = in_channel
         self.window_size = window_size
         self.pad_length = pad_length
         self.num_classes = num_classes
@@ -66,7 +69,7 @@ class CPC(SSLTrain):
     def _get_pretrain_model(self) -> L.LightningModule:
         model = build_cpc(
             encoding_size=self.encoding_size,
-            in_channel=6,
+            in_channel=self.in_channel,
             learning_rate=self.learning_rate,
             window_size=self.window_size,
             n_size=5,

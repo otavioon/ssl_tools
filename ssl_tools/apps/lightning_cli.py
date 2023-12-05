@@ -2,10 +2,7 @@ from typing import Union
 import logging
 import os
 
-class LightningTrainCLI:
-    _APP_NAME = "LightningTrainCLI"
-    _LOG_FORMAT = "[%(name)s] %(asctime)s - %(levelname)s - %(message)s"
-    
+class LightningTrainCLI:    
     def __init__(
         self,
         epochs: int = 1,
@@ -25,8 +22,7 @@ class LightningTrainCLI:
         limit_val_batches: Union[float, int] = 1.0,
         num_nodes: int = 1,
         num_workers: int = None,
-        seed: int = None,
-        verbose: int = 1
+        seed: int = None
     ):
         """Defines a Main CLI for pre-training Pytorch Lightning models
 
@@ -75,11 +71,6 @@ class LightningTrainCLI:
             The number of workers to use for the dataloader. 
         seed: int, optional
             The seed to use.
-        verbose: int, optional
-            The verbosity level. Defaults to 1
-            0: CRITICAL; ERROR
-            1: CRITICAL; ERROR; INFO
-            2. CRITICAL; ERROR; INFO; DEBUG
         """
         self.epochs = epochs
         self.batch_size = batch_size
