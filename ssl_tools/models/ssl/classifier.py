@@ -90,16 +90,14 @@ class SSLDiscriminator(L.LightningModule):
             logger=True,
         )
         if self.metrics is not None:
-            for metric in self.metrics:
-                metric(predictions, y)
-                self.log(
-                    f"train_{metric.name}",
-                    metric,
-                    on_step=False,
-                    on_epoch=True,
-                    prog_bar=True,
-                    logger=True,
-                )
+            results = self._compute_metrics(predictions, y, "test")
+            self.log_dict(
+                results,
+                on_step=False,
+                on_epoch=True,
+                prog_bar=True,
+                logger=True,
+            )
         return loss
 
     def predict_step(self, batch: Any, batch_idx: int):
