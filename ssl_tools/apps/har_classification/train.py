@@ -20,7 +20,7 @@ from ssl_tools.data.data_modules import (
     TFCDataModule,
     HARDataModule,
 )
-from ssl_tools.apps import LightningTrainCLI
+from ssl_tools.apps import LightningTrain
 from ssl_tools.callbacks.performance import PerformanceLog
 import lightning as L
 from lightning.pytorch.loggers import CSVLogger
@@ -34,7 +34,7 @@ from ssl_tools.models.ssl.classifier import SSLDiscriminator
 from ssl_tools.models.layers.linear import StateClassifier, SimpleClassifier
 
 
-class LightningTrainCLI(LightningTrainCLI):
+class LightningTrain(LightningTrain):
     """Defines a Main CLI for (pre-)training Self-supervised Pytorch Lightning
     models
 
@@ -546,4 +546,4 @@ class LightningTrainCLI(LightningTrainCLI):
 
 
 if __name__ == "__main__":
-    CLI(LightningTrainCLI, as_positional=False)
+    CLI(LightningTrain, as_positional=False)

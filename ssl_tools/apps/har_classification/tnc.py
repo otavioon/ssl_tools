@@ -4,14 +4,13 @@
 # the project
 import sys
 from jsonargparse import CLI
-from jsonargparse.typing import final
 import lightning as L
 import torch
 
 sys.path.append("../../../")
 
 
-from ssl_tools.apps import SSLTrain
+from ssl_tools.apps import SSLTrain, SSLTest
 from ssl_tools.models.ssl.tnc import build_tnc
 from ssl_tools.data.data_modules import (
     TNCHARDataModule,
@@ -22,8 +21,7 @@ from ssl_tools.models.ssl.classifier import SSLDiscriminator
 from ssl_tools.models.ssl.tnc import TNCHead
 
 
-@final
-class TNC(SSLTrain):
+class TNCTrain(SSLTrain):
     _MODEL_NAME = "TNC"
 
     def __init__(
@@ -132,5 +130,83 @@ class TNC(SSLTrain):
         return data_module
 
 
+class TNCTest(SSLTest):
+    _MODEL_NAME = "TNC"
+
+    def __init__(
+        self,
+        data: str,
+        encoding_size: int = 10,
+        in_channel: int = 6,
+        window_size: int = 60,
+        mc_sample_size: int = 20,
+        w: float = 0.05,
+        num_classes: int = 6,
+        *args,
+        **kwargs,
+    ):
+        """Trains the constrastive predictive coding model
+
+        Parameters
+        ----------
+        encoding_size : int, optional
+            Size of the encoding (output of the linear layer)
+        in_channel : int, optional
+            Number of channels in the input data
+        window_size : int, optional
+            Size of the input windows (X_t) to be fed to the encoder
+        pad_length : bool, optional
+            If True, the samples are padded to the length of the longest sample
+            in the dataset.
+        """
+        super().__init__(*args, **kwargs)
+        self.data = data
+        self.encoding_size = encoding_size
+        self.in_channel = in_channel
+        self.window_size = window_size
+        self.mc_sample_size = mc_sample_size
+        self.w = w
+        self.num_classes = num_classes
+
+    def _get_test_model(self) -> L.LightningModule:
+        model = build_tnc(
+            encoding_size=self.encoding_size,
+            in_channel=self.in_channel,
+            mc_sample_size=self.mc_sample_size,
+            w=self.w,
+        )
+        classifier = TNCHead(
+            input_size=self.encoding_size,
+            n_classes=self.num_classes,
+        )
+
+        task = "multiclass" if self.num_classes > 2 else "binary"
+        model = SSLDiscriminator(
+            backbone=model,
+            head=classifier,
+            loss_fn=torch.nn.CrossEntropyLoss(),
+            metrics={"acc": Accuracy(task=task, num_classes=self.num_classes)},
+        )
+        return model
+
+    def _get_test_data_module(self) -> L.LightningDataModule:
+        data_module = HARDataModule(
+            self.data,
+            batch_size=self.batch_size,
+            label="standard activity code",
+            features_as_channels=True,
+        )
+
+        return data_module
+
+
+def main():
+    components = {
+        "fit": TNCTrain,
+        "test": TNCTest,
+    }
+    CLI(components=components, as_positional=False)()
+
+
 if __name__ == "__main__":
-    CLI(TNC)()
+    main()

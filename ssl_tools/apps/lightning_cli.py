@@ -2,7 +2,8 @@ from typing import Union
 import logging
 import os
 
-class LightningTrainCLI:    
+
+class LightningTrain:
     def __init__(
         self,
         epochs: int = 1,
@@ -22,7 +23,7 @@ class LightningTrainCLI:
         limit_val_batches: Union[float, int] = 1.0,
         num_nodes: int = 1,
         num_workers: int = None,
-        seed: int = None
+        seed: int = None,
     ):
         """Defines a Main CLI for pre-training Pytorch Lightning models
 
@@ -37,21 +38,21 @@ class LightningTrainCLI:
         log_dir : str, optional
             Path to the location where logs will be stored
         name: str, optional
-            The name of the experiment (will be used as a prefix for the logs 
-            and checkpoints). If not provided, the name of the model will be 
+            The name of the experiment (will be used as a prefix for the logs
+            and checkpoints). If not provided, the name of the model will be
             used
         version: Union[int, str], optional
-            The version of the experiment. If not is provided the current date 
+            The version of the experiment. If not is provided the current date
             and time will be used as the version
         load: str, optional
             The path to a checkpoint to load
         resume: str, optional
             The path to a checkpoint to resume training
         checkpoint_metric: str, optional
-            The metric to monitor for checkpointing. If not provided, the last 
+            The metric to monitor for checkpointing. If not provided, the last
             model will be saved
         checkpoint_metric_mode: str, optional
-            The mode of the metric to monitor (min, max or mean). Defaults to 
+            The mode of the metric to monitor (min, max or mean). Defaults to
             "min"
         accelerator: str, optional
             The accelerator to use. Defaults to "cpu"
@@ -60,15 +61,15 @@ class LightningTrainCLI:
         strategy: str, optional
             The strategy to use. Defaults to "auto"
         limit_train_batches: Union[float, int], optional
-            The number of batches to use for training. Defaults to 1.0 (use 
+            The number of batches to use for training. Defaults to 1.0 (use
             all batches)
         limit_val_batches: Union[float, int], optional
-            The number of batches to use for validation. Defaults to 1.0 (use 
+            The number of batches to use for validation. Defaults to 1.0 (use
             all batches)
         num_nodes: int, optional
             The number of nodes to use. Defaults to 1
         num_workers: int, optional
-            The number of workers to use for the dataloader. 
+            The number of workers to use for the dataloader.
         seed: int, optional
             The seed to use.
         """
@@ -87,6 +88,34 @@ class LightningTrainCLI:
         self.strategy = strategy
         self.limit_train_batches = limit_train_batches
         self.limit_val_batches = limit_val_batches
+        self.num_nodes = num_nodes
+        self.num_workers = num_workers
+        self.seed = seed
+
+
+class LightningTest:
+    def __init__(
+        self,
+        load: str,
+        batch_size: int = 1,
+        log_dir="logs",
+        name: str = None,
+        version: str = None,
+        accelerator: str = "cpu",
+        devices: int = 1,
+        limit_test_batches: Union[float, int] = 1.0,
+        num_nodes: int = 1,
+        num_workers: int = None,
+        seed: int = None,
+    ):
+        self.load = load
+        self.batch_size = batch_size
+        self.log_dir = log_dir
+        self.name = name
+        self.version = version
+        self.accelerator = accelerator
+        self.devices = devices
+        self.limit_test_batches = limit_test_batches
         self.num_nodes = num_nodes
         self.num_workers = num_workers
         self.seed = seed
