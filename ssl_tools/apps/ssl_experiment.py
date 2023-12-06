@@ -28,28 +28,29 @@ class SSLTrain(LightningTrainCLI):
         self.training_mode = training_mode
         self.load_backbone = load_backbone
 
-        self.experiment_path = None
         self.checkpoint_path = None
 
     def _set_experiment(self):
         if self.seed is not None:
             L.seed_everything(self.seed)
         
-        self.log_dir = Path(self.log_dir)
+        self.log_dir = Path(self.log_dir) / self.training_mode
 
         if self.experiment_name is None:
             self.experiment_name = self._MODEL_NAME
+        
         if self.experiment_version is None:
             self.experiment_version = datetime.now().strftime(
                 self._EXPERIMENT_VERSION_FORMAT
             )
 
+        # Same as format as logger
         self.experiment_path = (
             self.log_dir
             / self.experiment_name
-            / self.training_mode
             / self.experiment_version
         )
+        
         self.checkpoint_path = self.experiment_path / "checkpoints"
 
     def _get_logger(self):
@@ -98,11 +99,21 @@ class SSLTrain(LightningTrainCLI):
         state_dict = torch.load(path)["state_dict"]
         model.load_state_dict(state_dict)
         print("Model loaded successfully")
-
+           
     def _log_hyperparams(self, model, logger):
+        
+        def nested_convert(data):
+            if isinstance(data, dict):
+                return {key: nested_convert(value) for key, value in data.items()}
+            elif isinstance(data, Path):
+                return str(data.expanduser())
+            else:
+                return data    
+        
         hyperparams = self.__dict__.copy()
         if getattr(model, "get_config", None):
             hyperparams.update(model.get_config())
+        hyperparams = nested_convert(hyperparams)
         logger.log_hyperparams(hyperparams)
         return hyperparams
 
