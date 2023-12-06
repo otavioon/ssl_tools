@@ -30,6 +30,7 @@ class TFC(SSLTrain):
         data: str,
         label: str = "standard activity code",
         encoding_size: int = 128,
+        in_channels: int = 6,
         length_alignment: int = 178,
         use_cosine_similarity: bool = True,
         temperature: float = 0.5,
@@ -51,6 +52,13 @@ class TFC(SSLTrain):
             encodings.
         label : str, optional
             Name of the column with the labels.
+        encoding_size : int, optional
+            Size of the encoding (output of the linear layer). The real size of
+            the representation will be 2*encoding_size, since the
+            representation is the concatenation of the time and frequency
+            encodings. 
+        in_channels : int, optional
+            Number of channels in the input data
         length_alignment : int, optional
             Truncate the features to this value.
         use_cosine_similarity : bool, optional
@@ -75,6 +83,7 @@ class TFC(SSLTrain):
         self.data = data
         self.label = label
         self.encoding_size = encoding_size
+        self.in_channels = in_channels
         self.length_alignment = length_alignment
         self.use_cosine_similarity = use_cosine_similarity
         self.temperature = temperature
@@ -86,6 +95,7 @@ class TFC(SSLTrain):
     def _get_pretrain_model(self) -> L.LightningModule:
         model = build_tfc_transformer(
             encoding_size=self.encoding_size,
+            in_channels=self.in_channels,
             length_alignment=self.length_alignment,
             use_cosine_similarity=self.use_cosine_similarity,
             temperature=self.temperature,
@@ -130,7 +140,7 @@ class TFC(SSLTrain):
             loss_fn=torch.nn.CrossEntropyLoss(),
             learning_rate=self.learning_rate,
             metrics={"acc": Accuracy(task=task, num_classes=self.num_classes)},
-            update_backbone=True,
+            update_backbone=self.update_backbone,
         )
         return model
 

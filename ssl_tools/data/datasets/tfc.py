@@ -167,35 +167,21 @@ class TFCDataset(Dataset):
     def __getitem__(self, index):
         data, label = self.dataset[index]
 
-        # Align the data to the same length, removing the extra features
+        # If data is a 1-D array, convert it to a 2-D array
         if data.ndim == 1:
-            data = data[: self.length_alignment]
-        else:
-            data = data[:, : self.length_alignment]
+            data = np.expand_dims(data, axis=0)
 
-        # Is the data a 1-D array or a 2-D array?
+        data = data[:, :self.length_alignment]
 
-        # If the data is a 1-D array, apply the transforms directly and
-        # generate the augmented data, frequency and frequency augmented data
-        if data.ndim == 1:
-            time_aug = self._apply_transforms(data, self.aug_time_transforms)
-            freq = self._apply_transforms(data, self.frequency_transform)
-            freq_aug = self._apply_transforms(
-                data, self.aug_frequency_transforms
-            )
-        # Else if the data is a 2-D array, apply the transforms to each channel
-        # separately and generate the augmented data, frequency and frequency
-        # augmented data
-        else:
-            time_aug = self._apply_transforms_per_axis(
-                data, self.aug_time_transforms
-            )
-            freq = self._apply_transforms_per_axis(
-                data, self.frequency_transform
-            )
-            freq_aug = self._apply_transforms_per_axis(
-                data, self.aug_frequency_transforms
-            )
+        time_aug = self._apply_transforms_per_axis(
+            data, self.aug_time_transforms
+        )
+        freq = self._apply_transforms_per_axis(
+            data, self.frequency_transform
+        )
+        freq_aug = self._apply_transforms_per_axis(
+            data, self.aug_frequency_transforms
+        )
 
         # Cast the data to the specified type
         if self.cast_to:

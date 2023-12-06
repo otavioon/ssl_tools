@@ -47,6 +47,7 @@ class TFC(L.LightningModule, Configurable):
         nxtent_criterion: torch.nn.Module,
         learning_rate: float = 1e-3,
         loss_lambda: float = 0.2,
+        permute_input: tuple = None,
     ):
         """Implements the Time-Frequency Contrastive model, as described in:
         Zhang, Xiang, et al. "Self-supervised contrastive pre-training for time
@@ -83,6 +84,7 @@ class TFC(L.LightningModule, Configurable):
         self.nxtent_criterion = nxtent_criterion
         self.learning_rate = learning_rate
         self.loss_lambda = loss_lambda
+        self.permute_input = permute_input
 
     def forward(
         self, x_in_t: torch.Tensor, x_in_f: torch.Tensor
@@ -101,6 +103,9 @@ class TFC(L.LightningModule, Configurable):
         torch.Tensor
             The final representation of the model (z_t, z_f concatenated)
         """
+        if self.permute_input is not None:
+            x_in_t = x_in_t.permute(*self.permute_input)
+            x_in_f = x_in_f.permute(*self.permute_input)
         h_t, z_t, h_f, z_f = self._generate_representations(x_in_t, x_in_f)
         return torch.cat((z_t, z_f), dim=1)
 
@@ -165,7 +170,6 @@ class TFC(L.LightningModule, Configurable):
             A 4-tuple with the intermediate representations of the model:
             (h_time, z_time, h_freq, z_freq).
         """
-
         # Encodes the time-domain data. It is usually a convolutional encoder
         # such as a resnet1D or a transformer
         x = self.time_encoder(x_in_t)
@@ -221,6 +225,12 @@ class TFC(L.LightningModule, Configurable):
             with the intermediate representations of the model: (h_time,
             z_time, h_freq, z_freq). The second element is the loss.
         """
+        if self.permute_input is not None:
+            data = data.permute(*self.permute_input)
+            aug1 = aug1.permute(*self.permute_input)
+            data_f = data_f.permute(*self.permute_input)
+            aug1_f = aug1_f.permute(*self.permute_input)
+        
         # Get intermetiate representations for non-augmented and augmented data
         # h_* is the intermediate representation of the encoder
         # z_* is the intermediate representation of the projector
@@ -290,32 +300,39 @@ class TFC(L.LightningModule, Configurable):
 
 def build_tfc_transformer(
     encoding_size: int = 128,
+    in_channels: int = 1,
     length_alignment: int = 360,
     use_cosine_similarity: bool = True,
     learning_rate: float = 1e-3,
-    temperature: float = 0.5
+    temperature: float = 0.5,
 ):
     time_encoder = TransformerEncoder(
         TransformerEncoderLayer(
-            length_alignment, dim_feedforward=2 * length_alignment, nhead=2
+            in_channels,
+            dim_feedforward=2 * length_alignment,
+            nhead=2,
+            batch_first=True,
         ),
         num_layers=2,
     )
     frequency_encoder = TransformerEncoder(
         TransformerEncoderLayer(
-            length_alignment, dim_feedforward=2 * length_alignment, nhead=2
+            in_channels,
+            dim_feedforward=2 * length_alignment,
+            nhead=2,
+            batch_first=True,
         ),
         num_layers=2,
     )
 
     time_projector = torch.nn.Sequential(
-        torch.nn.Linear(length_alignment, 256),
+        torch.nn.Linear(in_channels * length_alignment, 256),
         torch.nn.BatchNorm1d(256),
         torch.nn.ReLU(),
         torch.nn.Linear(256, encoding_size),
     )
     frequency_projector = torch.nn.Sequential(
-        torch.nn.Linear(length_alignment, 256),
+        torch.nn.Linear(in_channels * length_alignment, 256),
         torch.nn.BatchNorm1d(256),
         torch.nn.ReLU(),
         torch.nn.Linear(256, encoding_size),
@@ -333,6 +350,7 @@ def build_tfc_transformer(
         frequency_projector=frequency_projector,
         nxtent_criterion=nxtent,
         learning_rate=learning_rate,
+        permute_input=(0, 2, 1)
     )
-    
+
     return model
