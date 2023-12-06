@@ -19,7 +19,7 @@ from ssl_tools.data.data_modules import (
 )
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
-from ssl_tools.models.layers.linear import StateClassifier
+from ssl_tools.models.ssl.tnc import TNCHead
 
 
 @final
@@ -105,7 +105,7 @@ class TNC(SSLTrain):
         if load_backbone is not None:
             self._load_model(model, load_backbone)
 
-        classifier = StateClassifier(
+        classifier = TNCHead(
             input_size=self.encoding_size,
             n_classes=self.num_classes,
         )

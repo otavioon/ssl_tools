@@ -4,8 +4,79 @@ import lightning as L
 import numpy as np
 
 from ssl_tools.utils.configurable import Configurable
-from ssl_tools.models.layers.linear import Discriminator
 from ssl_tools.models.layers.gru import GRUEncoder
+
+
+class TNCDiscriminator(torch.nn.Module):
+    def __init__(self, input_size: int = 10, n_classes: int = 1):
+        """Simple discriminator network. As usued by `Tonekaboni et al.`
+        at "Unsupervised Representation Learning for Time Series with Temporal
+        Neighborhood Coding" (https://arxiv.org/abs/2106.00750)
+
+        It is composed by:
+            - Linear(2 * ``input_size``, 4 * ``input_size``)
+            - ReLU
+            - Dropout(0.5)
+            - Linear(4 * ``input_size``, ``n_classes``)
+        Parameters
+        ----------
+        input_size : int, optional
+            Size of the input sample, by default 10
+        n_classes : int, optional
+            Number of output classes (output_size), by default 1
+        """
+        super().__init__()
+        self.input_size = input_size
+        self.n_classes = n_classes
+
+        # Defines the model
+        self.model = torch.nn.Sequential(
+            torch.nn.Linear(2 * self.input_size, 4 * self.input_size),
+            torch.nn.ReLU(inplace=True),
+            torch.nn.Dropout(0.5),
+            torch.nn.Linear(4 * self.input_size, self.n_classes),
+        )
+        # Init the weights of linear layers with xavier uniform method
+        torch.nn.init.xavier_uniform_(self.model[0].weight)
+        torch.nn.init.xavier_uniform_(self.model[3].weight)
+
+    def forward(self, x):
+        """
+        Predict the probability of the two inputs belonging to the same
+        neighbourhood.
+        """
+        return self.model(x).view((-1,))
+
+
+class TNCHead(torch.nn.Module):
+    def __init__(
+        self,
+        input_size: int = 10,
+        hidden_size1=64,
+        hidden_size2=64,
+        n_classes=6,
+        dropout_prob=0,
+    ):
+        super().__init__()
+        self.layer1 = torch.nn.Sequential(
+            torch.nn.Linear(input_size, hidden_size1), torch.nn.ReLU()
+        )
+        self.layer2 = torch.nn.Sequential(
+            torch.nn.Linear(hidden_size1, hidden_size2), torch.nn.ReLU()
+        )
+        self.dropout = torch.nn.Dropout(p=dropout_prob)
+        self.output_layer = torch.nn.Sequential(
+            torch.nn.Linear(hidden_size2, n_classes), torch.nn.Softmax(dim=1)
+        )
+
+    def forward(self, x):
+        if len(x.shape) == 1:
+            x = x.unsqueeze(0)
+        out = self.layer1(x)
+        out = self.layer2(out)
+        out = self.dropout(out)
+        out = self.output_layer(out)
+        return out
 
 
 class TNC(L.LightningModule, Configurable):
@@ -29,13 +100,13 @@ class TNC(L.LightningModule, Configurable):
             the positive/negative samples. It is a binary classifier that
             predict if the samples are neighbors or not.
         encoder : torch.nn.Module
-            Encode a window of samples into a representation. This model is 
-            usually a GRU that encodes the samples into a representation of 
+            Encode a window of samples into a representation. This model is
+            usually a GRU that encodes the samples into a representation of
             fixed encoding size.
         mc_sample_size : int
             The number of close and distant samples selected in the dataset.
         w : float
-            This parameter is used in loss and represent probability of 
+            This parameter is used in loss and represent probability of
             sampling a positive window from the non-neighboring region.
         learning_rate : _type_, optional
             The learning rate of the optimizer, by default 1e-3
@@ -121,7 +192,7 @@ class TNC(L.LightningModule, Configurable):
         p_loss = self.loss_function(d_p, neighbors)
         # Compute loss negative loss (negative pairs vs. non_neighbors)
         n_loss = self.loss_function(d_n, non_neighbors)
-        # Compute loss of negative pairs vs. neighbours (probability of 
+        # Compute loss of negative pairs vs. neighbours (probability of
         # sampling a positive window from the non-neighboring region)
         n_loss_u = self.loss_function(d_n, neighbors)
         # Compute the final loss
@@ -175,19 +246,19 @@ def build_tnc(
     gru_hidden_size: int = 100,
     gru_num_layers: int = 1,
     gru_bidirectional: bool = True,
-    dropout: float = 0.0, 
+    dropout: float = 0.0,
 ):
-    discriminator = Discriminator(input_size=encoding_size, n_classes=1)
-    
+    discriminator = TNCDiscriminator(input_size=encoding_size, n_classes=1)
+
     encoder = GRUEncoder(
-        hidden_size=gru_hidden_size, 
+        hidden_size=gru_hidden_size,
         in_channel=in_channel,
         encoding_size=encoding_size,
         num_layers=gru_num_layers,
         dropout=dropout,
         bidirectional=gru_bidirectional,
     )
-    
+
     model = TNC(
         discriminator=discriminator,
         encoder=encoder,
@@ -195,5 +266,5 @@ def build_tnc(
         w=w,
         learning_rate=learning_rate,
     )
-    
+
     return model

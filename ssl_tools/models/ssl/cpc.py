@@ -4,6 +4,12 @@ import numpy as np
 
 from ssl_tools.utils.configurable import Configurable
 from ssl_tools.models.layers.gru import GRUEncoder
+from .tnc import TNCHead
+
+
+class CPCHead(TNCHead):
+    pass
+
 
 class CPC(L.LightningModule, Configurable):
     """Implements the Contrastive Predictive Coding (CPC) model, as described in
@@ -259,29 +265,29 @@ def build_cpc(
     gru_hidden_size: int = 100,
     gru_num_layers: int = 1,
     gru_bidirectional: bool = True,
-    dropout: float = 0.0, 
+    dropout: float = 0.0,
     learning_rate: float = 1e-3,
     weight_decay: float = 0.0,
     window_size: int = 4,
     n_size: int = 5,
 ):
     encoder = GRUEncoder(
-        hidden_size=gru_hidden_size, 
+        hidden_size=gru_hidden_size,
         in_channel=in_channel,
         encoding_size=encoding_size,
         num_layers=gru_num_layers,
         dropout=dropout,
         bidirectional=gru_bidirectional,
     )
-    
+
     density_estimator = torch.nn.Linear(encoding_size, encoding_size)
-    
+
     auto_regressor = torch.nn.GRU(
         input_size=encoding_size,
         hidden_size=encoding_size,
         batch_first=True,
     )
-    
+
     model = CPC(
         encoder=encoder,
         density_estimator=density_estimator,
@@ -289,8 +295,7 @@ def build_cpc(
         lr=learning_rate,
         weight_decay=weight_decay,
         window_size=window_size,
-        n_size=n_size
+        n_size=n_size,
     )
-    
-    return model
 
+    return model

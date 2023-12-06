@@ -12,14 +12,13 @@ sys.path.append("../../../")
 
 
 from ssl_tools.apps import SSLTrain
-from ssl_tools.models.ssl.tfc import build_tfc_transformer
+from ssl_tools.models.ssl.tfc import build_tfc_transformer, TFCHead
 from ssl_tools.data.data_modules import (
     TFCDataModule,
     HARDataModule,
 )
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
-from ssl_tools.models.layers.linear import SimpleClassifier
 
 
 @final
@@ -119,7 +118,7 @@ class TFC(SSLTrain):
         if load_backbone is not None:
             self._load_model(model, load_backbone)
 
-        classifier = SimpleClassifier(
+        classifier = TFCHead(
             input_size=2 * self.encoding_size,
             num_classes=self.num_classes,
         )

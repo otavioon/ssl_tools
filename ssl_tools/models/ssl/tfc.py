@@ -7,6 +7,36 @@ from torch.nn import TransformerEncoder, TransformerEncoderLayer
 from ssl_tools.losses.nxtent import NTXentLoss_poly
 
 
+class TFCHead(torch.nn.Module):
+    def __init__(self, input_size: int = 2 * 128, num_classes: int = 2):
+        """Simple discriminator network.
+
+        Parameters
+        ----------
+        input_size : int, optional
+            Size of the input sample, by default 2*128
+        n_classes : int, optional
+            Number of output classes (output_size), by default 2
+        """
+        super().__init__()
+        self.input_size = input_size
+        self.num_classes = num_classes
+
+        # Defines the model
+        self.model = torch.nn.Sequential(
+            torch.nn.Linear(self.input_size, 64),
+            torch.nn.Sigmoid(),
+            torch.nn.Linear(64, self.num_classes),
+        )
+        # Init the weights of linear layers with xavier uniform method
+        # torch.nn.init.xavier_uniform_(self.model[0].weight)
+        # torch.nn.init.xavier_uniform_(self.model[2].weight)
+
+    def forward(self, x):
+        emb_flatten = x.reshape(x.shape[0], -1)
+        return self.model(emb_flatten)
+
+
 class TFC(L.LightningModule, Configurable):
     def __init__(
         self,
