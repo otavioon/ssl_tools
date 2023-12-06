@@ -2,8 +2,8 @@
 
 cd ..
 
-./tnc.py \
-    /workspaces/hiaac-m4/ssl_tools/data/view_concatenated/MotionSense_cpc \
+./tnc.py fit \
+    --data /workspaces/hiaac-m4/ssl_tools/data/view_concatenated/MotionSense_cpc \
     --epochs 100 \
     --batch_size 16 \
     --accelerator gpu \

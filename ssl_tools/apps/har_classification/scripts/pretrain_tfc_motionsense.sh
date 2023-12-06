@@ -2,10 +2,10 @@
 
 cd ..
 
-./tfc.py \
-    /workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/MotionSense \
+./tfc.py fit \
+    --data /workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/MotionSense \
     --epochs 100 \
-    --batch_size 4 \
+    --batch_size 128 \
     --accelerator gpu \
     --devices 1  \
     --checkpoint_metric train_loss \
