@@ -17,7 +17,6 @@ import pandas as pd
 
 class SSLTrain(LightningTrain):
     _MODEL_NAME = "model"
-    _EXPERIMENT_VERSION_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
     def __init__(
         self,
@@ -42,11 +41,6 @@ class SSLTrain(LightningTrain):
 
         if self.experiment_name is None:
             self.experiment_name = self._MODEL_NAME
-
-        if self.experiment_version is None:
-            self.experiment_version = datetime.now().strftime(
-                self._EXPERIMENT_VERSION_FORMAT
-            )
 
         # Same as format as logger
         self.experiment_path = (
@@ -143,7 +137,7 @@ class SSLTrain(LightningTrain):
         print(f"Training will start")
         print(f"\tExperiment path: {self.experiment_path}")
         
-        return trainer.fit(model, data_module, ckpt_path=self.resume)
+        return trainer.fit(model, data_module)
 
     def _run(self):
         # ----------------------------------------------------------------------
@@ -194,7 +188,6 @@ class SSLTrain(LightningTrain):
 
 class SSLTest(LightningTest):
     _MODEL_NAME = "model"
-    _EXPERIMENT_VERSION_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -202,10 +195,8 @@ class SSLTest(LightningTest):
 
     def _set_experiment(self):
         self.log_dir = Path(self.log_dir) / "test"
-        self.experiment_name = self._MODEL_NAME
-        self.experiment_version = datetime.now().strftime(
-            self._EXPERIMENT_VERSION_FORMAT
-        )
+        if self.experiment_name is None:
+            self.experiment_name = self._MODEL_NAME
 
         # Same as format as logger
         self.experiment_path = (

@@ -1,6 +1,9 @@
 from typing import Union
 import logging
 import os
+from datetime import datetime
+
+EXPERIMENT_VERSION_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
 
 class LightningTrain:
@@ -10,10 +13,9 @@ class LightningTrain:
         batch_size: int = 1,
         learning_rate: float = 1e-3,
         log_dir: str = "logs",
-        name: str = None,
-        load: str = None,
-        resume: str = None,
+        name: str = "experiment",
         version: Union[str, int] = None,
+        load: str = None,
         checkpoint_metric: str = None,
         checkpoint_metric_mode: str = "min",
         accelerator: str = "cpu",
@@ -25,7 +27,9 @@ class LightningTrain:
         num_workers: int = None,
         seed: int = None,
     ):
-        """Defines a Main CLI for pre-training Pytorch Lightning models
+        """Defines the parameters for training a Lightning model. This class
+        may be used to define the parameters for a Lightning experiment and
+        CLI.
 
         Parameters
         ----------
@@ -38,16 +42,13 @@ class LightningTrain:
         log_dir : str, optional
             Path to the location where logs will be stored
         name: str, optional
-            The name of the experiment (will be used as a prefix for the logs
-            and checkpoints). If not provided, the name of the model will be
-            used
+            The name of the experiment (it will be used to compose the path of
+            the experiments, such as logs and checkpoints)
         version: Union[int, str], optional
             The version of the experiment. If not is provided the current date
             and time will be used as the version
         load: str, optional
             The path to a checkpoint to load
-        resume: str, optional
-            The path to a checkpoint to resume training
         checkpoint_metric: str, optional
             The metric to monitor for checkpointing. If not provided, the last
             model will be saved
@@ -78,9 +79,10 @@ class LightningTrain:
         self.learning_rate = learning_rate
         self.log_dir = log_dir
         self.experiment_name = name
-        self.experiment_version = version
+        self.experiment_version = version or datetime.now().strftime(
+            EXPERIMENT_VERSION_FORMAT
+        )
         self.load = load
-        self.resume = resume
         self.checkpoint_metric = checkpoint_metric
         self.checkpoint_metric_mode = checkpoint_metric_mode
         self.accelerator = accelerator
@@ -112,7 +114,9 @@ class LightningTest:
         self.batch_size = batch_size
         self.log_dir = log_dir
         self.name = name
-        self.version = version
+        self.experiment_version = version or datetime.now().strftime(
+            EXPERIMENT_VERSION_FORMAT
+        )
         self.accelerator = accelerator
         self.devices = devices
         self.limit_test_batches = limit_test_batches
