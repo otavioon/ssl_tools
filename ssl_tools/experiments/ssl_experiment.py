@@ -3,7 +3,7 @@ import torch
 
 from datetime import datetime
 
-from ssl_tools.apps import LightningTrain
+from ssl_tools.experiments import LightningTrain
 from ssl_tools.callbacks.performance import PerformanceLog
 import lightning as L
 from lightning.pytorch.loggers import CSVLogger

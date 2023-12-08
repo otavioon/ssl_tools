@@ -10,7 +10,7 @@ import torch
 sys.path.append("../../../")
 
 
-from ssl_tools.apps import SSLTrain, SSLTest
+from ssl_tools.experiments import SSLTrain, SSLTest
 from ssl_tools.models.ssl.tnc import build_tnc
 from ssl_tools.data.data_modules import (
     TNCHARDataModule,

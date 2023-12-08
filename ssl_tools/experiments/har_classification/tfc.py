@@ -10,7 +10,7 @@ import torch
 sys.path.append("../../../")
 
 
-from ssl_tools.apps import SSLTrain, SSLTest
+from ssl_tools.experiments import SSLTrain, SSLTest
 from ssl_tools.models.ssl.tfc import build_tfc_transformer, TFCHead
 from ssl_tools.data.data_modules import TFCDataModule
 from torchmetrics import Accuracy
