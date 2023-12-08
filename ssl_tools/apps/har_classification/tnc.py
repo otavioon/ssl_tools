@@ -14,7 +14,7 @@ from ssl_tools.apps import SSLTrain, SSLTest
 from ssl_tools.models.ssl.tnc import build_tnc
 from ssl_tools.data.data_modules import (
     TNCHARDataModule,
-    HARDataModule,
+    MultiModalHARSeriesDataModule,
 )
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
@@ -85,12 +85,12 @@ class TNCTrain(SSLTrain):
     def _get_pretrain_data_module(self) -> L.LightningDataModule:
         data_module = TNCHARDataModule(
             self.data,
-            batch_size=self.batch_size,
-            fix_length=self.pad_length,
+            pad=self.pad_length,
             window_size=self.window_size,
             mc_sample_size=self.mc_sample_size,
             significance_level=self.significance_level,
             repeat=self.repeat,
+            batch_size=self.batch_size,
             num_workers=self.num_workers,
         )
         return data_module
@@ -120,7 +120,7 @@ class TNCTrain(SSLTrain):
         return model
 
     def _get_finetune_data_module(self) -> L.LightningDataModule:
-        data_module = HARDataModule(
+        data_module = MultiModalHARSeriesDataModule(
             self.data,
             batch_size=self.batch_size,
             label="standard activity code",
@@ -190,7 +190,7 @@ class TNCTest(SSLTest):
         return model
 
     def _get_test_data_module(self) -> L.LightningDataModule:
-        data_module = HARDataModule(
+        data_module = MultiModalHARSeriesDataModule(
             self.data,
             batch_size=self.batch_size,
             label="standard activity code",

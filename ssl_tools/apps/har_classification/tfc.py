@@ -12,9 +12,7 @@ sys.path.append("../../../")
 
 from ssl_tools.apps import SSLTrain, SSLTest
 from ssl_tools.models.ssl.tfc import build_tfc_transformer, TFCHead
-from ssl_tools.data.data_modules import (
-    TFCDataModule,
-)
+from ssl_tools.data.data_modules import TFCDataModule
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
 
@@ -107,10 +105,6 @@ class TFCTrain(SSLTrain):
             label=self.label,
             features_as_channels=self.features_as_channels,
             length_alignment=self.length_alignment,
-            time_transforms=None,  # None, use default transforms.
-            # Check TFCDataModule for details
-            frequency_transforms=None,  # None, use default transforms
-            # Check TFCDataModule for details
             jitter_ratio=self.jitter_ratio,
             num_workers=self.num_workers,
             only_time_frequency=False,
@@ -148,10 +142,6 @@ class TFCTrain(SSLTrain):
             label=self.label,
             features_as_channels=self.features_as_channels,
             length_alignment=self.length_alignment,
-            time_transforms=None,  # None, use default transforms.
-            # Check TFCDataModule for details
-            frequency_transforms=None,  # None, use default transforms
-            # Check TFCDataModule for details
             jitter_ratio=self.jitter_ratio,
             num_workers=self.num_workers,
             only_time_frequency=True,
@@ -255,10 +245,6 @@ class TFCTest(SSLTest):
             label=self.label,
             features_as_channels=self.features_as_channels,
             length_alignment=self.length_alignment,
-            time_transforms=None,  # None, use default transforms.
-            # Check TFCDataModule for details
-            frequency_transforms=None,  # None, use default transforms
-            # Check TFCDataModule for details
             num_workers=self.num_workers,
             only_time_frequency=True,
         )

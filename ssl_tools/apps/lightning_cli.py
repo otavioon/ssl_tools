@@ -13,7 +13,7 @@ class LightningTrain:
         batch_size: int = 1,
         learning_rate: float = 1e-3,
         log_dir: str = "logs",
-        name: str = "experiment",
+        name: str = None,
         version: Union[str, int] = None,
         load: str = None,
         checkpoint_metric: str = None,
@@ -113,7 +113,7 @@ class LightningTest:
         self.load = load
         self.batch_size = batch_size
         self.log_dir = log_dir
-        self.name = name
+        self.experiment_name = name
         self.experiment_version = version or datetime.now().strftime(
             EXPERIMENT_VERSION_FORMAT
         )

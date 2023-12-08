@@ -136,7 +136,7 @@ class MultiModalSeriesCSVDataset:
                 for col in df.columns
                 if any(prefix in col for prefix in self.feature_prefixes)
             ]
-            
+
         selected_columns = list(selected_columns)
 
         # Select the data from the selected columns
@@ -371,7 +371,7 @@ class SeriesFolderCSVDataset:
             selected_columns = self.features
         # Transform it to a list if it is not
         selected_columns = list(selected_columns)
-            
+
         data = original_data[selected_columns].values
         data = data.swapaxes(0, 1)
 
@@ -438,7 +438,8 @@ class SeriesFolderCSVDataset:
         Returns
         -------
         Union[Tuple[np.ndarray, np.ndarray], np.ndarray]
-            A 2-element tuple with the data and the label if the label is specified, otherwise only the data.
+            A 2-element tuple with the data and the label if the label is
+            specified, otherwise only the data.
         """
         # If the data is not loaded, load it lazily (read the CSV file)
         if self._cache is None:

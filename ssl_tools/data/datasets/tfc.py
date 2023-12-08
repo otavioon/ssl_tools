@@ -5,7 +5,7 @@ from typing import List
 
 import torch
 from torch.utils.data import Dataset
-from typing import Union
+from typing import Union, Callable
 
 
 from librep.base import Transform
@@ -17,8 +17,8 @@ class TFCDataset(Dataset):
         self,
         data: Dataset,
         length_alignment: int = 178,
-        time_transforms: Union[Transform, List[Transform]] = None,
-        frequency_transforms: Union[Transform, List[Transform]] = None,
+        time_transforms: Union[Callable, List[Callable]] = None,
+        frequency_transforms: Union[Callable, List[Callable]] = None,
         cast_to: str = "float32",
         only_time_frequency: bool = False,
     ):
@@ -80,7 +80,7 @@ class TFCDataset(Dataset):
             self.FFT(absolute=True)
         ] + self.aug_frequency_transforms
 
-    class FFT(Transform):
+    class FFT:
         def __init__(self, absolute: bool = True):
             """Simple wrapper to apply the FFT to the data
 
@@ -91,7 +91,7 @@ class TFCDataset(Dataset):
             """
             self.absolute = absolute
 
-        def transform(self, x: np.ndarray) -> np.ndarray:
+        def __call__(self, x: np.ndarray) -> np.ndarray:
             """Apply the FFT to the data
 
             Parameters
@@ -128,7 +128,7 @@ class TFCDataset(Dataset):
         """
         # Apply the transforms on the data, one by one
         for transform in transforms:
-            x = transform.fit_transform(x)
+            x = transform(x)
         return x
 
     def _apply_transforms_per_axis(

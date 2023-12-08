@@ -22,6 +22,9 @@ class Scale(Transform):
         data_scaled = np.multiply(sample, scaling_factors[:, :])
         return data_scaled
     
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)
+    
     
 class AddGaussianNoise(Transform):
     def __init__(self, mean=0.0, std=0.1):
@@ -33,6 +36,9 @@ class AddGaussianNoise(Transform):
         noisy_sample = sample + noise
         return noisy_sample
     
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)
+    
 class Rotate(Transform):
     def transform(self, dataset: np.ndarray):
         flip = np.random.choice([-1, 1], size=(dataset.shape[0],dataset.shape[-1]))
@@ -41,11 +47,15 @@ class Rotate(Transform):
         data_rotation = flip[:,:] * dataset[:,rotate_axis]
         return data_rotation
     
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)
     
 class LeftToRightFlip(Transform):
     def transform(self, sample: np.ndarray):
         return np.flip(sample, axis=-1)
     
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)
     
 class MagnitudeWrap(Transform):
     def __init__(self, max_magnitude=1.0):
@@ -57,6 +67,8 @@ class MagnitudeWrap(Transform):
         scaled_sample = sample * scaling_factors[:, np.newaxis]
         return scaled_sample
     
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)
     
 class TimeAmplitudeModulation(Transform):
     def __init__(self, modulation_factor=0.1):
@@ -72,6 +84,8 @@ class TimeAmplitudeModulation(Transform):
         modulated_sample = sample * modulation_factors[ np.newaxis, :]
         return modulated_sample
 
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)
 class RandomSmoothing(Transform):
     def __init__(self, sigma_range=(1, 1)):
         self.sigma_range = sigma_range
@@ -88,3 +102,6 @@ class RandomSmoothing(Transform):
             smoothed_sample[channel, :] = gaussian_filter1d(sample[channel, :], sigma)
         
         return smoothed_sample
+    
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)

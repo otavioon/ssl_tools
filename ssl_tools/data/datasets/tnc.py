@@ -4,7 +4,7 @@ import numpy as np
 from torch.utils.data import Dataset
 from statsmodels.tsa.stattools import adfuller
 import math
-from torch.utils.data import Dataset
+
 
 
 class TNCDataset(Dataset):

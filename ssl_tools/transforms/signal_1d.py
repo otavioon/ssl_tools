@@ -8,6 +8,9 @@ from librep.base import Transform
 class FFT(Transform):
     def transform(self, sample: np.ndarray):
         return np.abs(np.fft.fft(sample, axis=1))
+    
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)
 
 
 class AddRemoveFrequency(Transform):
@@ -36,3 +39,7 @@ class AddRemoveFrequency(Transform):
         sample_2 = self.add_frequency(sample)
         augmented_sample = sample_1 + sample_2
         return augmented_sample
+
+
+    def __call__(self, sample: np.ndarray):
+        return self.transform(sample)

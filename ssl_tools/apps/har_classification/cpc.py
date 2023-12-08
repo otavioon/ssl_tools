@@ -13,8 +13,8 @@ sys.path.append("../../../")
 from ssl_tools.apps import SSLTrain, SSLTest
 from ssl_tools.models.ssl.cpc import build_cpc
 from ssl_tools.data.data_modules import (
-    MultiModalHARDataModule,
-    HARDataModule,
+    MultiModalHARSeriesDataModule,
+    UserActivityFolderDataModule,
 )
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
@@ -75,10 +75,10 @@ class CPCTrain(SSLTrain):
         return model
 
     def _get_pretrain_data_module(self) -> L.LightningDataModule:
-        data_module = MultiModalHARDataModule(
-            self.data,
+        data_module = UserActivityFolderDataModule(
+            data_path=self.data,
             batch_size=self.batch_size,
-            fix_length=self.pad_length,
+            pad=self.pad_length,
             num_workers=self.num_workers,
         )
         return data_module
@@ -108,15 +108,16 @@ class CPCTrain(SSLTrain):
         return model
 
     def _get_finetune_data_module(self) -> L.LightningDataModule:
-        data_module = HARDataModule(
-            self.data,
+        data_module = MultiModalHARSeriesDataModule(
+            data_path=self.data,
             batch_size=self.batch_size,
             label="standard activity code",
             features_as_channels=True,
         )
 
         return data_module
-    
+
+
 class CPCTest(SSLTest):
     _MODEL_NAME = "CPC"
 
@@ -153,9 +154,7 @@ class CPCTest(SSLTest):
         self.window_size = window_size
         self.num_classes = num_classes
 
-    def _get_test_model(
-        self, load_backbone: str = None
-    ) -> L.LightningModule:
+    def _get_test_model(self, load_backbone: str = None) -> L.LightningModule:
         model = build_cpc(
             encoding_size=self.encoding_size,
             in_channel=self.in_channel,
@@ -178,13 +177,12 @@ class CPCTest(SSLTest):
         return model
 
     def _get_test_data_module(self) -> L.LightningDataModule:
-        data_module = HARDataModule(
-            self.data,
+        data_module = MultiModalHARSeriesDataModule(
+            data_path=self.data,
             batch_size=self.batch_size,
             label="standard activity code",
             features_as_channels=True,
         )
-
         return data_module
 
 
