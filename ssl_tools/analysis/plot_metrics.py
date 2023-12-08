@@ -5,80 +5,125 @@ from jsonargparse import CLI
 import pandas as pd
 import plotly.graph_objects as go
 import yaml
+from collections.abc import Iterable
+from typing import List
 
 
-class PlotMetrics:   
-    def loss(
+class PlotMetrics:
+    """Class for plotting metrics from a training/predict run."""
+
+    def epoch_loss(
         self,
         experiment_dir: str,
+        losses: List[str] = ("train_loss", "val_loss"),
         metrics_file: str = "metrics.csv",
+        title: str = "Loss",
     ):
+        """Plot the loss over epochs.
+
+        Parameters
+        ----------
+        experiment_dir : str
+            The folder containing the metrics file.
+        losses : List[str], optional
+            The list of loss names to plot, by default ("train_loss",
+            "val_loss")
+        metrics_file : str, optional
+            Name of the metrics_file. The file must be a csv file inside the
+            ``experiment_dir``.
+        title : str, optional
+            Title of the plot.
+        """
         experiment_dir = Path(experiment_dir)
         metrics = pd.read_csv(experiment_dir / metrics_file)
-
-        train_loss_df = metrics[["epoch", "train_loss"]].dropna()
-        train_loss_df["epoch"] = train_loss_df["epoch"].astype(int)
-        train_loss_df["train_loss"] = train_loss_df["train_loss"].astype(float)
-
-        val_loss_df = metrics[["epoch", "val_loss"]].dropna()
-        val_loss_df["epoch"] = val_loss_df["epoch"].astype(int)
-        val_loss_df["val_loss"] = val_loss_df["val_loss"].astype(float)
+        if not isinstance(losses, Iterable):
+            losses = [losses]
 
         fig = go.Figure()
-        fig.add_trace(
-            go.Scatter(
-                x=train_loss_df["epoch"],
-                y=train_loss_df["train_loss"],
-                name="train loss",
+
+        # Iterate over losses and plot them as a scatter plot in the same figure
+        for loss_name in losses:
+            loss_df = metrics[["epoch", loss_name]].dropna()
+            loss_df["epoch"] = loss_df["epoch"].astype(int)
+            loss_df[loss_name] = loss_df[loss_name].astype(float)
+
+            fig.add_trace(
+                go.Scatter(
+                    x=loss_df["epoch"],
+                    y=loss_df[loss_name],
+                    name=loss_name,
+                )
             )
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=val_loss_df["epoch"],
-                y=val_loss_df["val_loss"],
-                name="val loss",
-            )
-        )
-        
-        fig.update_layout(title="Loss", xaxis_title="Epoch", yaxis_title="Loss")
-        
-        output_file = experiment_dir / "loss.png"
+        fig.update_layout(title=title, xaxis_title="Epoch", yaxis_title="Loss")
+
+        output_file = experiment_dir / f"loss.png"
         fig.write_image(str(output_file))
         print(f"Figure saved to {output_file}")
-        
+
     def accuracy(
         self,
         root_experiment_dir: str,
         results_file: str = "results.csv",
         hyperparams_file: str = "hparams.yaml",
         metric: str = "test_acc",
-        train_dataset: str = "train",
+        title: str = "Results",
     ):
+        """Plot the accuracy of a multiple test runs in a single figure. This
+        is useful for comparing the performance of a model trained on different
+        datasets. The folder structure should be as follows:
+        ```
+        root_experiment_dir
+        ├── experiment_1
+        │   ├── hparams.yaml
+        │   ├── results.csv
+        │   └── ...
+        ├── experiment_2
+        │   ├── hparams.yaml
+        │   ├── results.csv
+        │   └── ...
+        └── ...
+        ```
+
+        Parameters
+        ----------
+        root_experiment_dir : str
+            The root folder containing the experiments.
+        results_file : str, optional
+            The name of the results file. It must be a csv file inside the
+            ``root_experiment_dir``.
+        hyperparams_file : str, optional
+            The name of the hyperparamters file. It must be a csv file inside the
+            ``root_experiment_dir``.
+        metric : str, optional
+            Name of the metric to plot.
+        title : str, optional
+            Title of the plot.
+        """
         root_experiment_dir = Path(root_experiment_dir)
-        
+
         fig = go.Figure()
-       
+
+        # Iterate over experiments and plot them as a bar plot in the same 
+        # figure. Each experiment is a different bar.
         for path in sorted(root_experiment_dir.rglob(results_file)):
             experiment_dir = path.parent
             results = pd.read_csv(path)
             hyperparams = yaml.safe_load(
                 (experiment_dir / hyperparams_file).read_text()
             )
-            
+
             dataset_name = hyperparams["data"].split("/")[-1]
             accuracy = results[metric].values[-1]
-            
+
             fig.add_trace(
-                go.Bar(
-                    x=[dataset_name],
-                    y=[accuracy],
-                    name=dataset_name
-                )
+                go.Bar(x=[dataset_name], y=[accuracy], name=dataset_name)
             )
-            
-        fig.update_layout(title=f"Trained on {train_dataset}", xaxis_title="Dataset", yaxis_title=metric)
-            
-        output_file = root_experiment_dir / f"{train_dataset}_{metric}.png"
+
+        fig.update_layout(
+            title=title, xaxis_title="Dataset", yaxis_title=metric
+        )
+
+        output_file = root_experiment_dir / f"{title}_{metric}.png"
         fig.write_image(str(output_file))
         print(f"Figure saved to {output_file}")
 
