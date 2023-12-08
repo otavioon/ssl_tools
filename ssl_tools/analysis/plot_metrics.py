@@ -7,12 +7,11 @@ import plotly.graph_objects as go
 import yaml
 
 
-class PlotMetrics:
+class PlotMetrics:   
     def loss(
         self,
         experiment_dir: str,
         metrics_file: str = "metrics.csv",
-        hyperparams_file: str = "hparams.yaml",
     ):
         experiment_dir = Path(experiment_dir)
         metrics = pd.read_csv(experiment_dir / metrics_file)
