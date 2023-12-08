@@ -4,6 +4,9 @@ import time
 
 
 class PerformanceLog(Callback):
+    """This callback logs the time taken for each epoch and the overall fit 
+    time.
+    """
     def __init__(self):
         super().__init__()
         self.train_epoch_start_time = None
@@ -17,30 +20,6 @@ class PerformanceLog(Callback):
 
     def on_train_epoch_end(self, trainer: L.Trainer, module: L.LightningModule):
         """Called when the train epoch ends.
-
-        To access all batch outputs at the end of the epoch, you can cache step outputs as an attribute of the
-        :class:`lightning.pytorch.core.LightningModule` and access them in this hook:
-
-        .. code-block:: python
-
-            class MyLightningModule(L.LightningModule):
-                def __init__(self):
-                    super().__init__()
-                    self.training_step_outputs = []
-
-                def training_step(self):
-                    loss = ...
-                    self.training_step_outputs.append(loss)
-                    return loss
-
-
-            class MyCallback(L.Callback):
-                def on_train_epoch_end(self, trainer, pl_module):
-                    # do something with all training_step outputs, for example:
-                    epoch_mean = torch.stack(pl_module.training_step_outputs).mean()
-                    pl_module.log("training_epoch_mean", epoch_mean)
-                    # free up the memory
-                    pl_module.training_step_outputs.clear()
         """
         end = time.time()
         duration = end - self.train_epoch_start_time
