@@ -1,5 +1,3 @@
-from .har_dataset import HARDataset
-from .har_multi_csv import MultiCSVHARDataset
-from .simple import SimpleDataset, SimpleArrayDataset, ZarrArrayDataset
+from .series_dataset import MultiModalSeriesCSVDataset, SeriesFolderCSVDataset
 from .tfc import TFCDataset
 from .tnc import TNCDataset

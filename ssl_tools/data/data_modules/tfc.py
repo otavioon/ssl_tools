@@ -1,4 +1,4 @@
-from ssl_tools.data.datasets import HARDataset, TFCDataset
+from ssl_tools.data.datasets import MultiModalSeriesCSVDataset, TFCDataset
 
 from torch.utils.data import DataLoader
 from typing import Union, List
@@ -117,7 +117,7 @@ class TFCDataModule(L.LightningDataModule):
             A TFC dataset with the given split.
         """
         path = self.data_path / f"{name}.csv"
-        dataset = HARDataset(
+        dataset = MultiModalSeriesCSVDataset(
             path,
             feature_prefixes=self.feature_prefixes,
             label=self.label,

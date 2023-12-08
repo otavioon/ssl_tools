@@ -1,18 +1,24 @@
-from typing import Union
+from typing import Union, List
 from pathlib import Path
 import os
 
 import lightning as L
 from torch.utils.data import DataLoader
 
-from ssl_tools.data.datasets.har_multi_csv import MultiCSVHARDataset
-from ssl_tools.data.datasets.tnc import TNCDataset
-
+from ssl_tools.data.datasets import SeriesFolderCSVDataset, TNCDataset
 
 class MultiModalHARDataModule(L.LightningDataModule):
     def __init__(
         self,
         data_path: Union[Path, str],
+        features: List[str] = (
+            "accel-x",
+            "accel-y",
+            "accel-z",
+            "gyro-x",
+            "gyro-y",
+            "gyro-z",
+        ),
         batch_size: int = 1,
         num_workers: int = None,
         fix_length: bool = False,
@@ -48,6 +54,9 @@ class MultiModalHARDataModule(L.LightningDataModule):
         data_path : Union[Path, str]
             The location of the data (root folder). Inside it there must be
             three folders: train, validation and test
+        features: List[str]
+            A list with column names that will be used as features. If None,
+            all columns except the label will be used as features.
         batch_size : int, optional
             The size of the batch, by default 1
         num_workers : int, optional
@@ -65,6 +74,7 @@ class MultiModalHARDataModule(L.LightningDataModule):
         """
         super().__init__()
         self.data_path = Path(data_path)
+        self.features = features
         self.batch_size = batch_size
         self.num_workers = num_workers if num_workers is not None else os.cpu_count()
         self.fix_length = fix_length
@@ -76,7 +86,7 @@ class MultiModalHARDataModule(L.LightningDataModule):
                 "If fix_length is False, batch size must be 1"
             )
 
-    def _load_dataset(self, name: str) -> MultiCSVHARDataset:
+    def _load_dataset(self, name: str) -> SeriesFolderCSVDataset:
         """Load a MultiCSVHARDataset
 
         Parameters
@@ -90,9 +100,12 @@ class MultiModalHARDataModule(L.LightningDataModule):
             A MultiCSVHARDataset
         """
         path = self.data_path / name
-        dataset = MultiCSVHARDataset(
-            path, swapaxes=(1, 0), fix_length=self.fix_length,
-            label=self.label, cast_to=self.cast_to
+        dataset = SeriesFolderCSVDataset(
+            path,
+            features=self.features,
+            label=self.label,
+            pad=self.fix_length,
+            cast_to=self.cast_to,
         )
         return dataset
 

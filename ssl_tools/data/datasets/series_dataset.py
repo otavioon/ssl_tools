@@ -1,5 +1,6 @@
 from typing import Callable, List, Optional, Tuple, Union
 from pathlib import Path
+from collections.abc import Iterable
 
 import numpy as np
 import pandas as pd
@@ -100,7 +101,7 @@ class MultiModalSeriesCSVDataset:
         self.data_path = Path(data_path)
 
         if feature_prefixes is not None:
-            if not isinstance(feature_prefixes, list):
+            if not isinstance(feature_prefixes, Iterable):
                 feature_prefixes = [feature_prefixes]
         self.feature_prefixes = feature_prefixes
         self.label = label
@@ -135,6 +136,8 @@ class MultiModalSeriesCSVDataset:
                 for col in df.columns
                 if any(prefix in col for prefix in self.feature_prefixes)
             ]
+            
+        selected_columns = list(selected_columns)
 
         # Select the data from the selected columns
         data = df[selected_columns].to_numpy()
@@ -241,7 +244,7 @@ class SeriesFolderCSVDataset:
         -----
         - Samples may have different number of time steps. Use ``pad`` to pad
             the data to the length of the longest sample.
-            
+
         Examples
         --------
         # Using the data from the example above
@@ -288,7 +291,7 @@ class SeriesFolderCSVDataset:
         """
         self.data_path = Path(data_path)
         if features is not None:
-            if not isinstance(features, list):
+            if not isinstance(features, Iterable):
                 features = [features]
         self.features = features
         self.label = label
@@ -361,12 +364,15 @@ class SeriesFolderCSVDataset:
 
         # Collect the features
         if self.features is None:
-            features = [
+            selected_columns = [
                 col for col in original_data.columns if col != self.label
             ]
         else:
-            features = self.features
-        data = original_data[features].values
+            selected_columns = self.features
+        # Transform it to a list if it is not
+        selected_columns = list(selected_columns)
+            
+        data = original_data[selected_columns].values
         data = data.swapaxes(0, 1)
 
         # Cast the data to the specified type

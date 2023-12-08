@@ -1,4 +1,4 @@
-from ssl_tools.data.datasets import HARDataset, TFCDataset
+from ssl_tools.data.datasets import MultiModalSeriesCSVDataset, TFCDataset
 
 from torch.utils.data import DataLoader
 from typing import Union, List
@@ -30,11 +30,8 @@ class HARDataModule(L.LightningDataModule):
         features_as_channels: bool = True,
         cast_to: str = "float32",
     ):
-        """Define a dataloader for ``TFCDataset``. This is a wrapper around
-        ``TFCDataset`` class that defines the dataloaders for Pytorch Lightning.
-        The data (``data_path``) must contains three CSV files: train.csv,
-        validation.csv and test.csv.
-
+        """Data module for the HAR dataset
+        
         Parameters
         ----------
         data_path : Union[Path, str]
@@ -76,7 +73,7 @@ class HARDataModule(L.LightningDataModule):
             A TFC dataset with the given split.
         """
         path = self.data_path / f"{name}.csv"
-        dataset = HARDataset(
+        dataset = MultiModalSeriesCSVDataset(
             path,
             feature_prefixes=self.feature_prefixes,
             label=self.label,
