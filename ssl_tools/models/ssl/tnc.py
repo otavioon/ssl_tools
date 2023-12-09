@@ -57,6 +57,30 @@ class TNCHead(torch.nn.Module):
         n_classes=6,
         dropout_prob=0,
     ):
+        """The head of the TNC model. A discrminator one of the ``num_classes``.
+        It is composed by:
+            - Linear(``input_size``, ``hidden_size1``)
+            - ReLU
+            - Linear(``hidden_size1``, ``hidden_size2``)
+            - ReLU
+            - Dropout(``dropout_prob``)
+            - Linear(``hidden_size2``, ``n_classes``)
+            - Softmax(dim=1)
+        
+
+        Parameters
+        ----------
+        input_size : int, optional
+            _description_, by default 10
+        hidden_size1 : int, optional
+            _description_, by default 64
+        hidden_size2 : int, optional
+            _description_, by default 64
+        n_classes : int, optional
+            _description_, by default 6
+        dropout_prob : int, optional
+            _description_, by default 0
+        """
         super().__init__()
         self.layer1 = torch.nn.Sequential(
             torch.nn.Linear(input_size, hidden_size1), torch.nn.ReLU()
@@ -69,7 +93,8 @@ class TNCHead(torch.nn.Module):
             torch.nn.Linear(hidden_size2, n_classes), torch.nn.Softmax(dim=1)
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
+        # If x is a single sample, we need to add a new dimension to it
         if len(x.shape) == 1:
             x = x.unsqueeze(0)
         out = self.layer1(x)
@@ -119,7 +144,16 @@ class TNC(L.LightningModule, Configurable):
         self.learning_rate = learning_rate
         self.loss_func = torch.nn.BCEWithLogitsLoss()
 
-    def loss_function(self, y, y_hat):
+    def loss_function(self, y: torch.Tensor, y_hat: torch.Tensor):
+        """Calculate the loss.
+
+        Parameters
+        ----------
+        y : torch.Tensor
+            The ground truth labels.
+        y_hat : torch.Tensor
+            The predicted labels.
+        """
         return self.loss_func(y, y_hat)
 
     def forward(self, x):
@@ -247,7 +281,41 @@ def build_tnc(
     gru_num_layers: int = 1,
     gru_bidirectional: bool = True,
     dropout: float = 0.0,
-):
+) -> TNC:
+    """Builds a TNC model. This function aids the creation of a TNC model
+    by providing default values for the parameters. 
+
+    Parameters
+    ----------
+    encoding_size : int, optional
+        The size of the encoding. This is the size of the representation.
+    in_channel : int, optional
+        The number of channels (features) of the input samples (e.g., 6 for
+        the MotionSense dataset)
+    mc_sample_size : int
+        The number of close and distant samples selected in the dataset.
+    w : float
+        This parameter is used in loss and represent probability of
+        sampling a positive window from the non-neighboring region.
+    learning_rate : _type_, optional
+        The learning rate of the optimizer
+    gru_hidden_size : int, optional
+        The number of features in the hidden state of the GRU.
+    gru_num_layers : int, optional
+        Number of recurrent layers in the GRU. E.g., setting ``num_layers=2``
+        would mean stacking two GRUs together to form a `stacked GRU`,
+        with the second GRU taking in outputs of the first GRU and
+        computing the final results.
+    gru_bidirectional : bool, optional
+        If ``True``, becomes a bidirectional GRU.
+    dropout : float, optional
+        The dropout probability.
+
+    Returns
+    -------
+    TNC
+        The TNC model.
+    """
     discriminator = TNCDiscriminator(input_size=encoding_size, n_classes=1)
 
     encoder = GRUEncoder(

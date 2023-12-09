@@ -36,7 +36,7 @@ class GRUEncoder(torch.nn.Module):
             The number of input features (e.g. 6 for HAR data in MotionSense
             Dataset), by default 6
         encoding_size : int, optional
-            Size of the encoding (output of the linear layer), by default 10
+            Size of the encoding (output of the linear layer).
         num_layers : int, optional
             Number of recurrent layers. E.g., setting ``num_layers=2``
             would mean stacking two GRUs together to form a `stacked GRU`,

@@ -270,7 +270,43 @@ def build_cpc(
     weight_decay: float = 0.0,
     window_size: int = 4,
     n_size: int = 5,
-):
+) -> CPC:
+    """Builds a default CPC model. This function aid in the creation of a CPC
+    model, by setting the default values of the parameters.
+
+    Parameters
+    ----------
+    encoding_size : int, optional
+        Size of the encoding (output of the linear layer). This is the size of
+        the representation.
+    in_channel : int, optional
+        Number of input features (e.g. 6 for HAR data in MotionSense Dataset)
+    gru_hidden_size : int, optional
+        The number of features in the hidden state of the GRU.
+    gru_num_layers : int, optional
+        Number of recurrent layers in the GRU. E.g., setting ``num_layers=2``
+        would mean stacking two GRUs together to form a `stacked GRU`,
+        with the second GRU taking in outputs of the first GRU and
+        computing the final results.
+    gru_bidirectional : bool, optional
+        If ``True``, becomes a bidirectional GRU.
+    dropout : float, optional
+        The dropout probability.
+    learning_rate : float, optional
+        The learning rate of the optimizer.
+    weight_decay : float, optional
+        The weight decay of the optimizer.
+    window_size : int, optional
+        Size of the input windows (X_t) to be fed to the encoder
+    n_size : int, optional
+        Number of negative samples to be used in the contrastive loss
+        (steps to predict)
+
+    Returns
+    -------
+    CPC
+        The CPC model
+    """
     encoder = GRUEncoder(
         hidden_size=gru_hidden_size,
         in_channel=in_channel,

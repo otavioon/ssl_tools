@@ -45,7 +45,7 @@ class TFCDataset(Dataset):
             is the number of channels and T is the number of time steps. If no
             channels are present, the data must be of shape (T,).
         length_alignment : int, optional
-            Truncate the features to this value, by default 178
+            Truncate the features to this value
         time_transforms : Union[Transform, List[Transform]], optional
             List of transforms to apply to the time domain.
         frequency_transforms : Union[Transform, List[Transform]], optional

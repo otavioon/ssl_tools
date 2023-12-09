@@ -9,7 +9,7 @@ from ssl_tools.losses.nxtent import NTXentLoss_poly
 
 class TFCHead(torch.nn.Module):
     def __init__(self, input_size: int = 2 * 128, num_classes: int = 2):
-        """Simple discriminator network.
+        """Simple discriminator network, used as the head of the TFC model.
 
         Parameters
         ----------
@@ -305,7 +305,35 @@ def build_tfc_transformer(
     use_cosine_similarity: bool = True,
     learning_rate: float = 1e-3,
     temperature: float = 0.5,
-):
+) -> TFC:
+    """Creates a TFC model with a transformer encoder. This function aids in
+    the creation of the TFC model, by providing a transformer encoder and
+    projector.
+
+    Parameters
+    ----------
+        Size of the encoding (output of the linear layer). This is the size of
+        the representation.
+    in_channels : int, optional
+        Number of channels of the input data (e.g. 6 for HAR data in 
+        MotionSense Dataset),
+    length_alignment : int, optional
+        Truncate the features to this value
+    use_cosine_similarity : bool, optional
+        If True, the cosine similarity will be used instead of the dot product,
+        in the NTXentLoss.
+    learning_rate : float, optional
+        The learning rate for the optimizer.
+    temperature : float, optional
+        The temperature for the NTXentLoss.
+
+    Returns
+    -------
+    TFC
+        A TFC model with a transformer encoder.
+    """
+    
+    # Instantiate Encoders
     time_encoder = TransformerEncoder(
         TransformerEncoderLayer(
             in_channels,
@@ -325,6 +353,7 @@ def build_tfc_transformer(
         num_layers=2,
     )
 
+    # Instantiate Projectors
     time_projector = torch.nn.Sequential(
         torch.nn.Linear(in_channels * length_alignment, 256),
         torch.nn.BatchNorm1d(256),
@@ -338,11 +367,13 @@ def build_tfc_transformer(
         torch.nn.Linear(256, encoding_size),
     )
 
+    # Instantiate NTXentLoss
     nxtent = NTXentLoss_poly(
         temperature=temperature,
         use_cosine_similarity=use_cosine_similarity,
     )
 
+    # Create the model
     model = TFC(
         time_encoder=time_encoder,
         frequency_encoder=frequency_encoder,
