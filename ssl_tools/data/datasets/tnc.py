@@ -39,8 +39,7 @@ class TNCDataset(Dataset):
             null hypothesis of the test if p-value is less than this value, by  
             default 0.01
         repeat : int, optional
-            Simple repeat the element of the dataset ``repeat`` times,
-            by default 1
+            Simple repeat the element of the dataset ``repeat`` times
         cast_to : str, optional
             Cast the data to the given type, by default "float32"
         """
