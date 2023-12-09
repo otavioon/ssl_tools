@@ -110,6 +110,37 @@ class LightningTest:
         num_workers: int = None,
         seed: int = None,
     ):
+        """Defines the parameters for testing a Lightning model. This class
+        may be used to define the parameters for a Lightning experiment and
+        CLI.
+
+        Parameters
+        ----------
+        load : str
+            Path to the checkpoint to load
+        batch_size : int, optional
+            The batch size
+        log_dir : str, optional
+            Path to the location where logs will be stored
+        name: str, optional
+            The name of the experiment (it will be used to compose the path of
+            the experiments, such as logs and checkpoints)
+        version: Union[int, str], optional
+            The version of the experiment. If not is provided the current date
+            and time will be used as the version
+        accelerator: str, optional
+            The accelerator to use. Defaults to "cpu"
+        devices: int, optional
+            The number of devices to use. Defaults to 1
+        limit_test_batches : Union[float, int], optional
+            Limit the number of batches to use for testing.
+        num_nodes: int, optional
+            The number of nodes to use. Defaults to 1
+        num_workers: int, optional
+            The number of workers to use for the dataloader.
+        seed: int, optional
+            The seed to use.
+        """
         self.load = load
         self.batch_size = batch_size
         self.log_dir = log_dir
