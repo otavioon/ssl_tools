@@ -7,3 +7,6 @@ numpy
 pandas
 PyYAML
 statsmodels
+jsonargparse[all]
+zarr
+rich
