@@ -27,11 +27,11 @@ class TFCDataset(Dataset):
         this dataset will calculate the FFT of the signal and apply the
         specified transforms to the time and frequency domainof each sample.
         It will return a 5-element tuple with the following elements:
-        - The original time-domain signal
-        - The label of the signal
-        - Time augmented signal
-        - The frequency signal
-        - The frequency augmented signal
+        1. The original time-domain signal
+        2. The label of the signal
+        3. Time augmented time-domain signal
+        4. The frequency-domain signal
+        5. The augmented frequency-domain signal
 
         Note that, if samples are 1-D arrays, the transforms will be applied
         directly to the data. If samples are 2-D arrays, the transforms will
@@ -54,8 +54,27 @@ class TFCDataset(Dataset):
             Cast the data to the given type, by default "float32"
         only_time_frequency : bool, optional
             If True, the data returned will be a 2-element tuple with the
-            (time, frequency) data as the first element and the label as the
-            second element, by default False
+            (time, frequency) as the first element (without augmentation) and 
+            the label as the second element, by default False
+            
+        Examples
+        --------
+        >>> from ssl_tools.data.datasets import MultiModalSeriesCSVDataset
+        >>> data_path = "data.csv"
+        >>> dataset = MultiModalSeriesCSVDataset(
+                data_path,
+                feature_prefixes=["accel-x", "accel-y", "accel-z"],
+                label="class"
+            )
+        >>> dataset = TFCDataset(dataset, length_alignment=180)
+        >>> dataset[0]
+        >>> (
+            torch.Tensor([[-0.0001, -0.0001, -0.0001,  ..., -0.0001, -0.0001, -0.0001]]),   # time
+            0,
+            torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # time augmented
+            torch.Tensor([[0.1, 0.1, 0.1,  ..., 0.1, 0.1, 0.00101]]),                       # frequency
+            torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # frequency augmented
+        )
         """
         self.dataset = data
         self.length_alignment = length_alignment
