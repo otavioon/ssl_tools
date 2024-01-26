@@ -20,7 +20,7 @@ version = "0.0.1-dev"
 dependencies = [
     "torch",
     "lightning",
-    "git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
+    "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
     "scipy",
     "plotly",
     "numpy",
@@ -36,3 +36,7 @@ dev = ["mock", "pytest", "black", "isort"]
 
 "Bug Tracker" = "https://github.com/otavioon/ssl_tools/issues"
 "Homepage" = "https://github.com/otavioon/ssl_tools"
+
+[tool.setuptools]
+py-modules = ["ssl_tools"]
+
