@@ -8,7 +8,7 @@ cd ..
     --batch_size 128 \
     --accelerator gpu \
     --devices 1 \
-    --load_backbone logs/pretrain/TNC/2023-12-06_19-26-23/checkpoints/last.ckpt \
+    --load_backbone logs/pretrain/TNC/2024-01-29_19-28-11/checkpoints/last.ckpt \
     --training_mode finetune \
     --repeat 5 \
     --mc_sample_size 20 \

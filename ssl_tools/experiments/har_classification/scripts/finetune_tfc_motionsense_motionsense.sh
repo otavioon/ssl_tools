@@ -8,7 +8,7 @@ cd ..
     --batch_size 128 \
     --accelerator gpu \
     --devices 1 \
-    --load_backbone logs/pretrain/TFC/2023-12-06_19-26-50/checkpoints/last.ckpt \
+    --load_backbone logs/pretrain/TFC/2024-01-28_22-20-23/checkpoints/last.ckpt \
     --training_mode finetune \
     --encoding_size 128 \
     --features_as_channels True \
