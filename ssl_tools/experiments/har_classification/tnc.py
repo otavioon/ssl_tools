@@ -104,8 +104,8 @@ class TNCTrain(SSLTrain):
             self._load_model(model, load_backbone)
 
         classifier = TNCPredictionHead(
-            input_size=self.encoding_size,
-            n_classes=self.num_classes,
+            input_dim=self.encoding_size,
+            hidden_dim2=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -176,8 +176,8 @@ class TNCTest(SSLTest):
             w=self.w,
         )
         classifier = TNCPredictionHead(
-            input_size=self.encoding_size,
-            n_classes=self.num_classes,
+            input_dim=self.encoding_size,
+            hidden_dim2=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"

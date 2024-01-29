@@ -4,12 +4,6 @@ import numpy as np
 
 from ssl_tools.utils.configurable import Configurable
 from ssl_tools.models.layers.gru import GRUEncoder
-from .tnc import TNCHead
-
-
-class CPCHead(TNCHead):
-    pass
-
 
 class CPC(L.LightningModule, Configurable):
     """Implements the Contrastive Predictive Coding (CPC) model, as described in
