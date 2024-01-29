@@ -18,7 +18,7 @@ from ssl_tools.data.data_modules import (
 )
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
-from ssl_tools.models.ssl.cpc import CPCHead
+from ssl_tools.models.ssl.modules.heads import CPCPredictionHead
 
 
 class CPCTrain(SSLTrain):
@@ -91,9 +91,9 @@ class CPCTrain(SSLTrain):
         if load_backbone is not None:
             self._load_model(model, load_backbone)
 
-        classifier = CPCHead(
-            input_size=self.encoding_size,
-            n_classes=self.num_classes,
+        classifier = CPCPredictionHead(
+            input_dim=self.encoding_size,
+            hidden_dim2=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -162,9 +162,9 @@ class CPCTest(SSLTest):
             n_size=5,
         )
 
-        classifier = CPCHead(
-            input_size=self.encoding_size,
-            n_classes=self.num_classes,
+        classifier = CPCPredictionHead(
+            input_dim=self.encoding_size,
+            hidden_dim2=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"

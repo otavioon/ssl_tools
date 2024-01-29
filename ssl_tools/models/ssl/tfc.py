@@ -6,7 +6,9 @@ from ssl_tools.utils.configurable import Configurable
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
 from ssl_tools.losses.nxtent import NTXentLoss_poly
 
+from .modules.heads import TFCProjectionHead
 
+ 
 class TFCHead(torch.nn.Module):
     def __init__(self, input_size: int = 2 * 128, num_classes: int = 2):
         """Simple discriminator network, used as the head of the TFC model.
@@ -33,8 +35,9 @@ class TFCHead(torch.nn.Module):
         # torch.nn.init.xavier_uniform_(self.model[2].weight)
 
     def forward(self, x):
-        emb_flatten = x.reshape(x.shape[0], -1)
-        return self.model(emb_flatten)
+        # emb_flatten = x.reshape(x.shape[0], -1)
+        # return self.model(emb_flatten)
+        return self.model(x)
 
 
 class TFC(L.LightningModule, Configurable):
@@ -353,18 +356,17 @@ def build_tfc_transformer(
         num_layers=2,
     )
 
-    # Instantiate Projectors
-    time_projector = torch.nn.Sequential(
-        torch.nn.Linear(in_channels * length_alignment, 256),
-        torch.nn.BatchNorm1d(256),
-        torch.nn.ReLU(),
-        torch.nn.Linear(256, encoding_size),
+    # Instantiate Projectors    
+    time_projector = TFCProjectionHead(
+        input_dim=in_channels * length_alignment,
+        hidden_dim=256,
+        output_dim=encoding_size,
     )
-    frequency_projector = torch.nn.Sequential(
-        torch.nn.Linear(in_channels * length_alignment, 256),
-        torch.nn.BatchNorm1d(256),
-        torch.nn.ReLU(),
-        torch.nn.Linear(256, encoding_size),
+    
+    frequency_projector = TFCProjectionHead(
+        input_dim=in_channels * length_alignment,
+        hidden_dim=256,
+        output_dim=encoding_size,
     )
 
     # Instantiate NTXentLoss

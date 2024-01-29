@@ -11,7 +11,8 @@ sys.path.append("../../../")
 
 
 from ssl_tools.experiments import SSLTrain, SSLTest
-from ssl_tools.models.ssl.tfc import build_tfc_transformer, TFCHead
+from ssl_tools.models.ssl.tfc import build_tfc_transformer
+from ssl_tools.models.ssl.modules.heads import TFCPredictionHead
 from ssl_tools.data.data_modules import TFCDataModule
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
@@ -119,9 +120,9 @@ class TFCTrain(SSLTrain):
         if load_backbone is not None:
             self._load_model(model, load_backbone)
 
-        classifier = TFCHead(
-            input_size=2 * self.encoding_size,
-            num_classes=self.num_classes,
+        classifier = TFCPredictionHead(
+            input_dim=2 * self.encoding_size,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -224,9 +225,9 @@ class TFCTest(SSLTest):
             temperature=self.temperature,
         )
 
-        classifier = TFCHead(
-            input_size=2 * self.encoding_size,
-            num_classes=self.num_classes,
+        classifier = TFCPredictionHead(
+            input_dim=2 * self.encoding_size,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
