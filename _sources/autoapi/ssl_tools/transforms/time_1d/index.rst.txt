@@ -1,0 +1,109 @@
+:py:mod:`ssl_tools.transforms.time_1d`
+======================================
+
+.. py:module:: ssl_tools.transforms.time_1d
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.transforms.time_1d.AddGaussianNoise
+   ssl_tools.transforms.time_1d.LeftToRightFlip
+   ssl_tools.transforms.time_1d.MagnitudeWrap
+   ssl_tools.transforms.time_1d.RandomSmoothing
+   ssl_tools.transforms.time_1d.Rotate
+   ssl_tools.transforms.time_1d.Scale
+   ssl_tools.transforms.time_1d.TimeAmplitudeModulation
+
+
+
+
+.. py:class:: AddGaussianNoise(mean=0.0, std=0.1)
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+
+.. py:class:: LeftToRightFlip
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+
+.. py:class:: MagnitudeWrap(max_magnitude=1.0)
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+
+.. py:class:: RandomSmoothing(sigma_range=(1, 1))
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+
+.. py:class:: Rotate
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(dataset)
+
+
+
+.. py:class:: Scale(mean = 1.0, sigma = 0.5)
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+
+.. py:class:: TimeAmplitudeModulation(modulation_factor=0.1)
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+

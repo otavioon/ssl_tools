@@ -1,0 +1,184 @@
+:py:mod:`ssl_tools.models.ssl.tnc`
+==================================
+
+.. py:module:: ssl_tools.models.ssl.tnc
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.ssl.tnc.TNC
+   ssl_tools.models.ssl.tnc.TNCDiscriminator
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.ssl.tnc.build_tnc
+
+
+
+.. py:class:: TNC(discriminator, encoder, mc_sample_size = 20, w = 0.05, learning_rate=0.001)
+
+
+   Bases: :py:obj:`lightning.LightningModule`, :py:obj:`ssl_tools.utils.configurable.Configurable`
+
+   Configurable interface for models and other objects that can be 
+   configured with a dictionary. For now, this interface is used to save the hyperparameters of the models.
+
+   Implements the Temporal Neighbourhood Contrastive (TNC) model, as
+   described in https://arxiv.org/pdf/2106.00750.pdf. The implementation
+   was adapted from https://github.com/sanatonek/TNC_representation_learning
+
+   Parameters
+   ----------
+   discriminator : torch.nn.Module
+       A discriminator model that takes as input the concatenation of the
+       representation of the current time step and the representation of
+       the positive/negative samples. It is a binary classifier that
+       predict if the samples are neighbors or not.
+   encoder : torch.nn.Module
+       Encode a window of samples into a representation. This model is
+       usually a GRU that encodes the samples into a representation of
+       fixed encoding size.
+   mc_sample_size : int
+       The number of close and distant samples selected in the dataset.
+   w : float
+       This parameter is used in loss and represent probability of
+       sampling a positive window from the non-neighboring region.
+   learning_rate : _type_, optional
+       The learning rate of the optimizer, by default 1e-3
+
+   .. py:method:: _shared_step(x_t, x_p, x_n, stage)
+
+      Runs TNC and returns the representation and the loss.
+
+      Parameters
+      ----------
+      x_t : torch.Tensor
+          A tensor with the sample of the current time step. It is expected
+          to be the shape (B, C, T), where B is the batch size, C is the
+          number of channels (features) and T is the number of time steps.
+      x_p : torch.Tensor
+          A set of positive samples. It is expected to be the shape
+          (B * mc_sample_size, C, T), where B is the batch size, C is the
+          number of channels (features) and T is the number of time steps.
+      x_n : torch.Tensor
+          A set of negative samples. It is expected to be the shape
+          (B * mc_sample_size, C, T), where B is the batch size, C is the
+          number of channels (features) and T is the number of time steps.
+      stage : str
+          Stage of the training (train, val, test)
+
+      Returns
+      -------
+      Tuple[torch.Tensor, torch.Tensor]
+          A 2-element tuple containing the representation and the loss,
+          respectively.
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x)
+
+
+   .. py:method:: get_config()
+
+
+   .. py:method:: loss_function(y, y_hat)
+
+      Calculate the loss.
+
+      Parameters
+      ----------
+      y : torch.Tensor
+          The ground truth labels.
+      y_hat : torch.Tensor
+          The predicted labels.
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+
+.. py:class:: TNCDiscriminator(input_size = 10, n_classes = 1)
+
+
+   Bases: :py:obj:`torch.nn.Module`
+
+   
+   Simple discriminator network. As usued by `Tonekaboni et al.`
+   at "Unsupervised Representation Learning for Time Series with Temporal
+   Neighborhood Coding" (https://arxiv.org/abs/2106.00750)
+
+   It is composed by:
+       - Linear(2 * ``input_size``, 4 * ``input_size``)
+       - ReLU
+       - Dropout(0.5)
+       - Linear(4 * ``input_size``, ``n_classes``)
+   Parameters
+   ----------
+   input_size : int, optional
+       Size of the input sample, by default 10
+   n_classes : int, optional
+       Number of output classes (output_size), by default 1
+
+   .. py:method:: forward(x)
+
+      Predict the probability of the two inputs belonging to the same
+      neighbourhood.
+
+
+
+.. py:function:: build_tnc(encoding_size = 150, in_channel = 6, mc_sample_size = 20, w = 0.05, learning_rate=0.001, gru_hidden_size = 100, gru_num_layers = 1, gru_bidirectional = True, dropout = 0.0)
+
+   Builds a TNC model. This function aids the creation of a TNC model
+   by providing default values for the parameters. 
+
+   Parameters
+   ----------
+   encoding_size : int, optional
+       The size of the encoding. This is the size of the representation.
+   in_channel : int, optional
+       The number of channels (features) of the input samples (e.g., 6 for
+       the MotionSense dataset)
+   mc_sample_size : int
+       The number of close and distant samples selected in the dataset.
+   w : float
+       This parameter is used in loss and represent probability of
+       sampling a positive window from the non-neighboring region.
+   learning_rate : _type_, optional
+       The learning rate of the optimizer
+   gru_hidden_size : int, optional
+       The number of features in the hidden state of the GRU.
+   gru_num_layers : int, optional
+       Number of recurrent layers in the GRU. E.g., setting ``num_layers=2``
+       would mean stacking two GRUs together to form a `stacked GRU`,
+       with the second GRU taking in outputs of the first GRU and
+       computing the final results.
+   gru_bidirectional : bool, optional
+       If ``True``, becomes a bidirectional GRU.
+   dropout : float, optional
+       The dropout probability.
+
+   Returns
+   -------
+   TNC
+       The TNC model.
+
+

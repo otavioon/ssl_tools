@@ -1,0 +1,30 @@
+:py:mod:`ssl_tools.utils.configurable`
+======================================
+
+.. py:module:: ssl_tools.utils.configurable
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.utils.configurable.Configurable
+
+
+
+
+.. py:class:: Configurable
+
+
+   Configurable interface for models and other objects that can be 
+   configured with a dictionary. For now, this interface is used to save the hyperparameters of the models.
+
+   .. py:method:: get_config()
+      :abstractmethod:
+
+
+

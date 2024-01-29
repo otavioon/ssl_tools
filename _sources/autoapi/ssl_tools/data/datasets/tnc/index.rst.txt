@@ -1,0 +1,133 @@
+:py:mod:`ssl_tools.data.datasets.tnc`
+=====================================
+
+.. py:module:: ssl_tools.data.datasets.tnc
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.data.datasets.tnc.TNCDataset
+
+
+
+
+.. py:class:: TNCDataset(data, window_size, mc_sample_size = 20, significance_level = 0.01, repeat = 1, cast_to = 'float32')
+
+
+   Bases: :py:obj:`torch.utils.data.Dataset`
+
+   
+   Temporal Neighbourhood Coding (TNC) dataset. This dataset is used
+   to pre-train self-supervised models. The dataset obtain close and
+   distant samples from a time series.
+
+   The dataset returns a 3-element tuple with the following elements:
+   1. W_t, a window centered at random time step t, with window_size. It
+       is a numpy array with shape (n_features, window_size).
+   2. X_p, a set of close samples. It is a numpy array with shape
+       (mc_sample_size, n_features, window_size).
+   3. X_n, a set of distant samples. It is a numpy array with shape
+       (mc_sample_size, n_features, window_size).
+   Note that the number of distant samples may be less than mc_sample_size.
+
+   Parameters
+   ----------
+   data : Dataset
+       A dataset with samples. Each sample of the dataset must be a numpy
+       array of shape (n_features, time_steps). In the case of HAR, where
+       we have tri-axial accelerometer and gyroscope data, the shape of
+       each sample should be (6, time_steps). the time_steps may vary
+   window_size : int
+       Size of the window (δ). The window will be centered at t, with 
+       window_size / 2 elements before and after t (X[t - δ, t + δ]])
+   mc_sample_size : int
+       The number of close and distant samples to be selected. This is
+       the maximum number of samples that will be selected.
+   significance_level: float, optional
+       The significance level of the ADF test. It is used to reject the
+       null hypothesis of the test if p-value is less than this value, by  
+       default 0.01
+   repeat : int, optional
+       Simple repeat the element of the dataset ``repeat`` times
+   cast_to : str, optional
+       Cast the data to the given type, by default "float32"
+
+   .. py:method:: __getitem__(idx)
+
+      Get a sample from the dataset. The sample is a tuple with 3
+      elements, to know:
+      1. W_t, a window centered at random time step t, with window_size. It
+          is a numpy array with shape (n_features, window_size).
+      2. X_p, a set of close samples. It is a numpy array with shape
+          (mc_sample_size, n_features, window_size).
+      3. X_n, a set of distant samples. It is a numpy array with shape
+          (mc_sample_size, n_features, window_size).
+      Note that the number of distant samples may be less than mc_sample_size.
+
+      Parameters
+      ----------
+      idx : int
+          Index of the sample to select the close and distant samples.
+
+      Returns
+      -------
+      Tuple[np.ndarray, np.ndarray, np.ndarray]
+          A tuple with 3 elements (W_t, X_p, X_n).
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: _find_neighours(data, t)
+
+      Given a time series ``x_t`` and a time step ``t``, find the close
+      samples and the delta. The close samples are selected using the ADF
+      test. The delta adjusts the neighbourhood size.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The time series
+      t : int
+          The time step to find the close samples
+
+      Returns
+      -------
+      Tuple[np.ndarray, float]
+          A 2-element tuple. The first element is a numpy array with the
+          shape (mc_sample_size, n_features, window_size). The second element
+          is the delta, used to adjust the neighbourhood size.
+
+
+   .. py:method:: _find_non_neighours(data, t, delta = 0.0)
+
+      Find distant samples. The samples will be selected from the
+      neighbourhood of ``t``. If ``t`` is a time stemp from the first half
+      of the time series, the neighbourhood will be the second half of the
+      time series. Otherwise, the neighbourhood will be the first half of
+      the time series.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The time series
+      t : int
+          The time step to find the close samples
+      delta : float, optional
+          Factor used to adjust the neighbourhood size, by default 0.0
+
+      Returns
+      -------
+      np.ndarray
+          An array with the distant samples. The shape of the array is
+          (mc_sample_size, n_features, window_size). Note that if the list
+          of distant samples is empty, mc_sample_size will be 1.
+
+
+

@@ -1,0 +1,190 @@
+:py:mod:`ssl_tools.models.ssl.tfc`
+==================================
+
+.. py:module:: ssl_tools.models.ssl.tfc
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.ssl.tfc.TFC
+   ssl_tools.models.ssl.tfc.TFCHead
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.ssl.tfc.build_tfc_transformer
+
+
+
+.. py:class:: TFC(time_encoder, frequency_encoder, time_projector, frequency_projector, nxtent_criterion, learning_rate = 0.001, loss_lambda = 0.2, permute_input = None)
+
+
+   Bases: :py:obj:`lightning.LightningModule`, :py:obj:`ssl_tools.utils.configurable.Configurable`
+
+   Configurable interface for models and other objects that can be 
+   configured with a dictionary. For now, this interface is used to save the hyperparameters of the models.
+
+   Implements the Time-Frequency Contrastive model, as described in:
+   Zhang, Xiang, et al. "Self-supervised contrastive pre-training for time
+   series via time-frequency consistency." Advances in Neural Information
+   Processing Systems 35 (2022): 3988-4003.
+
+   Parameters
+   ----------
+   time_encoder : torch.nn.Module
+       The encoder for the time-domain data. It is usually a convolutional
+       encoder such as a resnet1D or a transformer.
+   frequency_encoder : torch.nn.Module
+       The encoder for the frequency-domain data. It is usually a
+       convolutional encoder such as a resnet1D or a transformer.
+   time_projector : torch.nn.Module
+       The projector for the time-domain data. Usually the projector is a
+       linear layer with the desired output dimensionality.
+   frequency_projector : torch.nn.Module
+       The projector for the frequency-domain data. Usually the projector
+       is a linear layer with the desired output dimensionality.
+   nxtent_criterion : torch.nn.Module
+       The Normalized Temperature-scaled Cross Entropy Loss.
+   learning_rate : float, optional
+       The learning rate for the optimizer, by default 1e-3
+   loss_lambda : float, optional
+       The consistency threshold, by default 0.2
+
+   .. py:method:: _generate_representations(x_in_t, x_in_f)
+
+      Returns the intermediate representations of the model.
+
+      Parameters
+      ----------
+      x_in_t : torch.Tensor
+          A tensor with the time-domain data. Usually has shape: (B, C, T),
+          where B is the batch size, C is the number of channels and T is the
+          number of time steps.
+      x_in_f : _type_
+          A tensor with the frequency-domain data. Usually has shape:
+          (B, C, F), where B is the batch size, C is the number of channels
+          F is the number of frequency bins.
+
+      Returns
+      -------
+      Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]
+          A 4-tuple with the intermediate representations of the model:
+          (h_time, z_time, h_freq, z_freq).
+
+
+   .. py:method:: _shared_step(data, aug1, data_f, aug1_f, stage)
+
+      Compute the representations and the loss.
+
+      Parameters
+      ----------
+      data : torch.Tensor
+          The original time-domain data
+      aug1 : torch.Tensor
+          The augmented time-domain data
+      data_f : torch.Tensor
+          The original frequency-domain data
+      aug1_f : torch.Tensor
+          The augmented frequency-domain data
+      stage : str
+          Stage of the training (train, val, test)
+
+      Returns
+      -------
+      Tuple[ Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor], torch.Tensor, ]
+          Returns a 2-element tuple. The first element is a 4-element tuple
+          with the intermediate representations of the model: (h_time,
+          z_time, h_freq, z_freq). The second element is the loss.
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x_in_t, x_in_f)
+
+      Generate the final representation of the model.
+
+      Parameters
+      ----------
+      x_in_t : torch.Tensor
+          The time-domain data.
+      x_in_f : torch.Tensor
+          The frequency-domain data.
+
+      Returns
+      -------
+      torch.Tensor
+          The final representation of the model (z_t, z_f concatenated)
+
+
+   .. py:method:: get_config()
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+
+.. py:class:: TFCHead(input_size = 2 * 128, num_classes = 2)
+
+
+   Bases: :py:obj:`torch.nn.Module`
+
+   
+   Simple discriminator network, used as the head of the TFC model.
+
+   Parameters
+   ----------
+   input_size : int, optional
+       Size of the input sample, by default 2*128
+   n_classes : int, optional
+       Number of output classes (output_size), by default 2
+
+   .. py:method:: forward(x)
+
+
+
+.. py:function:: build_tfc_transformer(encoding_size = 128, in_channels = 1, length_alignment = 360, use_cosine_similarity = True, learning_rate = 0.001, temperature = 0.5)
+
+   Creates a TFC model with a transformer encoder. This function aids in
+   the creation of the TFC model, by providing a transformer encoder and
+   projector.
+
+   Parameters
+   ----------
+       Size of the encoding (output of the linear layer). This is the size of
+       the representation.
+   in_channels : int, optional
+       Number of channels of the input data (e.g. 6 for HAR data in 
+       MotionSense Dataset),
+   length_alignment : int, optional
+       Truncate the features to this value
+   use_cosine_similarity : bool, optional
+       If True, the cosine similarity will be used instead of the dot product,
+       in the NTXentLoss.
+   learning_rate : float, optional
+       The learning rate for the optimizer.
+   temperature : float, optional
+       The temperature for the NTXentLoss.
+
+   Returns
+   -------
+   TFC
+       A TFC model with a transformer encoder.
+
+

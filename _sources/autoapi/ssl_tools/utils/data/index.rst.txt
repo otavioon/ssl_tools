@@ -1,0 +1,35 @@
+:py:mod:`ssl_tools.utils.data`
+==============================
+
+.. py:module:: ssl_tools.utils.data
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.utils.data.ConcatDataset
+
+
+
+
+.. py:class:: ConcatDataset(datasets)
+
+
+   Concatenate multiple datasets1
+
+   .. py:method:: __getitem__(i)
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: _get_slices(datasets)
+      :staticmethod:
+
+
+

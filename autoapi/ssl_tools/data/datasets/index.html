@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.data.datasets &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ssl_tools.data.datasets.series_dataset" href="series_dataset/index.html" />
+    <link rel="prev" title="ssl_tools.data.data_modules.har" href="../data_modules/har/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ssl_tools/data/datasets/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.data.datasets">
+<span id="ssl-tools-data-datasets"></span><h1><a class="reference internal" href="#module-ssl_tools.data.datasets" title="ssl_tools.data.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets</span></code></a><a class="headerlink" href="#module-ssl_tools.data.datasets" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="series_dataset/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets.series_dataset</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tfc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets.tfc</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tnc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets.tnc</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.data.datasets.MultiModalSeriesCSVDataset" title="ssl_tools.data.datasets.MultiModalSeriesCSVDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code></a></p></td>
+<td><p>This datasets assumes that the data is in a single CSV file with</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset" title="ssl_tools.data.datasets.SeriesFolderCSVDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code></a></p></td>
+<td><p>This dataset assumes that the data is in a folder with multiple CSV</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.data.datasets.TFCDataset" title="ssl_tools.data.datasets.TFCDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TFCDataset</span></code></a></p></td>
+<td><p>Time-Frequency Contrastive (TFC) Dataset. This dataset is intented</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.data.datasets.TNCDataset" title="ssl_tools.data.datasets.TNCDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TNCDataset</span></code></a></p></td>
+<td><p>Temporal Neighbourhood Coding (TNC) dataset. This dataset is used</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.MultiModalSeriesCSVDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.datasets.</span></span><span class="sig-name descname"><span class="pre">MultiModalSeriesCSVDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_prefixes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_as_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.MultiModalSeriesCSVDataset" title="Link to this definition"></a></dt>
+<dd><p>This datasets assumes that the data is in a single CSV file with
+series of data. Each row is a single sample that can be composed of
+multiple modalities (series). Each column is a feature of some series
+with the prefix indicating the series. The suffix may indicates the
+time step. For instance, if we have two series, accel-x and accel-y,
+the data will look something like:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x-0</p></td>
+<td><p>accel-x-1</p></td>
+<td><p>accel-y-0</p></td>
+<td><p>accel-y-1</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.6820123
+0.498217</p></td>
+<td><p>0.02123
+0.02123
+0.00001</p></td>
+<td><p>0.502123
+0.502123
+1.414141</p></td>
+<td><p>0.502123
+0.502123
+3.141592</p></td>
+<td><p>0
+1
+2</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">feature_prefixes</span></code> parameter is used to select the columns that
+will be used as features. For instance, if we want to use only the
+accel-x series, we can set <code class="docutils literal notranslate"><span class="pre">feature_prefixes=[&quot;accel-x&quot;]</span></code>. If we want
+to use both accel-x and accel-y, we can set
+<code class="docutils literal notranslate"><span class="pre">feature_prefixes=[&quot;accel-x&quot;,</span> <span class="pre">&quot;accel-y&quot;]</span></code>. If None is passed, all
+columns will be used as features, except the label column.
+The label column is specified by the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter.</p>
+<p>The dataset will return a 2-element tuple with the data and the label,
+if the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter is specified, otherwise return only the data.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">features_as_channels</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data will be returned as a
+vector of shape <cite>(C, T)</cite>, where C is the number of channels (features)
+and <cite>T</cite> is the number of time steps. Else, the data will be returned as
+a vector of shape  T*C (a single vector with all the features).</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>data_path<span class="classifier">Union[Path, str]</span></dt><dd><p>The location of the CSV file</p>
+</dd>
+<dt>feature_prefixes<span class="classifier">Union[str, List[str]], optional</span></dt><dd><p>The prefix of the column names in the dataframe that will be used
+to become features. If None, all columns except the label will be
+used as features.</p>
+</dd>
+<dt>label<span class="classifier">str, optional</span></dt><dd><p>The name of the column that will be used as label</p>
+</dd>
+<dt>features_as_channels<span class="classifier">bool, optional</span></dt><dd><p>If True, the data will be returned as a vector of shape (C, T),
+else the data will be returned as a vector of shape  T*C.</p>
+</dd>
+<dt>cast_to: str, optional</dt><dd><p>Cast the numpy data to the specified type</p>
+</dd>
+<dt>transforms: Optional[List[Callable]], optional</dt><dd><p>A list of transforms that will be applied to each sample
+individually. Each transform must be a callable that receives a
+numpy array and returns a numpy array. The transforms will be
+applied in the order they are specified.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
+<p># Using the data from the example above, and features_as_channels=False
+&gt;&gt;&gt; data_path = “data.csv”
+&gt;&gt;&gt; dataset = MultiModalSeriesCSVDataset(</p>
+<blockquote>
+<div><blockquote>
+<div><p>data_path,
+feature_prefixes=[“accel-x”, “accel-y”],
+label=”class”</p>
+</div></blockquote>
+<p>)</p>
+</div></blockquote>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(4, )</span>
+</pre></div>
+</div>
+<p># Using the data from the example above, and features_as_channels=True
+&gt;&gt;&gt; dataset = MultiModalSeriesCSVDataset(</p>
+<blockquote>
+<div><blockquote>
+<div><p>data_path,
+feature_prefixes=[“accel-x”, “accel-y”],
+label=”class”,
+features_as_channels=True</p>
+</div></blockquote>
+<p>)</p>
+</div></blockquote>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(2, 2)</span>
+</pre></div>
+</div>
+<p># And the dataset length
+&gt;&gt;&gt; len(dataset)
+3</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__getitem__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Union[Tuple[numpy.ndarray, numpy.ndarray], numpy.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__len__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__repr__" title="Link to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.MultiModalSeriesCSVDataset.__str__" title="Link to this definition"></a></dt>
+<dd><p>Return str(self).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.MultiModalSeriesCSVDataset._load_data">
+<span class="sig-name descname"><span class="pre">_load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.MultiModalSeriesCSVDataset._load_data" title="Link to this definition"></a></dt>
+<dd><p>Load data from the CSV file</p>
+<section id="returns">
+<h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>Tuple[np.ndarray, Optional[np.ndarray]]</dt><dd><p>A 2-element tuple with the data and the labels. The second element
+is None if the label is not specified.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[numpy.ndarray, Optional[numpy.ndarray]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>Union</em><em>[</em><em>pathlib.Path</em><em>, </em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>feature_prefixes</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>label</strong> (<em>str</em>) – </p></li>
+<li><p><strong>features_as_channels</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+<li><p><strong>transforms</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>Callable</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.datasets.</span></span><span class="sig-name descname"><span class="pre">SeriesFolderCSVDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lazy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset" title="Link to this definition"></a></dt>
+<dd><p>This dataset assumes that the data is in a folder with multiple CSV
+files. Each CSV file is a single sample that can be composed of
+multiple time steps (rows). Each column is a feature of the sample.</p>
+<p>For instance, if we have two samples, sample-1.csv and sample-2.csv,
+the directory structure will look something like:</p>
+<p>data_path
+├── sample-1.csv
+└── sample-2.csv</p>
+<p>And the data will look something like:
+- sample-1.csv:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x</p></td>
+<td><p>accel-y</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.682012
+0.498217</p></td>
+<td><p>0.02123
+0.02123
+0.00001</p></td>
+<td><p>1
+1
+1</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul>
+<li><dl>
+<dt>sample-2.csv:</dt><dd><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x</p></td>
+<td><p>accel-y</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.682012
+0.498217
+3.141592</p></td>
+<td><p>0.02123
+0.02123
+0.00001
+1.414141</p></td>
+<td><p>0
+0
+0
+0</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">features</span></code> parameter is used to select the columns that will be
+used as features. For instance, if we want to use only the accel-x
+column, we can set <code class="docutils literal notranslate"><span class="pre">features=[&quot;accel-x&quot;]</span></code>. If we want to use both
+accel-x and accel-y, we can set <code class="docutils literal notranslate"><span class="pre">features=[&quot;accel-x&quot;,</span> <span class="pre">&quot;accel-y&quot;]</span></code>.</p>
+<p>The label column is specified by the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter. Note that we
+have one label per time-step and not a single label per sample.</p>
+<p>The dataset will return a 2-element tuple with the data and the label,
+if the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter is specified, otherwise return only the data.</p>
+<section id="notes">
+<h4>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Samples may have different number of time steps. Use <code class="docutils literal notranslate"><span class="pre">pad</span></code> to pad</dt><dd><p>the data to the length of the longest sample.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id1">
+<h4>Examples<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<p># Using the data from the example above
+&gt;&gt;&gt; data_dir = “train_folder”
+&gt;&gt;&gt; dataset = SeriesFolderCSVDataset(</p>
+<blockquote>
+<div><blockquote>
+<div><p>data_dir,
+features=[“accel-x”, “accel-y”],
+label=”class”</p>
+</div></blockquote>
+<p>)</p>
+</div></blockquote>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(2, 3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(3,)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(2, 4)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(4,)</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>data_path<span class="classifier">str</span></dt><dd><p>The location of the directory with CSV files</p>
+</dd>
+<dt>features: List[str]</dt><dd><p>A list with column names that will be used as features. If None,
+all columns except the label will be used as features.</p>
+</dd>
+<dt>pad: bool, optional</dt><dd><p>If True, the data will be padded to the length of the longest
+sample. Note that padding will be applyied after the transforms,
+and also to the labels if specified.</p>
+</dd>
+<dt>label: str, optional</dt><dd><p>Specify the name of the column with the label of the data</p>
+</dd>
+<dt>cast_to: str, optional</dt><dd><p>Cast the numpy data to the specified type</p>
+</dd>
+<dt>transforms: Optional[List[Callable]], optional</dt><dd><p>A list of transforms that will be applied to each sample
+individually. Each transform must be a callable that receives a
+numpy array and returns a numpy array. The transforms will be
+applied in the order they are specified.</p>
+</dd>
+<dt>lazy: bool, optional</dt><dd><p>If True, the data will be loaded lazily (i.e. the CSV files will be
+read only when needed)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset.__getitem__" title="Link to this definition"></a></dt>
+<dd><p>Get a single sample from the dataset</p>
+<section id="id3">
+<h5>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>idx<span class="classifier">int</span></dt><dd><p>The index of the sample</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h5>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>Union[Tuple[np.ndarray, np.ndarray], np.ndarray]</dt><dd><p>A 2-element tuple with the data and the label if the label is
+specified, otherwise only the data.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>idx</strong> (<em>int</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Union[Tuple[numpy.ndarray, numpy.ndarray], numpy.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset.__len__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset.__repr__" title="Link to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset.__str__" title="Link to this definition"></a></dt>
+<dd><p>Return str(self).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset._disable_fix_length">
+<span class="sig-name descname"><span class="pre">_disable_fix_length</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset._disable_fix_length" title="Link to this definition"></a></dt>
+<dd><p>Decorator to disable fix_length when calling a function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset._get_longest_sample_size">
+<span class="sig-name descname"><span class="pre">_get_longest_sample_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset._get_longest_sample_size" title="Link to this definition"></a></dt>
+<dd><p>Return the size of the longest sample in the dataset</p>
+<section id="id5">
+<h5>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>int</dt><dd><p>The size of the longest sample in the dataset</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset._pad_data">
+<span class="sig-name descname"><span class="pre">_pad_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset._pad_data" title="Link to this definition"></a></dt>
+<dd><p>Pad the data to the length of the longest sample. In summary, this
+function makes the data cyclic.</p>
+<section id="id6">
+<h5>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The data to pad</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h5>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>The padded data</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>numpy.ndarray</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset._read_all_csv">
+<span class="sig-name descname"><span class="pre">_read_all_csv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset._read_all_csv" title="Link to this definition"></a></dt>
+<dd><p>Read all the CSV files in the data directory</p>
+<section id="id8">
+<h5>Returns<a class="headerlink" href="#id8" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>Union[Tuple[np.ndarray, np.ndarray], np.ndarray]</dt><dd><p>A list of 2-element tuple with the data and the label. If the label is not specified, the second element of the tuples are None.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[numpy.ndarray, Optional[numpy.ndarray]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset._read_csv">
+<span class="sig-name descname"><span class="pre">_read_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset._read_csv" title="Link to this definition"></a></dt>
+<dd><p>Read a single CSV file (a single sample)</p>
+<section id="id9">
+<h5>Parameters<a class="headerlink" href="#id9" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>path<span class="classifier">Path</span></dt><dd><p>The path to the CSV file</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h5>Returns<a class="headerlink" href="#id10" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>Tuple[np.ndarray, Optional[np.ndarray]]</dt><dd><p>A 2-element tuple with the data and the label. If the label is not
+specified, the second element is None.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>pathlib.Path</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[numpy.ndarray, Optional[numpy.ndarray]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.SeriesFolderCSVDataset._scan_data">
+<span class="sig-name descname"><span class="pre">_scan_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.SeriesFolderCSVDataset._scan_data" title="Link to this definition"></a></dt>
+<dd><p>List the CSV files in the data directory</p>
+<section id="id11">
+<h5>Returns<a class="headerlink" href="#id11" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>List[Path]</dt><dd><p>List of CSV files</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[pathlib.Path]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>Union</em><em>[</em><em>pathlib.Path</em><em>, </em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>features</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>label</strong> (<em>str</em>) – </p></li>
+<li><p><strong>pad</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+<li><p><strong>transforms</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>lazy</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TFCDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.datasets.</span></span><span class="sig-name descname"><span class="pre">TFCDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length_alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">178</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_time_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TFCDataset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code></p>
+<p>Time-Frequency Contrastive (TFC) Dataset. This dataset is intented
+to be used using TFC technique. Given a dataset with time-domain signal,
+this dataset will calculate the FFT of the signal and apply the
+specified transforms to the time and frequency domainof each sample.
+It will return a 5-element tuple with the following elements:
+1. The original time-domain signal
+2. The label of the signal
+3. Time augmented time-domain signal
+4. The frequency-domain signal
+5. The augmented frequency-domain signal</p>
+<p>Note that, if samples are 1-D arrays, the transforms will be applied
+directly to the data. If samples are 2-D arrays, the transforms will
+be applied to each channel separately.</p>
+<section id="id12">
+<h4>Parameters<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>data<span class="classifier">Dataset</span></dt><dd><p>A dataset with samples. The sample must be a tuple with the data
+and the label. The data must be a tensor of shape (C, T), where C
+is the number of channels and T is the number of time steps. If no
+channels are present, the data must be of shape (T,).</p>
+</dd>
+<dt>length_alignment<span class="classifier">int, optional</span></dt><dd><p>Truncate the features to this value</p>
+</dd>
+<dt>time_transforms<span class="classifier">Union[Transform, List[Transform]], optional</span></dt><dd><p>List of transforms to apply to the time domain.</p>
+</dd>
+<dt>frequency_transforms<span class="classifier">Union[Transform, List[Transform]], optional</span></dt><dd><p>List of transforms to apply to the frequency domain</p>
+</dd>
+<dt>cast_to<span class="classifier">str, optional</span></dt><dd><p>Cast the data to the given type, by default “float32”</p>
+</dd>
+<dt>only_time_frequency<span class="classifier">bool, optional</span></dt><dd><p>If True, the data returned will be a 2-element tuple with the
+(time, frequency) as the first element (without augmentation) and
+the label as the second element, by default False</p>
+</dd>
+</dl>
+</section>
+<section id="id13">
+<h4>Examples<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ssl_tools.data.datasets</span> <span class="kn">import</span> <span class="n">MultiModalSeriesCSVDataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;data.csv&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">MultiModalSeriesCSVDataset</span><span class="p">(</span>
+<span class="go">        data_path,</span>
+<span class="go">        feature_prefixes=[&quot;accel-x&quot;, &quot;accel-y&quot;, &quot;accel-z&quot;],</span>
+<span class="go">        label=&quot;class&quot;</span>
+<span class="go">    )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">TFCDataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">length_alignment</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span>
+<span class="go">    torch.Tensor([[-0.0001, -0.0001, -0.0001,  ..., -0.0001, -0.0001, -0.0001]]),   # time</span>
+<span class="go">    0,</span>
+<span class="go">    torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # time augmented</span>
+<span class="go">    torch.Tensor([[0.1, 0.1, 0.1,  ..., 0.1, 0.1, 0.00101]]),                       # frequency</span>
+<span class="go">    torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # frequency augmented</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TFCDataset.FFT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">absolute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TFCDataset.FFT" title="Link to this definition"></a></dt>
+<dd><p>Simple wrapper to apply the FFT to the data</p>
+<section id="id14">
+<h5>Parameters<a class="headerlink" href="#id14" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>absolute<span class="classifier">bool, optional</span></dt><dd><p>If True, returns the absolute value of FFT, by default True</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TFCDataset.FFT.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TFCDataset.FFT.__call__" title="Link to this definition"></a></dt>
+<dd><p>Apply the FFT to the data</p>
+<section id="id15">
+<h6>Parameters<a class="headerlink" href="#id15" title="Link to this heading"></a></h6>
+<dl class="simple">
+<dt>x<span class="classifier">np.ndarray</span></dt><dd><p>A 1-D array with the data</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h6>Returns<a class="headerlink" href="#id16" title="Link to this heading"></a></h6>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>The FFT of the data</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>numpy.ndarray</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>absolute</strong> (<em>bool</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TFCDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TFCDataset.__getitem__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TFCDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TFCDataset.__len__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TFCDataset._apply_transforms">
+<span class="sig-name descname"><span class="pre">_apply_transforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TFCDataset._apply_transforms" title="Link to this definition"></a></dt>
+<dd><p>Apply a list of transforms to the data</p>
+<section id="id17">
+<h5>Parameters<a class="headerlink" href="#id17" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>x<span class="classifier">np.ndarray</span></dt><dd><p>The 1-D array with the data</p>
+</dd>
+<dt>transforms<span class="classifier">List[Transform]</span></dt><dd><p>A sequence of transforms to apply in the data</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h5>Returns<a class="headerlink" href="#id18" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>The transformed data</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>transforms</strong> (<em>List</em><em>[</em><em>librep.base.Transform</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TFCDataset._apply_transforms_per_axis">
+<span class="sig-name descname"><span class="pre">_apply_transforms_per_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TFCDataset._apply_transforms_per_axis" title="Link to this definition"></a></dt>
+<dd><p>Split the data into channels and apply the transforms to each channel
+separately.</p>
+<section id="id19">
+<h5>Parameters<a class="headerlink" href="#id19" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The data to be transformed. It must be a 2-D array with the shape
+(C, T), where C is the number of channels and T is the number of
+time steps.</p>
+</dd>
+<dt>transforms<span class="classifier">List[Transform]</span></dt><dd><p>A sequence of transforms to apply in the data</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h5>Returns<a class="headerlink" href="#id20" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>An 2-D array with the transformed data. The array has the number of
+channels as the first dimension.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>transforms</strong> (<em>List</em><em>[</em><em>librep.base.Transform</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>torch.utils.data.Dataset</em>) – </p></li>
+<li><p><strong>length_alignment</strong> (<em>int</em>) – </p></li>
+<li><p><strong>time_transforms</strong> (<em>Union</em><em>[</em><em>Callable</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>frequency_transforms</strong> (<em>Union</em><em>[</em><em>Callable</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+<li><p><strong>only_time_frequency</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TNCDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.datasets.</span></span><span class="sig-name descname"><span class="pre">TNCDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mc_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">significance_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TNCDataset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code></p>
+<p>Temporal Neighbourhood Coding (TNC) dataset. This dataset is used
+to pre-train self-supervised models. The dataset obtain close and
+distant samples from a time series.</p>
+<p>The dataset returns a 3-element tuple with the following elements:
+1. W_t, a window centered at random time step t, with window_size. It</p>
+<blockquote>
+<div><p>is a numpy array with shape (n_features, window_size).</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><dl class="simple">
+<dt>X_p, a set of close samples. It is a numpy array with shape</dt><dd><p>(mc_sample_size, n_features, window_size).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>X_n, a set of distant samples. It is a numpy array with shape</dt><dd><p>(mc_sample_size, n_features, window_size).</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>Note that the number of distant samples may be less than mc_sample_size.</p>
+<section id="id21">
+<h4>Parameters<a class="headerlink" href="#id21" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>data<span class="classifier">Dataset</span></dt><dd><p>A dataset with samples. Each sample of the dataset must be a numpy
+array of shape (n_features, time_steps). In the case of HAR, where
+we have tri-axial accelerometer and gyroscope data, the shape of
+each sample should be (6, time_steps). the time_steps may vary</p>
+</dd>
+<dt>window_size<span class="classifier">int</span></dt><dd><p>Size of the window (δ). The window will be centered at t, with
+window_size / 2 elements before and after t (X[t - δ, t + δ]])</p>
+</dd>
+<dt>mc_sample_size<span class="classifier">int</span></dt><dd><p>The number of close and distant samples to be selected. This is
+the maximum number of samples that will be selected.</p>
+</dd>
+<dt>significance_level: float, optional</dt><dd><p>The significance level of the ADF test. It is used to reject the
+null hypothesis of the test if p-value is less than this value, by
+default 0.01</p>
+</dd>
+<dt>repeat<span class="classifier">int, optional</span></dt><dd><p>Simple repeat the element of the dataset <code class="docutils literal notranslate"><span class="pre">repeat</span></code> times</p>
+</dd>
+<dt>cast_to<span class="classifier">str, optional</span></dt><dd><p>Cast the data to the given type, by default “float32”</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TNCDataset.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TNCDataset.__getitem__" title="Link to this definition"></a></dt>
+<dd><p>Get a sample from the dataset. The sample is a tuple with 3
+elements, to know:
+1. W_t, a window centered at random time step t, with window_size. It</p>
+<blockquote>
+<div><p>is a numpy array with shape (n_features, window_size).</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><dl class="simple">
+<dt>X_p, a set of close samples. It is a numpy array with shape</dt><dd><p>(mc_sample_size, n_features, window_size).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>X_n, a set of distant samples. It is a numpy array with shape</dt><dd><p>(mc_sample_size, n_features, window_size).</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>Note that the number of distant samples may be less than mc_sample_size.</p>
+<section id="id22">
+<h5>Parameters<a class="headerlink" href="#id22" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>idx<span class="classifier">int</span></dt><dd><p>Index of the sample to select the close and distant samples.</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h5>Returns<a class="headerlink" href="#id23" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>Tuple[np.ndarray, np.ndarray, np.ndarray]</dt><dd><p>A tuple with 3 elements (W_t, X_p, X_n).</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>idx</strong> (<em>int</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TNCDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TNCDataset.__len__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TNCDataset._find_neighours">
+<span class="sig-name descname"><span class="pre">_find_neighours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TNCDataset._find_neighours" title="Link to this definition"></a></dt>
+<dd><p>Given a time series <code class="docutils literal notranslate"><span class="pre">x_t</span></code> and a time step <code class="docutils literal notranslate"><span class="pre">t</span></code>, find the close
+samples and the delta. The close samples are selected using the ADF
+test. The delta adjusts the neighbourhood size.</p>
+<section id="id24">
+<h5>Parameters<a class="headerlink" href="#id24" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The time series</p>
+</dd>
+<dt>t<span class="classifier">int</span></dt><dd><p>The time step to find the close samples</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h5>Returns<a class="headerlink" href="#id25" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>Tuple[np.ndarray, float]</dt><dd><p>A 2-element tuple. The first element is a numpy array with the
+shape (mc_sample_size, n_features, window_size). The second element
+is the delta, used to adjust the neighbourhood size.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>t</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[numpy.ndarray, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.datasets.TNCDataset._find_non_neighours">
+<span class="sig-name descname"><span class="pre">_find_non_neighours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.datasets.TNCDataset._find_non_neighours" title="Link to this definition"></a></dt>
+<dd><p>Find distant samples. The samples will be selected from the
+neighbourhood of <code class="docutils literal notranslate"><span class="pre">t</span></code>. If <code class="docutils literal notranslate"><span class="pre">t</span></code> is a time stemp from the first half
+of the time series, the neighbourhood will be the second half of the
+time series. Otherwise, the neighbourhood will be the first half of
+the time series.</p>
+<section id="id26">
+<h5>Parameters<a class="headerlink" href="#id26" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>The time series</p>
+</dd>
+<dt>t<span class="classifier">int</span></dt><dd><p>The time step to find the close samples</p>
+</dd>
+<dt>delta<span class="classifier">float, optional</span></dt><dd><p>Factor used to adjust the neighbourhood size, by default 0.0</p>
+</dd>
+</dl>
+</section>
+<section id="id27">
+<h5>Returns<a class="headerlink" href="#id27" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>An array with the distant samples. The shape of the array is
+(mc_sample_size, n_features, window_size). Note that if the list
+of distant samples is empty, mc_sample_size will be 1.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>t</strong> (<em>int</em>) – </p></li>
+<li><p><strong>delta</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>torch.utils.data.Dataset</em>) – </p></li>
+<li><p><strong>window_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>mc_sample_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>significance_level</strong> (<em>float</em>) – </p></li>
+<li><p><strong>repeat</strong> (<em>int</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../data_modules/har/index.html" class="btn btn-neutral float-left" title="ssl_tools.data.data_modules.har" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="series_dataset/index.html" class="btn btn-neutral float-right" title="ssl_tools.data.datasets.series_dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

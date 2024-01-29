@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.analysis.plot_metrics &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ssl_tools.callbacks" href="../../callbacks/index.html" />
+    <link rel="prev" title="ssl_tools.analysis" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis.plot_metrics</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ssl_tools/analysis/plot_metrics/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.analysis.plot_metrics">
+<span id="ssl-tools-analysis-plot-metrics"></span><h1><a class="reference internal" href="#module-ssl_tools.analysis.plot_metrics" title="ssl_tools.analysis.plot_metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis.plot_metrics</span></code></a><a class="headerlink" href="#module-ssl_tools.analysis.plot_metrics" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.analysis.plot_metrics.PlotMetrics" title="ssl_tools.analysis.plot_metrics.PlotMetrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PlotMetrics</span></code></a></p></td>
+<td><p>Class for plotting metrics from a training/predict run.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.analysis.plot_metrics.main" title="ssl_tools.analysis.plot_metrics.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.analysis.plot_metrics.PlotMetrics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.analysis.plot_metrics.</span></span><span class="sig-name descname"><span class="pre">PlotMetrics</span></span><a class="headerlink" href="#ssl_tools.analysis.plot_metrics.PlotMetrics" title="Link to this definition"></a></dt>
+<dd><p>Class for plotting metrics from a training/predict run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.analysis.plot_metrics.PlotMetrics.accuracy">
+<span class="sig-name descname"><span class="pre">accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_experiment_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'results.csv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparams_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hparams.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test_acc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Results'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.analysis.plot_metrics.PlotMetrics.accuracy" title="Link to this definition"></a></dt>
+<dd><p>Plot the accuracy of a multiple test runs in a single figure. This
+is useful for comparing the performance of a model trained on different
+datasets. The folder structure should be as follows:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">root_experiment_dir</span>
+<span class="pre">├──</span> <span class="pre">experiment_1</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">hparams.yaml</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">results.csv</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">└──</span> <span class="pre">...</span>
+<span class="pre">├──</span> <span class="pre">experiment_2</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">hparams.yaml</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">results.csv</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">└──</span> <span class="pre">...</span>
+<span class="pre">└──</span> <span class="pre">...</span>
+<span class="pre">`</span></code></p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>root_experiment_dir<span class="classifier">str</span></dt><dd><p>The root folder containing the experiments.</p>
+</dd>
+<dt>results_file<span class="classifier">str, optional</span></dt><dd><p>The name of the results file. It must be a csv file inside the
+<code class="docutils literal notranslate"><span class="pre">root_experiment_dir</span></code>.</p>
+</dd>
+<dt>hyperparams_file<span class="classifier">str, optional</span></dt><dd><p>The name of the hyperparamters file. It must be a csv file inside the
+<code class="docutils literal notranslate"><span class="pre">root_experiment_dir</span></code>.</p>
+</dd>
+<dt>metric<span class="classifier">str, optional</span></dt><dd><p>Name of the metric to plot.</p>
+</dd>
+<dt>title<span class="classifier">str, optional</span></dt><dd><p>Title of the plot.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root_experiment_dir</strong> (<em>str</em>) – </p></li>
+<li><p><strong>results_file</strong> (<em>str</em>) – </p></li>
+<li><p><strong>hyperparams_file</strong> (<em>str</em>) – </p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – </p></li>
+<li><p><strong>title</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.analysis.plot_metrics.PlotMetrics.epoch_loss">
+<span class="sig-name descname"><span class="pre">epoch_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">losses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('train_loss',</span> <span class="pre">'val_loss')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'metrics.csv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Loss'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.analysis.plot_metrics.PlotMetrics.epoch_loss" title="Link to this definition"></a></dt>
+<dd><p>Plot the loss over epochs.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>experiment_dir<span class="classifier">str</span></dt><dd><p>The folder containing the metrics file.</p>
+</dd>
+<dt>losses<span class="classifier">List[str], optional</span></dt><dd><p>The list of loss names to plot, by default (“train_loss”,
+“val_loss”)</p>
+</dd>
+<dt>metrics_file<span class="classifier">str, optional</span></dt><dd><p>Name of the metrics_file. The file must be a csv file inside the
+<code class="docutils literal notranslate"><span class="pre">experiment_dir</span></code>.</p>
+</dd>
+<dt>title<span class="classifier">str, optional</span></dt><dd><p>Title of the plot.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment_dir</strong> (<em>str</em>) – </p></li>
+<li><p><strong>losses</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>metrics_file</strong> (<em>str</em>) – </p></li>
+<li><p><strong>title</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.analysis.plot_metrics.main">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.analysis.plot_metrics.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.analysis.plot_metrics.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ssl_tools.analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../callbacks/index.html" class="btn btn-neutral float-right" title="ssl_tools.callbacks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

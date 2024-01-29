@@ -1,0 +1,161 @@
+:py:mod:`ssl_tools.experiments.har_classification.cpc`
+======================================================
+
+.. py:module:: ssl_tools.experiments.har_classification.cpc
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.cpc.CPCTest
+   ssl_tools.experiments.har_classification.cpc.CPCTrain
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.cpc.main
+
+
+
+.. py:class:: CPCTest(data, encoding_size = 150, in_channel = 6, window_size = 4, num_classes = 6, *args, **kwargs)
+
+
+   Bases: :py:obj:`ssl_tools.experiments.SSLTest`
+
+   
+   Trains the constrastive predictive coding model
+
+   Parameters
+   ----------
+   encoding_size : int, optional
+       Size of the encoding (output of the linear layer)
+   in_channel : int, optional
+       Number of channels in the input data
+   window_size : int, optional
+       Size of the input windows (X_t) to be fed to the encoder
+   num_classes : int, optional
+       Number of classes in the dataset. Only used in finetune mode.
+   update_backbone : bool, optional
+       If True, the backbone will be updated during training. Only used in
+       finetune mode.
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'CPC'
+
+      
+
+   .. py:method:: _get_test_data_module()
+
+      The data module to use for testing.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The data module to use for testing
+
+
+   .. py:method:: _get_test_model(load_backbone = None)
+
+      Get the model to use for testing.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for testing
+
+
+
+.. py:class:: CPCTrain(data, encoding_size = 150, in_channel = 6, window_size = 4, pad_length = False, num_classes = 6, update_backbone = False, *args, **kwargs)
+
+
+   Bases: :py:obj:`ssl_tools.experiments.SSLTrain`
+
+   
+   Trains the constrastive predictive coding model
+
+   Parameters
+   ----------
+   encoding_size : int, optional
+       Size of the encoding (output of the linear layer)
+   in_channel : int, optional
+       Number of channels in the input data
+   window_size : int, optional
+       Size of the input windows (X_t) to be fed to the encoder
+   pad_length : bool, optional
+       If True, the samples are padded to the length of the longest sample
+       in the dataset.
+   num_classes : int, optional
+       Number of classes in the dataset. Only used in finetune mode.
+   update_backbone : bool, optional
+       If True, the backbone will be updated during training. Only used in
+       finetune mode.
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'CPC'
+
+      
+
+   .. py:method:: _get_finetune_data_module()
+
+      The data module to use for fine-tuning.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The data module to use for fine-tuning
+
+      Raises
+      ------
+      NotImplementedError
+          _description_
+
+
+   .. py:method:: _get_finetune_model(load_backbone = None)
+
+      Get the model to use for fine-tuning.
+
+      Parameters
+      ----------
+      load_backbone : str, optional
+          The path to the backbone to load. The backbone must be loaded 
+          inside this method, if it is not None.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for fine-tuning
+
+
+   .. py:method:: _get_pretrain_data_module()
+
+      The data module to use for pre-training.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The data module to use for pre-training
+
+
+   .. py:method:: _get_pretrain_model()
+
+      Get the model to use for pre-training.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for pre-training
+
+
+
+.. py:function:: main()
+
+

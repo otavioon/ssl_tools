@@ -1,0 +1,13 @@
+:py:mod:`ssl_tools.utils.types`
+===============================
+
+.. py:module:: ssl_tools.utils.types
+
+
+Module Contents
+---------------
+
+.. py:data:: PathLike
+
+   
+

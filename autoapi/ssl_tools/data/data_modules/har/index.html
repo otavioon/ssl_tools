@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.data.data_modules.har &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="ssl_tools.data.datasets" href="../../datasets/index.html" />
+    <link rel="prev" title="ssl_tools.data.data_modules" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.data_modules</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.data_modules.har</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/autoapi/ssl_tools/data/data_modules/har/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.data.data_modules.har">
+<span id="ssl-tools-data-data-modules-har"></span><h1><a class="reference internal" href="#module-ssl_tools.data.data_modules.har" title="ssl_tools.data.data_modules.har"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.data_modules.har</span></code></a><a class="headerlink" href="#module-ssl_tools.data.data_modules.har" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule" title="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiModalHARSeriesDataModule</span></code></a></p></td>
+<td><p>Define the dataloaders for train, validation and test splits for</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.data.data_modules.har.TFCDataModule" title="ssl_tools.data.data_modules.har.TFCDataModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TFCDataModule</span></code></a></p></td>
+<td><p>Define a dataloader for <code class="docutils literal notranslate"><span class="pre">TFCDataset</span></code>. This is a wrapper around</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.data.data_modules.har.TNCHARDataModule" title="ssl_tools.data.data_modules.har.TNCHARDataModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TNCHARDataModule</span></code></a></p></td>
+<td><p>Define the dataloaders for train, validation and test splits for</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule" title="ssl_tools.data.data_modules.har.UserActivityFolderDataModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserActivityFolderDataModule</span></code></a></p></td>
+<td><p>Define the dataloaders for train, validation and test splits for</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.data.data_modules.har.parse_num_workers" title="ssl_tools.data.data_modules.har.parse_num_workers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_num_workers</span></code></a>(num_workers)</p></td>
+<td><p>Parse the num_workers parameter. If None, use all cores.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.data.data_modules.har.parse_transforms" title="ssl_tools.data.data_modules.har.parse_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_transforms</span></code></a>(transforms)</p></td>
+<td><p>Parse the transforms parameter to a dictionary with the split name as</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.data_modules.har.</span></span><span class="sig-name descname"><span class="pre">MultiModalHARSeriesDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_prefixes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('accel-x',</span> <span class="pre">'accel-y',</span> <span class="pre">'accel-z',</span> <span class="pre">'gyro-x',</span> <span class="pre">'gyro-y',</span> <span class="pre">'gyro-z')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard</span> <span class="pre">activity</span> <span class="pre">code'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_as_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">lightning.LightningDataModule</span></code></p>
+<p>Define the dataloaders for train, validation and test splits for
+HAR datasets. This datasets assumes that the data is in a single CSV
+file with series of data. Each row is a single sample that can be
+composed of multiple modalities (series). Each column is a feature of
+some series with the prefix indicating the series. The suffix may
+indicates the time step. For instance, if we have two series, accel-x
+and accel-y, the data will look something like:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x-0</p></td>
+<td><p>accel-x-1</p></td>
+<td><p>accel-y-0</p></td>
+<td><p>accel-y-1</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.6820123
+0.498217</p></td>
+<td><p>0.02123
+0.02123
+0.00001</p></td>
+<td><p>0.502123
+0.502123
+1.414141</p></td>
+<td><p>0.502123
+0.502123
+3.141592</p></td>
+<td><p>0
+1
+2</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">feature_prefixes</span></code> parameter is used to select the columns that
+will be used as features. For instance, if we want to use only the
+accel-x series, we can set <code class="docutils literal notranslate"><span class="pre">feature_prefixes=[&quot;accel-x&quot;]</span></code>. If we want
+to use both accel-x and accel-y, we can set
+<code class="docutils literal notranslate"><span class="pre">feature_prefixes=[&quot;accel-x&quot;,</span> <span class="pre">&quot;accel-y&quot;]</span></code>. If None is passed, all
+columns will be used as features, except the label column.
+The label column is specified by the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter.</p>
+<p>The dataset will return a 2-element tuple with the data and the label,
+if the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter is specified, otherwise return only the data.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">features_as_channels</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data will be returned as a
+vector of shape <cite>(C, T)</cite>, where C is the number of channels (features)
+and <cite>T</cite> is the number of time steps. Else, the data will be returned as
+a vector of shape  T*C (a single vector with all the features).</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<dl>
+<dt>data_path<span class="classifier">PathLike</span></dt><dd><p>The path to the folder with “train.csv”, “validation.csv” and
+“test.csv” files inside it.</p>
+</dd>
+<dt>feature_prefixes<span class="classifier">Union[str, List[str]], optional</span></dt><dd><p>The prefix of the column names in the dataframe that will be used
+to become features. If None, all columns except the label will be
+used as features.</p>
+</dd>
+<dt>label<span class="classifier">str, optional</span></dt><dd><p>The name of the column that will be used as label</p>
+</dd>
+<dt>features_as_channels<span class="classifier">bool, optional</span></dt><dd><p>If True, the data will be returned as a vector of shape (C, T),
+else the data will be returned as a vector of shape  T*C.</p>
+</dd>
+<dt>cast_to: str, optional</dt><dd><p>Cast the numpy data to the specified type</p>
+</dd>
+<dt>transforms<span class="classifier">Union[List[Callable], Dict[str, List[Callable]]], optional</span></dt><dd><p>This could be:
+- None: No transforms will be applied
+- List[Callable]: A list of transforms that will be applied to the</p>
+<blockquote>
+<div><p>data. The same transforms will be applied to all splits.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Dict[str, List[Callable]]: A dictionary with the split name as</dt><dd><p>key and a list of transforms as value. The split name must be
+one of: “train”, “validation”, “test” or “predict”.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>The size of the batch</p>
+</dd>
+<dt>num_workers<span class="classifier">int, optional</span></dt><dd><p>Number of workers to load data. If None, then use all cores</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule._get_loader">
+<span class="sig-name descname"><span class="pre">_get_loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule._get_loader" title="Link to this definition"></a></dt>
+<dd><p>Get a dataloader for the given split.</p>
+<section id="id1">
+<h5>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>split_name<span class="classifier">str</span></dt><dd><p>The name of the split. This must be one of: “train”, “validation”,
+“test” or “predict”.</p>
+</dd>
+<dt>shuffle<span class="classifier">bool</span></dt><dd><p>Shuffle the data or not.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>DataLoader</dt><dd><p>A dataloader for the given split.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>split_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule._load_dataset">
+<span class="sig-name descname"><span class="pre">_load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule._load_dataset" title="Link to this definition"></a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> dataset with the given split.</p>
+<section id="id2">
+<h5>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>split_name<span class="classifier">str</span></dt><dd><p>The name of the split. This must be one of: “train”, “validation”,
+“test” or “predict”.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h5>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>MultiModalSeriesCSVDataset</dt><dd><p>A MultiModalSeriesCSVDataset dataset with the given split.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>split_name</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../../datasets/index.html#ssl_tools.data.datasets.MultiModalSeriesCSVDataset" title="ssl_tools.data.datasets.MultiModalSeriesCSVDataset">ssl_tools.data.datasets.MultiModalSeriesCSVDataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.predict_dataloader">
+<span class="sig-name descname"><span class="pre">predict_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.predict_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.setup" title="Link to this definition"></a></dt>
+<dd><p>Assign the datasets to the corresponding split. <code class="docutils literal notranslate"><span class="pre">self.datasets</span></code>
+will be a dictionary with the split name as key and the dataset as
+value.</p>
+<section id="id4">
+<h5>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>stage<span class="classifier">str</span></dt><dd><p>The stage of the setup. This could be:
+- “fit”: Load the train and validation datasets
+- “test”: Load the test dataset
+- “predict”: Load the predict dataset</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h5>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If the stage is not one of: “fit”, “test” or “predict”</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stage</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.test_dataloader">
+<span class="sig-name descname"><span class="pre">test_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.test_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.train_dataloader">
+<span class="sig-name descname"><span class="pre">train_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.train_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.val_dataloader">
+<span class="sig-name descname"><span class="pre">val_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule.val_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>ssl_tools.utils.types.PathLike</em>) – </p></li>
+<li><p><strong>feature_prefixes</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>label</strong> (<em>str</em>) – </p></li>
+<li><p><strong>features_as_channels</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>transforms</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.data_modules.har.</span></span><span class="sig-name descname"><span class="pre">TFCDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_prefixes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('accel-x',</span> <span class="pre">'accel-y',</span> <span class="pre">'accel-z',</span> <span class="pre">'gyro-x',</span> <span class="pre">'gyro-y',</span> <span class="pre">'gyro-z')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard</span> <span class="pre">activity</span> <span class="pre">code'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_as_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length_alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jitter_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_time_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">lightning.LightningDataModule</span></code></p>
+<p>Define a dataloader for <code class="docutils literal notranslate"><span class="pre">TFCDataset</span></code>. This is a wrapper around
+<code class="docutils literal notranslate"><span class="pre">TFCDataset</span></code> class that defines the dataloaders for Pytorch Lightning.
+The data (<code class="docutils literal notranslate"><span class="pre">data_path</span></code>) must contains three CSV files: train.csv,
+validation.csv and test.csv.</p>
+<section id="id5">
+<h4>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<dl>
+<dt>data_path<span class="classifier">PathLike</span></dt><dd><p>The location of the data (root folder). Inside it there must be
+three files: train.csv, validation.csv and test.csv</p>
+</dd>
+<dt>feature_prefixes<span class="classifier">Union[str, List[str]], optional</span></dt><dd><p>The prefix of the column names in the dataframe that will be used
+to become features. Used to instantiate <code class="docutils literal notranslate"><span class="pre">HARDataset</span></code> dataset.</p>
+</dd>
+<dt>label<span class="classifier">str, optional</span></dt><dd><p>The label column, by default “standard activity code”</p>
+</dd>
+<dt>features_as_channels<span class="classifier">bool, optional</span></dt><dd><p>If True, the data will be returned as a vector of shape (C, T),
+where C is the number of features (in feature_prefixes) and T is
+the number of time steps. If False, the data will be returned as a
+vector of shape  T*C. Used to instantiate <code class="docutils literal notranslate"><span class="pre">HARDataset</span></code> dataset.</p>
+</dd>
+<dt>length_alignment<span class="classifier">int, optional</span></dt><dd><p>Truncate the features to this value, by default 178</p>
+</dd>
+<dt>time_transforms<span class="classifier">Union[List[Callable], Dict[str, List[Callable]]], optional</span></dt><dd><p>Transforms to be applied to time domain data. This could be:
+- None: No transforms will be applied
+- List[Callable]: A list of transforms that will be applied to the</p>
+<blockquote>
+<div><p>data. The same transforms will be applied to all splits.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Dict[str, List[Callable]]: A dictionary with the split name as</dt><dd><p>key and a list of transforms as value. The split name must be
+one of: “train”, “validation”, “test” or “predict”.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>If None. an <code class="docutils literal notranslate"><span class="pre">AddGaussianNoise</span></code> transform will be used with the
+given <code class="docutils literal notranslate"><span class="pre">jitter_ratio</span></code>.</p>
+</dd>
+<dt>frequency_transforms<span class="classifier">Union[List[Callable], Dict[str, List[Callable]]], optional</span></dt><dd><p>Transforms to be applied to frequency domain data. This could be:
+- None: No transforms will be applied
+- List[Callable]: A list of transforms that will be applied to the</p>
+<blockquote>
+<div><p>data. The same transforms will be applied to all splits.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Dict[str, List[Callable]]: A dictionary with the split name as</dt><dd><p>key and a list of transforms as value. The split name must be
+one of: “train”, “validation”, “test” or “predict”.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>If None, an <code class="docutils literal notranslate"><span class="pre">AddRemoveFrequency</span></code> transform will be used.</p>
+</dd>
+<dt>cast_to<span class="classifier">str, optional</span></dt><dd><p>Cast the data to the given type, by default “float32”</p>
+</dd>
+<dt>jitter_ratio<span class="classifier">float, optional</span></dt><dd><p>If no time transforms are given (<code class="docutils literal notranslate"><span class="pre">time_transforms</span></code>),
+this parameter will be used to instantiate an <code class="docutils literal notranslate"><span class="pre">AddGaussianNoise</span></code>
+transform with the given <code class="docutils literal notranslate"><span class="pre">jitter_ratio</span></code>.</p>
+</dd>
+<dt>only_time_frequency<span class="classifier">bool, optional</span></dt><dd><p>If True, the data returned will be a 2-element tuple with the
+(time, frequency) data as the first element and the label as the
+second element, by default False</p>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>The size of the batch, by default 1</p>
+</dd>
+<dt>num_workers<span class="classifier">int, optional</span></dt><dd><p>Number of workers to load data, by default None (use all cores)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule._get_loader">
+<span class="sig-name descname"><span class="pre">_get_loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule._get_loader" title="Link to this definition"></a></dt>
+<dd><p>Get a dataloader for the given split.</p>
+<section id="id6">
+<h5>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>split_name<span class="classifier">str</span></dt><dd><p>The name of the split. This must be one of: “train”, “validation”,
+“test” or “predict”.</p>
+</dd>
+<dt>shuffle<span class="classifier">bool</span></dt><dd><p>Shuffle the data or not.</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h5>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>DataLoader</dt><dd><p>A dataloader for the given split.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>split_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule._load_dataset">
+<span class="sig-name descname"><span class="pre">_load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule._load_dataset" title="Link to this definition"></a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">TFCDataset</span></code></p>
+<section id="id8">
+<h5>Parameters<a class="headerlink" href="#id8" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>split_name<span class="classifier">str</span></dt><dd><p>Name of the split (train, validation or test). This will be used to
+load the corresponding CSV file.</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h5>Returns<a class="headerlink" href="#id9" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>TFCDataset</dt><dd><p>A TFC dataset with the given split.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>split_name</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../../datasets/index.html#ssl_tools.data.datasets.TFCDataset" title="ssl_tools.data.datasets.TFCDataset">ssl_tools.data.datasets.TFCDataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule.predict_dataloader">
+<span class="sig-name descname"><span class="pre">predict_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule.predict_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule.setup" title="Link to this definition"></a></dt>
+<dd><p>Assign the datasets to the corresponding split. <code class="docutils literal notranslate"><span class="pre">self.datasets</span></code>
+will be a dictionary with the split name as key and the dataset as
+value.</p>
+<section id="id10">
+<h5>Parameters<a class="headerlink" href="#id10" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>stage<span class="classifier">str</span></dt><dd><p>The stage of the setup. This could be:
+- “fit”: Load the train and validation datasets
+- “test”: Load the test dataset
+- “predict”: Load the predict dataset</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h5>Raises<a class="headerlink" href="#id11" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If the stage is not one of: “fit”, “test” or “predict”</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stage</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule.test_dataloader">
+<span class="sig-name descname"><span class="pre">test_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule.test_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule.train_dataloader">
+<span class="sig-name descname"><span class="pre">train_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule.train_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TFCDataModule.val_dataloader">
+<span class="sig-name descname"><span class="pre">val_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TFCDataModule.val_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>ssl_tools.utils.types.PathLike</em>) – </p></li>
+<li><p><strong>feature_prefixes</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>label</strong> (<em>str</em>) – </p></li>
+<li><p><strong>features_as_channels</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>length_alignment</strong> (<em>int</em>) – </p></li>
+<li><p><strong>time_transforms</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>frequency_transforms</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+<li><p><strong>jitter_ratio</strong> (<em>float</em>) – </p></li>
+<li><p><strong>only_time_frequency</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TNCHARDataModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.data_modules.har.</span></span><span class="sig-name descname"><span class="pre">TNCHARDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('accel-x',</span> <span class="pre">'accel-y',</span> <span class="pre">'accel-z',</span> <span class="pre">'gyro-x',</span> <span class="pre">'gyro-y',</span> <span class="pre">'gyro-z')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mc_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">significance_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TNCHARDataModule" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule" title="ssl_tools.data.data_modules.har.UserActivityFolderDataModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserActivityFolderDataModule</span></code></a></p>
+<p>Define the dataloaders for train, validation and test splits for
+TNC datasets. The data must be in the following folder structure:
+It is a wrapper around <code class="docutils literal notranslate"><span class="pre">TNCDataset</span></code> dataset class.
+The <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class assumes that the data is in a
+folder with multiple CSV files. Each CSV file is a single sample that
+can be composed of multiple time steps (rows). Each column is a feature
+of the sample.</p>
+<p>For instance, if we have two samples, user-1.csv and user-2.csv,
+the directory structure will look something like:</p>
+<p>data_path
+├── user-1.csv
+└── user-2.csv</p>
+<p>And the data will look something like:
+- user-1.csv:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x</p></td>
+<td><p>accel-y</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.682012
+0.498217</p></td>
+<td><p>0.02123
+0.02123
+0.00001</p></td>
+<td><p>1
+1
+1</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul>
+<li><dl>
+<dt>user-2.csv:</dt><dd><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x</p></td>
+<td><p>accel-y</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.682012
+0.498217
+3.141592</p></td>
+<td><p>0.02123
+0.02123
+0.00001
+1.414141</p></td>
+<td><p>0
+0
+0
+0</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">features</span></code> parameter is used to select the columns that will be
+used as features. For instance, if we want to use only the accel-x
+column, we can set <code class="docutils literal notranslate"><span class="pre">features=[&quot;accel-x&quot;]</span></code>. If we want to use both
+accel-x and accel-y, we can set <code class="docutils literal notranslate"><span class="pre">features=[&quot;accel-x&quot;,</span> <span class="pre">&quot;accel-y&quot;]</span></code>.</p>
+<p>The label column is specified by the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter. Note that we
+have one label per time-step and not a single label per sample.</p>
+<p>The dataset will return a 2-element tuple with the data and the label,
+if the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter is specified, otherwise return only the data.</p>
+<section id="id12">
+<h4>Parameters<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<dl>
+<dt>data_path<span class="classifier">PathLike</span></dt><dd><p>The location of the directory with CSV files.</p>
+</dd>
+<dt>features: List[str]</dt><dd><p>A list with column names that will be used as features. If None,
+all columns except the label will be used as features.</p>
+</dd>
+<dt>pad: bool, optional</dt><dd><p>If True, the data will be padded to the length of the longest
+sample. Note that padding will be applyied after the transforms,
+and also to the labels if specified.</p>
+</dd>
+<dt>label: str, optional</dt><dd><p>Specify the name of the column with the label of the data</p>
+</dd>
+<dt>transforms<span class="classifier">Union[List[Callable], Dict[str, List[Callable]]], optional</span></dt><dd><p>This could be:
+- None: No transforms will be applied
+- List[Callable]: A list of transforms that will be applied to the</p>
+<blockquote>
+<div><p>data. The same transforms will be applied to all splits.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Dict[str, List[Callable]]: A dictionary with the split name as</dt><dd><p>key and a list of transforms as value. The split name must be
+one of: “train”, “validation”, “test” or “predict”.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>cast_to: str, optional</dt><dd><p>Cast the numpy data to the specified type</p>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>The size of the batch</p>
+</dd>
+<dt>num_workers<span class="classifier">int, optional</span></dt><dd><p>Number of workers to load data. If None, then use all cores</p>
+</dd>
+<dt>window_size<span class="classifier">int</span></dt><dd><p>Size of the window (δ). The window will be centered at t, with
+window_size / 2 elements before and after t (X[t - δ, t + δ]])</p>
+</dd>
+<dt>mc_sample_size<span class="classifier">int</span></dt><dd><p>The number of close and distant samples to be selected. This is
+the maximum number of samples that will be selected.</p>
+</dd>
+<dt>significance_level: float, optional</dt><dd><p>The significance level of the ADF test. It is used to reject the
+null hypothesis of the test if p-value is less than this value, by
+default 0.01</p>
+</dd>
+<dt>repeat<span class="classifier">int, optional</span></dt><dd><p>Simple repeat the element of the dataset <code class="docutils literal notranslate"><span class="pre">repeat</span></code> times,</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.TNCHARDataModule._load_dataset">
+<span class="sig-name descname"><span class="pre">_load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.TNCHARDataModule._load_dataset" title="Link to this definition"></a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">TNCDataset</span></code> dataset with the given split.</p>
+<section id="id13">
+<h5>Parameters<a class="headerlink" href="#id13" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>split_name<span class="classifier">str</span></dt><dd><p>The name of the split. This must be one of: “train”, “validation”,
+“test” or “predict”.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h5>Returns<a class="headerlink" href="#id14" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>TNCDataset</dt><dd><p>A TNC dataset with the given split.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>split_name</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../../datasets/index.html#ssl_tools.data.datasets.TNCDataset" title="ssl_tools.data.datasets.TNCDataset">ssl_tools.data.datasets.TNCDataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>Union</em><em>[</em><em>pathlib.Path</em><em>, </em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>features</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>label</strong> (<em>str</em>) – </p></li>
+<li><p><strong>pad</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>transforms</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+<li><p><strong>window_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>mc_sample_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>significance_level</strong> (<em>float</em>) – </p></li>
+<li><p><strong>repeat</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.data.data_modules.har.</span></span><span class="sig-name descname"><span class="pre">UserActivityFolderDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('accel-x',</span> <span class="pre">'accel-y',</span> <span class="pre">'accel-z',</span> <span class="pre">'gyro-x',</span> <span class="pre">'gyro-y',</span> <span class="pre">'gyro-z')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">lightning.LightningDataModule</span></code></p>
+<p>Define the dataloaders for train, validation and test splits for
+HAR datasets. The data must be in the following folder structure:
+It is a wrapper around <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> dataset class.
+The <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class assumes that the data is in a
+folder with multiple CSV files. Each CSV file is a single sample that
+can be composed of multiple time steps (rows). Each column is a feature
+of the sample.</p>
+<p>For instance, if we have two samples, user-1.csv and user-2.csv,
+the directory structure will look something like:</p>
+<p>data_path
+├── user-1.csv
+└── user-2.csv</p>
+<p>And the data will look something like:
+- user-1.csv:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x</p></td>
+<td><p>accel-y</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.682012
+0.498217</p></td>
+<td><p>0.02123
+0.02123
+0.00001</p></td>
+<td><p>1
+1
+1</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul>
+<li><dl>
+<dt>user-2.csv:</dt><dd><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>accel-x</p></td>
+<td><p>accel-y</p></td>
+<td><p>class</p></td>
+</tr>
+<tr class="row-even"><td><p>0.502123
+0.682012
+0.498217
+3.141592</p></td>
+<td><p>0.02123
+0.02123
+0.00001
+1.414141</p></td>
+<td><p>0
+0
+0
+0</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">features</span></code> parameter is used to select the columns that will be
+used as features. For instance, if we want to use only the accel-x
+column, we can set <code class="docutils literal notranslate"><span class="pre">features=[&quot;accel-x&quot;]</span></code>. If we want to use both
+accel-x and accel-y, we can set <code class="docutils literal notranslate"><span class="pre">features=[&quot;accel-x&quot;,</span> <span class="pre">&quot;accel-y&quot;]</span></code>.</p>
+<p>The label column is specified by the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter. Note that we
+have one label per time-step and not a single label per sample.</p>
+<p>The dataset will return a 2-element tuple with the data and the label,
+if the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter is specified, otherwise return only the data.</p>
+<section id="id15">
+<h4>Parameters<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<dl>
+<dt>data_path<span class="classifier">PathLike</span></dt><dd><p>The location of the directory with CSV files.</p>
+</dd>
+<dt>features: List[str]</dt><dd><p>A list with column names that will be used as features. If None,
+all columns except the label will be used as features.</p>
+</dd>
+<dt>pad: bool, optional</dt><dd><p>If True, the data will be padded to the length of the longest
+sample. Note that padding will be applyied after the transforms,
+and also to the labels if specified.</p>
+</dd>
+<dt>label: str, optional</dt><dd><p>Specify the name of the column with the label of the data</p>
+</dd>
+<dt>transforms<span class="classifier">Union[List[Callable], Dict[str, List[Callable]]], optional</span></dt><dd><p>This could be:
+- None: No transforms will be applied
+- List[Callable]: A list of transforms that will be applied to the</p>
+<blockquote>
+<div><p>data. The same transforms will be applied to all splits.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Dict[str, List[Callable]]: A dictionary with the split name as</dt><dd><p>key and a list of transforms as value. The split name must be
+one of: “train”, “validation”, “test” or “predict”.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>cast_to: str, optional</dt><dd><p>Cast the numpy data to the specified type</p>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>The size of the batch</p>
+</dd>
+<dt>num_workers<span class="classifier">int, optional</span></dt><dd><p>Number of workers to load data. If None, then use all cores</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule._get_loader">
+<span class="sig-name descname"><span class="pre">_get_loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule._get_loader" title="Link to this definition"></a></dt>
+<dd><p>Get a dataloader for the given split.</p>
+<section id="id16">
+<h5>Parameters<a class="headerlink" href="#id16" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>split_name<span class="classifier">str</span></dt><dd><p>The name of the split. This must be one of: “train”, “validation”,
+“test” or “predict”.</p>
+</dd>
+<dt>shuffle<span class="classifier">bool</span></dt><dd><p>Shuffle the data or not.</p>
+</dd>
+</dl>
+</section>
+<section id="id17">
+<h5>Returns<a class="headerlink" href="#id17" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>DataLoader</dt><dd><p>A dataloader for the given split.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>split_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule._load_dataset">
+<span class="sig-name descname"><span class="pre">_load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule._load_dataset" title="Link to this definition"></a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> dataset with the given split.</p>
+<section id="id18">
+<h5>Parameters<a class="headerlink" href="#id18" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>split_name<span class="classifier">str</span></dt><dd><p>Name of the split (train, validation or test). This will be used to
+load the corresponding CSV file.</p>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h5>Returns<a class="headerlink" href="#id19" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>SeriesFolderCSVDataset</dt><dd><p>The dataset with the given split.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>split_name</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../../datasets/index.html#ssl_tools.data.datasets.SeriesFolderCSVDataset" title="ssl_tools.data.datasets.SeriesFolderCSVDataset">ssl_tools.data.datasets.SeriesFolderCSVDataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule.predict_dataloader">
+<span class="sig-name descname"><span class="pre">predict_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule.predict_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule.setup" title="Link to this definition"></a></dt>
+<dd><p>Assign the datasets to the corresponding split. <code class="docutils literal notranslate"><span class="pre">self.datasets</span></code>
+will be a dictionary with the split name as key and the dataset as
+value.</p>
+<section id="id20">
+<h5>Parameters<a class="headerlink" href="#id20" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>stage<span class="classifier">str</span></dt><dd><p>The stage of the setup. This could be:
+- “fit”: Load the train and validation datasets
+- “test”: Load the test dataset
+- “predict”: Load the predict dataset</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h5>Raises<a class="headerlink" href="#id21" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If the stage is not one of: “fit”, “test” or “predict”</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stage</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule.test_dataloader">
+<span class="sig-name descname"><span class="pre">test_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule.test_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule.train_dataloader">
+<span class="sig-name descname"><span class="pre">train_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule.train_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.UserActivityFolderDataModule.val_dataloader">
+<span class="sig-name descname"><span class="pre">val_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.UserActivityFolderDataModule.val_dataloader" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>ssl_tools.utils.types.PathLike</em>) – </p></li>
+<li><p><strong>features</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>label</strong> (<em>str</em>) – </p></li>
+<li><p><strong>pad</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>transforms</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>cast_to</strong> (<em>str</em>) – </p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.parse_num_workers">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.data.data_modules.har.</span></span><span class="sig-name descname"><span class="pre">parse_num_workers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_workers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.parse_num_workers" title="Link to this definition"></a></dt>
+<dd><p>Parse the num_workers parameter. If None, use all cores.</p>
+<section id="id22">
+<h4>Parameters<a class="headerlink" href="#id22" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>num_workers<span class="classifier">int</span></dt><dd><p>Number of workers to load data. If None, then use all cores</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h4>Returns<a class="headerlink" href="#id23" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>int</dt><dd><p>Number of workers to load data.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_workers</strong> (<em>int</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.data.data_modules.har.parse_transforms">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.data.data_modules.har.</span></span><span class="sig-name descname"><span class="pre">parse_transforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transforms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.data.data_modules.har.parse_transforms" title="Link to this definition"></a></dt>
+<dd><p>Parse the transforms parameter to a dictionary with the split name as
+key and a list of transforms as value.</p>
+<section id="id24">
+<h4>Parameters<a class="headerlink" href="#id24" title="Link to this heading"></a></h4>
+<dl>
+<dt>transforms<span class="classifier">Union[List[Callable], Dict[str, List[Callable]]]</span></dt><dd><p>This could be:
+- None: No transforms will be applied
+- List[Callable]: A list of transforms that will be applied to the</p>
+<blockquote>
+<div><p>data. The same transforms will be applied to all splits.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Dict[str, List[Callable]]: A dictionary with the split name as</dt><dd><p>key and a list of transforms as value. The split name must be
+one of: “train”, “validation”, “test” or “predict”.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h4>Returns<a class="headerlink" href="#id25" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>Dict[str, List[Callable]]</dt><dd><p>A dictionary with the split name as key and a list of transforms as
+value.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>transforms</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>Callable</em><em>]</em><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, List[Callable]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ssl_tools.data.data_modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../datasets/index.html" class="btn btn-neutral float-right" title="ssl_tools.data.datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

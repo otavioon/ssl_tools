@@ -1,0 +1,15 @@
+:py:mod:`ssl_tools.analysis`
+============================
+
+.. py:module:: ssl_tools.analysis
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   plot_metrics/index.rst
+
+

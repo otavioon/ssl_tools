@@ -1,0 +1,59 @@
+:py:mod:`ssl_tools.transforms.utils`
+====================================
+
+.. py:module:: ssl_tools.transforms.utils
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.transforms.utils.Composer
+   ssl_tools.transforms.utils.Flatten
+   ssl_tools.transforms.utils.Identity
+   ssl_tools.transforms.utils.Reshape
+
+
+
+
+.. py:class:: Composer(transforms)
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(X)
+
+
+   .. py:method:: transform(X)
+
+
+
+.. py:class:: Flatten
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: transform(X)
+
+
+
+.. py:class:: Identity
+
+
+   .. py:method:: transform(X)
+
+
+
+.. py:class:: Reshape(shape)
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: transform(X)
+
+
+

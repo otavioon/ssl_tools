@@ -1,0 +1,583 @@
+:py:mod:`ssl_tools.data.datasets`
+=================================
+
+.. py:module:: ssl_tools.data.datasets
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   series_dataset/index.rst
+   tfc/index.rst
+   tnc/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.data.datasets.MultiModalSeriesCSVDataset
+   ssl_tools.data.datasets.SeriesFolderCSVDataset
+   ssl_tools.data.datasets.TFCDataset
+   ssl_tools.data.datasets.TNCDataset
+
+
+
+
+.. py:class:: MultiModalSeriesCSVDataset(data_path, feature_prefixes = None, label = None, features_as_channels = True, cast_to = 'float32', transforms = None)
+
+
+   
+   This datasets assumes that the data is in a single CSV file with
+   series of data. Each row is a single sample that can be composed of
+   multiple modalities (series). Each column is a feature of some series
+   with the prefix indicating the series. The suffix may indicates the
+   time step. For instance, if we have two series, accel-x and accel-y,
+   the data will look something like:
+
+   +-----------+-----------+-----------+-----------+--------+
+   | accel-x-0 | accel-x-1 | accel-y-0 | accel-y-1 |  class |
+   +-----------+-----------+-----------+-----------+--------+
+   | 0.502123  | 0.02123   | 0.502123  | 0.502123  |  0     |
+   | 0.6820123 | 0.02123   | 0.502123  | 0.502123  |  1     |
+   | 0.498217  | 0.00001   | 1.414141  | 3.141592  |  2     |
+   +-----------+-----------+-----------+-----------+--------+
+
+   The ``feature_prefixes`` parameter is used to select the columns that
+   will be used as features. For instance, if we want to use only the
+   accel-x series, we can set ``feature_prefixes=["accel-x"]``. If we want
+   to use both accel-x and accel-y, we can set
+   ``feature_prefixes=["accel-x", "accel-y"]``. If None is passed, all
+   columns will be used as features, except the label column.
+   The label column is specified by the ``label`` parameter.
+
+   The dataset will return a 2-element tuple with the data and the label,
+   if the ``label`` parameter is specified, otherwise return only the data.
+
+   If ``features_as_channels`` is ``True``, the data will be returned as a
+   vector of shape `(C, T)`, where C is the number of channels (features)
+   and `T` is the number of time steps. Else, the data will be returned as
+   a vector of shape  T*C (a single vector with all the features).
+
+   Parameters
+   ----------
+   data_path : Union[Path, str]
+       The location of the CSV file
+   feature_prefixes : Union[str, List[str]], optional
+       The prefix of the column names in the dataframe that will be used
+       to become features. If None, all columns except the label will be
+       used as features.
+   label : str, optional
+       The name of the column that will be used as label
+   features_as_channels : bool, optional
+       If True, the data will be returned as a vector of shape (C, T),
+       else the data will be returned as a vector of shape  T*C.
+   cast_to: str, optional
+       Cast the numpy data to the specified type
+   transforms: Optional[List[Callable]], optional
+       A list of transforms that will be applied to each sample
+       individually. Each transform must be a callable that receives a
+       numpy array and returns a numpy array. The transforms will be
+       applied in the order they are specified.
+
+   Examples
+   --------
+   # Using the data from the example above, and features_as_channels=False
+   >>> data_path = "data.csv"
+   >>> dataset = MultiModalSeriesCSVDataset(
+           data_path,
+           feature_prefixes=["accel-x", "accel-y"],
+           label="class"
+       )
+   >>> data, label = dataset[0]
+   >>> data.shape
+   (4, )
+
+   # Using the data from the example above, and features_as_channels=True
+   >>> dataset = MultiModalSeriesCSVDataset(
+           data_path,
+           feature_prefixes=["accel-x", "accel-y"],
+           label="class",
+           features_as_channels=True
+       )
+   >>> data, label = dataset[0]
+   >>> data.shape
+   (2, 2)
+
+   # And the dataset length
+   >>> len(dataset)
+   3
+
+
+   .. py:method:: __getitem__(index)
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: _load_data()
+
+      Load data from the CSV file
+
+      Returns
+      -------
+      Tuple[np.ndarray, Optional[np.ndarray]]
+          A 2-element tuple with the data and the labels. The second element
+          is None if the label is not specified.
+
+
+
+.. py:class:: SeriesFolderCSVDataset(data_path, features = None, label = None, pad = False, cast_to = 'float32', transforms = None, lazy = False)
+
+
+   
+   This dataset assumes that the data is in a folder with multiple CSV
+   files. Each CSV file is a single sample that can be composed of
+   multiple time steps (rows). Each column is a feature of the sample.
+
+   For instance, if we have two samples, sample-1.csv and sample-2.csv,
+   the directory structure will look something like:
+
+   data_path
+   ├── sample-1.csv
+   └── sample-2.csv
+
+   And the data will look something like:
+   - sample-1.csv:
+       +---------+---------+--------+
+       | accel-x | accel-y | class  |
+       +---------+---------+--------+
+       | 0.502123| 0.02123 | 1      |
+       | 0.682012| 0.02123 | 1      |
+       | 0.498217| 0.00001 | 1      |
+       +---------+---------+--------+
+   - sample-2.csv:
+       +---------+---------+--------+
+       | accel-x | accel-y | class  |
+       +---------+---------+--------+
+       | 0.502123| 0.02123 | 0      |
+       | 0.682012| 0.02123 | 0      |
+       | 0.498217| 0.00001 | 0      |
+       | 3.141592| 1.414141| 0      |
+       +---------+---------+--------+
+
+   The ``features`` parameter is used to select the columns that will be
+   used as features. For instance, if we want to use only the accel-x
+   column, we can set ``features=["accel-x"]``. If we want to use both
+   accel-x and accel-y, we can set ``features=["accel-x", "accel-y"]``.
+
+   The label column is specified by the ``label`` parameter. Note that we
+   have one label per time-step and not a single label per sample.
+
+   The dataset will return a 2-element tuple with the data and the label,
+   if the ``label`` parameter is specified, otherwise return only the data.
+
+   Notes
+   -----
+   - Samples may have different number of time steps. Use ``pad`` to pad
+       the data to the length of the longest sample.
+
+   Examples
+   --------
+   # Using the data from the example above
+   >>> data_dir = "train_folder"
+   >>> dataset = SeriesFolderCSVDataset(
+           data_dir,
+           features=["accel-x", "accel-y"],
+           label="class"
+       )
+   >>> data, label = dataset[0]
+   >>> data.shape
+   (2, 3)
+   >>> label.shape
+   (3,)
+   >>> data, label = dataset[1]
+   >>> data.shape
+   (2, 4)
+   >>> label.shape
+   (4,)
+
+   Parameters
+   ----------
+   data_path : str
+       The location of the directory with CSV files
+   features: List[str]
+       A list with column names that will be used as features. If None,
+       all columns except the label will be used as features.
+   pad: bool, optional
+       If True, the data will be padded to the length of the longest
+       sample. Note that padding will be applyied after the transforms,
+       and also to the labels if specified.
+   label: str, optional
+       Specify the name of the column with the label of the data
+   cast_to: str, optional
+       Cast the numpy data to the specified type
+   transforms: Optional[List[Callable]], optional
+       A list of transforms that will be applied to each sample
+       individually. Each transform must be a callable that receives a
+       numpy array and returns a numpy array. The transforms will be
+       applied in the order they are specified.
+   lazy: bool, optional
+       If True, the data will be loaded lazily (i.e. the CSV files will be
+       read only when needed)
+
+   .. py:method:: __getitem__(idx)
+
+      Get a single sample from the dataset
+
+      Parameters
+      ----------
+      idx : int
+          The index of the sample
+
+      Returns
+      -------
+      Union[Tuple[np.ndarray, np.ndarray], np.ndarray]
+          A 2-element tuple with the data and the label if the label is
+          specified, otherwise only the data.
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: _disable_fix_length()
+
+      Decorator to disable fix_length when calling a function
+
+
+   .. py:method:: _get_longest_sample_size()
+
+      Return the size of the longest sample in the dataset
+
+      Returns
+      -------
+      int
+          The size of the longest sample in the dataset
+
+
+   .. py:method:: _pad_data(data)
+
+      Pad the data to the length of the longest sample. In summary, this
+      function makes the data cyclic.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The data to pad
+
+      Returns
+      -------
+      np.ndarray
+          The padded data
+
+
+   .. py:method:: _read_all_csv()
+
+      Read all the CSV files in the data directory
+
+      Returns
+      -------
+      Union[Tuple[np.ndarray, np.ndarray], np.ndarray]
+          A list of 2-element tuple with the data and the label. If the label is not specified, the second element of the tuples are None.
+
+
+   .. py:method:: _read_csv(path)
+
+      Read a single CSV file (a single sample)
+
+      Parameters
+      ----------
+      path : Path
+          The path to the CSV file
+
+      Returns
+      -------
+      Tuple[np.ndarray, Optional[np.ndarray]]
+          A 2-element tuple with the data and the label. If the label is not
+          specified, the second element is None.
+
+
+   .. py:method:: _scan_data()
+
+      List the CSV files in the data directory
+
+      Returns
+      -------
+      List[Path]
+          List of CSV files
+
+
+
+.. py:class:: TFCDataset(data, length_alignment = 178, time_transforms = None, frequency_transforms = None, cast_to = 'float32', only_time_frequency = False)
+
+
+   Bases: :py:obj:`torch.utils.data.Dataset`
+
+   
+   Time-Frequency Contrastive (TFC) Dataset. This dataset is intented
+   to be used using TFC technique. Given a dataset with time-domain signal,
+   this dataset will calculate the FFT of the signal and apply the
+   specified transforms to the time and frequency domainof each sample.
+   It will return a 5-element tuple with the following elements:
+   1. The original time-domain signal
+   2. The label of the signal
+   3. Time augmented time-domain signal
+   4. The frequency-domain signal
+   5. The augmented frequency-domain signal
+
+   Note that, if samples are 1-D arrays, the transforms will be applied
+   directly to the data. If samples are 2-D arrays, the transforms will
+   be applied to each channel separately.
+
+   Parameters
+   ----------
+   data : Dataset
+       A dataset with samples. The sample must be a tuple with the data
+       and the label. The data must be a tensor of shape (C, T), where C
+       is the number of channels and T is the number of time steps. If no
+       channels are present, the data must be of shape (T,).
+   length_alignment : int, optional
+       Truncate the features to this value
+   time_transforms : Union[Transform, List[Transform]], optional
+       List of transforms to apply to the time domain.
+   frequency_transforms : Union[Transform, List[Transform]], optional
+       List of transforms to apply to the frequency domain
+   cast_to : str, optional
+       Cast the data to the given type, by default "float32"
+   only_time_frequency : bool, optional
+       If True, the data returned will be a 2-element tuple with the
+       (time, frequency) as the first element (without augmentation) and 
+       the label as the second element, by default False
+       
+   Examples
+   --------
+   >>> from ssl_tools.data.datasets import MultiModalSeriesCSVDataset
+   >>> data_path = "data.csv"
+   >>> dataset = MultiModalSeriesCSVDataset(
+           data_path,
+           feature_prefixes=["accel-x", "accel-y", "accel-z"],
+           label="class"
+       )
+   >>> dataset = TFCDataset(dataset, length_alignment=180)
+   >>> dataset[0]
+   >>> (
+       torch.Tensor([[-0.0001, -0.0001, -0.0001,  ..., -0.0001, -0.0001, -0.0001]]),   # time
+       0,
+       torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # time augmented
+       torch.Tensor([[0.1, 0.1, 0.1,  ..., 0.1, 0.1, 0.00101]]),                       # frequency
+       torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # frequency augmented
+   )
+
+   .. py:class:: FFT(absolute = True)
+
+
+      
+      Simple wrapper to apply the FFT to the data
+
+      Parameters
+      ----------
+      absolute : bool, optional
+          If True, returns the absolute value of FFT, by default True
+
+      .. py:method:: __call__(x)
+
+         Apply the FFT to the data
+
+         Parameters
+         ----------
+         x : np.ndarray
+             A 1-D array with the data
+
+         Returns
+         -------
+         np.ndarray
+             The FFT of the data
+
+
+
+   .. py:method:: __getitem__(index)
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: _apply_transforms(x, transforms)
+
+      Apply a list of transforms to the data
+
+      Parameters
+      ----------
+      x : np.ndarray
+          The 1-D array with the data
+      transforms : List[Transform]
+          A sequence of transforms to apply in the data
+
+      Returns
+      -------
+      np.ndarray
+          The transformed data
+
+
+   .. py:method:: _apply_transforms_per_axis(data, transforms)
+
+      Split the data into channels and apply the transforms to each channel
+      separately.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The data to be transformed. It must be a 2-D array with the shape
+          (C, T), where C is the number of channels and T is the number of
+          time steps.
+      transforms : List[Transform]
+          A sequence of transforms to apply in the data
+
+      Returns
+      -------
+      np.ndarray
+          An 2-D array with the transformed data. The array has the number of
+          channels as the first dimension.
+
+
+
+.. py:class:: TNCDataset(data, window_size, mc_sample_size = 20, significance_level = 0.01, repeat = 1, cast_to = 'float32')
+
+
+   Bases: :py:obj:`torch.utils.data.Dataset`
+
+   
+   Temporal Neighbourhood Coding (TNC) dataset. This dataset is used
+   to pre-train self-supervised models. The dataset obtain close and
+   distant samples from a time series.
+
+   The dataset returns a 3-element tuple with the following elements:
+   1. W_t, a window centered at random time step t, with window_size. It
+       is a numpy array with shape (n_features, window_size).
+   2. X_p, a set of close samples. It is a numpy array with shape
+       (mc_sample_size, n_features, window_size).
+   3. X_n, a set of distant samples. It is a numpy array with shape
+       (mc_sample_size, n_features, window_size).
+   Note that the number of distant samples may be less than mc_sample_size.
+
+   Parameters
+   ----------
+   data : Dataset
+       A dataset with samples. Each sample of the dataset must be a numpy
+       array of shape (n_features, time_steps). In the case of HAR, where
+       we have tri-axial accelerometer and gyroscope data, the shape of
+       each sample should be (6, time_steps). the time_steps may vary
+   window_size : int
+       Size of the window (δ). The window will be centered at t, with 
+       window_size / 2 elements before and after t (X[t - δ, t + δ]])
+   mc_sample_size : int
+       The number of close and distant samples to be selected. This is
+       the maximum number of samples that will be selected.
+   significance_level: float, optional
+       The significance level of the ADF test. It is used to reject the
+       null hypothesis of the test if p-value is less than this value, by  
+       default 0.01
+   repeat : int, optional
+       Simple repeat the element of the dataset ``repeat`` times
+   cast_to : str, optional
+       Cast the data to the given type, by default "float32"
+
+   .. py:method:: __getitem__(idx)
+
+      Get a sample from the dataset. The sample is a tuple with 3
+      elements, to know:
+      1. W_t, a window centered at random time step t, with window_size. It
+          is a numpy array with shape (n_features, window_size).
+      2. X_p, a set of close samples. It is a numpy array with shape
+          (mc_sample_size, n_features, window_size).
+      3. X_n, a set of distant samples. It is a numpy array with shape
+          (mc_sample_size, n_features, window_size).
+      Note that the number of distant samples may be less than mc_sample_size.
+
+      Parameters
+      ----------
+      idx : int
+          Index of the sample to select the close and distant samples.
+
+      Returns
+      -------
+      Tuple[np.ndarray, np.ndarray, np.ndarray]
+          A tuple with 3 elements (W_t, X_p, X_n).
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: _find_neighours(data, t)
+
+      Given a time series ``x_t`` and a time step ``t``, find the close
+      samples and the delta. The close samples are selected using the ADF
+      test. The delta adjusts the neighbourhood size.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The time series
+      t : int
+          The time step to find the close samples
+
+      Returns
+      -------
+      Tuple[np.ndarray, float]
+          A 2-element tuple. The first element is a numpy array with the
+          shape (mc_sample_size, n_features, window_size). The second element
+          is the delta, used to adjust the neighbourhood size.
+
+
+   .. py:method:: _find_non_neighours(data, t, delta = 0.0)
+
+      Find distant samples. The samples will be selected from the
+      neighbourhood of ``t``. If ``t`` is a time stemp from the first half
+      of the time series, the neighbourhood will be the second half of the
+      time series. Otherwise, the neighbourhood will be the first half of
+      the time series.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The time series
+      t : int
+          The time step to find the close samples
+      delta : float, optional
+          Factor used to adjust the neighbourhood size, by default 0.0
+
+      Returns
+      -------
+      np.ndarray
+          An array with the distant samples. The shape of the array is
+          (mc_sample_size, n_features, window_size). Note that if the list
+          of distant samples is empty, mc_sample_size will be 1.
+
+
+

@@ -1,0 +1,50 @@
+:py:mod:`ssl_tools.transforms.signal_1d`
+========================================
+
+.. py:module:: ssl_tools.transforms.signal_1d
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.transforms.signal_1d.AddRemoveFrequency
+   ssl_tools.transforms.signal_1d.FFT
+
+
+
+
+.. py:class:: AddRemoveFrequency(add_pertub_ratio=0.1, remove_pertub_ratio=0.1)
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: add_frequency(sample)
+
+
+   .. py:method:: remove_frequency(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+
+.. py:class:: FFT
+
+
+   Bases: :py:obj:`librep.base.Transform`
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(sample)
+
+
+

@@ -1,0 +1,202 @@
+:py:mod:`ssl_tools.experiments.har_classification.tfc`
+======================================================
+
+.. py:module:: ssl_tools.experiments.har_classification.tfc
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.tfc.TFCTest
+   ssl_tools.experiments.har_classification.tfc.TFCTrain
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.tfc.main
+
+
+
+.. py:class:: TFCTest(data, label = 'standard activity code', encoding_size = 128, in_channels = 6, length_alignment = 178, use_cosine_similarity = True, temperature = 0.5, features_as_channels = False, num_classes = 6, *args, **kwargs)
+
+
+   Bases: :py:obj:`ssl_tools.experiments.SSLTest`
+
+   
+   Tests the Temporal Frequency Coding model
+
+   Parameters
+   ----------
+   encoding_size : int, optional
+       Size of the encoding (output of the linear layer). Note that the
+       representation will be of size 2*encoding_size, since the
+       representation is the concatenation of the time and frequency
+       encodings.
+   label : str, optional
+       Name of the column with the labels.
+   encoding_size : int, optional
+       Size of the encoding (output of the linear layer). The real size of
+       the representation will be 2*encoding_size, since the
+       representation is the concatenation of the time and frequency
+       encodings.
+   in_channels : int, optional
+       Number of channels in the input data
+   length_alignment : int, optional
+       Truncate the features to this value.
+   use_cosine_similarity : bool, optional
+       If True use cosine similarity, otherwise use dot product in the
+       NXTent loss.
+   temperature : float, optional
+       Temperature parameter of the NXTent loss.
+   features_as_channels : bool, optional
+       If true, features will be transposed to (C, T), where C is the
+       number of features and T is the number of time steps. If False,
+       features will be (T*C, )
+   jitter_ratio : float, optional
+       Ratio of the standard deviation of the gaussian noise that will be
+       added to the data.
+   num_classes : int, optional
+       Number of classes in the dataset. Only used in finetune mode.
+   update_backbone : bool, optional
+       If True, the backbone will be updated during training. Only used in
+       finetune mode.
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'TFC'
+
+      
+
+   .. py:method:: _get_test_data_module()
+
+      The data module to use for testing.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The data module to use for testing
+
+
+   .. py:method:: _get_test_model()
+
+      Get the model to use for testing.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for testing
+
+
+
+.. py:class:: TFCTrain(data, label = 'standard activity code', encoding_size = 128, in_channels = 6, length_alignment = 178, use_cosine_similarity = True, temperature = 0.5, features_as_channels = False, jitter_ratio = 2, num_classes = 6, update_backbone = False, *args, **kwargs)
+
+
+   Bases: :py:obj:`ssl_tools.experiments.SSLTrain`
+
+   
+   Trains the Temporal Frequency Coding model
+
+   Parameters
+   ----------
+   encoding_size : int, optional
+       Size of the encoding (output of the linear layer). Note that the
+       representation will be of size 2*encoding_size, since the
+       representation is the concatenation of the time and frequency
+       encodings.
+   label : str, optional
+       Name of the column with the labels.
+   encoding_size : int, optional
+       Size of the encoding (output of the linear layer). The real size of
+       the representation will be 2*encoding_size, since the
+       representation is the concatenation of the time and frequency
+       encodings.
+   in_channels : int, optional
+       Number of channels in the input data
+   length_alignment : int, optional
+       Truncate the features to this value.
+   use_cosine_similarity : bool, optional
+       If True use cosine similarity, otherwise use dot product in the
+       NXTent loss.
+   temperature : float, optional
+       Temperature parameter of the NXTent loss.
+   features_as_channels : bool, optional
+       If true, features will be transposed to (C, T), where C is the
+       number of features and T is the number of time steps. If False,
+       features will be (T*C, )
+   jitter_ratio : float, optional
+       Ratio of the standard deviation of the gaussian noise that will be
+       added to the data.
+   num_classes : int, optional
+       Number of classes in the dataset. Only used in finetune mode.
+   update_backbone : bool, optional
+       If True, the backbone will be updated during training. Only used in
+       finetune mode.
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'TFC'
+
+      
+
+   .. py:method:: _get_finetune_data_module()
+
+      The data module to use for fine-tuning.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The data module to use for fine-tuning
+
+      Raises
+      ------
+      NotImplementedError
+          _description_
+
+
+   .. py:method:: _get_finetune_model(load_backbone = None)
+
+      Get the model to use for fine-tuning.
+
+      Parameters
+      ----------
+      load_backbone : str, optional
+          The path to the backbone to load. The backbone must be loaded 
+          inside this method, if it is not None.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for fine-tuning
+
+
+   .. py:method:: _get_pretrain_data_module()
+
+      The data module to use for pre-training.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The data module to use for pre-training
+
+
+   .. py:method:: _get_pretrain_model()
+
+      Get the model to use for pre-training.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for pre-training
+
+
+
+.. py:function:: main()
+
+

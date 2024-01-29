@@ -1,0 +1,164 @@
+:py:mod:`ssl_tools.models.ssl.cpc`
+==================================
+
+.. py:module:: ssl_tools.models.ssl.cpc
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.ssl.cpc.CPC
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.ssl.cpc.build_cpc
+
+
+
+.. py:class:: CPC(encoder, density_estimator, auto_regressor, lr = 0.001, weight_decay = 0.0, window_size = 4, n_size = 5)
+
+
+   Bases: :py:obj:`lightning.LightningModule`, :py:obj:`ssl_tools.utils.configurable.Configurable`
+
+   Implements the Contrastive Predictive Coding (CPC) model, as described in
+   https://arxiv.org/abs/1807.03748. The implementation was adapted from
+   https://github.com/sanatonek/TNC_representation_learning
+
+   The model is trained to predict the future representation of a window of
+   samples, given the past representation of the same window. The model is
+   trained to maximize the mutual information between the past and future
+   representations. The model is trained using a contrastive loss, where the
+   positive samples are the future representations of the same window, and the
+   negative samples are the future representations of other windows.
+
+   Implements the Contrastive Predictive Coding (CPC) model.
+
+   Parameters
+   ----------
+   encoder : torch.nn.Module
+       Model that encodes a window of samples into a representation.
+       This model takes the sample windows as input and outputs a
+       representation of the windows (Z-vector). Original paper uses a
+       GRU+Linear.
+   density_estimator : torch.nn.Module
+       Model that estimates the density of a representation.
+   auto_regressor : torch.nn.Module
+       Model that predicts the future representation of a window of
+       samples, given the past representation of the same window.
+   lr : float, optional
+       Learning rate, by default 1e-3.
+   weight_decay : float, optional
+       Weight decay, by default 0.0
+   window_size : int, optional
+       Size of the input windows (X_t) to be fed to the encoder
+   n_size : int, optional
+       Number of negative samples to be used in the contrastive loss
+       (steps to predict)
+
+   .. py:method:: _shared_step(batch, batch_idx, prefix)
+
+
+   .. py:method:: _step(sample)
+
+      Perform a forward pass through the model.
+
+      Parameters
+      ----------
+      sample : torch.Tensor
+          A tensor of shape (B, C, T), where B is the batch size, C is the
+          number of channels and T is the number of time steps. Note that T
+          may vary between samples of the dataset. If this is the case, the
+          B dimension must be 1.
+
+      Returns
+      -------
+      torch.Tensor
+          A tensor of size (B, encoder_output_size), with the samples encoded
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(sample)
+
+      Perform a forward pass through the model. This method is used to
+      encode a sample into a representation.
+
+      Parameters
+      ----------
+      sample : torch.Tensor
+          The sample to be encoded. A tensor of shape (B, C, T), where B is
+          the batch size, C is the number of channels and T is the number of
+          time steps.
+
+      Returns
+      -------
+      torch.Tensor
+          A tensor of size (B, encoder_output_size), with the samples encoded.
+
+
+   .. py:method:: get_config()
+
+
+   .. py:method:: loss_function(X_N, labels)
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+
+.. py:function:: build_cpc(encoding_size = 150, in_channel = 6, gru_hidden_size = 100, gru_num_layers = 1, gru_bidirectional = True, dropout = 0.0, learning_rate = 0.001, weight_decay = 0.0, window_size = 4, n_size = 5)
+
+   Builds a default CPC model. This function aid in the creation of a CPC
+   model, by setting the default values of the parameters.
+
+   Parameters
+   ----------
+   encoding_size : int, optional
+       Size of the encoding (output of the linear layer). This is the size of
+       the representation.
+   in_channel : int, optional
+       Number of input features (e.g. 6 for HAR data in MotionSense Dataset)
+   gru_hidden_size : int, optional
+       The number of features in the hidden state of the GRU.
+   gru_num_layers : int, optional
+       Number of recurrent layers in the GRU. E.g., setting ``num_layers=2``
+       would mean stacking two GRUs together to form a `stacked GRU`,
+       with the second GRU taking in outputs of the first GRU and
+       computing the final results.
+   gru_bidirectional : bool, optional
+       If ``True``, becomes a bidirectional GRU.
+   dropout : float, optional
+       The dropout probability.
+   learning_rate : float, optional
+       The learning rate of the optimizer.
+   weight_decay : float, optional
+       The weight decay of the optimizer.
+   window_size : int, optional
+       Size of the input windows (X_t) to be fed to the encoder
+   n_size : int, optional
+       Number of negative samples to be used in the contrastive loss
+       (steps to predict)
+
+   Returns
+   -------
+   CPC
+       The CPC model
+
+

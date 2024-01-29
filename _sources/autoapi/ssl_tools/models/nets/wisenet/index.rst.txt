@@ -1,0 +1,46 @@
+:py:mod:`ssl_tools.models.nets.wisenet`
+=======================================
+
+.. py:module:: ssl_tools.models.nets.wisenet
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.wisenet.WiseNet
+
+
+
+
+.. py:class:: WiseNet(learning_rate = 0.0001)
+
+
+   Bases: :py:obj:`pytorch_lightning.LightningModule`
+
+   .. py:method:: _common_step(batch, batch_idx)
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x)
+
+
+   .. py:method:: predict_step(batch, batch_idx)
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+

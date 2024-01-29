@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.models.ssl.classifier &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="ssl_tools.models.ssl.cpc" href="../cpc/index.html" />
+    <link rel="prev" title="ssl_tools.models.ssl" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.classifier</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/autoapi/ssl_tools/models/ssl/classifier/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.models.ssl.classifier">
+<span id="ssl-tools-models-ssl-classifier"></span><h1><a class="reference internal" href="#module-ssl_tools.models.ssl.classifier" title="ssl_tools.models.ssl.classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.classifier</span></code></a><a class="headerlink" href="#module-ssl_tools.models.ssl.classifier" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator" title="ssl_tools.models.ssl.classifier.SSLDiscriminator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SSLDiscriminator</span></code></a></p></td>
+<td><p>A generic SSL Discriminator model. It takes a backbone and a head</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.ssl.classifier.</span></span><span class="sig-name descname"><span class="pre">SSLDiscriminator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">lightning.LightningModule</span></code></p>
+<p>A generic SSL Discriminator model. It takes a backbone and a head
+and trains them jointly (or not, depending on the <code class="docutils literal notranslate"><span class="pre">update_backbone</span></code>
+parameter).</p>
+<p>In summary, the training loop is as follows:
+1. Forward pass through the backbone
+2. Forward pass through the head (with the backbone’s output)
+3. Compute the loss
+4. Backpropagate the loss through the head and the backbone (the latter
+is backpropagated only if <code class="docutils literal notranslate"><span class="pre">update_backbone</span></code> is True)</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>backbone<span class="classifier">_type_</span></dt><dd><p>The backbone of the model, that will encode the input data</p>
+</dd>
+<dt>head<span class="classifier">_type_</span></dt><dd><p>The head of the model, that will make the final predictions. It
+taks the output of the backbone as input.</p>
+</dd>
+<dt>loss_fn<span class="classifier">_type_</span></dt><dd><p>The loss function to use. By default, it is a cross entropy loss.</p>
+</dd>
+<dt>learning_rate<span class="classifier">float, optional</span></dt><dd><p>The learning rate to use for the optimizer.</p>
+</dd>
+<dt>update_backbone<span class="classifier">bool, optional</span></dt><dd><p>If True, the backbone will be updated during training. Otherwise,
+only the head will be updated.</p>
+</dd>
+<dt>metrics<span class="classifier">Dict[str, Metric], optional</span></dt><dd><p>The metrics to use during training. The keys are the names of the
+metrics, and the values are the metrics themselves.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator._compute_metrics">
+<span class="sig-name descname"><span class="pre">_compute_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator._compute_metrics" title="Link to this definition"></a></dt>
+<dd><p>Compute the metrics.</p>
+<section id="id1">
+<h5>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>y_hat<span class="classifier">torch.Tensor</span></dt><dd><p>The predictions of the model</p>
+</dd>
+<dt>y<span class="classifier">_type_</span></dt><dd><p>The ground truth labels</p>
+</dd>
+<dt>stage<span class="classifier">str</span></dt><dd><p>The stage of the training loop (train, val or test)</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>Dict[str, float]</dt><dd><p>A dictionary containing the metrics. The keys are the names of the
+metrics, and the values are the values of the metrics.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_hat</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>y</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>stage</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator._freeze">
+<span class="sig-name descname"><span class="pre">_freeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator._freeze" title="Link to this definition"></a></dt>
+<dd><p>Freezes the model, i.e. sets the requires_grad parameter of all the
+parameters to False.</p>
+<section id="id2">
+<h5>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>model<span class="classifier">_type_</span></dt><dd><p>The model to freeze</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator._loss_func">
+<span class="sig-name descname"><span class="pre">_loss_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator._loss_func" title="Link to this definition"></a></dt>
+<dd><p>Calculates the loss function.</p>
+<section id="id3">
+<h5>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>y_hat<span class="classifier">torch.Tensor</span></dt><dd><p>The predictions of the model</p>
+</dd>
+<dt>y<span class="classifier">torch.Tensor</span></dt><dd><p>The ground truth labels</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_hat</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>y</strong> (<em>torch.Tensor</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator.configure_optimizers">
+<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator.configure_optimizers" title="Link to this definition"></a></dt>
+<dd><p>Configures the optimizer. If <code class="docutils literal notranslate"><span class="pre">update_backbone</span></code> is True, it will
+update the parameters of the backbone and the head. Otherwise, it will
+only update the parameters of the head.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator.forward" title="Link to this definition"></a></dt>
+<dd><p>Performs a forward pass through the model. It first passes the input
+through the backbone, and then passes the output of the backbone through
+the head.</p>
+<section id="id4">
+<h5>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>The input data. If it is a tuple or a list, it will be unpacked
+before being passed to the backbone.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h5>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>torch.Tensor</dt><dd><p>The predictions of the model.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>torch.Tensor</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator.predict_step">
+<span class="sig-name descname"><span class="pre">predict_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator.predict_step" title="Link to this definition"></a></dt>
+<dd><p>Performs a prediction step. It only performs a forward pass through
+the model.</p>
+<section id="id6">
+<h5>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>batch<span class="classifier">torch.Tensor</span></dt><dd><p>The batch of data</p>
+</dd>
+<dt>batch_idx<span class="classifier">int</span></dt><dd><p>The index of the batch</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h5>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>torch.Tensor</dt><dd><p>The predictions of the model</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator.test_step">
+<span class="sig-name descname"><span class="pre">test_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator.test_step" title="Link to this definition"></a></dt>
+<dd><p>Performs a test step. It first performs a forward pass through
+the model, then computes the loss. Finally, it logs the loss and the
+metrics (if any) (test_loss, test_metric_1, test_metric_2, …)</p>
+<section id="id8">
+<h5>Parameters<a class="headerlink" href="#id8" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>batch<span class="classifier">torch.Tensor</span></dt><dd><p>The batch of data</p>
+</dd>
+<dt>batch_idx<span class="classifier">int</span></dt><dd><p>The index of the batch</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h5>Returns<a class="headerlink" href="#id9" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>torch.Tensor</dt><dd><p>The loss of the model</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator.training_step">
+<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator.training_step" title="Link to this definition"></a></dt>
+<dd><p>Performs a training step. It first performs a forward pass through
+the model, then computes the loss. Finally, it logs the loss
+(train_loss)</p>
+<section id="id10">
+<h5>Parameters<a class="headerlink" href="#id10" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>batch<span class="classifier">torch.Tensor</span></dt><dd><p>The batch of data</p>
+</dd>
+<dt>batch_idx<span class="classifier">int</span></dt><dd><p>The index of the batch</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h5>Returns<a class="headerlink" href="#id11" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>torch.Tensor</dt><dd><p>The loss of the model</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.classifier.SSLDiscriminator.validation_step">
+<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.classifier.SSLDiscriminator.validation_step" title="Link to this definition"></a></dt>
+<dd><p>Performs a validation step. It first performs a forward pass through
+the model, then computes the loss. Finally, it logs the loss and the
+metrics (if any) (val_loss, val_metric_1, val_metric_2, …)</p>
+<section id="id12">
+<h5>Parameters<a class="headerlink" href="#id12" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>batch<span class="classifier">torch.Tensor</span></dt><dd><p>The batch of data</p>
+</dd>
+<dt>batch_idx<span class="classifier">int</span></dt><dd><p>The index of the batch</p>
+</dd>
+</dl>
+</section>
+<section id="id13">
+<h5>Returns<a class="headerlink" href="#id13" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>torch.Tensor</dt><dd><p>The loss of the model</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>learning_rate</strong> (<em>float</em>) – </p></li>
+<li><p><strong>update_backbone</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>metrics</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>torchmetrics.Metric</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ssl_tools.models.ssl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../cpc/index.html" class="btn btn-neutral float-right" title="ssl_tools.models.ssl.cpc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,588 @@
+:py:mod:`ssl_tools.data.data_modules.har`
+=========================================
+
+.. py:module:: ssl_tools.data.data_modules.har
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule
+   ssl_tools.data.data_modules.har.TFCDataModule
+   ssl_tools.data.data_modules.har.TNCHARDataModule
+   ssl_tools.data.data_modules.har.UserActivityFolderDataModule
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.data.data_modules.har.parse_num_workers
+   ssl_tools.data.data_modules.har.parse_transforms
+
+
+
+.. py:class:: MultiModalHARSeriesDataModule(data_path, feature_prefixes = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = 'standard activity code', features_as_channels = True, transforms = None, cast_to = 'float32', batch_size = 1, num_workers = None)
+
+
+   Bases: :py:obj:`lightning.LightningDataModule`
+
+   
+   Define the dataloaders for train, validation and test splits for
+   HAR datasets. This datasets assumes that the data is in a single CSV
+   file with series of data. Each row is a single sample that can be
+   composed of multiple modalities (series). Each column is a feature of
+   some series with the prefix indicating the series. The suffix may
+   indicates the time step. For instance, if we have two series, accel-x
+   and accel-y, the data will look something like:
+
+   +-----------+-----------+-----------+-----------+--------+
+   | accel-x-0 | accel-x-1 | accel-y-0 | accel-y-1 |  class |
+   +-----------+-----------+-----------+-----------+--------+
+   | 0.502123  | 0.02123   | 0.502123  | 0.502123  |  0     |
+   | 0.6820123 | 0.02123   | 0.502123  | 0.502123  |  1     |
+   | 0.498217  | 0.00001   | 1.414141  | 3.141592  |  2     |
+   +-----------+-----------+-----------+-----------+--------+
+
+   The ``feature_prefixes`` parameter is used to select the columns that
+   will be used as features. For instance, if we want to use only the
+   accel-x series, we can set ``feature_prefixes=["accel-x"]``. If we want
+   to use both accel-x and accel-y, we can set
+   ``feature_prefixes=["accel-x", "accel-y"]``. If None is passed, all
+   columns will be used as features, except the label column.
+   The label column is specified by the ``label`` parameter.
+
+   The dataset will return a 2-element tuple with the data and the label,
+   if the ``label`` parameter is specified, otherwise return only the data.
+
+   If ``features_as_channels`` is ``True``, the data will be returned as a
+   vector of shape `(C, T)`, where C is the number of channels (features)
+   and `T` is the number of time steps. Else, the data will be returned as
+   a vector of shape  T*C (a single vector with all the features).
+
+   Parameters
+   ----------
+   data_path : PathLike
+       The path to the folder with "train.csv", "validation.csv" and
+       "test.csv" files inside it.
+   feature_prefixes : Union[str, List[str]], optional
+       The prefix of the column names in the dataframe that will be used
+       to become features. If None, all columns except the label will be
+       used as features.
+   label : str, optional
+       The name of the column that will be used as label
+   features_as_channels : bool, optional
+       If True, the data will be returned as a vector of shape (C, T),
+       else the data will be returned as a vector of shape  T*C.
+   cast_to: str, optional
+       Cast the numpy data to the specified type
+   transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
+       This could be:
+       - None: No transforms will be applied
+       - List[Callable]: A list of transforms that will be applied to the
+           data. The same transforms will be applied to all splits.
+       - Dict[str, List[Callable]]: A dictionary with the split name as
+           key and a list of transforms as value. The split name must be
+           one of: "train", "validation", "test" or "predict".
+   batch_size : int, optional
+       The size of the batch
+   num_workers : int, optional
+       Number of workers to load data. If None, then use all cores
+
+   .. py:method:: _get_loader(split_name, shuffle)
+
+      Get a dataloader for the given split.
+
+      Parameters
+      ----------
+      split_name : str
+          The name of the split. This must be one of: "train", "validation",
+          "test" or "predict".
+      shuffle : bool
+          Shuffle the data or not.
+
+      Returns
+      -------
+      DataLoader
+          A dataloader for the given split.
+
+
+   .. py:method:: _load_dataset(split_name)
+
+      Create a ``MultiModalSeriesCSVDataset`` dataset with the given split.
+
+      Parameters
+      ----------
+      split_name : str
+          The name of the split. This must be one of: "train", "validation",
+          "test" or "predict".
+
+      Returns
+      -------
+      MultiModalSeriesCSVDataset
+          A MultiModalSeriesCSVDataset dataset with the given split.
+
+
+   .. py:method:: predict_dataloader()
+
+
+   .. py:method:: setup(stage)
+
+      Assign the datasets to the corresponding split. ``self.datasets``
+      will be a dictionary with the split name as key and the dataset as
+      value.
+
+      Parameters
+      ----------
+      stage : str
+          The stage of the setup. This could be:
+          - "fit": Load the train and validation datasets
+          - "test": Load the test dataset
+          - "predict": Load the predict dataset
+
+      Raises
+      ------
+      ValueError
+          If the stage is not one of: "fit", "test" or "predict"
+
+
+   .. py:method:: test_dataloader()
+
+
+   .. py:method:: train_dataloader()
+
+
+   .. py:method:: val_dataloader()
+
+
+
+.. py:class:: TFCDataModule(data_path, feature_prefixes = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = 'standard activity code', features_as_channels = True, length_alignment = 60, time_transforms = None, frequency_transforms = None, cast_to = 'float32', jitter_ratio = 2, only_time_frequency = False, batch_size = 32, num_workers = None)
+
+
+   Bases: :py:obj:`lightning.LightningDataModule`
+
+   
+   Define a dataloader for ``TFCDataset``. This is a wrapper around
+   ``TFCDataset`` class that defines the dataloaders for Pytorch Lightning.
+   The data (``data_path``) must contains three CSV files: train.csv,
+   validation.csv and test.csv.
+
+   Parameters
+   ----------
+   data_path : PathLike
+       The location of the data (root folder). Inside it there must be
+       three files: train.csv, validation.csv and test.csv
+   feature_prefixes : Union[str, List[str]], optional
+       The prefix of the column names in the dataframe that will be used
+       to become features. Used to instantiate ``HARDataset`` dataset.
+   label : str, optional
+       The label column, by default "standard activity code"
+   features_as_channels : bool, optional
+       If True, the data will be returned as a vector of shape (C, T),
+       where C is the number of features (in feature_prefixes) and T is
+       the number of time steps. If False, the data will be returned as a
+       vector of shape  T*C. Used to instantiate ``HARDataset`` dataset.
+   length_alignment : int, optional
+       Truncate the features to this value, by default 178
+   time_transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
+       Transforms to be applied to time domain data. This could be:
+       - None: No transforms will be applied
+       - List[Callable]: A list of transforms that will be applied to the
+           data. The same transforms will be applied to all splits.
+       - Dict[str, List[Callable]]: A dictionary with the split name as
+           key and a list of transforms as value. The split name must be
+           one of: "train", "validation", "test" or "predict".
+       If None. an ``AddGaussianNoise`` transform will be used with the 
+       given ``jitter_ratio``.
+   frequency_transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
+       Transforms to be applied to frequency domain data. This could be:
+       - None: No transforms will be applied
+       - List[Callable]: A list of transforms that will be applied to the
+           data. The same transforms will be applied to all splits.
+       - Dict[str, List[Callable]]: A dictionary with the split name as
+           key and a list of transforms as value. The split name must be
+           one of: "train", "validation", "test" or "predict".            
+       If None, an ``AddRemoveFrequency`` transform will be used.
+   cast_to : str, optional
+       Cast the data to the given type, by default "float32"
+   jitter_ratio : float, optional
+       If no time transforms are given (``time_transforms``),
+       this parameter will be used to instantiate an ``AddGaussianNoise``
+       transform with the given ``jitter_ratio``.
+   only_time_frequency : bool, optional
+       If True, the data returned will be a 2-element tuple with the
+       (time, frequency) data as the first element and the label as the
+       second element, by default False
+   batch_size : int, optional
+       The size of the batch, by default 1
+   num_workers : int, optional
+       Number of workers to load data, by default None (use all cores)
+
+   .. py:method:: _get_loader(split_name, shuffle)
+
+      Get a dataloader for the given split.
+
+      Parameters
+      ----------
+      split_name : str
+          The name of the split. This must be one of: "train", "validation",
+          "test" or "predict".
+      shuffle : bool
+          Shuffle the data or not.
+
+      Returns
+      -------
+      DataLoader
+          A dataloader for the given split.
+
+
+   .. py:method:: _load_dataset(split_name)
+
+      Create a ``TFCDataset``
+
+      Parameters
+      ----------
+      split_name : str
+          Name of the split (train, validation or test). This will be used to
+          load the corresponding CSV file.
+          
+      Returns
+      -------
+      TFCDataset
+          A TFC dataset with the given split.
+
+
+   .. py:method:: predict_dataloader()
+
+
+   .. py:method:: setup(stage)
+
+      Assign the datasets to the corresponding split. ``self.datasets``
+      will be a dictionary with the split name as key and the dataset as
+      value.
+
+      Parameters
+      ----------
+      stage : str
+          The stage of the setup. This could be:
+          - "fit": Load the train and validation datasets
+          - "test": Load the test dataset
+          - "predict": Load the predict dataset
+
+      Raises
+      ------
+      ValueError
+          If the stage is not one of: "fit", "test" or "predict"
+
+
+   .. py:method:: test_dataloader()
+
+
+   .. py:method:: train_dataloader()
+
+
+   .. py:method:: val_dataloader()
+
+
+
+.. py:class:: TNCHARDataModule(data_path, features = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = None, pad = False, transforms = None, batch_size = 1, num_workers = None, cast_to = 'float32', window_size = 60, mc_sample_size = 20, significance_level = 0.01, repeat = 1)
+
+
+   Bases: :py:obj:`UserActivityFolderDataModule`
+
+   
+   Define the dataloaders for train, validation and test splits for
+   TNC datasets. The data must be in the following folder structure:
+   It is a wrapper around ``TNCDataset`` dataset class.
+   The ``SeriesFolderCSVDataset`` class assumes that the data is in a
+   folder with multiple CSV files. Each CSV file is a single sample that
+   can be composed of multiple time steps (rows). Each column is a feature
+   of the sample.
+
+   For instance, if we have two samples, user-1.csv and user-2.csv,
+   the directory structure will look something like:
+
+   data_path
+   ├── user-1.csv
+   └── user-2.csv
+
+   And the data will look something like:
+   - user-1.csv:
+       +---------+---------+--------+
+       | accel-x | accel-y | class  |
+       +---------+---------+--------+
+       | 0.502123| 0.02123 | 1      |
+       | 0.682012| 0.02123 | 1      |
+       | 0.498217| 0.00001 | 1      |
+       +---------+---------+--------+
+   - user-2.csv:
+       +---------+---------+--------+
+       | accel-x | accel-y | class  |
+       +---------+---------+--------+
+       | 0.502123| 0.02123 | 0      |
+       | 0.682012| 0.02123 | 0      |
+       | 0.498217| 0.00001 | 0      |
+       | 3.141592| 1.414141| 0      |
+       +---------+---------+--------+
+
+   The ``features`` parameter is used to select the columns that will be
+   used as features. For instance, if we want to use only the accel-x
+   column, we can set ``features=["accel-x"]``. If we want to use both
+   accel-x and accel-y, we can set ``features=["accel-x", "accel-y"]``.
+
+   The label column is specified by the ``label`` parameter. Note that we
+   have one label per time-step and not a single label per sample.
+
+   The dataset will return a 2-element tuple with the data and the label,
+   if the ``label`` parameter is specified, otherwise return only the data.
+
+
+   Parameters
+   ----------
+   data_path : PathLike
+       The location of the directory with CSV files.
+   features: List[str]
+       A list with column names that will be used as features. If None,
+       all columns except the label will be used as features.
+   pad: bool, optional
+       If True, the data will be padded to the length of the longest
+       sample. Note that padding will be applyied after the transforms,
+       and also to the labels if specified.
+   label: str, optional
+       Specify the name of the column with the label of the data
+   transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
+       This could be:
+       - None: No transforms will be applied
+       - List[Callable]: A list of transforms that will be applied to the
+           data. The same transforms will be applied to all splits.
+       - Dict[str, List[Callable]]: A dictionary with the split name as
+           key and a list of transforms as value. The split name must be
+           one of: "train", "validation", "test" or "predict".
+   cast_to: str, optional
+       Cast the numpy data to the specified type
+   batch_size : int, optional
+       The size of the batch
+   num_workers : int, optional
+       Number of workers to load data. If None, then use all cores
+   window_size : int
+       Size of the window (δ). The window will be centered at t, with
+       window_size / 2 elements before and after t (X[t - δ, t + δ]])
+   mc_sample_size : int
+       The number of close and distant samples to be selected. This is
+       the maximum number of samples that will be selected.
+   significance_level: float, optional
+       The significance level of the ADF test. It is used to reject the
+       null hypothesis of the test if p-value is less than this value, by
+       default 0.01
+   repeat : int, optional
+       Simple repeat the element of the dataset ``repeat`` times,
+
+   .. py:method:: _load_dataset(split_name)
+
+      Create a ``TNCDataset`` dataset with the given split.
+
+      Parameters
+      ----------
+      split_name : str
+          The name of the split. This must be one of: "train", "validation",
+          "test" or "predict".
+
+      Returns
+      -------
+      TNCDataset
+          A TNC dataset with the given split.
+
+
+
+.. py:class:: UserActivityFolderDataModule(data_path, features = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = None, pad = False, transforms = None, cast_to = 'float32', batch_size = 1, num_workers = None)
+
+
+   Bases: :py:obj:`lightning.LightningDataModule`
+
+   
+   Define the dataloaders for train, validation and test splits for
+   HAR datasets. The data must be in the following folder structure:
+   It is a wrapper around ``SeriesFolderCSVDataset`` dataset class.
+   The ``SeriesFolderCSVDataset`` class assumes that the data is in a
+   folder with multiple CSV files. Each CSV file is a single sample that
+   can be composed of multiple time steps (rows). Each column is a feature
+   of the sample.
+
+   For instance, if we have two samples, user-1.csv and user-2.csv,
+   the directory structure will look something like:
+
+   data_path
+   ├── user-1.csv
+   └── user-2.csv
+
+   And the data will look something like:
+   - user-1.csv:
+       +---------+---------+--------+
+       | accel-x | accel-y | class  |
+       +---------+---------+--------+
+       | 0.502123| 0.02123 | 1      |
+       | 0.682012| 0.02123 | 1      |
+       | 0.498217| 0.00001 | 1      |
+       +---------+---------+--------+
+   - user-2.csv:
+       +---------+---------+--------+
+       | accel-x | accel-y | class  |
+       +---------+---------+--------+
+       | 0.502123| 0.02123 | 0      |
+       | 0.682012| 0.02123 | 0      |
+       | 0.498217| 0.00001 | 0      |
+       | 3.141592| 1.414141| 0      |
+       +---------+---------+--------+
+
+   The ``features`` parameter is used to select the columns that will be
+   used as features. For instance, if we want to use only the accel-x
+   column, we can set ``features=["accel-x"]``. If we want to use both
+   accel-x and accel-y, we can set ``features=["accel-x", "accel-y"]``.
+
+   The label column is specified by the ``label`` parameter. Note that we
+   have one label per time-step and not a single label per sample.
+
+   The dataset will return a 2-element tuple with the data and the label,
+   if the ``label`` parameter is specified, otherwise return only the data.
+
+
+   Parameters
+   ----------
+   data_path : PathLike
+       The location of the directory with CSV files.
+   features: List[str]
+       A list with column names that will be used as features. If None,
+       all columns except the label will be used as features.
+   pad: bool, optional
+       If True, the data will be padded to the length of the longest
+       sample. Note that padding will be applyied after the transforms,
+       and also to the labels if specified.
+   label: str, optional
+       Specify the name of the column with the label of the data
+   transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
+       This could be:
+       - None: No transforms will be applied
+       - List[Callable]: A list of transforms that will be applied to the
+           data. The same transforms will be applied to all splits.
+       - Dict[str, List[Callable]]: A dictionary with the split name as
+           key and a list of transforms as value. The split name must be
+           one of: "train", "validation", "test" or "predict".
+   cast_to: str, optional
+       Cast the numpy data to the specified type
+   batch_size : int, optional
+       The size of the batch
+   num_workers : int, optional
+       Number of workers to load data. If None, then use all cores
+
+   .. py:method:: _get_loader(split_name, shuffle)
+
+      Get a dataloader for the given split.
+
+      Parameters
+      ----------
+      split_name : str
+          The name of the split. This must be one of: "train", "validation",
+          "test" or "predict".
+      shuffle : bool
+          Shuffle the data or not.
+
+      Returns
+      -------
+      DataLoader
+          A dataloader for the given split.
+
+
+   .. py:method:: _load_dataset(split_name)
+
+      Create a ``SeriesFolderCSVDataset`` dataset with the given split.
+
+      Parameters
+      ----------
+      split_name : str
+          Name of the split (train, validation or test). This will be used to
+          load the corresponding CSV file.
+
+      Returns
+      -------
+      SeriesFolderCSVDataset
+          The dataset with the given split.
+
+
+   .. py:method:: predict_dataloader()
+
+
+   .. py:method:: setup(stage)
+
+      Assign the datasets to the corresponding split. ``self.datasets``
+      will be a dictionary with the split name as key and the dataset as
+      value.
+
+      Parameters
+      ----------
+      stage : str
+          The stage of the setup. This could be:
+          - "fit": Load the train and validation datasets
+          - "test": Load the test dataset
+          - "predict": Load the predict dataset
+
+      Raises
+      ------
+      ValueError
+          If the stage is not one of: "fit", "test" or "predict"
+
+
+   .. py:method:: test_dataloader()
+
+
+   .. py:method:: train_dataloader()
+
+
+   .. py:method:: val_dataloader()
+
+
+
+.. py:function:: parse_num_workers(num_workers)
+
+   Parse the num_workers parameter. If None, use all cores.
+
+   Parameters
+   ----------
+   num_workers : int
+       Number of workers to load data. If None, then use all cores
+
+   Returns
+   -------
+   int
+       Number of workers to load data.
+
+
+.. py:function:: parse_transforms(transforms)
+
+   Parse the transforms parameter to a dictionary with the split name as
+   key and a list of transforms as value.
+
+   Parameters
+   ----------
+   transforms : Union[List[Callable], Dict[str, List[Callable]]]
+       This could be:
+       - None: No transforms will be applied
+       - List[Callable]: A list of transforms that will be applied to the
+           data. The same transforms will be applied to all splits.
+       - Dict[str, List[Callable]]: A dictionary with the split name as
+           key and a list of transforms as value. The split name must be
+           one of: "train", "validation", "test" or "predict".
+
+   Returns
+   -------
+   Dict[str, List[Callable]]
+       A dictionary with the split name as key and a list of transforms as
+       value.
+
+

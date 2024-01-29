@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.experiments.lightning_cli &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ssl_tools.experiments.ssl_experiment" href="../ssl_experiment/index.html" />
+    <link rel="prev" title="ssl_tools.experiments.har_classification.tnc" href="../har_classification/tnc/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.lightning_cli</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ssl_tools/experiments/lightning_cli/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.experiments.lightning_cli">
+<span id="ssl-tools-experiments-lightning-cli"></span><h1><a class="reference internal" href="#module-ssl_tools.experiments.lightning_cli" title="ssl_tools.experiments.lightning_cli"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.lightning_cli</span></code></a><a class="headerlink" href="#module-ssl_tools.experiments.lightning_cli" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.lightning_cli.LightningTest" title="ssl_tools.experiments.lightning_cli.LightningTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightningTest</span></code></a></p></td>
+<td><p>Defines the parameters for testing a Lightning model. This class</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.experiments.lightning_cli.LightningTrain" title="ssl_tools.experiments.lightning_cli.LightningTrain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightningTrain</span></code></a></p></td>
+<td><p>Defines the parameters for training a Lightning model. This class</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.lightning_cli.EXPERIMENT_VERSION_FORMAT" title="ssl_tools.experiments.lightning_cli.EXPERIMENT_VERSION_FORMAT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXPERIMENT_VERSION_FORMAT</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="ssl_tools.experiments.lightning_cli.EXPERIMENT_VERSION_FORMAT">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.lightning_cli.</span></span><span class="sig-name descname"><span class="pre">EXPERIMENT_VERSION_FORMAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%Y-%m-%d_%H-%M-%S'</span></em><a class="headerlink" href="#ssl_tools.experiments.lightning_cli.EXPERIMENT_VERSION_FORMAT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.experiments.lightning_cli.LightningTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.lightning_cli.</span></span><span class="sig-name descname"><span class="pre">LightningTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'logs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_test_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ssl_tools/experiments/lightning_cli.html#LightningTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ssl_tools.experiments.lightning_cli.LightningTest" title="Link to this definition"></a></dt>
+<dd><p>Defines the parameters for testing a Lightning model. This class
+may be used to define the parameters for a Lightning experiment and
+CLI.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>load<span class="classifier">str</span></dt><dd><p>Path to the checkpoint to load</p>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>The batch size</p>
+</dd>
+<dt>log_dir<span class="classifier">str, optional</span></dt><dd><p>Path to the location where logs will be stored</p>
+</dd>
+<dt>name: str, optional</dt><dd><p>The name of the experiment (it will be used to compose the path of
+the experiments, such as logs and checkpoints)</p>
+</dd>
+<dt>version: Union[int, str], optional</dt><dd><p>The version of the experiment. If not is provided the current date
+and time will be used as the version</p>
+</dd>
+<dt>accelerator: str, optional</dt><dd><p>The accelerator to use. Defaults to “cpu”</p>
+</dd>
+<dt>devices: int, optional</dt><dd><p>The number of devices to use. Defaults to 1</p>
+</dd>
+<dt>limit_test_batches<span class="classifier">Union[float, int], optional</span></dt><dd><p>Limit the number of batches to use for testing.</p>
+</dd>
+<dt>num_nodes: int, optional</dt><dd><p>The number of nodes to use. Defaults to 1</p>
+</dd>
+<dt>num_workers: int, optional</dt><dd><p>The number of workers to use for the dataloader.</p>
+</dd>
+<dt>seed: int, optional</dt><dd><p>The seed to use.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>load</strong> (<em>str</em>) – </p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>version</strong> (<em>str</em>) – </p></li>
+<li><p><strong>accelerator</strong> (<em>str</em>) – </p></li>
+<li><p><strong>devices</strong> (<em>int</em>) – </p></li>
+<li><p><strong>limit_test_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – </p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.experiments.lightning_cli.LightningTrain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.lightning_cli.</span></span><span class="sig-name descname"><span class="pre">LightningTrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'logs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_metric_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_train_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_val_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ssl_tools/experiments/lightning_cli.html#LightningTrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ssl_tools.experiments.lightning_cli.LightningTrain" title="Link to this definition"></a></dt>
+<dd><p>Defines the parameters for training a Lightning model. This class
+may be used to define the parameters for a Lightning experiment and
+CLI.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>epochs<span class="classifier">int, optional</span></dt><dd><p>Number of epochs to pre-train the model</p>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>The batch size</p>
+</dd>
+<dt>learning_rate<span class="classifier">float, optional</span></dt><dd><p>The learning rate of the optimizer</p>
+</dd>
+<dt>log_dir<span class="classifier">str, optional</span></dt><dd><p>Path to the location where logs will be stored</p>
+</dd>
+<dt>name: str, optional</dt><dd><p>The name of the experiment (it will be used to compose the path of
+the experiments, such as logs and checkpoints)</p>
+</dd>
+<dt>version: Union[int, str], optional</dt><dd><p>The version of the experiment. If not is provided the current date
+and time will be used as the version</p>
+</dd>
+<dt>load: str, optional</dt><dd><p>The path to a checkpoint to load</p>
+</dd>
+<dt>checkpoint_metric: str, optional</dt><dd><p>The metric to monitor for checkpointing. If not provided, the last
+model will be saved</p>
+</dd>
+<dt>checkpoint_metric_mode: str, optional</dt><dd><p>The mode of the metric to monitor (min, max or mean). Defaults to
+“min”</p>
+</dd>
+<dt>accelerator: str, optional</dt><dd><p>The accelerator to use. Defaults to “cpu”</p>
+</dd>
+<dt>devices: int, optional</dt><dd><p>The number of devices to use. Defaults to 1</p>
+</dd>
+<dt>strategy: str, optional</dt><dd><p>The strategy to use. Defaults to “auto”</p>
+</dd>
+<dt>limit_train_batches: Union[float, int], optional</dt><dd><p>The number of batches to use for training. Defaults to 1.0 (use
+all batches)</p>
+</dd>
+<dt>limit_val_batches: Union[float, int], optional</dt><dd><p>The number of batches to use for validation. Defaults to 1.0 (use
+all batches)</p>
+</dd>
+<dt>num_nodes: int, optional</dt><dd><p>The number of nodes to use. Defaults to 1</p>
+</dd>
+<dt>num_workers: int, optional</dt><dd><p>The number of workers to use for the dataloader.</p>
+</dd>
+<dt>seed: int, optional</dt><dd><p>The seed to use.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>int</em>) – </p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>) – </p></li>
+<li><p><strong>log_dir</strong> (<em>str</em>) – </p></li>
+<li><p><strong>name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>version</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>load</strong> (<em>str</em>) – </p></li>
+<li><p><strong>checkpoint_metric</strong> (<em>str</em>) – </p></li>
+<li><p><strong>checkpoint_metric_mode</strong> (<em>str</em>) – </p></li>
+<li><p><strong>accelerator</strong> (<em>str</em>) – </p></li>
+<li><p><strong>devices</strong> (<em>int</em>) – </p></li>
+<li><p><strong>strategy</strong> (<em>str</em>) – </p></li>
+<li><p><strong>limit_train_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>limit_val_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – </p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../har_classification/tnc/index.html" class="btn btn-neutral float-left" title="ssl_tools.experiments.har_classification.tnc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ssl_experiment/index.html" class="btn btn-neutral float-right" title="ssl_tools.experiments.ssl_experiment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

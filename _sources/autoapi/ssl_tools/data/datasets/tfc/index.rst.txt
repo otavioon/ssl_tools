@@ -1,0 +1,151 @@
+:py:mod:`ssl_tools.data.datasets.tfc`
+=====================================
+
+.. py:module:: ssl_tools.data.datasets.tfc
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.data.datasets.tfc.TFCDataset
+
+
+
+
+.. py:class:: TFCDataset(data, length_alignment = 178, time_transforms = None, frequency_transforms = None, cast_to = 'float32', only_time_frequency = False)
+
+
+   Bases: :py:obj:`torch.utils.data.Dataset`
+
+   
+   Time-Frequency Contrastive (TFC) Dataset. This dataset is intented
+   to be used using TFC technique. Given a dataset with time-domain signal,
+   this dataset will calculate the FFT of the signal and apply the
+   specified transforms to the time and frequency domainof each sample.
+   It will return a 5-element tuple with the following elements:
+   1. The original time-domain signal
+   2. The label of the signal
+   3. Time augmented time-domain signal
+   4. The frequency-domain signal
+   5. The augmented frequency-domain signal
+
+   Note that, if samples are 1-D arrays, the transforms will be applied
+   directly to the data. If samples are 2-D arrays, the transforms will
+   be applied to each channel separately.
+
+   Parameters
+   ----------
+   data : Dataset
+       A dataset with samples. The sample must be a tuple with the data
+       and the label. The data must be a tensor of shape (C, T), where C
+       is the number of channels and T is the number of time steps. If no
+       channels are present, the data must be of shape (T,).
+   length_alignment : int, optional
+       Truncate the features to this value
+   time_transforms : Union[Transform, List[Transform]], optional
+       List of transforms to apply to the time domain.
+   frequency_transforms : Union[Transform, List[Transform]], optional
+       List of transforms to apply to the frequency domain
+   cast_to : str, optional
+       Cast the data to the given type, by default "float32"
+   only_time_frequency : bool, optional
+       If True, the data returned will be a 2-element tuple with the
+       (time, frequency) as the first element (without augmentation) and 
+       the label as the second element, by default False
+       
+   Examples
+   --------
+   >>> from ssl_tools.data.datasets import MultiModalSeriesCSVDataset
+   >>> data_path = "data.csv"
+   >>> dataset = MultiModalSeriesCSVDataset(
+           data_path,
+           feature_prefixes=["accel-x", "accel-y", "accel-z"],
+           label="class"
+       )
+   >>> dataset = TFCDataset(dataset, length_alignment=180)
+   >>> dataset[0]
+   >>> (
+       torch.Tensor([[-0.0001, -0.0001, -0.0001,  ..., -0.0001, -0.0001, -0.0001]]),   # time
+       0,
+       torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # time augmented
+       torch.Tensor([[0.1, 0.1, 0.1,  ..., 0.1, 0.1, 0.00101]]),                       # frequency
+       torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # frequency augmented
+   )
+
+   .. py:class:: FFT(absolute = True)
+
+
+      
+      Simple wrapper to apply the FFT to the data
+
+      Parameters
+      ----------
+      absolute : bool, optional
+          If True, returns the absolute value of FFT, by default True
+
+      .. py:method:: __call__(x)
+
+         Apply the FFT to the data
+
+         Parameters
+         ----------
+         x : np.ndarray
+             A 1-D array with the data
+
+         Returns
+         -------
+         np.ndarray
+             The FFT of the data
+
+
+
+   .. py:method:: __getitem__(index)
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: _apply_transforms(x, transforms)
+
+      Apply a list of transforms to the data
+
+      Parameters
+      ----------
+      x : np.ndarray
+          The 1-D array with the data
+      transforms : List[Transform]
+          A sequence of transforms to apply in the data
+
+      Returns
+      -------
+      np.ndarray
+          The transformed data
+
+
+   .. py:method:: _apply_transforms_per_axis(data, transforms)
+
+      Split the data into channels and apply the transforms to each channel
+      separately.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The data to be transformed. It must be a 2-D array with the shape
+          (C, T), where C is the number of channels and T is the number of
+          time steps.
+      transforms : List[Transform]
+          A sequence of transforms to apply in the data
+
+      Returns
+      -------
+      np.ndarray
+          An 2-D array with the transformed data. The array has the number of
+          channels as the first dimension.
+
+
+

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.models.ssl.cpc &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="ssl_tools.models.ssl.tfc" href="../tfc/index.html" />
+    <link rel="prev" title="ssl_tools.models.ssl.classifier" href="../classifier/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.cpc</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/autoapi/ssl_tools/models/ssl/cpc/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.models.ssl.cpc">
+<span id="ssl-tools-models-ssl-cpc"></span><h1><a class="reference internal" href="#module-ssl_tools.models.ssl.cpc" title="ssl_tools.models.ssl.cpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.cpc</span></code></a><a class="headerlink" href="#module-ssl_tools.models.ssl.cpc" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.ssl.cpc.CPC" title="ssl_tools.models.ssl.cpc.CPC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CPC</span></code></a></p></td>
+<td><p>Implements the Contrastive Predictive Coding (CPC) model, as described in</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.ssl.cpc.build_cpc" title="ssl_tools.models.ssl.cpc.build_cpc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_cpc</span></code></a>([encoding_size, in_channel, ...])</p></td>
+<td><p>Builds a default CPC model. This function aid in the creation of a CPC</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.ssl.cpc.</span></span><span class="sig-name descname"><span class="pre">CPC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_regressor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">lightning.LightningModule</span></code>, <a class="reference internal" href="../../../utils/configurable/index.html#ssl_tools.utils.configurable.Configurable" title="ssl_tools.utils.configurable.Configurable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.utils.configurable.Configurable</span></code></a></p>
+<p>Implements the Contrastive Predictive Coding (CPC) model, as described in
+<a class="reference external" href="https://arxiv.org/abs/1807.03748">https://arxiv.org/abs/1807.03748</a>. The implementation was adapted from
+<a class="reference external" href="https://github.com/sanatonek/TNC_representation_learning">https://github.com/sanatonek/TNC_representation_learning</a></p>
+<p>The model is trained to predict the future representation of a window of
+samples, given the past representation of the same window. The model is
+trained to maximize the mutual information between the past and future
+representations. The model is trained using a contrastive loss, where the
+positive samples are the future representations of the same window, and the
+negative samples are the future representations of other windows.</p>
+<p>Implements the Contrastive Predictive Coding (CPC) model.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>encoder<span class="classifier">torch.nn.Module</span></dt><dd><p>Model that encodes a window of samples into a representation.
+This model takes the sample windows as input and outputs a
+representation of the windows (Z-vector). Original paper uses a
+GRU+Linear.</p>
+</dd>
+<dt>density_estimator<span class="classifier">torch.nn.Module</span></dt><dd><p>Model that estimates the density of a representation.</p>
+</dd>
+<dt>auto_regressor<span class="classifier">torch.nn.Module</span></dt><dd><p>Model that predicts the future representation of a window of
+samples, given the past representation of the same window.</p>
+</dd>
+<dt>lr<span class="classifier">float, optional</span></dt><dd><p>Learning rate, by default 1e-3.</p>
+</dd>
+<dt>weight_decay<span class="classifier">float, optional</span></dt><dd><p>Weight decay, by default 0.0</p>
+</dd>
+<dt>window_size<span class="classifier">int, optional</span></dt><dd><p>Size of the input windows (X_t) to be fed to the encoder</p>
+</dd>
+<dt>n_size<span class="classifier">int, optional</span></dt><dd><p>Number of negative samples to be used in the contrastive loss
+(steps to predict)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC._shared_step">
+<span class="sig-name descname"><span class="pre">_shared_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC._shared_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC._step">
+<span class="sig-name descname"><span class="pre">_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC._step" title="Link to this definition"></a></dt>
+<dd><p>Perform a forward pass through the model.</p>
+<section id="id1">
+<h5>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>sample<span class="classifier">torch.Tensor</span></dt><dd><p>A tensor of shape (B, C, T), where B is the batch size, C is the
+number of channels and T is the number of time steps. Note that T
+may vary between samples of the dataset. If this is the case, the
+B dimension must be 1.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>torch.Tensor</dt><dd><p>A tensor of size (B, encoder_output_size), with the samples encoded</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sample</strong> (<em>torch.Tensor</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC.configure_optimizers">
+<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC.configure_optimizers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC.forward" title="Link to this definition"></a></dt>
+<dd><p>Perform a forward pass through the model. This method is used to
+encode a sample into a representation.</p>
+<section id="id2">
+<h5>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>sample<span class="classifier">torch.Tensor</span></dt><dd><p>The sample to be encoded. A tensor of shape (B, C, T), where B is
+the batch size, C is the number of channels and T is the number of
+time steps.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h5>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<dl class="simple">
+<dt>torch.Tensor</dt><dd><p>A tensor of size (B, encoder_output_size), with the samples encoded.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sample</strong> (<em>torch.Tensor</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC.get_config">
+<span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC.get_config" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC.loss_function">
+<span class="sig-name descname"><span class="pre">loss_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC.loss_function" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC.test_step">
+<span class="sig-name descname"><span class="pre">test_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC.test_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC.training_step">
+<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC.training_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.CPC.validation_step">
+<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.CPC.validation_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder</strong> (<em>torch.nn.Module</em>) – </p></li>
+<li><p><strong>density_estimator</strong> (<em>torch.nn.Module</em>) – </p></li>
+<li><p><strong>auto_regressor</strong> (<em>torch.nn.Module</em>) – </p></li>
+<li><p><strong>lr</strong> (<em>float</em>) – </p></li>
+<li><p><strong>weight_decay</strong> (<em>float</em>) – </p></li>
+<li><p><strong>window_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>n_size</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.build_cpc">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.models.ssl.cpc.</span></span><span class="sig-name descname"><span class="pre">build_cpc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.build_cpc" title="Link to this definition"></a></dt>
+<dd><p>Builds a default CPC model. This function aid in the creation of a CPC
+model, by setting the default values of the parameters.</p>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>encoding_size<span class="classifier">int, optional</span></dt><dd><p>Size of the encoding (output of the linear layer). This is the size of
+the representation.</p>
+</dd>
+<dt>in_channel<span class="classifier">int, optional</span></dt><dd><p>Number of input features (e.g. 6 for HAR data in MotionSense Dataset)</p>
+</dd>
+<dt>gru_hidden_size<span class="classifier">int, optional</span></dt><dd><p>The number of features in the hidden state of the GRU.</p>
+</dd>
+<dt>gru_num_layers<span class="classifier">int, optional</span></dt><dd><p>Number of recurrent layers in the GRU. E.g., setting <code class="docutils literal notranslate"><span class="pre">num_layers=2</span></code>
+would mean stacking two GRUs together to form a <cite>stacked GRU</cite>,
+with the second GRU taking in outputs of the first GRU and
+computing the final results.</p>
+</dd>
+<dt>gru_bidirectional<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, becomes a bidirectional GRU.</p>
+</dd>
+<dt>dropout<span class="classifier">float, optional</span></dt><dd><p>The dropout probability.</p>
+</dd>
+<dt>learning_rate<span class="classifier">float, optional</span></dt><dd><p>The learning rate of the optimizer.</p>
+</dd>
+<dt>weight_decay<span class="classifier">float, optional</span></dt><dd><p>The weight decay of the optimizer.</p>
+</dd>
+<dt>window_size<span class="classifier">int, optional</span></dt><dd><p>Size of the input windows (X_t) to be fed to the encoder</p>
+</dd>
+<dt>n_size<span class="classifier">int, optional</span></dt><dd><p>Number of negative samples to be used in the contrastive loss
+(steps to predict)</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>CPC</dt><dd><p>The CPC model</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoding_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>in_channel</strong> (<em>int</em>) – </p></li>
+<li><p><strong>gru_hidden_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>gru_num_layers</strong> (<em>int</em>) – </p></li>
+<li><p><strong>gru_bidirectional</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>dropout</strong> (<em>float</em>) – </p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>) – </p></li>
+<li><p><strong>weight_decay</strong> (<em>float</em>) – </p></li>
+<li><p><strong>window_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>n_size</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ssl_tools.models.ssl.cpc.CPC" title="ssl_tools.models.ssl.cpc.CPC">CPC</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../classifier/index.html" class="btn btn-neutral float-left" title="ssl_tools.models.ssl.classifier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tfc/index.html" class="btn btn-neutral float-right" title="ssl_tools.models.ssl.tfc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
