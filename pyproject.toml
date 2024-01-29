@@ -35,8 +35,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["mock", "pytest", "black", "isort"]
+docs = ["sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "sphinx-argparse", "sphinx", "sphinx-autoapi", "nbsphinx", "pandoc", "Ipython"]
 
 [project.urls]
 
 "Bug Tracker" = "https://github.com/otavioon/ssl_tools/issues"
 "Homepage" = "https://github.com/otavioon/ssl_tools"
+
+[tool.setuptools]
+py-modules = ["ssl_tools"]
