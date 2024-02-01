@@ -213,6 +213,9 @@ class UserActivityFolderDataModule(L.LightningDataModule):
             "test",
             "predict",
         ], f"Invalid split_name: {split_name}"
+        
+        if split_name == "predict":
+            split_name = "test"
 
         return SeriesFolderCSVDataset(
             self.data_path / split_name,
@@ -288,6 +291,12 @@ class UserActivityFolderDataModule(L.LightningDataModule):
 
     def predict_dataloader(self) -> DataLoader:
         return self._get_loader("predict", shuffle=False)
+    
+    def __str__(self):
+        return f"UserActivityFolderDataModule(data_path={self.data_path}, batch_size={self.batch_size})"
+    
+    def __repr__(self) -> str:
+        return str(self)
 
 
 class TNCHARDataModule(UserActivityFolderDataModule):
@@ -556,6 +565,9 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
             "test",
             "predict",
         ], f"Invalid split_name: {split_name}"
+        
+        if split_name == "predict":
+            split_name = "test"
 
         return MultiModalSeriesCSVDataset(
             self.data_path / f"{split_name}.csv",
@@ -631,6 +643,12 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
 
     def predict_dataloader(self) -> DataLoader:
         return self._get_loader("predict", shuffle=False)
+    
+    def __str__(self):
+        return f"MultiModalHARSeriesDataModule(data_path={self.data_path}, batch_size={self.batch_size})"
+    
+    def __repr__(self) -> str:
+        return str(self)
 
 
 class TFCDataModule(L.LightningDataModule):
@@ -802,6 +820,9 @@ class TFCDataModule(L.LightningDataModule):
             "test",
             "predict",
         ], f"Invalid split_name: {split_name}"
+        
+        if split_name == "predict":
+            split_name = "test"
 
         path = self.data_path / f"{split_name}.csv"
         
