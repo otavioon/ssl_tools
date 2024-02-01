@@ -44,8 +44,8 @@ class TNCPredictionHead(ProjectionHead):
         self,
         input_dim: int = 10,
         hidden_dim1: int = 64,
-        hidden_size2: int = 64,
-        hidden_dim2: int = 6,
+        hidden_dim2: int = 64,
+        output_dim: int = 6,
         dropout_prob: float = 0,
     ):
         super().__init__(
@@ -58,15 +58,15 @@ class TNCPredictionHead(ProjectionHead):
                 ),
                 (
                     hidden_dim1,
-                    hidden_size2,
+                    hidden_dim2,
                     None,
                     torch.nn.Sequential(
                         torch.nn.ReLU(), torch.nn.Dropout(p=dropout_prob)
                     ),
                 ),
                 (
-                    hidden_size2,
                     hidden_dim2,
+                    output_dim,
                     None,
                     torch.nn.Softmax(dim=1),
                 ),
