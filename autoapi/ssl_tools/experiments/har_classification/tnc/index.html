@@ -23,7 +23,7 @@
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="ssl_tools.experiments.lightning_cli" href="../../lightning_cli/index.html" />
+    <link rel="next" title="ssl_tools.experiments.experiment" href="../../experiment/index.html" />
     <link rel="prev" title="ssl_tools.experiments.har_classification.tfc" href="../tfc/index.html" /> 
 </head>
 
@@ -105,19 +105,19 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.har_classification.tnc.TNCTest" title="ssl_tools.experiments.har_classification.tnc.TNCTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TNCTest</span></code></a></p></td>
-<td><p>Trains the constrastive predictive coding model</p></td>
+<td><p>Helper class that provides a standard way to create an ABC using</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain" title="ssl_tools.experiments.har_classification.tnc.TNCTrain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TNCTrain</span></code></a></p></td>
-<td><p>Trains the constrastive predictive coding model</p></td>
+<td><p>Helper class that provides a standard way to create an ABC using</p></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.har_classification.tnc.main" title="ssl_tools.experiments.har_classification.tnc.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.har_classification.tnc.options" title="ssl_tools.experiments.har_classification.tnc.options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">options</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -125,7 +125,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTest">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.har_classification.tnc.</span></span><span class="sig-name descname"><span class="pre">TNCTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mc_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../../index.html#ssl_tools.experiments.SSLTest" title="ssl_tools.experiments.SSLTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.experiments.SSLTest</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../../index.html#ssl_tools.experiments.LightningTest" title="ssl_tools.experiments.LightningTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.experiments.LightningTest</span></code></a></p>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
 <p>Trains the constrastive predictive coding model</p>
 <section id="parameters">
 <h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
@@ -146,13 +148,13 @@ in the dataset.</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTest._get_test_data_module">
-<span class="sig-name descname"><span class="pre">_get_test_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest._get_test_data_module" title="Link to this definition"></a></dt>
-<dd><p>The data module to use for testing.</p>
+<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTest.get_data_module">
+<span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest.get_data_module" title="Link to this definition"></a></dt>
+<dd><p>Get the datamodule to use for the experiment.</p>
 <section id="returns">
 <h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
 <dl class="simple">
-<dt>L.LightningDataModule</dt><dd><p>The data module to use for testing</p>
+<dt>L.LightningDataModule</dt><dd><p>The datamodule to use for the experiment</p>
 </dd>
 </dl>
 </section>
@@ -164,13 +166,13 @@ in the dataset.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTest._get_test_model">
-<span class="sig-name descname"><span class="pre">_get_test_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest._get_test_model" title="Link to this definition"></a></dt>
-<dd><p>Get the model to use for testing.</p>
+<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTest.get_model">
+<span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest.get_model" title="Link to this definition"></a></dt>
+<dd><p>Get the model to use for the experiment.</p>
 <section id="id1">
 <h5>Returns<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
 <dl class="simple">
-<dt>L.LightningModule</dt><dd><p>The model to use for testing</p>
+<dt>L.LightningModule</dt><dd><p>The model to use for the experiment</p>
 </dd>
 </dl>
 </section>
@@ -200,7 +202,9 @@ in the dataset.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.har_classification.tnc.</span></span><span class="sig-name descname"><span class="pre">TNCTrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mc_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">significance_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../../index.html#ssl_tools.experiments.SSLTrain" title="ssl_tools.experiments.SSLTrain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.experiments.SSLTrain</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../../index.html#ssl_tools.experiments.LightningSSLTrain" title="ssl_tools.experiments.LightningSSLTrain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.experiments.LightningSSLTrain</span></code></a></p>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
 <p>Trains the constrastive predictive coding model</p>
 <section id="id2">
 <h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
@@ -226,8 +230,8 @@ finetune mode.</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain._get_finetune_data_module">
-<span class="sig-name descname"><span class="pre">_get_finetune_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain._get_finetune_data_module" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain.get_finetune_data_module">
+<span class="sig-name descname"><span class="pre">get_finetune_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_finetune_data_module" title="Link to this definition"></a></dt>
 <dd><p>The data module to use for fine-tuning.</p>
 <section id="id3">
 <h5>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
@@ -251,8 +255,8 @@ finetune mode.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain._get_finetune_model">
-<span class="sig-name descname"><span class="pre">_get_finetune_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain._get_finetune_model" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain.get_finetune_model">
+<span class="sig-name descname"><span class="pre">get_finetune_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_finetune_model" title="Link to this definition"></a></dt>
 <dd><p>Get the model to use for fine-tuning.</p>
 <section id="id4">
 <h5>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
@@ -280,8 +284,8 @@ inside this method, if it is not None.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain._get_pretrain_data_module">
-<span class="sig-name descname"><span class="pre">_get_pretrain_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain._get_pretrain_data_module" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain.get_pretrain_data_module">
+<span class="sig-name descname"><span class="pre">get_pretrain_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_pretrain_data_module" title="Link to this definition"></a></dt>
 <dd><p>The data module to use for pre-training.</p>
 <section id="id6">
 <h5>Returns<a class="headerlink" href="#id6" title="Link to this heading"></a></h5>
@@ -298,13 +302,13 @@ inside this method, if it is not None.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain._get_pretrain_model">
-<span class="sig-name descname"><span class="pre">_get_pretrain_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain._get_pretrain_model" title="Link to this definition"></a></dt>
-<dd><p>Get the model to use for pre-training.</p>
+<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTrain.get_pretrain_model">
+<span class="sig-name descname"><span class="pre">get_pretrain_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_pretrain_model" title="Link to this definition"></a></dt>
+<dd><p>Get the model to use for the pretraining phase.</p>
 <section id="id7">
 <h5>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h5>
 <dl class="simple">
-<dt>L.LightningModule</dt><dd><p>The model to use for pre-training</p>
+<dt>L.LightningModule</dt><dd><p>The model to use for the pretraining phase</p>
 </dd>
 </dl>
 </section>
@@ -335,9 +339,9 @@ inside this method, if it is not None.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.main">
-<span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.har_classification.tnc.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.main" title="Link to this definition"></a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.options">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.har_classification.tnc.</span></span><span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.options" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -349,7 +353,7 @@ inside this method, if it is not None.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../tfc/index.html" class="btn btn-neutral float-left" title="ssl_tools.experiments.har_classification.tfc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../lightning_cli/index.html" class="btn btn-neutral float-right" title="ssl_tools.experiments.lightning_cli" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../experiment/index.html" class="btn btn-neutral float-right" title="ssl_tools.experiments.experiment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

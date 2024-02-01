@@ -20,7 +20,7 @@ Classes
 
 
 
-.. py:class:: CPCPredictionHead(input_dim = 10, hidden_dim1 = 64, hidden_size2 = 64, hidden_dim2 = 6, dropout_prob = 0)
+.. py:class:: CPCPredictionHead(input_dim = 10, hidden_dim1 = 64, hidden_dim2 = 64, output_dim = 6, dropout_prob = 0)
 
 
    Bases: :py:obj:`TNCPredictionHead`
@@ -38,7 +38,7 @@ Classes
    Bases: :py:obj:`lightly.models.modules.heads.ProjectionHead`
 
 
-.. py:class:: TNCPredictionHead(input_dim = 10, hidden_dim1 = 64, hidden_size2 = 64, hidden_dim2 = 6, dropout_prob = 0)
+.. py:class:: TNCPredictionHead(input_dim = 10, hidden_dim1 = 64, hidden_dim2 = 64, output_dim = 6, dropout_prob = 0)
 
 
    Bases: :py:obj:`lightly.models.modules.heads.ProjectionHead`

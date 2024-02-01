@@ -17,21 +17,23 @@ Classes
 
 
 
-Functions
-~~~~~~~~~
+
+Attributes
+~~~~~~~~~~
 
 .. autoapisummary::
 
-   ssl_tools.experiments.har_classification.tnc.main
-
+   ssl_tools.experiments.har_classification.tnc.options
 
 
 .. py:class:: TNCTest(data, encoding_size = 10, in_channel = 6, window_size = 60, mc_sample_size = 20, w = 0.05, num_classes = 6, *args, **kwargs)
 
 
-   Bases: :py:obj:`ssl_tools.experiments.SSLTest`
+   Bases: :py:obj:`ssl_tools.experiments.LightningTest`
 
-   
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
    Trains the constrastive predictive coding model
 
    Parameters
@@ -51,33 +53,35 @@ Functions
 
       
 
-   .. py:method:: _get_test_data_module()
+   .. py:method:: get_data_module()
 
-      The data module to use for testing.
+      Get the datamodule to use for the experiment.
 
       Returns
       -------
       L.LightningDataModule
-          The data module to use for testing
+          The datamodule to use for the experiment
 
 
-   .. py:method:: _get_test_model()
+   .. py:method:: get_model()
 
-      Get the model to use for testing.
+      Get the model to use for the experiment.
 
       Returns
       -------
       L.LightningModule
-          The model to use for testing
+          The model to use for the experiment
 
 
 
 .. py:class:: TNCTrain(data, encoding_size = 10, in_channel = 6, window_size = 60, mc_sample_size = 20, w = 0.05, significance_level = 0.01, repeat = 5, pad_length = True, num_classes = 6, update_backbone = False, *args, **kwargs)
 
 
-   Bases: :py:obj:`ssl_tools.experiments.SSLTrain`
+   Bases: :py:obj:`ssl_tools.experiments.LightningSSLTrain`
 
-   
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
    Trains the constrastive predictive coding model
 
    Parameters
@@ -102,7 +106,7 @@ Functions
 
       
 
-   .. py:method:: _get_finetune_data_module()
+   .. py:method:: get_finetune_data_module()
 
       The data module to use for fine-tuning.
 
@@ -117,14 +121,14 @@ Functions
           _description_
 
 
-   .. py:method:: _get_finetune_model(load_backbone = None)
+   .. py:method:: get_finetune_model(load_backbone = None)
 
       Get the model to use for fine-tuning.
 
       Parameters
       ----------
       load_backbone : str, optional
-          The path to the backbone to load. The backbone must be loaded 
+          The path to the backbone to load. The backbone must be loaded
           inside this method, if it is not None.
 
       Returns
@@ -133,7 +137,7 @@ Functions
           The model to use for fine-tuning
 
 
-   .. py:method:: _get_pretrain_data_module()
+   .. py:method:: get_pretrain_data_module()
 
       The data module to use for pre-training.
 
@@ -143,17 +147,18 @@ Functions
           The data module to use for pre-training
 
 
-   .. py:method:: _get_pretrain_model()
+   .. py:method:: get_pretrain_model()
 
-      Get the model to use for pre-training.
+      Get the model to use for the pretraining phase.
 
       Returns
       -------
       L.LightningModule
-          The model to use for pre-training
+          The model to use for the pretraining phase
 
 
 
-.. py:function:: main()
+.. py:data:: options
 
+   
 

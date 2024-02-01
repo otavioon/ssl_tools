@@ -1,89 +1,22 @@
-:py:mod:`ssl_tools.experiments`
-===============================
+:py:mod:`ssl_tools.experiments.lightning_experiment`
+====================================================
 
-.. py:module:: ssl_tools.experiments
-
-
-Subpackages
------------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   har_classification/index.rst
+.. py:module:: ssl_tools.experiments.lightning_experiment
 
 
-Submodules
-----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   experiment/index.rst
-   lightning_experiment/index.rst
-
-
-Package Contents
-----------------
+Module Contents
+---------------
 
 Classes
 ~~~~~~~
 
 .. autoapisummary::
 
-   ssl_tools.experiments.Experiment
-   ssl_tools.experiments.LightningExperiment
-   ssl_tools.experiments.LightningSSLTrain
-   ssl_tools.experiments.LightningTest
-   ssl_tools.experiments.LightningTrain
+   ssl_tools.experiments.lightning_experiment.LightningExperiment
+   ssl_tools.experiments.lightning_experiment.LightningSSLTrain
+   ssl_tools.experiments.lightning_experiment.LightningTest
+   ssl_tools.experiments.lightning_experiment.LightningTrain
 
-
-
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   ssl_tools.experiments.auto_main
-
-
-
-.. py:class:: Experiment(name = 'experiment', run_id = None, log_dir = 'logs', seed = None)
-
-
-   Bases: :py:obj:`abc.ABC`
-
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
-
-   .. py:property:: experiment_dir
-      :type: pathlib.Path
-
-
-   .. py:method:: __call__()
-
-
-   .. py:method:: __repr__()
-
-      Return repr(self).
-
-
-   .. py:method:: __str__()
-
-      Return str(self).
-
-
-   .. py:method:: execute()
-
-
-   .. py:method:: run()
-      :abstractmethod:
-
-
-   .. py:method:: setup()
-
-
-   .. py:method:: teardown()
 
 
 
@@ -432,8 +365,5 @@ Functions
 
    .. py:method:: run_model(model, data_module, trainer)
 
-
-
-.. py:function:: auto_main(commands)
 
 

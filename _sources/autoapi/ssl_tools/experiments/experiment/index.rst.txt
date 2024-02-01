@@ -1,0 +1,86 @@
+:py:mod:`ssl_tools.experiments.experiment`
+==========================================
+
+.. py:module:: ssl_tools.experiments.experiment
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.experiments.experiment.Experiment
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.experiments.experiment.auto_main
+   ssl_tools.experiments.experiment.get_parser
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.experiments.experiment.EXPERIMENT_VERSION_FORMAT
+
+
+.. py:data:: EXPERIMENT_VERSION_FORMAT
+   :value: '%Y-%m-%d_%H-%M-%S'
+
+   
+
+.. py:class:: Experiment(name = 'experiment', run_id = None, log_dir = 'logs', seed = None)
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: experiment_dir
+      :type: pathlib.Path
+
+
+   .. py:method:: __call__()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: execute()
+
+
+   .. py:method:: run()
+      :abstractmethod:
+
+
+   .. py:method:: setup()
+
+
+   .. py:method:: teardown()
+
+
+
+.. py:function:: auto_main(commands)
+
+
+.. py:function:: get_parser(commands)
+
+
