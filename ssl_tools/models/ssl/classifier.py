@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Callable, Dict
 import lightning as L
 import torch
 from torchmetrics import Metric
@@ -108,6 +108,10 @@ class SSLDiscriminator(L.LightningModule):
             encodings = self.backbone.forward(*x)
         else:
             encodings = self.backbone.forward(x)
+
+        if len(encodings.shape) == 1:
+            encodings = encodings.unsqueeze(0)
+
         predictions = self.head.forward(encodings)
         return predictions
 
