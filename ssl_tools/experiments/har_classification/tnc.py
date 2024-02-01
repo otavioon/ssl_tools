@@ -2,15 +2,10 @@
 
 # TODO: A way of removing the need to add the path to the root of
 # the project
-import sys
-from jsonargparse import CLI
 import lightning as L
 import torch
 
-sys.path.append("../../../")
 
-
-from ssl_tools.experiments import SSLTrain, SSLTest
 from ssl_tools.models.ssl.tnc import build_tnc
 from ssl_tools.data.data_modules import (
     TNCHARDataModule,
@@ -20,8 +15,15 @@ from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
 from ssl_tools.models.ssl.modules.heads import TNCPredictionHead
 
+import lightning as L
+import torch
 
-class TNCTrain(SSLTrain):
+from ssl_tools.experiments import LightningSSLTrain, LightningTest, auto_main
+from torchmetrics import Accuracy
+from ssl_tools.models.ssl.classifier import SSLDiscriminator
+
+
+class TNCTrain(LightningSSLTrain):
     _MODEL_NAME = "TNC"
 
     def __init__(
@@ -72,7 +74,7 @@ class TNCTrain(SSLTrain):
         self.num_classes = num_classes
         self.update_backbone = update_backbone
 
-    def _get_pretrain_model(self) -> L.LightningModule:
+    def get_pretrain_model(self) -> L.LightningModule:
         model = build_tnc(
             encoding_size=self.encoding_size,
             in_channel=self.in_channel,
@@ -82,7 +84,7 @@ class TNCTrain(SSLTrain):
         )
         return model
 
-    def _get_pretrain_data_module(self) -> L.LightningDataModule:
+    def get_pretrain_data_module(self) -> L.LightningDataModule:
         data_module = TNCHARDataModule(
             self.data,
             pad=self.pad_length,
@@ -95,17 +97,22 @@ class TNCTrain(SSLTrain):
         )
         return data_module
 
-    def _get_finetune_model(
+    def get_finetune_model(
         self, load_backbone: str = None
     ) -> L.LightningModule:
-        model = self._get_pretrain_model()
+        model = build_tnc(
+            encoding_size=self.encoding_size,
+            in_channel=self.in_channel,
+            mc_sample_size=self.mc_sample_size,
+            w=self.w,
+        )
 
         if load_backbone is not None:
-            self._load_model(model, load_backbone)
+            self.load_checkpoint(model, load_backbone)
 
         classifier = TNCPredictionHead(
             input_dim=self.encoding_size,
-            hidden_dim2=self.num_classes,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -115,11 +122,10 @@ class TNCTrain(SSLTrain):
             loss_fn=torch.nn.CrossEntropyLoss(),
             learning_rate=self.learning_rate,
             metrics={"acc": Accuracy(task=task, num_classes=self.num_classes)},
-            update_backbone=self.update_backbone,
         )
         return model
 
-    def _get_finetune_data_module(self) -> L.LightningDataModule:
+    def get_finetune_data_module(self) -> L.LightningDataModule:
         data_module = MultiModalHARSeriesDataModule(
             self.data,
             batch_size=self.batch_size,
@@ -130,7 +136,7 @@ class TNCTrain(SSLTrain):
         return data_module
 
 
-class TNCTest(SSLTest):
+class TNCTest(LightningTest):
     _MODEL_NAME = "TNC"
 
     def __init__(
@@ -168,7 +174,7 @@ class TNCTest(SSLTest):
         self.w = w
         self.num_classes = num_classes
 
-    def _get_test_model(self) -> L.LightningModule:
+    def get_model(self) -> L.LightningModule:
         model = build_tnc(
             encoding_size=self.encoding_size,
             in_channel=self.in_channel,
@@ -177,7 +183,7 @@ class TNCTest(SSLTest):
         )
         classifier = TNCPredictionHead(
             input_dim=self.encoding_size,
-            hidden_dim2=self.num_classes,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -189,7 +195,7 @@ class TNCTest(SSLTest):
         )
         return model
 
-    def _get_test_data_module(self) -> L.LightningDataModule:
+    def get_data_module(self) -> L.LightningDataModule:
         data_module = MultiModalHARSeriesDataModule(
             self.data,
             batch_size=self.batch_size,
@@ -200,13 +206,9 @@ class TNCTest(SSLTest):
         return data_module
 
 
-def main():
-    components = {
+if __name__ == "__main__":
+    options = {
         "fit": TNCTrain,
         "test": TNCTest,
     }
-    CLI(components=components, as_positional=False)()
-
-
-if __name__ == "__main__":
-    main()
+    auto_main(options)
