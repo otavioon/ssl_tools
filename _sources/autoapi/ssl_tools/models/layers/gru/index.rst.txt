@@ -17,7 +17,7 @@ Classes
 
 
 
-.. py:class:: GRUEncoder(hidden_size = 100, in_channel = 6, encoding_size = 10, num_layers = 1, dropout = 0.0, bidirectional = True)
+.. py:class:: GRUEncoder(hidden_size = 100, in_channels = 6, encoding_size = 10, num_layers = 1, dropout = 0.0, bidirectional = True)
 
 
    Bases: :py:obj:`torch.nn.Module`

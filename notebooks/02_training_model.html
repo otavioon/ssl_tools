@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. Training a Pytorch Lighning model &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Training a self-supervised model (CPC)" href="03_training_ssl_model.html" />
+    <link rel="prev" title="1. Structuring the input" href="01_structuring_input.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_structuring_input.html">1. Structuring the input</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2. Training a Pytorch Lighning model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-KuHar-LightningDataModule">Creating KuHar LightningDataModule</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Faciliting-the-creation-of-the-LightningDataModule-with-MultiModalHARSeriesDataModule">Faciliting the creation of the LightningDataModule with MultiModalHARSeriesDataModule</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Training-a-simple-model">Training a simple model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_training_ssl_model.html">3. Training a self-supervised model (CPC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_using_experiments.html">Using Experiments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Programming Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">2. Training a Pytorch Lighning model</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/02_training_model.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="2.-Training-a-Pytorch-Lighning-model">
+<h1>2. Training a Pytorch Lighning model<a class="headerlink" href="#2.-Training-a-Pytorch-Lighning-model" title="Link to this heading"></a></h1>
+<p>In this notebook, we show the training of a simple CNN model using Pytorch Lightning. We first start with data, then we define the model, and finally we train it.</p>
+<section id="Creating-KuHar-LightningDataModule">
+<h2>Creating KuHar LightningDataModule<a class="headerlink" href="#Creating-KuHar-LightningDataModule" title="Link to this heading"></a></h2>
+<p>In order to train a model, we must first create a LightningDataModule. In this work, we will use the Standartized KuHar HAR data. Our data folder looks like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>KuHar/
+    test.csv
+    train.csv
+    validation.csv
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">train.csv</span></code> file may look like this:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>accel-x-0</p></th>
+<th class="head"><p>accel-x-1</p></th>
+<th class="head"><p>accel-y-0</p></th>
+<th class="head"><p>accel-y-1</p></th>
+<th class="head"><p>class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.502123</p></td>
+<td><p>0.02123</p></td>
+<td><p>0.502123</p></td>
+<td><p>0.502123</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.6820123</p></td>
+<td><p>0.02123</p></td>
+<td><p>0.502123</p></td>
+<td><p>0.502123</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>0.498217</p></td>
+<td><p>0.00001</p></td>
+<td><p>1.414141</p></td>
+<td><p>3.141592</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+<p>As each CSV file contains time-windows signals of two 3-axis sensors (accelerometer and gyroscope), we must use the <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class. After it, we must create a LightningDataModule, that will define the data loaders for training, validation and test.</p>
+<section id="Faciliting-the-creation-of-the-LightningDataModule-with-MultiModalHARSeriesDataModule">
+<h3>Faciliting the creation of the LightningDataModule with MultiModalHARSeriesDataModule<a class="headerlink" href="#Faciliting-the-creation-of-the-LightningDataModule-with-MultiModalHARSeriesDataModule" title="Link to this heading"></a></h3>
+<p>In order to facilitate the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> and <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> creation, we will use the <code class="docutils literal notranslate"><span class="pre">MultiModalHARSeriesDataModule</span></code>. If:</p>
+<ol class="arabic simple">
+<li><p>Your directory is organized like the one above; and</p></li>
+<li><p>Each CSV file is a collection os time-windows of signals (that possibly would be used as a dataset wrapping <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code>).</p></li>
+</ol>
+<p>Then, you can use the <code class="docutils literal notranslate"><span class="pre">The</span></code>train.csv` file may look like this:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>accel-x-0</p></th>
+<th class="head"><p>accel-x-1</p></th>
+<th class="head"><p>accel-y-0</p></th>
+<th class="head"><p>accel-y-1</p></th>
+<th class="head"><p>class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.502123</p></td>
+<td><p>0.02123</p></td>
+<td><p>0.502123</p></td>
+<td><p>0.502123</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.6820123</p></td>
+<td><p>0.02123</p></td>
+<td><p>0.502123</p></td>
+<td><p>0.502123</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>0.498217</p></td>
+<td><p>0.00001</p></td>
+<td><p>1.414141</p></td>
+<td><p>3.141592</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+<p>As each CSV file contains time-windows signals of two 3-axis sensors (accelerometer and gyroscope), we must use the <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class. After it, we must create a LightningDataModule, that will define the data loaders for training, validation and test. <code class="docutils literal notranslate"><span class="pre">to</span> <span class="pre">create</span> <span class="pre">a</span></code>LightningDataModule<code class="docutils literal notranslate"><span class="pre">,</span> <span class="pre">easily.</span>&#160; <span class="pre">The</span></code>train_dataloader<code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">will</span> <span class="pre">use</span></code>train.csv<code class="docutils literal notranslate"><span class="pre">,</span></code>val_dataloader<code class="docutils literal notranslate"><span class="pre">will</span> <span class="pre">use</span></code>validation.csv<code class="docutils literal notranslate"><span class="pre">and</span></code>test_dataloader<code class="docutils literal notranslate"><span class="pre">will</span> <span class="pre">use</span></code>test.csv`.</p>
+<p>To create a <code class="docutils literal notranslate"><span class="pre">MultiModalHARSeriesDataModule</span></code>, we must pass: - <code class="docutils literal notranslate"><span class="pre">data_path</span></code>: the path to the <code class="docutils literal notranslate"><span class="pre">KuHar</span></code> folder; - <code class="docutils literal notranslate"><span class="pre">feature_prefixes</span></code>: the prefixes of the features in the CSV files. In this case, we have <code class="docutils literal notranslate"><span class="pre">accel-x</span></code>, <code class="docutils literal notranslate"><span class="pre">accel-y</span></code>, <code class="docutils literal notranslate"><span class="pre">accel-z</span></code>, <code class="docutils literal notranslate"><span class="pre">gyro-x</span></code>, <code class="docutils literal notranslate"><span class="pre">gyro-y</span></code> and <code class="docutils literal notranslate"><span class="pre">gyro-z</span></code>; - <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>: the batch size for the data loaders; and - <code class="docutils literal notranslate"><span class="pre">num_workers</span></code>: the number of workers for the data loaders. Essentially, the number of parallel processes to load the data.</p>
+<p>All data loader will share the passed parameters, such as <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, <code class="docutils literal notranslate"><span class="pre">num_workers</span></code>, and <code class="docutils literal notranslate"><span class="pre">feature_prefixes</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ssl_tools.data.data_modules.har</span> <span class="kn">import</span> <span class="n">MultiModalHARSeriesDataModule</span>
+
+<span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;/workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/KuHar/&quot;</span>
+
+<span class="n">data_module</span> <span class="o">=</span> <span class="n">MultiModalHARSeriesDataModule</span><span class="p">(</span>
+    <span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
+    <span class="n">feature_prefixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;accel-x&quot;</span><span class="p">,</span> <span class="s2">&quot;accel-y&quot;</span><span class="p">,</span> <span class="s2">&quot;accel-z&quot;</span><span class="p">,</span> <span class="s2">&quot;gyro-x&quot;</span><span class="p">,</span> <span class="s2">&quot;gyro-y&quot;</span><span class="p">,</span> <span class="s2">&quot;gyro-z&quot;</span><span class="p">),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;standard activity code&quot;</span><span class="p">,</span>
+    <span class="n">features_as_channels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># Sequential, for notebook compatibility</span>
+<span class="p">)</span>
+<span class="n">data_module</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule at 0x7f4e2cc53340&gt;
+</pre></div></div>
+</div>
+<p>We can test the dataloaders by getting the first batch of each one. Let’s do it, but just for the <code class="docutils literal notranslate"><span class="pre">train_dataloader</span></code>. Note that the <code class="docutils literal notranslate"><span class="pre">.setup()</span></code> method must be called before getting the data loaders. If you don’t call it, the data loaders will not be created. However, when used to train a model, the Pytorch Lightning <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> method will call the <code class="docutils literal notranslate"><span class="pre">.setup()</span></code> method for you. So, we put it here just to show how to use it.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_module</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>            <span class="c1"># We just put it here to test.</span>
+                                    <span class="c1"># When training a model, the Trainer will call this method.</span>
+<span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
+
+<span class="c1"># Pick the first batch to inspect. The batch size is 64, so we have 64 samples.</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_dataloader</span><span class="p">))</span>
+<span class="c1"># Each batch is a 2-element tuple with the first element being the 64 sample input and the second the 64 sample target.</span>
+<span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">batch</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inputs shape: </span><span class="si">{</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, Targets shape: </span><span class="si">{</span><span class="n">targets</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Inputs shape: torch.Size([64, 6, 60]), Targets shape: torch.Size([64])
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Training-a-simple-model">
+<h2>Training a simple model<a class="headerlink" href="#Training-a-simple-model" title="Link to this heading"></a></h2>
+<p>We will create a simple 1D CNN Pytorch Lightning model using the <code class="docutils literal notranslate"><span class="pre">Simple1DConvNetwork</span></code>. The model will be trained to classify the activities in the KuHar dataset.</p>
+<p>Pytorch Lightning models must implement the <code class="docutils literal notranslate"><span class="pre">forward</span></code> method, <code class="docutils literal notranslate"><span class="pre">training_step</span></code> and <code class="docutils literal notranslate"><span class="pre">configure_optimizers</span></code> methods. Also, the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method is used to define the model. The <code class="docutils literal notranslate"><span class="pre">forward</span></code> method is the same as the Pytorch <code class="docutils literal notranslate"><span class="pre">forward</span></code> method. The <code class="docutils literal notranslate"><span class="pre">training_step</span></code> method is the method that will be called for each batch of data during the training. The <code class="docutils literal notranslate"><span class="pre">configure_optimizers</span></code> method is the method that will define the optimizer to be used during the training.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Simple1DConvNetwork</span></code> is a simple 1D CNN model that will be used to classify the activities in the KuHar dataset. It has 3 convolutional layers and 2 fully connected layers. It is trained using the <code class="docutils literal notranslate"><span class="pre">Adam</span></code> optimizer and the <code class="docutils literal notranslate"><span class="pre">CrossEntropyLoss</span></code> loss function.</p>
+<p>Besides that, Lightning models implemented in this framework, usually logs the training and validation losses. Also, the <code class="docutils literal notranslate"><span class="pre">test</span></code> usually implement common metrics, such as accuracy.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ssl_tools.models.nets.convnet</span> <span class="kn">import</span> <span class="n">Simple1DConvNetwork</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Simple1DConvNetwork</span><span class="p">(</span>
+    <span class="n">input_channels</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>   <span class="c1"># The number of input channels (accel-x, accel-y, accel-z, gyro-x, gyro-y, gyro-z)</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>    <span class="c1"># The number of output classes</span>
+    <span class="n">time_steps</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>  <span class="c1"># Used to automatically calculate the input size of the linear layer</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="c1"># The learning rate for the optimizer</span>
+<span class="p">)</span>
+
+<span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Simple1DConvNetwork(
+  (loss_func): CrossEntropyLoss()
+  (features): Sequential(
+    (0): Conv1d(6, 64, kernel_size=(5,), stride=(1,))
+    (1): ReLU()
+    (2): Dropout(p=0.5, inplace=False)
+    (3): Conv1d(64, 64, kernel_size=(5,), stride=(1,))
+    (4): ReLU()
+    (5): Dropout(p=0.5, inplace=False)
+    (6): Conv1d(64, 64, kernel_size=(5,), stride=(1,))
+    (7): ReLU()
+  )
+  (classifier): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=3072, out_features=128, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.5, inplace=False)
+    (4): Linear(in_features=128, out_features=6, bias=True)
+  )
+)
+</pre></div></div>
+</div>
+<p>To train a Lightning model using Pytorch Lightning, we must create a <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> and call the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method. The <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> is responsible for training the model. It has several parameters, such as the number of epochs, the number of GPUs to use, the number of TPU cores to use, etc.</p>
+<p>We will train our model using the already defined dataloader. The <code class="docutils literal notranslate"><span class="pre">fit</span></code> method will be responsible for training the model using the training and validation data loaders. After the training, we will test the model using the test data loader.</p>
+<p>The training will run for 300 epochs (<code class="docutils literal notranslate"><span class="pre">max_epochs</span></code>) and will use 1 (<code class="docutils literal notranslate"><span class="pre">devices</span></code>) GPU only (<code class="docutils literal notranslate"><span class="pre">accelerator</span></code>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lightning</span> <span class="k">as</span> <span class="nn">L</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span>
+    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span>
+    <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_module</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name       | Type             | Params
+------------------------------------------------
+0 | loss_func  | CrossEntropyLoss | 0
+1 | features   | Sequential       | 43.1 K
+2 | classifier | Sequential       | 394 K
+------------------------------------------------
+437 K     Trainable params
+0         Non-trainable params
+437 K     Total params
+1.749     Total estimated model params size (MB)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/trainer/connectors/data_connector.py:441: The &#39;val_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=47` in the `DataLoader` to improve performance.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/trainer/connectors/data_connector.py:441: The &#39;train_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=47` in the `DataLoader` to improve performance.
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/loops/fit_loop.py:293: The number of training batches (22) is smaller than the logging interval Trainer(log_every_n_steps=50). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch 299: 100%|██████████| 22/22 [00:00&lt;00:00, 64.10it/s, v_num=11, val_loss=13.80, val_acc=0.568, train_loss=0.0279]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+`Trainer.fit` stopped: `max_epochs=300` reached.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch 299: 100%|██████████| 22/22 [00:00&lt;00:00, 59.83it/s, v_num=11, val_loss=13.80, val_acc=0.568, train_loss=0.0279]
+</pre></div></div>
+</div>
+<p>We can them test the model using the test data loader.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_module</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/trainer/connectors/data_connector.py:441: The &#39;test_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=47` in the `DataLoader` to improve performance.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Testing DataLoader 0: 100%|██████████| 3/3 [00:00&lt;00:00, 89.65it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold">        Test metric        </span>┃<span style="font-weight: bold">       DataLoader 0        </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│<span style="color: #008080; text-decoration-color: #008080">         test_acc          </span>│<span style="color: #800080; text-decoration-color: #800080">    0.9027777910232544     </span>│
+│<span style="color: #008080; text-decoration-color: #008080">         test_loss         </span>│<span style="color: #800080; text-decoration-color: #800080">     0.626140832901001     </span>│
+└───────────────────────────┴───────────────────────────┘
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;test_loss&#39;: 0.626140832901001, &#39;test_acc&#39;: 0.9027777910232544}]
+</pre></div></div>
+</div>
+<p>And if we want to test the model using the validation data loader, we also can use the <code class="docutils literal notranslate"><span class="pre">trainer.test</span></code> method, but passing the <code class="docutils literal notranslate"><span class="pre">val_dataloader</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_module</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_module</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/trainer/connectors/data_connector.py:441: The &#39;test_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=47` in the `DataLoader` to improve performance.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Testing DataLoader 0: 100%|██████████| 7/7 [00:00&lt;00:00, 167.33it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold">        Test metric        </span>┃<span style="font-weight: bold">       DataLoader 0        </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│<span style="color: #008080; text-decoration-color: #008080">         test_acc          </span>│<span style="color: #800080; text-decoration-color: #800080">    0.5680751204490662     </span>│
+│<span style="color: #008080; text-decoration-color: #008080">         test_loss         </span>│<span style="color: #800080; text-decoration-color: #800080">    13.804328918457031     </span>│
+└───────────────────────────┴───────────────────────────┘
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;test_loss&#39;: 13.804328918457031, &#39;test_acc&#39;: 0.5680751204490662}]
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="01_structuring_input.html" class="btn btn-neutral float-left" title="1. Structuring the input" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="03_training_ssl_model.html" class="btn btn-neutral float-right" title="3. Training a self-supervised model (CPC)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

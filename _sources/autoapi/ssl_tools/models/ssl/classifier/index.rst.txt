@@ -17,7 +17,7 @@ Classes
 
 
 
-.. py:class:: SSLDiscriminator(backbone, head, loss_fn, learning_rate = 0.001, update_backbone = True, metrics = None)
+.. py:class:: SSLDiscriminator(backbone, head, loss_fn, learning_rate = 0.001, update_backbone = True, metrics = None, optimizer_cls = None)
 
 
    Bases: :py:obj:`lightning.LightningModule`

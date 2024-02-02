@@ -96,6 +96,12 @@ Classes
    num_workers : int, optional
        Number of workers to load data. If None, then use all cores
 
+   .. py:method:: __repr__()
+
+
+   .. py:method:: __str__()
+
+
    .. py:method:: _get_loader(split_name, shuffle)
 
       Get a dataloader for the given split.
@@ -480,6 +486,12 @@ Classes
        The size of the batch
    num_workers : int, optional
        Number of workers to load data. If None, then use all cores
+
+   .. py:method:: __repr__()
+
+
+   .. py:method:: __str__()
+
 
    .. py:method:: _get_loader(split_name, shuffle)
 

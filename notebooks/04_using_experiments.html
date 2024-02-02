@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Experiments &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Running Experiments" href="../experiments.html" />
+    <link rel="prev" title="3. Training a self-supervised model (CPC)" href="03_training_ssl_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_structuring_input.html">1. Structuring the input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_training_model.html">2. Training a Pytorch Lighning model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_training_ssl_model.html">3. Training a self-supervised model (CPC)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using Experiments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Experiment-Structure">Experiment Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#The-Experiment-class">The <code class="docutils literal notranslate"><span class="pre">Experiment</span></code> class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-LightningExperiment-class">The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-LightningTrain-and-LightningTest-classes">The <code class="docutils literal notranslate"><span class="pre">LightningTrain</span></code> and <code class="docutils literal notranslate"><span class="pre">LightningTest</span></code> classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#The-LightningSSLTrain-class">The <code class="docutils literal notranslate"><span class="pre">LightningSSLTrain</span></code> class</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Running-CPC-Experiment">Running CPC Experiment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Experiment-of-Pretraining-CPC">Experiment of Pretraining CPC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Experiment-of-Fine-tune-CPC">Experiment of Fine-tune CPC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CPC-performance-evaluation-experiment">CPC performance evaluation experiment</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Other-advantages-of-using-LightningExperiment">Other advantages of using <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Programming Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Using Experiments</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/04_using_experiments.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Using-Experiments">
+<h1>Using Experiments<a class="headerlink" href="#Using-Experiments" title="Link to this heading"></a></h1>
+<p>Although the process of training and evaluating models becomes easier due to the abstractions and facilities provided by this framework and Pytorch Lightning, we also standarize the way we conduct experiments, in order to allow for a more systematic and organized approach to the development of models.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class aims to standartize the way we conduct experiments, including: default callacks and loggers, the directory structure for the logs and checkpoints, logging of hyperparameters, and the way we handle the training and evaluation of models and data modules.</p>
+<p>In this notebook, we will demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class to conduct experiments in a systematic and organized way.</p>
+<section id="Experiment-Structure">
+<h2>Experiment Structure<a class="headerlink" href="#Experiment-Structure" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> follows the structure below. The first box is the name of the class, the second box is the name of the attributes and their type, and the third box is the methods of that class, the input parameters and return type. The arrows represent the inheritance relationship between the classes. Derived classes inherit the attributes and methods of their parent classes, that is, it have access to all the attributes and methods of the parent class. Methods named in italic are
+abstract methods, that is, they must be implemented by the derived class. Some methods are not abstract, or it may already e implemented in some childs (overriden).</p>
+<p><img alt="Experiment Structure" src="../_images/experiment_classes.svg" /></p>
+<section id="The-Experiment-class">
+<h3>The <code class="docutils literal notranslate"><span class="pre">Experiment</span></code> class<a class="headerlink" href="#The-Experiment-class" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Experiment</span></code> class is the base class for all experiments and includes the <code class="docutils literal notranslate"><span class="pre">experiment_dir</span></code> (where logs, checkpoints, and outputs are saved), the <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">run_id</span></code> (tipically, the time). The experiment directory is created when the experiment is instantiated, and the <code class="docutils literal notranslate"><span class="pre">experiment_dir</span></code> attribute is set to the path of the created directory. The experiment consist in 3 stages: <code class="docutils literal notranslate"><span class="pre">setup</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code> and <code class="docutils literal notranslate"><span class="pre">teardown</span></code>. You can use the <code class="docutils literal notranslate"><span class="pre">execute</span></code> method to run the experiment, that will call
+the <code class="docutils literal notranslate"><span class="pre">setup</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code> and <code class="docutils literal notranslate"><span class="pre">teardown</span></code> methods in sequence.</p>
+</section>
+<section id="The-LightningExperiment-class">
+<h3>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class<a class="headerlink" href="#The-LightningExperiment-class" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> adds common parameters for train and test models using Pytorch Lightning. Usually this is the base class for any experiment that uses Pytorch Lightning. This class also implements the <code class="docutils literal notranslate"><span class="pre">run</span></code> method, that execute a generic Pytorch Lightning pipeline, and calls the <code class="docutils literal notranslate"><span class="pre">get_callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">get_logger</span></code>, <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code>, <code class="docutils literal notranslate"><span class="pre">get_model</span></code>, <code class="docutils literal notranslate"><span class="pre">get_trainer</span></code>, <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code>, <code class="docutils literal notranslate"><span class="pre">run_model</span></code> and <code class="docutils literal notranslate"><span class="pre">log_hyperparameter</span></code> methods. The pseudo-code for the <code class="docutils literal notranslate"><span class="pre">run</span></code> method is:</p>
+<ol class="arabic simple">
+<li><p>Get the model and data module using <code class="docutils literal notranslate"><span class="pre">get_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code> methods.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">self.load</span></code> is provided, load the checkpoint using the <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> method.</p></li>
+<li><p>Get the callbacks and logger using <code class="docutils literal notranslate"><span class="pre">get_callbacks</span></code> and <code class="docutils literal notranslate"><span class="pre">get_logger</span></code> methods.</p></li>
+<li><p>Log the hyperparameters using the <code class="docutils literal notranslate"><span class="pre">log_hyperparameters</span></code> method.</p></li>
+<li><p>Get the trainer using the <code class="docutils literal notranslate"><span class="pre">get_trainer</span></code> method.</p></li>
+<li><p>Run the model using the <code class="docutils literal notranslate"><span class="pre">run_model</span></code> method.</p></li>
+</ol>
+<p>The user can override these methods to customize the experiment. By default, <code class="docutils literal notranslate"><span class="pre">get_callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">get_logger</span></code>, <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code>, and <code class="docutils literal notranslate"><span class="pre">log_hyperparameters</span></code> have default implementations, and <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code>, <code class="docutils literal notranslate"><span class="pre">get_model</span></code>, <code class="docutils literal notranslate"><span class="pre">get_trainer</span></code>, and <code class="docutils literal notranslate"><span class="pre">run_model</span></code> are abstract methods that must be implemented by the derived class.</p>
+</section>
+<section id="The-LightningTrain-and-LightningTest-classes">
+<h3>The <code class="docutils literal notranslate"><span class="pre">LightningTrain</span></code> and <code class="docutils literal notranslate"><span class="pre">LightningTest</span></code> classes<a class="headerlink" href="#The-LightningTrain-and-LightningTest-classes" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningTrain</span></code> and <code class="docutils literal notranslate"><span class="pre">LightningTest</span></code> classes are derived from <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> and are used to train and test models, respectively. These classes adds more specific parameters for training and testing models using Pytorch Lightning and implements specific <code class="docutils literal notranslate"><span class="pre">get_callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">get_trainer</span></code>, and <code class="docutils literal notranslate"><span class="pre">run_model</span></code> methods, that are specific for training and testing models, respectively. This standardizes the way we train and test models, logging the same information and using the same
+callbacks and loggers. Thus, it allows the user to focus on the model and data module, and not on the training and testing process, that is already standardized (and can be customized) and can be reused in different experiments. In fact, <code class="docutils literal notranslate"><span class="pre">get_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code> are abstract methods that must be implemented by the derived class, that varies according to the model and data module used in the experiment.</p>
+</section>
+<section id="The-LightningSSLTrain-class">
+<h3>The <code class="docutils literal notranslate"><span class="pre">LightningSSLTrain</span></code> class<a class="headerlink" href="#The-LightningSSLTrain-class" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningTrain</span></code> class allow to train arbitrary models. The <code class="docutils literal notranslate"><span class="pre">LightningSSLTrain</span></code> class is a derived class that is used to train models using self-supervised learning. It adds 4 new methods: - <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code>: the user must return the model and data module used to pretrain the model. - <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_finetune_data_module</span></code>: the user must return the model and data module used to finetune the model.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">training_mode</span></code> variable is used to indicate if the model is in pretrain or finetune mode. In fact, the <code class="docutils literal notranslate"><span class="pre">get_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code> methods will call the <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code> methods if <code class="docutils literal notranslate"><span class="pre">training_mode</span></code> is <code class="docutils literal notranslate"><span class="pre">pretrain</span></code>, and the <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_finetune_data_module</span></code> methods if <code class="docutils literal notranslate"><span class="pre">training_mode</span></code> is <code class="docutils literal notranslate"><span class="pre">finetune</span></code>.</p>
+<p>One important thing to note is about <code class="docutils literal notranslate"><span class="pre">load</span></code> parameter. If it is provided, the <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> method will load the checkpoint for the model, in order to resume the training. The <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> receives an additional parameter, the <code class="docutils literal notranslate"><span class="pre">load_backbone</span></code> parameter. After the backbone is loaded, the <code class="docutils literal notranslate"><span class="pre">load</span></code> parameter is used to resume the finetuning, that is, load the checkpoint for the finetune model (<code class="docutils literal notranslate"><span class="pre">SSLDiscriminator</span></code>).</p>
+</section>
+</section>
+<section id="Running-CPC-Experiment">
+<h2>Running CPC Experiment<a class="headerlink" href="#Running-CPC-Experiment" title="Link to this heading"></a></h2>
+<p>In this notebook, we will demonstrate how to run a CPC experiment, from pretrain to finetune. The <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class derives from <code class="docutils literal notranslate"><span class="pre">LightningSSLTrain</span></code> and implements the <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code>, <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code>, <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_finetune_data_module</span></code> methods, while the <code class="docutils literal notranslate"><span class="pre">CPCTest</span></code> class derives from <code class="docutils literal notranslate"><span class="pre">LightningTest</span></code> and implements the <code class="docutils literal notranslate"><span class="pre">get_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code> methods. Both classes add specific parameters to create CPC model and instantiate the data
+module.</p>
+<p>Let’s first start by pretraining the CPC model, using KuHAR dataset, as in previous notebooks.</p>
+<section id="Experiment-of-Pretraining-CPC">
+<h3>Experiment of Pretraining CPC<a class="headerlink" href="#Experiment-of-Pretraining-CPC" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class will encapsuate the default code for creating models and data modules from previous notebooks into the <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code> methods. Thus, we just need to pass the required parameters to the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class and call the <code class="docutils literal notranslate"><span class="pre">execute</span></code> method to run the experiment. As <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> is a derived class, we can pass the parameters from all parent classes (<code class="docutils literal notranslate"><span class="pre">epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">accelerator</span></code>, <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, <em>etc.</em>), as well as the parameters from the
+<code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class (<code class="docutils literal notranslate"><span class="pre">window_size</span></code>, <code class="docutils literal notranslate"><span class="pre">num_classes</span></code>, <em>etc.</em>) in the class constructor.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> includes parameters to create the model as well as the data module. These parameters include: - <code class="docutils literal notranslate"><span class="pre">data</span></code>: the path to the dataset folder. For pretrain, the data must be the path to a dataset where the samples are the whole time-series of an user. For finetune, the data must be the path to a dataset where the samples are the windows of the time-series, as in previous notebooks. - <code class="docutils literal notranslate"><span class="pre">encoding_size</span></code>: the size of the latent representation of the CPC model. - <code class="docutils literal notranslate"><span class="pre">in_channel</span></code>: the
+number of features in the input data. - <code class="docutils literal notranslate"><span class="pre">window_size</span></code>: size of the input windows (<code class="docutils literal notranslate"><span class="pre">X_t</span></code>) to be fed to the encoder. - <code class="docutils literal notranslate"><span class="pre">pad_length</span></code>: boolean indicating if the input windows should be padded to the <code class="docutils literal notranslate"><span class="pre">window_size</span></code> or not. - <code class="docutils literal notranslate"><span class="pre">num_classes</span></code>: number of classes in the dataset. - <code class="docutils literal notranslate"><span class="pre">update_backbone</span></code>: boolean indicating if the backbone should be updated during finetuning (only useful for fine-tuning process).</p>
+<p>Only the <code class="docutils literal notranslate"><span class="pre">data</span></code> parameter is required, the others have default values. Please check the documentation of the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class for more details.</p>
+<p>Let’s create the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class and run the pretraining experiment.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ssl_tools.experiments.har_classification.cpc</span> <span class="kn">import</span> <span class="n">CPCTrain</span>
+
+<span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;/workspaces/hiaac-m4/ssl_tools/data/view_concatenated/KuHar_cpc&quot;</span>
+
+<span class="n">cpc_experiment</span> <span class="o">=</span> <span class="n">CPCTrain</span><span class="p">(</span>
+    <span class="c1"># General params</span>
+    <span class="n">training_mode</span><span class="o">=</span><span class="s2">&quot;pretrain&quot;</span><span class="p">,</span>
+    <span class="c1"># Data Module params</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
+    <span class="c1"># CPC model params</span>
+    <span class="n">encoding_size</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
+    <span class="n">window_size</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">in_channel</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="c1"># Trainer params</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span>
+    <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">cpc_experiment</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+LightningExperiment(experiment_dir=logs/pretrain/CPC/2024-02-01_22-29-11, model=CPC, run_id=2024-02-01_22-29-11, finished=False)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Executing the experiment. Result is the output of the run() method</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">cpc_experiment</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/pretrain/CPC/2024-02-01_22-29-11 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
+GPU available: True (cuda), used: True
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Setting up experiment: CPC...
+Running experiment: CPC...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+`Trainer(limit_train_batches=1.0)` was configured so 100% of the batches per epoch will be used..
+`Trainer(limit_val_batches=1.0)` was configured so 100% of the batches will be used..
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training will start
+        Experiment path: logs/pretrain/CPC/2024-02-01_22-29-11
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">   </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Name              </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Type             </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Params </span>┃
+┡━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 0 </span>│ encoder           │ GRUEncoder       │ 95.0 K │
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 1 </span>│ density_estimator │ Linear           │ 22.7 K │
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 2 </span>│ auto_regressor    │ GRU              │  135 K │
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 3 </span>│ loss_func         │ CrossEntropyLoss │      0 │
+└───┴───────────────────┴──────────────────┴────────┘
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Trainable params</span>: 253 K
+<span style="font-weight: bold">Non-trainable params</span>: 0
+<span style="font-weight: bold">Total params</span>: 253 K
+<span style="font-weight: bold">Total estimated model params size (MB)</span>: 1
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a0c0cc6d18374062a4e91d2d0c6bc11c", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+`Trainer.fit` stopped: `max_epochs=10` reached.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">--&gt; Overall fit time: 20.050 seconds
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training finished
+Last checkpoint saved at: logs/pretrain/CPC/2024-02-01_22-29-11/checkpoints/last.ckpt
+Teardown experiment: CPC...
+</pre></div></div>
+</div>
+<p>Once the experiment finished, we may have a directory structure like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>logs/
+    pretrain/
+        CPC/
+            2024-02-01_22-01-31/
+                checkpoints/
+                    epoch=9-step=570.ckpt
+                    last.ckpt
+                hparams.yaml
+                metrics.csv
+</pre></div>
+</div>
+<p>This is the default directory structure for experiments, where the experiment directory is <code class="docutils literal notranslate"><span class="pre">logs/pretrain/CPC/2024-02-01_22-01-31/</span></code>. The <code class="docutils literal notranslate"><span class="pre">checkpoints</span> <span class="pre">directory</span></code> contains the saved checkpoints and inside it we may have a <code class="docutils literal notranslate"><span class="pre">last.ckpt</span></code> file which is the last checkpoint saved. The <code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code> file contains the hyperparameters, and the <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code> file contains the metrics logged during training.</p>
+<p>We can obtain the experiment’s model, data module, logger, checkpoint directory, callbacks, trianer, and hyperparameters using the <code class="docutils literal notranslate"><span class="pre">cpc_experiment.model</span></code>, <code class="docutils literal notranslate"><span class="pre">cpc_experiment.data_module</span></code>, <code class="docutils literal notranslate"><span class="pre">cpc_experiment.logger</span></code>, <code class="docutils literal notranslate"><span class="pre">cpc_experiment.checkpoint_dir</span></code>, <code class="docutils literal notranslate"><span class="pre">cpc_experiment.callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">cpc_experiment.trainer</span></code>, and <code class="docutils literal notranslate"><span class="pre">cpc_experiment.hyperparameters</span></code> attributes, respectively. These objects are cached in the <code class="docutils literal notranslate"><span class="pre">cpc_experiment</span></code> object, thus, it is instantiated only once, and can be accessed multiple
+times. Also, the <code class="docutils literal notranslate"><span class="pre">cpc_experiment.finished</span></code> attribute is a boolean indicating if the experiment has finished sucessfuly or not.</p>
+<p>We will need this checkpoint to load the weights of the backbone for the finetuning process. Let’s obtain the checkpoint file and the experiment’s model and data module, and then run the finetuning experiment.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">backbone_checkpoint_path</span> <span class="o">=</span> <span class="n">cpc_experiment</span><span class="o">.</span><span class="n">checkpoint_dir</span> <span class="o">/</span> <span class="s2">&quot;last.ckpt&quot;</span>
+<span class="n">backbone_checkpoint_path</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PosixPath(&#39;logs/pretrain/CPC/2024-02-01_22-29-11/checkpoints/last.ckpt&#39;)
+</pre></div></div>
+</div>
+</section>
+<section id="Experiment-of-Fine-tune-CPC">
+<h3>Experiment of Fine-tune CPC<a class="headerlink" href="#Experiment-of-Fine-tune-CPC" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class also encapsuate the default code for creating models and data modules from previous notebooks into the <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_finetune_data_module</span></code> methods. The behaviour of these methods is similar to the <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code> methods, but they are used to create the model and data module for the finetuning process. In fact, the <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> will encapsulate the CPC code inside <code class="docutils literal notranslate"><span class="pre">SSLDisriminator</span></code> class, as seen in
+previous notebooks.</p>
+<p>As we use the same class for pretrain and finetune, we just need to set the <code class="docutils literal notranslate"><span class="pre">training_mode</span></code> attribute to <code class="docutils literal notranslate"><span class="pre">finetune</span></code> and set the <code class="docutils literal notranslate"><span class="pre">load_backbone</span></code> parameter to the checkpoint file obtained in the pretrain process. Then, we can call the <code class="docutils literal notranslate"><span class="pre">execute</span></code> method to run the experiment.</p>
+<p>However, it worth to notice that fine tune is an supervised learning process and uses windowed time-series as input. Thus, the <code class="docutils literal notranslate"><span class="pre">data</span></code> parameter must be the path to a dataset where the samples are the windows of the time-series, as in previous notebooks. In our case, we will use the standardized balanced view of the KuHar dataset.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;/workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/KuHar/&quot;</span>
+
+<span class="n">cpc_experiment</span> <span class="o">=</span> <span class="n">CPCTrain</span><span class="p">(</span>
+    <span class="c1"># General params</span>
+    <span class="n">training_mode</span><span class="o">=</span><span class="s2">&quot;finetune&quot;</span><span class="p">,</span>
+    <span class="n">load_backbone</span><span class="o">=</span><span class="n">backbone_checkpoint_path</span><span class="p">,</span>
+    <span class="c1"># Data Module params</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
+    <span class="c1"># CPC model params</span>
+    <span class="n">encoding_size</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
+    <span class="n">window_size</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">in_channel</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="c1"># Trainer params</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span>
+    <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">cpc_experiment</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+LightningExperiment(experiment_dir=logs/finetune/CPC/2024-02-01_22-38-32, model=CPC, run_id=2024-02-01_22-38-32, finished=False)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Executing the experiment. Result is the output of the run() method</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">cpc_experiment</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/finetune/CPC/2024-02-01_22-38-32 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+`Trainer(limit_train_batches=1.0)` was configured so 100% of the batches per epoch will be used..
+`Trainer(limit_val_batches=1.0)` was configured so 100% of the batches will be used..
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Setting up experiment: CPC...
+Running experiment: CPC...
+Loading model from: logs/pretrain/CPC/2024-02-01_22-29-11/checkpoints/last.ckpt...
+Model loaded successfully
+Training will start
+        Experiment path: logs/finetune/CPC/2024-02-01_22-38-32
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">   </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Name     </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Type              </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Params </span>┃
+┡━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 0 </span>│ backbone │ CPC               │  253 K │
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 1 </span>│ head     │ CPCPredictionHead │ 14.2 K │
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 2 </span>│ loss_fn  │ CrossEntropyLoss  │      0 │
+└───┴──────────┴───────────────────┴────────┘
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Trainable params</span>: 14.2 K
+<span style="font-weight: bold">Non-trainable params</span>: 253 K
+<span style="font-weight: bold">Total params</span>: 267 K
+<span style="font-weight: bold">Total estimated model params size (MB)</span>: 1
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d4283777cdd14ff1ba3978d107c1d23a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/usr/local/lib/python3.10/dist-packages/lightning/pytorch/loops/fit_loop.py:293: The number of training batches (11) is smaller than the logging interval Trainer(log_every_n_steps=50). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+`Trainer.fit` stopped: `max_epochs=10` reached.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">--&gt; Overall fit time: 9.757 seconds
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training finished
+Last checkpoint saved at: logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt
+Teardown experiment: CPC...
+</pre></div></div>
+</div>
+<p>We will pick the last checkpoint from the fine-tuning process to evaluate the model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fine_tuned_checkpoint_path</span> <span class="o">=</span> <span class="n">cpc_experiment</span><span class="o">.</span><span class="n">checkpoint_dir</span> <span class="o">/</span> <span class="s2">&quot;last.ckpt&quot;</span>
+<span class="n">fine_tuned_checkpoint_path</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PosixPath(&#39;logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt&#39;)
+</pre></div></div>
+</div>
+</section>
+<section id="CPC-performance-evaluation-experiment">
+<h3>CPC performance evaluation experiment<a class="headerlink" href="#CPC-performance-evaluation-experiment" title="Link to this heading"></a></h3>
+<p>Finally, we can evaluate the performance of the CPC model using the <code class="docutils literal notranslate"><span class="pre">CPCTest</span></code> class. This class inherits from <code class="docutils literal notranslate"><span class="pre">LightningTest</span></code> and encapsulate the default code for creating models and data modules from previous notebooks into the <code class="docutils literal notranslate"><span class="pre">get_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code> methods.</p>
+<p>The signature of the <code class="docutils literal notranslate"><span class="pre">CPCTest</span></code> class is very similar to the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class. Also, we will use the same data module used in the finetuning process. However, differently from the train process the test process uses the <code class="docutils literal notranslate"><span class="pre">.test</span></code> method in the trainer and not the <code class="docutils literal notranslate"><span class="pre">.fit</span></code> method. Also, the <code class="docutils literal notranslate"><span class="pre">load</span></code> parameter is used to load the checkpoint obtained in the finetuning process (that load the weights from <code class="docutils literal notranslate"><span class="pre">SSLDiscriminator</span></code>, backbone and prediction haad).</p>
+<p>Let’s create experiments to test the CPC model, using the test set from different datasets besides KuHAR.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">ssl_tools.experiments.har_classification.cpc</span> <span class="kn">import</span> <span class="n">CPCTest</span>
+
+<span class="n">root_datasets_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/&quot;</span><span class="p">)</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;KuHar&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MotionSense&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RealWorld_thigh&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RealWorld_waist&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UCI&quot;</span>
+    <span class="s2">&quot;WISDM&quot;</span>
+<span class="p">]</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="n">root_datasets_path</span> <span class="o">/</span> <span class="n">dataset</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset at: </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">cpc_experiment</span> <span class="o">=</span> <span class="n">CPCTest</span><span class="p">(</span>
+        <span class="c1"># General params</span>
+        <span class="n">load</span><span class="o">=</span><span class="n">fine_tuned_checkpoint_path</span><span class="p">,</span>
+        <span class="c1"># Data Module params</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
+        <span class="c1"># CPC model params</span>
+        <span class="n">encoding_size</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
+        <span class="n">window_size</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">in_channel</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">num_classes</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="c1"># Trainer params</span>
+        <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span>
+        <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading model from </span><span class="si">{</span><span class="n">fine_tuned_checkpoint_path</span><span class="si">}</span><span class="s2"> and executing test using dataset at </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpc_experiment</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test on dataset </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2"> finished!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/test/CPC/2024-02-01_23-01-24 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+`Trainer(limit_test_batches=1.0)` was configured so 100% of the batches will be used..
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dataset at: /workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/KuHar
+Loading model from logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt and executing test using dataset at KuHar...
+Setting up experiment: CPC...
+Running experiment: CPC...
+Loading model from: logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt...
+Model loaded successfully
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f580fe5d3fa9441a846ad0962953d3c3", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold">        Test metric        </span>┃<span style="font-weight: bold">       DataLoader 0        </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│<span style="color: #008080; text-decoration-color: #008080">         test_acc          </span>│<span style="color: #800080; text-decoration-color: #800080">    0.4583333432674408     </span>│
+│<span style="color: #008080; text-decoration-color: #008080">         test_loss         </span>│<span style="color: #800080; text-decoration-color: #800080">     1.576676845550537     </span>│
+└───────────────────────────┴───────────────────────────┘
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/test/CPC/2024-02-01_23-01-28 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+`Trainer(limit_test_batches=1.0)` was configured so 100% of the batches will be used..
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Teardown experiment: CPC...
+Test on dataset KuHar finished !
+Dataset at: /workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/MotionSense
+Loading model from logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt and executing test using dataset at MotionSense...
+Setting up experiment: CPC...
+Running experiment: CPC...
+Loading model from: logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt...
+Model loaded successfully
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "483322b4b438455c8455b6417a625b5e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold">        Test metric        </span>┃<span style="font-weight: bold">       DataLoader 0        </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│<span style="color: #008080; text-decoration-color: #008080">         test_acc          </span>│<span style="color: #800080; text-decoration-color: #800080">    0.3860640227794647     </span>│
+│<span style="color: #008080; text-decoration-color: #008080">         test_loss         </span>│<span style="color: #800080; text-decoration-color: #800080">    1.6338088512420654     </span>│
+└───────────────────────────┴───────────────────────────┘
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/test/CPC/2024-02-01_23-01-39 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+`Trainer(limit_test_batches=1.0)` was configured so 100% of the batches will be used..
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Teardown experiment: CPC...
+Test on dataset MotionSense finished !
+Dataset at: /workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/RealWorld_thigh
+Loading model from logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt and executing test using dataset at RealWorld_thigh...
+Setting up experiment: CPC...
+Running experiment: CPC...
+Loading model from: logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt...
+Model loaded successfully
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bc9753a4e8d549daad98bc8a70185c97", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Other-advantages-of-using-LightningExperiment">
+<h2>Other advantages of using <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code><a class="headerlink" href="#Other-advantages-of-using-LightningExperiment" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class also provides other advantages, such as: - Automatically generate CLI applications for the experiments, using the <code class="docutils literal notranslate"><span class="pre">jsonargparse</span></code> library. In fact, every parameter in the class constructor is automatically converted to a command line argument. This allows the user to run the experiment from the command line, using the same parameters as in the class constructor. - Default <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code> files are created, and the hyperparameters are logged
+in the <code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code> file. The <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code> file contains the metrics logged during training, and can be used to analyze the performance of the model.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="03_training_ssl_model.html" class="btn btn-neutral float-left" title="3. Training a self-supervised model (CPC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../experiments.html" class="btn btn-neutral float-right" title="Running Experiments" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

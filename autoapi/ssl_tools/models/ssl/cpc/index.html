@@ -49,6 +49,9 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -114,7 +117,7 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.ssl.cpc.build_cpc" title="ssl_tools.models.ssl.cpc.build_cpc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_cpc</span></code></a>([encoding_size, in_channel, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.ssl.cpc.build_cpc" title="ssl_tools.models.ssl.cpc.build_cpc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_cpc</span></code></a>([encoding_size, in_channels, ...])</p></td>
 <td><p>Builds a default CPC model. This function aid in the creation of a CPC</p></td>
 </tr>
 </tbody>
@@ -276,14 +279,13 @@ time steps.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ssl_tools.models.ssl.cpc.build_cpc">
-<span class="sig-prename descclassname"><span class="pre">ssl_tools.models.ssl.cpc.</span></span><span class="sig-name descname"><span class="pre">build_cpc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.build_cpc" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.models.ssl.cpc.</span></span><span class="sig-name descname"><span class="pre">build_cpc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gru_bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.cpc.build_cpc" title="Link to this definition"></a></dt>
 <dd><p>Builds a default CPC model. This function aid in the creation of a CPC
 model, by setting the default values of the parameters.</p>
 <section id="id4">
 <h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
 <dl class="simple">
-<dt>encoding_size<span class="classifier">int, optional</span></dt><dd><p>Size of the encoding (output of the linear layer). This is the size of
-the representation.</p>
+<dt>encoding_size<span class="classifier">int, optional</span></dt><dd><p>Size of the encoded representation (the output of the linear layer).</p>
 </dd>
 <dt>in_channel<span class="classifier">int, optional</span></dt><dd><p>Number of input features (e.g. 6 for HAR data in MotionSense Dataset)</p>
 </dd>
@@ -320,7 +322,7 @@ computing the final results.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>encoding_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>in_channel</strong> (<em>int</em>) – </p></li>
+<li><p><strong>in_channels</strong> (<em>int</em>) – </p></li>
 <li><p><strong>gru_hidden_size</strong> (<em>int</em>) – </p></li>
 <li><p><strong>gru_num_layers</strong> (<em>int</em>) – </p></li>
 <li><p><strong>gru_bidirectional</strong> (<em>bool</em>) – </p></li>

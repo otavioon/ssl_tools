@@ -1,0 +1,128 @@
+:py:mod:`ssl_tools.models.nets.convnet`
+=======================================
+
+.. py:module:: ssl_tools.models.nets.convnet
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.convnet.Simple1DConvNetwork
+   ssl_tools.models.nets.convnet.Simple2DConvNetwork
+
+
+
+
+.. py:class:: Simple1DConvNetwork(input_channels = 6, num_classes = 6, time_steps = 60, learning_rate = 0.001)
+
+
+   Bases: :py:obj:`lightning.LightningModule`
+
+   Model for human-activity-recognition.
+
+   .. py:method:: _calculate_fc_input_features(input_channels)
+
+
+   .. py:method:: _common_step(batch, batch_idx, prefix)
+
+
+   .. py:method:: _compute_metrics(y_hat, y, stage)
+
+      Compute the metrics.
+
+      Parameters
+      ----------
+      y_hat : torch.Tensor
+          The predictions of the model
+      y : _type_
+          The ground truth labels
+      stage : str
+          The stage of the training loop (train, val or test)
+
+      Returns
+      -------
+      Dict[str, float]
+          A dictionary containing the metrics. The keys are the names of the
+          metrics, and the values are the values of the metrics.
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x)
+
+
+   .. py:method:: loss_function(X, y)
+
+
+   .. py:method:: predict_step(batch, batch_idx, dataloader_idx=None)
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+
+.. py:class:: Simple2DConvNetwork(input_channels = 10, num_classes = 6, time_steps = 60, learning_rate = 0.001)
+
+
+   Bases: :py:obj:`lightning.LightningModule`
+
+   .. py:method:: _calculate_fc_input_features(input_channels)
+
+
+   .. py:method:: _common_step(batch, batch_idx, prefix)
+
+
+   .. py:method:: _compute_metrics(y_hat, y, stage)
+
+      Compute the metrics.
+
+      Parameters
+      ----------
+      y_hat : torch.Tensor
+          The predictions of the model
+      y : _type_
+          The ground truth labels
+      stage : str
+          The stage of the training loop (train, val or test)
+
+      Returns
+      -------
+      Dict[str, float]
+          A dictionary containing the metrics. The keys are the names of the
+          metrics, and the values are the values of the metrics.
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x)
+
+
+   .. py:method:: loss_function(X, y)
+
+
+   .. py:method:: predict_step(batch, batch_idx, dataloader_idx=None)
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+

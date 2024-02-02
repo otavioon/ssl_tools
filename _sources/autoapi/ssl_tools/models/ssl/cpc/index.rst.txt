@@ -123,7 +123,7 @@ Functions
 
 
 
-.. py:function:: build_cpc(encoding_size = 150, in_channel = 6, gru_hidden_size = 100, gru_num_layers = 1, gru_bidirectional = True, dropout = 0.0, learning_rate = 0.001, weight_decay = 0.0, window_size = 4, n_size = 5)
+.. py:function:: build_cpc(encoding_size = 150, in_channels = 6, gru_hidden_size = 100, gru_num_layers = 1, gru_bidirectional = True, dropout = 0.0, learning_rate = 0.001, weight_decay = 0.0, window_size = 4, n_size = 5)
 
    Builds a default CPC model. This function aid in the creation of a CPC
    model, by setting the default values of the parameters.
@@ -131,8 +131,7 @@ Functions
    Parameters
    ----------
    encoding_size : int, optional
-       Size of the encoding (output of the linear layer). This is the size of
-       the representation.
+       Size of the encoded representation (the output of the linear layer).
    in_channel : int, optional
        Number of input features (e.g. 6 for HAR data in MotionSense Dataset)
    gru_hidden_size : int, optional
