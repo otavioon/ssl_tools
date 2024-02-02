@@ -1,8 +1,8 @@
-name: ssl_tools
+name: ssl_tools documentation
 on:
   push:
     branches:
-    - main
+    - docs
 
 jobs:
   docs:
@@ -16,6 +16,11 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.12.1
+
+    - name: Install packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc
 
     - name: Install requirements
       run: |

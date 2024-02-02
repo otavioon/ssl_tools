@@ -5,7 +5,7 @@ class GRUEncoder(torch.nn.Module):
     def __init__(
         self,
         hidden_size: int = 100,
-        in_channel: int = 6,
+        in_channels: int = 6,
         encoding_size: int = 10,
         num_layers: int = 1,
         dropout: float = 0.0,
@@ -53,7 +53,7 @@ class GRUEncoder(torch.nn.Module):
         
         # Parameters 
         self.hidden_size = hidden_size
-        self.in_channel = in_channel
+        self.in_channel = in_channels
         self.num_layers = num_layers
         self.encoding_size = encoding_size
         self.bidirectional = bidirectional
