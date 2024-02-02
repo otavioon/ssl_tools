@@ -4,20 +4,20 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# 3. Training a self-supervised model (CPC)\n",
+    "# 3. Training a self-supervised model: Contrastive Predictive Coding (CPC)\n",
     "\n",
     "In this notebook, we will train a self-supervised model using the Contrastive Predictive Coding (CPC) method. \n",
     "This method is based on the idea of predicting future tokens in a sequence, and it has been shown to be very effective in learning useful representations for downstream tasks.\n",
     "This framework already provides an implementation of CPC, so we will use it to train the model.\n",
     "\n",
-    "We will pre-train the model using KuHar dataset, and then we will use the learned representations to train a classifier for the downstream task. \n",
+    "We will pre-train the model using KuHar dataset, and then we will use the learned representations to train a classifier for the downstream task (fine tuning). \n",
     "For both stages of training, as the last notebook, we will:\n",
     "\n",
     "1. Create a `Dataset` and then `LightningDataModule` to load the data;\n",
     "2. Instantiate the CPC model; and\n",
     "3. Train the model using PyTorch Lightning.\n",
     "\n",
-    "We can instantiate the model in two ways:\n",
+    "Every SSL model in this framework can instantiate in two ways:\n",
     "\n",
     "1. Instantiate each element, such as the encoder, the autoregressive model, and the CPC model, and then pass them to the CPC model; or\n",
     "2. Using builder methods to instantiate the model. In this case, we do not need to instantiate each element separately, but we can still customize the model by passing the desired parameters to the builder methods. This is the approach we will use in this notebook.\n",
@@ -31,7 +31,9 @@
    "source": [
     "## Pre-training the model\n",
     "\n",
-    "We will pre-train the model using the KuHar dataset. CPC is a self-supervised method, so we do not need labels to train the model. However, CPC assumes that the input data is sequential, that is, an input is a sequence of time-steps comprising different acitivities. Thus, for HAR, usually, one sample (a multi-modal time-series) correspond to the whole time-series of a single user.\n",
+    "We will pre-train the model using the KuHar dataset. CPC is a self-supervised method, so we do not need labels to train the model. \n",
+    "However, CPC assumes that the input data is sequential, that is, an input is a sequence of time-steps comprising different acitivities. \n",
+    "Thus, for HAR, usually, one sample is a multi-modal time-series correspond to the whole time-series of a single user.\n",
     "\n",
     "### Creating the LightningDataModule\n",
     "\n",
@@ -53,7 +55,7 @@
     "        ...\n",
     "```\n",
     "\n",
-    "And the content of each file should be something like:\n",
+    "And the content of each CSV file should be something like:\n",
     "\n",
     "| timestamp | accel-x | accel-y | accel-z | gyro-x | gyro-y | gyro-z | activity  |\n",
     "|-----------|---------|---------|---------|--------|--------|--------|-----------|\n",
@@ -66,16 +68,16 @@
     "In this way, we should use the `SeriesFolderCSVDataset` to load the data.\n",
     "This will create a `Dataset` for us, where each CSV file is a sample, and each row of the CSV file is a time-step, and the columns are the features.\n",
     "\n",
-    "> **NOTE**: The samples may have different lengths, so, for this method, the `batch_size` must be 1.\n",
-    "\n",
     "If your data is organized as above, where inside the root folder (`data/` in this case) there are sub-folders for each split (`train/`, `validation/`, and `test/`), and inside each split folder there are the CSV files, you can use the `UserActivityFolderDataModule` to create a `LightningDataModule` for you.\n",
     "This class will create `DataLoader` of `SeriesFolderCSVDataset` for each split (train, validation, and test), and will setup data correctly.\n",
     "\n",
-    "In this notebook, we will use the `UserActivityFolderDataModule` to create the `LightningDataModule` for us. This class minimally requires:\n",
+    "In this notebook, we will use the `UserActivityFolderDataModule` to create the `LightningDataModule` for us. This class requires the following parameters:\n",
     "\n",
     "- `data_path`: the root directory of the data;\n",
     "- `features`: the name of the features columns;\n",
-    "- `pad`: a boolean indicating if the samples should be padded to the same length, that is, the length of the longest sample in the dataset. The padding scheme will replicate the samples, from the beginning, until the length of the longest sample is reached. "
+    "- `pad`: a boolean indicating if the samples should be padded to the same length, that is, the length of the longest sample in the dataset. The padding scheme will replicate the samples, from the beginning, until the length of the longest sample is reached. \n",
+    "  \n",
+    "> **NOTE**: The samples may have different lengths, so, for this method, the `batch_size` must be 1."
    ]
   },
   {
@@ -83,6 +85,13 @@
    "execution_count": 1,
    "metadata": {},
    "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[1706884475.353781] [aae107fc745c:2265333:f]        vfs_fuse.c:281  UCX  ERROR inotify_add_watch(/tmp) failed: No space left on device\n"
+     ]
+    },
     {
      "data": {
       "text/plain": [
@@ -120,9 +129,10 @@
     "### Pre-training the model\n",
     "\n",
     "Here we will use the builder method `build_cpc` to instantiate the CPC model.\n",
-    "This will instantiate an CPC self-supervised model, with the default encoder (`ssl_tools.models.layers.gru.GRUEncoder`), that is an GRU+Linear, and the default autoregressive model (`torch.nn.GRU`), a linear layer.\n",
+    "This will instantiate an CPC self-supervised model, with the default encoder (`ssl_tools.models.layers.gru.GRUEncoder`), that is an GRU+Linear, and the default autoregressive model (`torch.nn.GRU`).\n",
     "\n",
-    "We can parametrize the creation of the model by passing the desired parameters to the builder method. The `build_cpc` method can be parametrized the following parameters:\n",
+    "We can parametrize the creation of the model by passing the desired parameters to the builder method. T\n",
+    "he `build_cpc` method can be parametrized the following parameters:\n",
     "\n",
     "- `encoding_size`: the size of the encoded representation;\n",
     "- `in_channels`: number of input features;\n",
@@ -131,9 +141,10 @@
     "- `learning_rate`: the learning rate of the optimizer;\n",
     "- `window_size` : size of the input windows (`X_t`) to be fed to the encoder (GRU).\n",
     "\n",
-    "All parameters are optional, and have default values. You may want to consult the documentation of the method to see the default values and additional parameters.\n",
+    "All parameters are optional, and have default values. \n",
+    "You may want to consult the documentation of the method to see the default values and additional parameters.\n",
     "\n",
-    "Note that the `LightningModule` returned by the `build_cpc` method is already configured to use the `CPC` loss, and the `Adam` optimizer."
+    "Note that the `LightningModule` returned by the `build_cpc` method is already configured to use the CPC loss, and the `Adam` optimizer."
    ]
   },
   {
@@ -217,7 +228,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "ae5e2aa76b724bd28d4a6a30a24741b6",
+       "model_id": "8e3634f46d0440d78d1cc4df789b6f63",
        "version_major": 2,
        "version_minor": 0
       },
@@ -231,7 +242,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "09c22282fde24cfd9de81b97f95e86fd",
+       "model_id": "640b0f0a79794c2d97ca00a311e4b08d",
        "version_major": 2,
        "version_minor": 0
       },
@@ -245,7 +256,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "bef77ce96a814d7285754998c34e9ac9",
+       "model_id": "36aa3a12d53f47e39962e445c39d2af3",
        "version_major": 2,
        "version_minor": 0
       },
@@ -259,7 +270,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "1937e63c20084b50bb692146e61413a1",
+       "model_id": "9b41ae7b312341bb8872f7b4e56a753e",
        "version_major": 2,
        "version_minor": 0
       },
@@ -273,7 +284,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "f69d85b4c6d740a69283266cec51d423",
+       "model_id": "dbcc4c7c3da648fa94d7a3f2663ffe5e",
        "version_major": 2,
        "version_minor": 0
       },
@@ -287,7 +298,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "b646a368e4604032afa6c76ad58e442c",
+       "model_id": "7f89209f2f5b44488be9b5d002fb949f",
        "version_major": 2,
        "version_minor": 0
       },
@@ -301,7 +312,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "34378bbe5c29451b8e8699f5d5e5c5f3",
+       "model_id": "52322530fcc641b2b3f2da9e76d23a5d",
        "version_major": 2,
        "version_minor": 0
       },
@@ -315,7 +326,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "7eb66332ab514500beab85981de2cc86",
+       "model_id": "268860b5d4104d1f83692fe48f173f7c",
        "version_major": 2,
        "version_minor": 0
       },
@@ -329,7 +340,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "c497708ecea642399c3972d6588834dc",
+       "model_id": "96c45fd34de246cea3b0321434c8205a",
        "version_major": 2,
        "version_minor": 0
       },
@@ -343,7 +354,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "81d632bcc570499580819d00fad1f48c",
+       "model_id": "66aa47a3e2e34cd383f03c62dde9bbaf",
        "version_major": 2,
        "version_minor": 0
       },
@@ -357,7 +368,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "5f64cf4dbb41406da82a5a8028f50080",
+       "model_id": "e6ce5719fcd540dfad7536ac5ac75baf",
        "version_major": 2,
        "version_minor": 0
       },
@@ -371,7 +382,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "2c930a3f8e18484bb2fc18b2a4773d1a",
+       "model_id": "e472b12bf71c4b2f909f481385a2b371",
        "version_major": 2,
        "version_minor": 0
       },
@@ -404,7 +415,9 @@
    "source": [
     "This finishes the pre-training stage. \n",
     "\n",
-    "To obtain the latent representations of the data, we must use cpc `forward` method on the data. In this framework, the `forward` method of the SSL models returns the latent representations of the input data. Usually this is the output of the encoder, as in this case, but it may vary depending on the model.\n",
+    "To obtain the latent representations of the data, we must use `model.forward()` method on the data. \n",
+    "In this framework, the `forward` method of the SSL models returns the latent representations of the input data. \n",
+    "Usually this is the output of the encoder, as in this case, but it may vary depending on the model.\n",
     "\n",
     "We will use the encoder to obtain the latent representations of the data, and then we will use these representations to train a classifier for the downstream task."
    ]
@@ -429,7 +442,8 @@
     "Human acivity recognition is a supervised classification task, that usually receives multi-modal windowed time-series as input, diferently from the self-supervised task, that receives the whole time-series of a single user.\n",
     "Thus, we cannot use the same `LightningDataModule` to load the data for the downstream task. \n",
     "\n",
-    "In this notebook, we will use the windowed time-series version of the KuHar dataset, that each split is a single CSV file, containing windowed time-series of the users. The content of the file should be something like:\n",
+    "In this notebook, we will use the windowed time-series version of the KuHar dataset, that each split is a single CSV file, containing windowed time-series of the users. \n",
+    "The content of the file should be something like:\n",
     "\n",
     "```\n",
     "KuHar/\n",
@@ -438,7 +452,7 @@
     "    test.csv\n",
     "```\n",
     "\n",
-    "The `train.csv` file may look like this:\n",
+    "The CSVs file may look like this:\n",
     "\n",
     "| accel-x-0 | accel-x-1 | accel-y-0 | accel-y-1 |  class |\n",
     "|-----------|-----------|-----------|-----------|--------|\n",
@@ -494,18 +508,24 @@
     "To handle the fine-tune process, we can design a new model, that is composed of the pre-trained backbone and the prediction head, and then train this new model with the labeled data. \n",
     "In order to facilitate this process, this framework provides the `SSLDiscriminator` class, that receives the backbone model and the prediction head, and then trains the classifier with the labeled data.\n",
     "\n",
-    "In summary, the `SSLDiscriminator` class is a `LightningModule` that generate the representations of the input data using the backbone model, that is, using the `forward` method of the backbone model, and then uses the prediction head to output the predictions. The predictions and labels are then used to compute the loss and train the model. \n",
-    "By default, the `SSLDiscriminator` is trained using the `Adam` optimizer with the `learning_rate` defined by the user (1e-3 by default).\n",
+    "In summary, the `SSLDiscriminator` class is a `LightningModule` that generate the representations of the input data using the backbone model, that is, using the `forward` method of the pre-trained backbone model, and then uses the prediction head to output the predictions, something like `y_hat = prediction_head(backbone(sample))`. \n",
+    "The predictions and labels are then used to compute the loss and train the model. \n",
+    "By default, the `SSLDiscriminator` is trained using the `Adam` optimizer with parametrizable `learning_rate`.\n",
     "\n",
-    "It worth to mention that the `SSLDiscriminator` class `forward` method receives the input data and the labels, and returns the predictions. This is different from the `forward` method of the self-supervised models, that receives only the input data and returns the latent representations of the input data.\n",
+    "It worth to mention that the `SSLDiscriminator` class `forward` method receives the input data and the labels, and returns the predictions. \n",
+    "This is different from the `forward` method of the self-supervised models, that receives only the input data and returns the latent representations of the input data.\n",
     "\n",
     "It worth to notice that the fine-tune train process can be done in two ways: \n",
     "\n",
     "1. Fine-tuning the whole model, that is, backbone (encoder) and classifier, with the labeled data; or \n",
     "2. Fine-tuning only the classifier, with the labeled data.\n",
-    "The `SSLDisriminator` class can handle both cases, with the `update_backbone` parameter. If `update_backbone` is `True`, the whole model is fine-tuned (case 1, above), otherwise, only the classifier is fine-tuned (case 2, above).\n",
     "\n",
-    "Let's create our prediction head and `SSLDisriminator` model and train it with the labeled data. Prediction heads for most popular tasks are already implemented in the `ssl_tools.models.ssl.modules.heads` module. In this notebook, we will use the `CPCPredictionHead` prediction head, that is a MLP with 3 hidden layers and dropout."
+    "The `SSLDisriminator` class can handle both cases, with the `update_backbone` parameter. \n",
+    "If `update_backbone` is `True`, the whole model is fine-tuned (case 1, above), otherwise, only the classifier is fine-tuned (case 2, above).\n",
+    "\n",
+    "Let's create our prediction head and `SSLDisriminator` model and train it with the labeled data. \n",
+    "Prediction heads for most popular tasks are already implemented in the `ssl_tools.models.ssl.modules.heads` module. \n",
+    "In this notebook, we will use the `CPCPredictionHead` prediction head, that is a MLP with 3 hidden layers and dropout."
    ]
   },
   {
@@ -556,14 +576,14 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "We will create the `SSLDisriminator` model. \n",
-    "The `SSLDisriminator` minimally requires:\n",
+    "Now we create the `SSLDisriminator` model. This class requires the following parameters:\n",
     "\n",
     "- `backbone`: the backbone model, that is, the pre-trained model;\n",
     "- `head`: the prediction head model;\n",
     "- `loss_fn`: the loss function to be used to train the model;\n",
     "\n",
-    "Also, we can attach metrics that will be calculated with for every batch of `validation` and `test` sets. The metrics is passed using the `metrics` parameter of the `SSLDisriminator` class, that receives a dictionary with the name of the metric as key and the `torchmetrics.Metric` as value.\n",
+    "Also, we can attach metrics that will be calculated with for every batch of `validation` and `test` sets. \n",
+    "The metrics is passed using the `metrics` parameter of the `SSLDisriminator` class, that receives a dictionary with the name of the metric as key and the `torchmetrics.Metric` as value.\n",
     "\n",
     "Let's create the `SSLDiscriminator` and attach the `Accuracy` metric to the model, to check the validation accuracy per epoch."
    ]
@@ -667,7 +687,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "2cf48079d50145c7afc3309882108058",
+       "model_id": "b4a9bc62bb02433c814bb266ad167222",
        "version_major": 2,
        "version_minor": 0
       },
@@ -690,7 +710,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "e2ae4d6c11b94de5995bb8a7ef1c495b",
+       "model_id": "5a315d4c45dc43baac89162331a17467",
        "version_major": 2,
        "version_minor": 0
       },
@@ -704,7 +724,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "b5eb6ffc4ee4423a93c60c73a1edfbf1",
+       "model_id": "a43e85394ce34b1f987664c15e50fd30",
        "version_major": 2,
        "version_minor": 0
       },
@@ -718,7 +738,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "c66686d98e9d4f6daf3e11ad6dbba580",
+       "model_id": "ae46f2bf6c324fe7b442a2f88f27a28e",
        "version_major": 2,
        "version_minor": 0
       },
@@ -732,7 +752,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "f5ddf90cc6cb45c698b80b613d67ba43",
+       "model_id": "242bcdc871da408eaf38a5a56334a8b1",
        "version_major": 2,
        "version_minor": 0
       },
@@ -746,7 +766,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "a2e606bf41644aa3ba73f1dd1af1f0ba",
+       "model_id": "1970a89b26fd4cf39c0ca393b9b6c027",
        "version_major": 2,
        "version_minor": 0
       },
@@ -760,7 +780,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "5225a29cc4734fe2a51e0a672c017e44",
+       "model_id": "6bdbd86f03074702a869b386d177fb7d",
        "version_major": 2,
        "version_minor": 0
       },
@@ -774,7 +794,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "1daec8bdfe244e98a0506f59cadce3e8",
+       "model_id": "d2167f1510bb4d64a54da935335ccc21",
        "version_major": 2,
        "version_minor": 0
       },
@@ -788,7 +808,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "0bf6a6c07005402aa725b3711cfc1e8a",
+       "model_id": "1f3e63d7f34f4dd2b0dc31467dd464dd",
        "version_major": 2,
        "version_minor": 0
       },
@@ -802,7 +822,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "6f8c6f1f5b7e42c5b4f7a94e3ab5c929",
+       "model_id": "69e4bfc1a324439a8ecb59e82b9e810f",
        "version_major": 2,
        "version_minor": 0
       },
@@ -816,7 +836,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "e378c409ea68429b80f4e26858a472dd",
+       "model_id": "220928c965124f8fa5d5feeb1ec05f2d",
        "version_major": 2,
        "version_minor": 0
       },
@@ -830,7 +850,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "e6535154a526421997abf0f6c82cda9f",
+       "model_id": "6e0696c0f6a144909060b0ab7d53b45a",
        "version_major": 2,
        "version_minor": 0
       },
@@ -862,7 +882,7 @@
    "metadata": {},
    "source": [
     "Let's evaluate the model using the test set. If we have added the `Accuracy` metric to the model, it will calculate the accuracy of the model on the test set.\n",
-    "All logged metrics will be returnet by `.test()` method, as a dictionary."
+    "All logged metrics will be returnet by `.test()` method, as a list of dictionaries."
    ]
   },
   {
@@ -881,7 +901,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "0075d6e46e5243eca4724a1a3ead2011",
+       "model_id": "96b0536249cb4290abbe1fb6367f6de6",
        "version_major": 2,
        "version_minor": 0
       },
@@ -899,7 +919,7 @@
        "┃<span style=\"font-weight: bold\">        Test metric        </span>┃<span style=\"font-weight: bold\">       DataLoader 0        </span>┃\n",
        "┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩\n",
        "│<span style=\"color: #008080; text-decoration-color: #008080\">         test_acc          </span>│<span style=\"color: #800080; text-decoration-color: #800080\">    0.5277777910232544     </span>│\n",
-       "│<span style=\"color: #008080; text-decoration-color: #008080\">         test_loss         </span>│<span style=\"color: #800080; text-decoration-color: #800080\">    1.5032936334609985     </span>│\n",
+       "│<span style=\"color: #008080; text-decoration-color: #008080\">         test_loss         </span>│<span style=\"color: #800080; text-decoration-color: #800080\">    1.4903016090393066     </span>│\n",
        "└───────────────────────────┴───────────────────────────┘\n",
        "</pre>\n"
       ],
@@ -908,7 +928,7 @@
        "┃\u001b[1m \u001b[0m\u001b[1m       Test metric       \u001b[0m\u001b[1m \u001b[0m┃\u001b[1m \u001b[0m\u001b[1m      DataLoader 0       \u001b[0m\u001b[1m \u001b[0m┃\n",
        "┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩\n",
        "│\u001b[36m \u001b[0m\u001b[36m        test_acc         \u001b[0m\u001b[36m \u001b[0m│\u001b[35m \u001b[0m\u001b[35m   0.5277777910232544    \u001b[0m\u001b[35m \u001b[0m│\n",
-       "│\u001b[36m \u001b[0m\u001b[36m        test_loss        \u001b[0m\u001b[36m \u001b[0m│\u001b[35m \u001b[0m\u001b[35m   1.5032936334609985    \u001b[0m\u001b[35m \u001b[0m│\n",
+       "│\u001b[36m \u001b[0m\u001b[36m        test_loss        \u001b[0m\u001b[36m \u001b[0m│\u001b[35m \u001b[0m\u001b[35m   1.4903016090393066    \u001b[0m\u001b[35m \u001b[0m│\n",
        "└───────────────────────────┴───────────────────────────┘\n"
       ]
      },
@@ -918,7 +938,7 @@
     {
      "data": {
       "text/plain": [
-       "[{'test_loss': 1.5032936334609985, 'test_acc': 0.5277777910232544}]"
+       "[{'test_loss': 1.4903016090393066, 'test_acc': 0.5277777910232544}]"
       ]
      },
      "execution_count": 8,
@@ -957,7 +977,7 @@
     {
      "data": {
       "application/vnd.jupyter.widget-view+json": {
-       "model_id": "c344339416884a01b84c3bc5dace1252",
+       "model_id": "64924b90def24c998374ee4e9ebd8478",
        "version_major": 2,
        "version_minor": 0
       },

@@ -55,17 +55,17 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">1. Structuring the input</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Time-series-dataset-implementations">Time-series dataset implementations</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#SeriesFolderCSVDataset">SeriesFolderCSVDataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#MultiModalSeriesCSVDataset">MultiModalSeriesCSVDataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SeriesFolderCSVDataset"><code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#MultiModalSeriesCSVDataset"><code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#Loading-batches-of-data">Loading batches of data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Handling-data-splits-(train,-validation,-and-test)">Handling data splits (train, validation, and test)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Loading-batches-of-data-using-DataLoader">Loading batches of data using DataLoader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Handling-data-splits-(train,-validation,-and-test)-using-LightningDataModule">Handling data splits (train, validation, and test) using <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Summary">Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="02_training_model.html">2. Training a Pytorch Lighning model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_training_ssl_model.html">3. Training a self-supervised model (CPC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_training_ssl_model.html">3. Training a self-supervised model: Contrastive Predictive Coding (CPC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_using_experiments.html">4. Using Experiments</a></li>
 </ul>
 </li>
@@ -101,20 +101,24 @@
              
   <section id="1.-Structuring-the-input">
 <h1>1. Structuring the input<a class="headerlink" href="#1.-Structuring-the-input" title="Link to this heading"></a></h1>
-<p>In order to train and test models, we need to structure the input data in a way that is compatible with the model and framweork’s experiments.</p>
-<p>This framework is designed to work with time-series data and Pytorch Lightning. Thus, it provides the necessary tools to create a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object and a <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> object.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object is responsible for loading the data. It is a Pytorch object that is used to load the data and make it available to the model. Every <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class must implement two methods: <code class="docutils literal notranslate"><span class="pre">__len__</span></code> and <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>. The <code class="docutils literal notranslate"><span class="pre">__len__</span></code> method returns the number of samples in the dataset, and the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>, given an integer from 0 to <code class="docutils literal notranslate"><span class="pre">__len__</span></code> - 1, returns the corresponding sample from the dataset. The returned type of the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> method is not specified, but it is
-usually a 2-element tuple with the input and the target. The input is the data that will be used to make the predictions, and the target is the data that the model will try to predict.</p>
-<p>For now, this framework provide implementations for the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> objects for time-series data, where data is organized in two different ways:</p>
-<ul class="simple">
-<li><p>A directory with several CSV files, where each file contains a time-series. Each row in a CSV file is a time-step, each column is a feature, and the whole file is a time-series. This is handled by the <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class.</p></li>
-<li><p>A single CSV file with a windowed time-series. Each row in the CSV file is a window, and each column is a feature. This is handled by the <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class.</p></li>
-</ul>
-<p>We explain both classes in detais nextly.</p>
+<p>In order to train and test models, we need to structure the input data in a way that is compatible with the model and the framework’s experiments.</p>
+<p>For now, this framework is designed to work with time-series data and Pytorch Lightning. Thus, it provides the necessary tools to create <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> and <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> objects, required by Pytorch Lightning to train and test models.</p>
+<p>In this notebook, we explain the default data pipeline, which includes: 1. Creating <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> objects, that are responsible for loading the data. 2. Creating <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects, that are responsible for batched loading of the data. It encapsulates the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object and provides an iterator to iterate over the data in batches. 3. Creating <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> objects, that are responsible for loading the data and creating the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> and encapsulate it into <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code>
+objects for training, validation, and test sets.</p>
 <section id="Time-series-dataset-implementations">
 <h2>Time-series dataset implementations<a class="headerlink" href="#Time-series-dataset-implementations" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object is responsible for loading the data. It is a Pytorch object that is used to load the data and make it available to the model.</p>
+<p>Every <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class must implement two methods: <code class="docutils literal notranslate"><span class="pre">__len__</span></code> and <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>. The <code class="docutils literal notranslate"><span class="pre">__len__</span></code> method returns the number of samples in the dataset, and the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>, given an integer from 0 to <code class="docutils literal notranslate"><span class="pre">__len__</span></code> - 1, returns the corresponding sample from the dataset. The returned type of the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> method is not specified, but it is usually a 2-element tuple with the input and the target. The input is the data that will be used to make the predictions, and the target is the data
+that the model will try to predict.</p>
+<p>The first step when creating a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object is to identify the layout of the data directory and choose the appropriate class to handle it. For now, this framework provides default <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> classes for time-series data, which are the <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> and <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> classes. Both classes assumes that data are stored in CSV files, but with different layouts, to know:</p>
+<ul class="simple">
+<li><p>A directory with several CSV files, where each file contains a time-series. Each row in a CSV file is a time-step, each column is a feature. Thus, the whole file is a single multi-modal time-series. Also, if you want to use labels, it must be in a separated column of the CSV file and it should exists to all rows (time-steps). This layout is handled by the <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class.</p></li>
+<li><p>A single CSV file with a windowed time-series. Each row contains different modalities of the same windowed time-series. The prefix of the column names is used to identify the modalities. For instance, if the is <code class="docutils literal notranslate"><span class="pre">accel-x</span></code>, all columns that start with this prefix, like <code class="docutils literal notranslate"><span class="pre">accel-x-1</span></code>, <code class="docutils literal notranslate"><span class="pre">accel-x-2</span></code>, <code class="docutils literal notranslate"><span class="pre">accel-x-3</span></code>, are considered time-steps from the same modality (<code class="docutils literal notranslate"><span class="pre">accel-x</span></code>). Also, if you want to use labels, it must be in a separated column and it should exists to all rows, that is, for each
+windowed multimodal time-series. This layout is handled by the <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class.</p></li>
+</ul>
+<p>We will show how to use these classes in the next sections.</p>
 <section id="SeriesFolderCSVDataset">
-<h3>SeriesFolderCSVDataset<a class="headerlink" href="#SeriesFolderCSVDataset" title="Link to this heading"></a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code><a class="headerlink" href="#SeriesFolderCSVDataset" title="Link to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class is designed to work with a directory containing several CSV files, where each file represent a time-series. Each row in a CSV file is a time-step, and each column is a feature.</p>
 <p>This class assumes that data is organized in the following way, where <code class="docutils literal notranslate"><span class="pre">my_dataset</span></code> is the path to the directory containing the CSV files:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my_dataset/
@@ -124,7 +128,7 @@ usually a 2-element tuple with the input and the target. The input is the data t
 <span class="w">    </span>...
 </pre></div>
 </div>
-<p>Where each CSV file represents a time-series.</p>
+<p>Where each CSV file represents a time-series, similar to the one below:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>accel-x</p></th>
@@ -163,14 +167,13 @@ usually a 2-element tuple with the input and the target. The input is the data t
 </tr>
 </tbody>
 </table>
-<p>Note that the CSV must have a header with the column names.</p>
-<p>To handle this kind of data, we use the <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class. This class is a Pytorch <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object that loads the data from the CSV files and makes it available to the model. For this class, we must specify the path to the directory containing the CSV files, the name of the columns that will be used as features, and the name of the column that will be used as the target. Note that, each feature (column) represent a dimension of the time-series, while the rows represent the
-time-steps.</p>
-<p>Thus, the <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class minimally requires:</p>
+<p>Note that the CSV must have a header with the column names. Also, columns that are not used as features or labels are ignored.</p>
+<p>To handle this kind of data, we use the <code class="docutils literal notranslate"><span class="pre">SeriesFolderCSVDataset</span></code> class. This class is a Pytorch <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object that loads the data from the CSV files and makes it available to the model. Note that, each feature (column) represent a dimension of the time-series, while the rows represent the time-steps. The sample is a numpy array.</p>
+<p>For this class, we must specify the following parameters:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">data_path</span></code>: the path to the directory containing the CSV files</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">features</span></code>: a list of strings with the names of the features columns, e.g. <code class="docutils literal notranslate"><span class="pre">['accel-x',</span> <span class="pre">'accel-y',</span> <span class="pre">'accel-z',</span> <span class="pre">'gyro-x',</span> <span class="pre">'gyro-y',</span> <span class="pre">'gyro-z']</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code>: a string with the name of the label column, e.g. <code class="docutils literal notranslate"><span class="pre">'class'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_path</span></code>: the path to the directory containing the CSV files;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">features</span></code>: a list of strings with the names of the features columns, <em>e.g.</em> <code class="docutils literal notranslate"><span class="pre">['accel-x',</span> <span class="pre">'accel-y',</span> <span class="pre">'accel-z',</span> <span class="pre">'gyro-x',</span> <span class="pre">'gyro-y',</span> <span class="pre">'gyro-z']</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code>: a string with the name of the label column, <em>e.g.</em> <code class="docutils literal notranslate"><span class="pre">'class'</span></code>.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -195,10 +198,9 @@ time-steps.</p>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-/usr/local/lib/python3.10/dist-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
+[1706883997.242541] [aae107fc745c:2264626:f]        vfs_fuse.c:281  UCX  ERROR inotify_add_watch(/tmp) failed: No space left on device
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -210,10 +212,10 @@ time-steps.</p>
 SeriesFolderCSVDataset at /workspaces/hiaac-m4/ssl_tools/data/view_concatenated/KuHar_cpc/train (57 samples)
 </pre></div></div>
 </div>
-<p>We can get the number of samples in the dataset with the <code class="docutils literal notranslate"><span class="pre">len</span></code> function, and we can retrive a sample with the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> method, that is, using <code class="docutils literal notranslate"><span class="pre">[]</span></code>, such as <code class="docutils literal notranslate"><span class="pre">dataset[0]</span></code>. The dataset may return:</p>
+<p>We can get the number of samples in the dataset with the <code class="docutils literal notranslate"><span class="pre">len</span></code> function, and we can retrive a sample with the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> method, that is, using <code class="docutils literal notranslate"><span class="pre">[]</span></code>, such as <code class="docutils literal notranslate"><span class="pre">dataset[0]</span></code>. The dataset return type is different depending on the <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter.</p>
 <ul class="simple">
-<li><p>A 2-element tuple, where the first element is a 2D numpy array with shape <code class="docutils literal notranslate"><span class="pre">(num_features,</span> <span class="pre">time_steps)</span></code>, and the second element is a 1D tensor with shape <code class="docutils literal notranslate"><span class="pre">(time_steps,)</span></code>.</p></li>
-<li><p>A 2D numpy array with shape <code class="docutils literal notranslate"><span class="pre">(num_features,</span> <span class="pre">time_steps)</span></code>, if <code class="docutils literal notranslate"><span class="pre">label</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, at the time of the dataset object’s creation.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">label</span></code> is speficied, the return type is a 2-element tuple, where the first element is a 2D numpy array with shape <code class="docutils literal notranslate"><span class="pre">(num_features,</span> <span class="pre">time_steps)</span></code>, and the second element is a 1D tensor with shape <code class="docutils literal notranslate"><span class="pre">(time_steps,)</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">label</span></code> is not speficied, the return type is a single 2D numpy array with shape <code class="docutils literal notranslate"><span class="pre">(num_features,</span> <span class="pre">time_steps)</span></code>.</p></li>
 </ul>
 <p>Let’s check the number of samples and access the first sample and its label.</p>
 <div class="nbinput docutils container">
@@ -238,7 +240,7 @@ Length of dataset: 57 samples
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the first sample</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the first sample. We can go from 0 to length_of_dataset - 1 (56)</span>
 <span class="n">sample</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">type_of_sample</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Type of sample: </span><span class="si">{</span><span class="n">type_of_sample</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span><span class="si">}</span><span class="s2"> elements&quot;</span><span class="p">)</span>
@@ -276,8 +278,9 @@ Shape of sample: (6, 2586), shape of label: (2586, 1)
 <p>You can see above, the sample is a 2-element tuple. The first element is a 2D numpy array with shape <code class="docutils literal notranslate"><span class="pre">(6,</span> <span class="pre">2586)</span></code>, and the second element is a 1D tensor with shape <code class="docutils literal notranslate"><span class="pre">(2586,)</span></code>, that is, a label for each time-step.</p>
 </section>
 <section id="MultiModalSeriesCSVDataset">
-<h3>MultiModalSeriesCSVDataset<a class="headerlink" href="#MultiModalSeriesCSVDataset" title="Link to this heading"></a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class is designed to work with a single CSV file containing a windowed time-series. The CSV is a multi-modal time-series, where each row is a sample and each column is a feature at a given time-step. Features are organized in a way that each group of columns represent a different modality.</p>
+<h3><code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code><a class="headerlink" href="#MultiModalSeriesCSVDataset" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class is designed to work with a single CSV file containing a windowed time-series. Each row contains different modalities of the same windowed time-series. The prefix of the column names is used to identify the modalities. For instance, if the prefix is <code class="docutils literal notranslate"><span class="pre">accel-x</span></code>, all columns that start with this prefix, like <code class="docutils literal notranslate"><span class="pre">accel-x-1</span></code>, <code class="docutils literal notranslate"><span class="pre">accel-x-2</span></code>, <code class="docutils literal notranslate"><span class="pre">accel-x-3</span></code>, are considered time-steps from the same modality (<code class="docutils literal notranslate"><span class="pre">accel-x</span></code>). Also, if you want to use labels, it must
+be in a separated column and it should exists to all rows, that is, for each windowed multimodal time-series.</p>
 <p>The CSV file looks like this:</p>
 <table class="docutils align-default">
 <thead>
@@ -309,15 +312,15 @@ Shape of sample: (6, 2586), shape of label: (2586, 1)
 </tr>
 </tbody>
 </table>
-<p>In the example, columns <code class="docutils literal notranslate"><span class="pre">accel-x-0</span></code> and <code class="docutils literal notranslate"><span class="pre">accel-x-1</span></code> are the <code class="docutils literal notranslate"><span class="pre">accel-x</span></code> feature at time <code class="docutils literal notranslate"><span class="pre">0</span></code> and time <code class="docutils literal notranslate"><span class="pre">1</span></code>, respectively. The same goes for the <code class="docutils literal notranslate"><span class="pre">accel-y</span></code> feature. Finally, the <code class="docutils literal notranslate"><span class="pre">class</span></code> column is the label.</p>
-<p>To handle this kind of data, we use the <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class. For this class, we must specify the path to the CSV file, the prefix of the columns that will be used as features, and the columns that will be used as label. Note that, each feature (column) represent a dimension of the time-series, while the rows represent the samples.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> class minimally requires:</p>
+<p>In the example, columns <code class="docutils literal notranslate"><span class="pre">accel-x-0</span></code> and <code class="docutils literal notranslate"><span class="pre">accel-x-1</span></code> are the <code class="docutils literal notranslate"><span class="pre">accel-x</span></code> feature at time <code class="docutils literal notranslate"><span class="pre">0</span></code> and time <code class="docutils literal notranslate"><span class="pre">1</span></code>, respectively. The same goes for the <code class="docutils literal notranslate"><span class="pre">accel-y</span></code> feature. Finally, the <code class="docutils literal notranslate"><span class="pre">class</span></code> column is the label. Columns that are not used as features or labels are ignored.</p>
+<p>To use <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code>, we must specify the following parameters:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">data_path</span></code>: the path to the CSV file</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">feature_prefixes</span></code>: a list of strings with the prefixes of the feature columns, e.g. <code class="docutils literal notranslate"><span class="pre">['accel-x',</span> <span class="pre">'accel-y']</span></code>. The class will look for columns with these prefixes and will consider them as features of a modality.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">label</span></code>: a string with the name of the label column, e.g. <code class="docutils literal notranslate"><span class="pre">'class'</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">features_as_channels</span></code>: a boolean indicating if the features should be treated as channels, that is, if each prefix will become a channel. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data will be returned as a vector of shape <code class="docutils literal notranslate"><span class="pre">(C,</span> <span class="pre">T)</span></code>, where C is the number of channels (features/prefixes) and <code class="docutils literal notranslate"><span class="pre">T</span></code> is the number of time steps. Else, the data will be returned as a vector of shape <code class="docutils literal notranslate"><span class="pre">T*C</span></code> (a single vector with all the features).</p></li>
 </ul>
+<p>Note that, each feature (column) represent a dimension of the time-series, while the rows represent the samples.</p>
 <p>Let’s show how to read this data and create a <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> object.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -409,10 +412,11 @@ Shape of sample: (6, 60)
 </div>
 </section>
 </section>
-<section id="Loading-batches-of-data">
-<h2>Loading batches of data<a class="headerlink" href="#Loading-batches-of-data" title="Link to this heading"></a></h2>
+<section id="Loading-batches-of-data-using-DataLoader">
+<h2>Loading batches of data using DataLoader<a class="headerlink" href="#Loading-batches-of-data-using-DataLoader" title="Link to this heading"></a></h2>
 <p>Pytorch models are trained using batches of data. Thus, we do not feed the model with a single sample at a time, but with a batch of samples. If we see the last example, the <code class="docutils literal notranslate"><span class="pre">MultiModalSeriesCSVDataset</span></code> object returns a single sample at a time. Each sample is a 2-element tuple, where first element is a <code class="docutils literal notranslate"><span class="pre">(6,</span> <span class="pre">60)</span></code> numpy array and the second is an integer, representing the label.</p>
-<p>A batch of samples add an extra dimension to the data. Thus, in our case, a batch of samples is a 3D tensor, where the first dimension is the batch size (<code class="docutils literal notranslate"><span class="pre">B</span></code>), the second dimension is the number of features, or channels (<code class="docutils literal notranslate"><span class="pre">C</span></code>), and the third dimension is the number of time-steps (<code class="docutils literal notranslate"><span class="pre">T</span></code>). Thus, if the data have the shape <code class="docutils literal notranslate"><span class="pre">(6,</span> <span class="pre">60)</span></code>, a batch of samples will have the shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">6,</span> <span class="pre">60)</span></code>. The same happens to <code class="docutils literal notranslate"><span class="pre">label</span></code>, which gains an extra dimension.</p>
+<p>A batch of samples add an extra dimension to the data. Thus, in our case, a batch of samples would be a 3D tensor, where the first dimension is the batch size (<code class="docutils literal notranslate"><span class="pre">B</span></code>), the second dimension is the number of features, or channels (<code class="docutils literal notranslate"><span class="pre">C</span></code>), and the third dimension is the number of time-steps (<code class="docutils literal notranslate"><span class="pre">T</span></code>). Thus, if the data have the shape <code class="docutils literal notranslate"><span class="pre">(6,</span> <span class="pre">60)</span></code>, a batch of 32 samples will be a tensor with shape <code class="docutils literal notranslate"><span class="pre">(32,</span> <span class="pre">6,</span> <span class="pre">60)</span></code>. The same happens to <code class="docutils literal notranslate"><span class="pre">label</span></code>, which gains an extra dimension, and would be an 1D tensor
+with shape <code class="docutils literal notranslate"><span class="pre">(32,)</span></code>.</p>
 <p>The batching of samples is done using a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object. This object is a Pytorch object that takes a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object and returns batches of samples. The <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object is responsible for shuffling the data, dividing it into batches, and loading the data in parallel. Thus, given a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object, we can easilly create a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object using the <code class="docutils literal notranslate"><span class="pre">torch.utils.data.DataLoader</span></code> class.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -432,18 +436,21 @@ Shape of sample: (6, 60)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;torch.utils.data.dataloader.DataLoader at 0x7f438971a8c0&gt;
+&lt;torch.utils.data.dataloader.DataLoader at 0x7f4dd2cb5960&gt;
 </pre></div></div>
 </div>
-<p>We can fetch a batch of samples from the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object using the <code class="docutils literal notranslate"><span class="pre">__iter__</span></code> method, that is, using a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop. Each iteration returns a batch of samples. In our case, each batch is a 2-element tuple, where the first element is a 3D tensor with shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">C,</span> <span class="pre">T)</span></code>, and the second element is a 1D tensor with shape <code class="docutils literal notranslate"><span class="pre">(B,)</span></code>.</p>
+<p>Datasets implement the <code class="docutils literal notranslate"><span class="pre">__len__</span></code> and <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> methods. However, the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object implements the iterable protocol, that is, it implements the <code class="docutils literal notranslate"><span class="pre">__iter__</span></code> method, which returns an iterator to iterate over the data in batches. Thus, to fetch a batch of samples from the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object, we can use a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop, as we do with any other iterable object in Python, like lists and tuples (<em>e.g.</em> <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">batch</span> <span class="pre">in</span> <span class="pre">dataloader:</span> <span class="pre">...</span></code>). We can also use the <code class="docutils literal notranslate"><span class="pre">next</span></code> function to fetch
+a single batch of samples, such as <code class="docutils literal notranslate"><span class="pre">batch</span> <span class="pre">=</span> <span class="pre">next(iter(dataloader))</span></code>. Let’s fetch a single sample from the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object and check its shape.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>
-    <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">batch</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inputs shape: </span><span class="si">{</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, labels shape: </span><span class="si">{</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">break</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">dataloader</span><span class="p">))</span>
+<span class="c1"># Batch is a tuple with two elements: inputs and labels.</span>
+<span class="c1"># Let&#39;s extract it to two different variables</span>
+<span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">batch</span>
+<span class="c1"># Print the shape of the inputs and labels</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inputs shape: </span><span class="si">{</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, labels shape: </span><span class="si">{</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -456,12 +463,12 @@ Inputs shape: torch.Size([32, 6, 60]), labels shape: torch.Size([32])
 </pre></div></div>
 </div>
 </section>
-<section id="Handling-data-splits-(train,-validation,-and-test)">
-<h2>Handling data splits (train, validation, and test)<a class="headerlink" href="#Handling-data-splits-(train,-validation,-and-test)" title="Link to this heading"></a></h2>
-<p>Usually, we create a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object for the training data, another for the validation data, and another for the test data. A simple way to do this is to create a <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> object, which is a Pytorch Lightning object that is responsible for creating the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects for the training, validation, and test data.</p>
-<p>A <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> object is responsible for splitting the data into training, validation, and test sets, and creating the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects for each set. This object may also be responsible for setting up the data, such as downloading the data from the internet, checking the data, and add the augmentations. This module is used to encapsulate all the data loading and processing logic in a single place, and to make it easy to use the same data processing logic across different
-experiments.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> object must implement three methods: <code class="docutils literal notranslate"><span class="pre">setup</span></code>, <code class="docutils literal notranslate"><span class="pre">train_dataloader</span></code>, and <code class="docutils literal notranslate"><span class="pre">val_dataloader</span></code>. The <code class="docutils literal notranslate"><span class="pre">setup</span></code> is optional, and is responsible for splitting the data into training, validation, and test sets, and the <code class="docutils literal notranslate"><span class="pre">train_dataloader</span></code> and <code class="docutils literal notranslate"><span class="pre">val_dataloader</span></code> methods are responsible for creating the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects for the training and validation sets, respectively.</p>
+<section id="Handling-data-splits-(train,-validation,-and-test)-using-LightningDataModule">
+<h2>Handling data splits (train, validation, and test) using <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code><a class="headerlink" href="#Handling-data-splits-(train,-validation,-and-test)-using-LightningDataModule" title="Link to this heading"></a></h2>
+<p>Usually, we create a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> object for the training data, another for the validation data, and another for the test data. We can encapsulate the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> creation logic in a single place, and make it easy to use the same data processing logic across different experiments. A simple way to do this is to create a <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> object.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> object is responsible for splitting the data into training, validation, and test sets, and creating the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects for each set. This object may also be responsible for setting up the data, such as downloading the data from the internet, checking the data, and add the augmentations.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> object must implement four methods: <code class="docutils literal notranslate"><span class="pre">setup</span></code>, <code class="docutils literal notranslate"><span class="pre">train_dataloader</span></code>, <code class="docutils literal notranslate"><span class="pre">val_dataloader</span></code>, and <code class="docutils literal notranslate"><span class="pre">test_dataloader</span></code>. The <code class="docutils literal notranslate"><span class="pre">setup</span></code> is optional, and is responsible for splitting the data into training, validation, and test sets, and <code class="docutils literal notranslate"><span class="pre">train_dataloader</span></code>, <code class="docutils literal notranslate"><span class="pre">val_dataloader</span></code> and <code class="docutils literal notranslate"><span class="pre">test_dataloader</span></code> methods are responsible for creating the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects for the training, validation and test sets, respectively.</p>
+<p>A data module may be implemented as shown below.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
