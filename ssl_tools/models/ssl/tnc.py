@@ -264,7 +264,7 @@ def build_tnc(
 
     encoder = GRUEncoder(
         hidden_size=gru_hidden_size,
-        in_channel=in_channel,
+        in_channels=in_channel,
         encoding_size=encoding_size,
         num_layers=gru_num_layers,
         dropout=dropout,

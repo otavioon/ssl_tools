@@ -60,7 +60,7 @@ class CPCTrain(LightningSSLTrain):
     def get_pretrain_model(self) -> L.LightningModule:
         model = build_cpc(
             encoding_size=self.encoding_size,
-            in_channel=self.in_channel,
+            in_channels=self.in_channel,
             learning_rate=self.learning_rate,
             window_size=self.window_size,
             n_size=5,
@@ -151,7 +151,7 @@ class CPCTest(LightningTest):
     def get_model(self, load_backbone: str = None) -> L.LightningModule:
         model = build_cpc(
             encoding_size=self.encoding_size,
-            in_channel=self.in_channel,
+            in_channels=self.in_channel,
             window_size=self.window_size,
             n_size=5,
         )
