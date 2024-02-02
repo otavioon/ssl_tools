@@ -20,6 +20,15 @@ class TNCDataset(Dataset):
         """Temporal Neighbourhood Coding (TNC) dataset. This dataset is used
         to pre-train self-supervised models. The dataset obtain close and
         distant samples from a time series.
+        
+        The dataset returns a 3-element tuple with the following elements:
+        1. W_t, a window centered at random time step t, with window_size. It
+            is a numpy array with shape (n_features, window_size).
+        2. X_p, a set of close samples. It is a numpy array with shape
+            (mc_sample_size, n_features, window_size).
+        3. X_n, a set of distant samples. It is a numpy array with shape
+            (mc_sample_size, n_features, window_size).
+        Note that the number of distant samples may be less than mc_sample_size.
 
         Parameters
         ----------

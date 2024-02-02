@@ -4,12 +4,6 @@ import numpy as np
 
 from ssl_tools.utils.configurable import Configurable
 from ssl_tools.models.layers.gru import GRUEncoder
-from .tnc import TNCHead
-
-
-class CPCHead(TNCHead):
-    pass
-
 
 class CPC(L.LightningModule, Configurable):
     """Implements the Contrastive Predictive Coding (CPC) model, as described in
@@ -261,7 +255,7 @@ class CPC(L.LightningModule, Configurable):
 
 def build_cpc(
     encoding_size: int = 150,
-    in_channel: int = 6,
+    in_channels: int = 6,
     gru_hidden_size: int = 100,
     gru_num_layers: int = 1,
     gru_bidirectional: bool = True,
@@ -277,8 +271,7 @@ def build_cpc(
     Parameters
     ----------
     encoding_size : int, optional
-        Size of the encoding (output of the linear layer). This is the size of
-        the representation.
+        Size of the encoded representation (the output of the linear layer).
     in_channel : int, optional
         Number of input features (e.g. 6 for HAR data in MotionSense Dataset)
     gru_hidden_size : int, optional
@@ -309,7 +302,7 @@ def build_cpc(
     """
     encoder = GRUEncoder(
         hidden_size=gru_hidden_size,
-        in_channel=in_channel,
+        in_channels=in_channels,
         encoding_size=encoding_size,
         num_layers=gru_num_layers,
         dropout=dropout,

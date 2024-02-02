@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Dict
 import lightning as L
 import torch
 from torchmetrics import Metric
@@ -13,6 +13,7 @@ class SSLDiscriminator(L.LightningModule):
         learning_rate: float = 1e-3,
         update_backbone: bool = True,
         metrics: Dict[str, Metric] = None,
+        optimizer_cls: torch.optim.Optimizer = None,
     ):
         """A generic SSL Discriminator model. It takes a backbone and a head
         and trains them jointly (or not, depending on the ``update_backbone``
@@ -50,6 +51,7 @@ class SSLDiscriminator(L.LightningModule):
         self.learning_rate = learning_rate
         self.update_backbone = update_backbone
         self.metrics = metrics
+        self.optimizer_cls = optimizer_cls or torch.optim.Adam
 
     def _loss_func(self, y_hat: torch.Tensor, y: torch.Tensor):
         """Calculates the loss function.
@@ -108,6 +110,10 @@ class SSLDiscriminator(L.LightningModule):
             encodings = self.backbone.forward(*x)
         else:
             encodings = self.backbone.forward(x)
+
+        if len(encodings.shape) == 1:
+            encodings = encodings.unsqueeze(0)
+
         predictions = self.head.forward(encodings)
         return predictions
 
@@ -241,7 +247,7 @@ class SSLDiscriminator(L.LightningModule):
             The predictions of the model
         """
         x, y = batch
-        predictions = self.forwardf(x)
+        predictions = self.forward(x)
         return predictions
 
     def _freeze(self, model):
@@ -262,9 +268,9 @@ class SSLDiscriminator(L.LightningModule):
         only update the parameters of the head.
         """
         if self.update_backbone:
-            return torch.optim.Adam(self.parameters(), lr=self.learning_rate)
+            return self.optimizer_cls(self.parameters(), lr=self.learning_rate)
         else:
             self._freeze(self.backbone)
-            return torch.optim.Adam(
+            return self.optimizer_cls(
                 self.head.parameters(), lr=self.learning_rate
             )

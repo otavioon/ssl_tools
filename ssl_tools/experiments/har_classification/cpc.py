@@ -1,16 +1,9 @@
 #!/usr/bin/env python
 
-# TODO: A way of removing the need to add the path to the root of
-# the project
-import sys
-from jsonargparse import CLI
 import lightning as L
 import torch
 
-sys.path.append("../../../")
-
-
-from ssl_tools.experiments import SSLTrain, SSLTest
+from ssl_tools.experiments import LightningSSLTrain, LightningTest, auto_main
 from ssl_tools.models.ssl.cpc import build_cpc
 from ssl_tools.data.data_modules import (
     MultiModalHARSeriesDataModule,
@@ -18,10 +11,10 @@ from ssl_tools.data.data_modules import (
 )
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
-from ssl_tools.models.ssl.cpc import CPCHead
+from ssl_tools.models.ssl.modules.heads import CPCPredictionHead
 
 
-class CPCTrain(SSLTrain):
+class CPCTrain(LightningSSLTrain):
     _MODEL_NAME = "CPC"
 
     def __init__(
@@ -64,17 +57,17 @@ class CPCTrain(SSLTrain):
         self.num_classes = num_classes
         self.update_backbone = update_backbone
 
-    def _get_pretrain_model(self) -> L.LightningModule:
+    def get_pretrain_model(self) -> L.LightningModule:
         model = build_cpc(
             encoding_size=self.encoding_size,
-            in_channel=self.in_channel,
+            in_channels=self.in_channel,
             learning_rate=self.learning_rate,
             window_size=self.window_size,
             n_size=5,
         )
         return model
 
-    def _get_pretrain_data_module(self) -> L.LightningDataModule:
+    def get_pretrain_data_module(self) -> L.LightningDataModule:
         data_module = UserActivityFolderDataModule(
             data_path=self.data,
             batch_size=self.batch_size,
@@ -83,17 +76,17 @@ class CPCTrain(SSLTrain):
         )
         return data_module
 
-    def _get_finetune_model(
+    def get_finetune_model(
         self, load_backbone: str = None
     ) -> L.LightningModule:
-        model = self._get_pretrain_model()
+        model = self.get_pretrain_model()
 
         if load_backbone is not None:
-            self._load_model(model, load_backbone)
+            self.load_checkpoint(model, load_backbone)
 
-        classifier = CPCHead(
-            input_size=self.encoding_size,
-            n_classes=self.num_classes,
+        classifier = CPCPredictionHead(
+            input_dim=self.encoding_size,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -107,18 +100,19 @@ class CPCTrain(SSLTrain):
         )
         return model
 
-    def _get_finetune_data_module(self) -> L.LightningDataModule:
+    def get_finetune_data_module(self) -> L.LightningDataModule:
         data_module = MultiModalHARSeriesDataModule(
             data_path=self.data,
             batch_size=self.batch_size,
             label="standard activity code",
             features_as_channels=True,
+            num_workers=self.num_workers,
         )
 
         return data_module
 
 
-class CPCTest(SSLTest):
+class CPCTest(LightningTest):
     _MODEL_NAME = "CPC"
 
     def __init__(
@@ -154,17 +148,20 @@ class CPCTest(SSLTest):
         self.window_size = window_size
         self.num_classes = num_classes
 
-    def _get_test_model(self, load_backbone: str = None) -> L.LightningModule:
+    def get_model(self, load_backbone: str = None) -> L.LightningModule:
         model = build_cpc(
             encoding_size=self.encoding_size,
-            in_channel=self.in_channel,
+            in_channels=self.in_channel,
             window_size=self.window_size,
             n_size=5,
         )
 
-        classifier = CPCHead(
-            input_size=self.encoding_size,
-            n_classes=self.num_classes,
+        if load_backbone is not None:
+            self.load_checkpoint(model, load_backbone)
+
+        classifier = CPCPredictionHead(
+            input_dim=self.encoding_size,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -176,23 +173,21 @@ class CPCTest(SSLTest):
         )
         return model
 
-    def _get_test_data_module(self) -> L.LightningDataModule:
+    def get_data_module(self) -> L.LightningDataModule:
         data_module = MultiModalHARSeriesDataModule(
             data_path=self.data,
             batch_size=self.batch_size,
             label="standard activity code",
             features_as_channels=True,
+            num_workers=self.num_workers,
         )
+
         return data_module
 
 
-def main():
-    components = {
+if __name__ == "__main__":
+    options = {
         "fit": CPCTrain,
         "test": CPCTest,
     }
-    CLI(components=components, as_positional=False)()
-
-
-if __name__ == "__main__":
-    main()
+    auto_main(options)

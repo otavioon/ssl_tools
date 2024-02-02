@@ -45,63 +45,7 @@ class TNCDiscriminator(torch.nn.Module):
         Predict the probability of the two inputs belonging to the same
         neighbourhood.
         """
-        return self.model(x).view((-1,))
-
-
-class TNCHead(torch.nn.Module):
-    def __init__(
-        self,
-        input_size: int = 10,
-        hidden_size1=64,
-        hidden_size2=64,
-        n_classes=6,
-        dropout_prob=0,
-    ):
-        """The head of the TNC model. A discrminator one of the ``num_classes``.
-        It is composed by:
-            - Linear(``input_size``, ``hidden_size1``)
-            - ReLU
-            - Linear(``hidden_size1``, ``hidden_size2``)
-            - ReLU
-            - Dropout(``dropout_prob``)
-            - Linear(``hidden_size2``, ``n_classes``)
-            - Softmax(dim=1)
-        
-
-        Parameters
-        ----------
-        input_size : int, optional
-            _description_, by default 10
-        hidden_size1 : int, optional
-            _description_, by default 64
-        hidden_size2 : int, optional
-            _description_, by default 64
-        n_classes : int, optional
-            _description_, by default 6
-        dropout_prob : int, optional
-            _description_, by default 0
-        """
-        super().__init__()
-        self.layer1 = torch.nn.Sequential(
-            torch.nn.Linear(input_size, hidden_size1), torch.nn.ReLU()
-        )
-        self.layer2 = torch.nn.Sequential(
-            torch.nn.Linear(hidden_size1, hidden_size2), torch.nn.ReLU()
-        )
-        self.dropout = torch.nn.Dropout(p=dropout_prob)
-        self.output_layer = torch.nn.Sequential(
-            torch.nn.Linear(hidden_size2, n_classes), torch.nn.Softmax(dim=1)
-        )
-
-    def forward(self, x: torch.Tensor):
-        # If x is a single sample, we need to add a new dimension to it
-        if len(x.shape) == 1:
-            x = x.unsqueeze(0)
-        out = self.layer1(x)
-        out = self.layer2(out)
-        out = self.dropout(out)
-        out = self.output_layer(out)
-        return out
+        return self.model(x)
 
 
 class TNC(L.LightningModule, Configurable):
@@ -217,10 +161,10 @@ class TNC(L.LightningModule, Configurable):
         # In fact, we try to discriminate if the samples are neighbors or not.
         # Positive samples (1/2 original, 1/2 positive ones)
         z_tp = torch.cat([z_t, z_p], -1)
-        d_p = self.discriminator(z_tp)
+        d_p = self.discriminator(z_tp).view((-1, ))
         # Negative samples (1/2 original, 1/2 negative ones)
         z_tn = torch.cat([z_t, z_n], -1)
-        d_n = self.discriminator(z_tn)
+        d_n = self.discriminator(z_tn).view((-1, ))
 
         # Compute loss positive loss (positive pairs vs. neighbours)
         p_loss = self.loss_function(d_p, neighbors)
@@ -320,7 +264,7 @@ def build_tnc(
 
     encoder = GRUEncoder(
         hidden_size=gru_hidden_size,
-        in_channel=in_channel,
+        in_channels=in_channel,
         encoding_size=encoding_size,
         num_layers=gru_num_layers,
         dropout=dropout,

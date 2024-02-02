@@ -18,19 +18,31 @@ requires-python = ">=3.8"
 version = "0.0.1-dev"
 
 dependencies = [
-    "torch",
+    "ipywidgets",
+    "jsonargparse[all]",
+    "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
+    "lightly",
     "lightning",
+<<<<<<< HEAD
     "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
     "scipy",
     "plotly",
+=======
+>>>>>>> refs/remotes/origin/main
     "numpy",
     "pandas",
+    "plotly",
     "PyYAML",
+    "rich",
+    "scipy",
     "statsmodels",
+    "torch",
+    "zarr",
 ]
 
 [project.optional-dependencies]
 dev = ["mock", "pytest", "black", "isort"]
+docs = ["sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "sphinx-argparse", "sphinx", "sphinx-autoapi", "nbsphinx", "pandoc", "Ipython"]
 
 [project.urls]
 
@@ -38,5 +50,9 @@ dev = ["mock", "pytest", "black", "isort"]
 "Homepage" = "https://github.com/otavioon/ssl_tools"
 
 [tool.setuptools]
+<<<<<<< HEAD
 py-modules = ["ssl_tools"]
 
+=======
+py-modules = ["ssl_tools"]
+>>>>>>> refs/remotes/origin/main

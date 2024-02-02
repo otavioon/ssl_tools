@@ -8,7 +8,7 @@ cd ..
     --batch_size 128 \
     --accelerator gpu \
     --devices 1 \
-    --load_backbone logs/pretrain/CPC/2023-12-06_19-26-10/checkpoints/last.ckpt \
+    --load_backbone logs/pretrain/CPC/2024-01-31_21-14-31/checkpoints/last.ckpt \
     --training_mode finetune \
     --window_size 60 \
     --num_classes 6 \

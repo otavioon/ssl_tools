@@ -1,23 +1,17 @@
 #!/usr/bin/env python
 
-# TODO: A way of removing the need to add the path to the root of
-# the project
-import sys
-from jsonargparse import CLI
 import lightning as L
 import torch
 
-sys.path.append("../../../")
-
-
-from ssl_tools.experiments import SSLTrain, SSLTest
-from ssl_tools.models.ssl.tfc import build_tfc_transformer, TFCHead
-from ssl_tools.data.data_modules import TFCDataModule
+from ssl_tools.experiments import LightningSSLTrain, LightningTest, auto_main
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
+from ssl_tools.models.ssl.modules.heads import TFCPredictionHead
+from ssl_tools.models.ssl.tfc import build_tfc_transformer
+from ssl_tools.data.data_modules import TFCDataModule
 
 
-class TFCTrain(SSLTrain):
+class TFCTrain(LightningSSLTrain):
     _MODEL_NAME = "TFC"
 
     def __init__(
@@ -87,7 +81,7 @@ class TFCTrain(SSLTrain):
         self.num_classes = num_classes
         self.update_backbone = update_backbone
 
-    def _get_pretrain_model(self) -> L.LightningModule:
+    def get_pretrain_model(self) -> L.LightningModule:
         model = build_tfc_transformer(
             encoding_size=self.encoding_size,
             in_channels=self.in_channels,
@@ -98,7 +92,7 @@ class TFCTrain(SSLTrain):
         )
         return model
 
-    def _get_pretrain_data_module(self) -> L.LightningDataModule:
+    def get_pretrain_data_module(self) -> L.LightningDataModule:
         data_module = TFCDataModule(
             self.data,
             batch_size=self.batch_size,
@@ -111,17 +105,17 @@ class TFCTrain(SSLTrain):
         )
         return data_module
 
-    def _get_finetune_model(
+    def get_finetune_model(
         self, load_backbone: str = None
     ) -> L.LightningModule:
-        model = self._get_pretrain_model()
+        model = self.get_pretrain_model()
 
         if load_backbone is not None:
-            self._load_model(model, load_backbone)
+            self.load_checkpoint(model, load_backbone)
 
-        classifier = TFCHead(
-            input_size=2 * self.encoding_size,
-            num_classes=self.num_classes,
+        classifier = TFCPredictionHead(
+            input_dim=2 * self.encoding_size,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -135,7 +129,7 @@ class TFCTrain(SSLTrain):
         )
         return model
 
-    def _get_finetune_data_module(self) -> L.LightningDataModule:
+    def get_finetune_data_module(self) -> L.LightningDataModule:
         data_module = TFCDataModule(
             self.data,
             batch_size=self.batch_size,
@@ -149,7 +143,7 @@ class TFCTrain(SSLTrain):
         return data_module
 
 
-class TFCTest(SSLTest):
+class TFCTest(LightningTest):
     _MODEL_NAME = "TFC"
 
     def __init__(
@@ -215,7 +209,7 @@ class TFCTest(SSLTest):
         self.features_as_channels = features_as_channels
         self.num_classes = num_classes
 
-    def _get_test_model(self) -> L.LightningModule:
+    def get_model(self) -> L.LightningModule:
         model = build_tfc_transformer(
             encoding_size=self.encoding_size,
             in_channels=self.in_channels,
@@ -224,9 +218,9 @@ class TFCTest(SSLTest):
             temperature=self.temperature,
         )
 
-        classifier = TFCHead(
-            input_size=2 * self.encoding_size,
-            num_classes=self.num_classes,
+        classifier = TFCPredictionHead(
+            input_dim=2 * self.encoding_size,
+            output_dim=self.num_classes,
         )
 
         task = "multiclass" if self.num_classes > 2 else "binary"
@@ -238,7 +232,7 @@ class TFCTest(SSLTest):
         )
         return model
 
-    def _get_test_data_module(self) -> L.LightningDataModule:
+    def get_data_module(self) -> L.LightningDataModule:
         data_module = TFCDataModule(
             self.data,
             batch_size=self.batch_size,
@@ -251,13 +245,9 @@ class TFCTest(SSLTest):
         return data_module
 
 
-def main():
-    components = {
+if __name__ == "__main__":
+    options = {
         "fit": TFCTrain,
         "test": TFCTest,
     }
-    CLI(components=components, as_positional=False)()
-
-
-if __name__ == "__main__":
-    main()
+    auto_main(options)
