@@ -1,4 +1,4 @@
-name: ssl_tools
+name: ssl_tools documentation
 on:
   push:
     branches:
