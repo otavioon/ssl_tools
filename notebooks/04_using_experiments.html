@@ -140,7 +140,11 @@ callbacks and loggers. Thus, it allows the user to focus on the model and data m
 </section>
 <section id="The-LightningSSLTrain-class">
 <h3>The <code class="docutils literal notranslate"><span class="pre">LightningSSLTrain</span></code> class<a class="headerlink" href="#The-LightningSSLTrain-class" title="Link to this heading"></a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">LightningTrain</span></code> class allow to train arbitrary models. The <code class="docutils literal notranslate"><span class="pre">LightningSSLTrain</span></code> class is a derived class that is used to train models using self-supervised learning. It adds 4 new methods: - <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code>: the user must return the model and data module used to pretrain the model. - <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_finetune_data_module</span></code>: the user must return the model and data module used to finetune the model.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningTrain</span></code> class allow to train arbitrary models. The <code class="docutils literal notranslate"><span class="pre">LightningSSLTrain</span></code> class is a derived class that is used to train models using self-supervised learning. It adds 4 new methods:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code>: the user must return the model and data module used to pretrain the model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_finetune_data_module</span></code>: the user must return the model and data module used to finetune the model.</p></li>
+</ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">training_mode</span></code> variable is used to indicate if the model is in pretrain or finetune mode. In fact, the <code class="docutils literal notranslate"><span class="pre">get_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_data_module</span></code> methods will call the <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code> methods if <code class="docutils literal notranslate"><span class="pre">training_mode</span></code> is <code class="docutils literal notranslate"><span class="pre">pretrain</span></code>, and the <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_finetune_data_module</span></code> methods if <code class="docutils literal notranslate"><span class="pre">training_mode</span></code> is <code class="docutils literal notranslate"><span class="pre">finetune</span></code>.</p>
 <p>One important thing to note is about <code class="docutils literal notranslate"><span class="pre">load</span></code> parameter. If it is provided, the <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> method will load the checkpoint for the model, in order to resume the training. The <code class="docutils literal notranslate"><span class="pre">get_finetune_model</span></code> receives an additional parameter, the <code class="docutils literal notranslate"><span class="pre">load_backbone</span></code> parameter. After the backbone is loaded, the <code class="docutils literal notranslate"><span class="pre">load</span></code> parameter is used to resume the finetuning, that is, load the checkpoint for the finetune model (<code class="docutils literal notranslate"><span class="pre">SSLDiscriminator</span></code>).</p>
 </section>
@@ -154,8 +158,16 @@ module.</p>
 <h3>Experiment of Pretraining CPC<a class="headerlink" href="#Experiment-of-Pretraining-CPC" title="Link to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class will encapsuate the default code for creating models and data modules from previous notebooks into the <code class="docutils literal notranslate"><span class="pre">get_pretrain_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_pretrain_data_module</span></code> methods. Thus, we just need to pass the required parameters to the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class and call the <code class="docutils literal notranslate"><span class="pre">execute</span></code> method to run the experiment. As <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> is a derived class, we can pass the parameters from all parent classes (<code class="docutils literal notranslate"><span class="pre">epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">accelerator</span></code>, <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, <em>etc.</em>), as well as the parameters from the
 <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class (<code class="docutils literal notranslate"><span class="pre">window_size</span></code>, <code class="docutils literal notranslate"><span class="pre">num_classes</span></code>, <em>etc.</em>) in the class constructor.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> includes parameters to create the model as well as the data module. These parameters include: - <code class="docutils literal notranslate"><span class="pre">data</span></code>: the path to the dataset folder. For pretrain, the data must be the path to a dataset where the samples are the whole time-series of an user. For finetune, the data must be the path to a dataset where the samples are the windows of the time-series, as in previous notebooks. - <code class="docutils literal notranslate"><span class="pre">encoding_size</span></code>: the size of the latent representation of the CPC model. - <code class="docutils literal notranslate"><span class="pre">in_channel</span></code>: the
-number of features in the input data. - <code class="docutils literal notranslate"><span class="pre">window_size</span></code>: size of the input windows (<code class="docutils literal notranslate"><span class="pre">X_t</span></code>) to be fed to the encoder. - <code class="docutils literal notranslate"><span class="pre">pad_length</span></code>: boolean indicating if the input windows should be padded to the <code class="docutils literal notranslate"><span class="pre">window_size</span></code> or not. - <code class="docutils literal notranslate"><span class="pre">num_classes</span></code>: number of classes in the dataset. - <code class="docutils literal notranslate"><span class="pre">update_backbone</span></code>: boolean indicating if the backbone should be updated during finetuning (only useful for fine-tuning process).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> includes parameters to create the model as well as the data module. These parameters include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: the path to the dataset folder. For pretrain, the data must be the path to a dataset where the samples are the whole time-series of an user. For finetune, the data must be the path to a dataset where the samples are the windows of the time-series, as in previous notebooks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">encoding_size</span></code>: the size of the latent representation of the CPC model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">in_channel</span></code>: the number of features in the input data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">window_size</span></code>: size of the input windows (<code class="docutils literal notranslate"><span class="pre">X_t</span></code>) to be fed to the encoder.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pad_length</span></code>: boolean indicating if the input windows should be padded to the <code class="docutils literal notranslate"><span class="pre">window_size</span></code> or not.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_classes</span></code>: number of classes in the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_backbone</span></code>: boolean indicating if the backbone should be updated during finetuning (only useful for fine-tuning process).</p></li>
+</ul>
 <p>Only the <code class="docutils literal notranslate"><span class="pre">data</span></code> parameter is required, the others have default values. Please check the documentation of the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class for more details.</p>
 <p>Let’s create the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class and run the pretraining experiment.</p>
 <div class="nbinput docutils container">
@@ -194,7 +206,7 @@ number of features in the input data. - <code class="docutils literal notranslat
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-LightningExperiment(experiment_dir=logs/pretrain/CPC/2024-02-01_22-29-11, model=CPC, run_id=2024-02-01_22-29-11, finished=False)
+LightningExperiment(experiment_dir=logs/pretrain/CPC/2024-02-01_23-52-39, model=CPC, run_id=2024-02-01_23-52-39, finished=False)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -211,24 +223,8 @@ LightningExperiment(experiment_dir=logs/pretrain/CPC/2024-02-01_22-29-11, model=
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/pretrain/CPC/2024-02-01_22-29-11 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
+/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/pretrain/CPC/2024-02-01_23-52-39 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
 GPU available: True (cuda), used: True
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Setting up experiment: CPC...
-Running experiment: CPC...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
 TPU available: False, using: 0 TPU cores
 IPU available: False, using: 0 IPUs
 HPU available: False, using: 0 HPUs
@@ -241,8 +237,10 @@ HPU available: False, using: 0 HPUs
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+Setting up experiment: CPC...
+Running experiment: CPC...
 Training will start
-        Experiment path: logs/pretrain/CPC/2024-02-01_22-29-11
+        Experiment path: logs/pretrain/CPC/2024-02-01_23-52-39
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -281,7 +279,7 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a0c0cc6d18374062a4e91d2d0c6bc11c", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d3d79b4d1870487a9225f9f9afdc262c", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -295,7 +293,7 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">--&gt; Overall fit time: 20.050 seconds
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">--&gt; Overall fit time: 19.928 seconds
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -317,7 +315,7 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Training finished
-Last checkpoint saved at: logs/pretrain/CPC/2024-02-01_22-29-11/checkpoints/last.ckpt
+Last checkpoint saved at: logs/pretrain/CPC/2024-02-01_23-52-39/checkpoints/last.ckpt
 Teardown experiment: CPC...
 </pre></div></div>
 </div>
@@ -352,7 +350,7 @@ times. Also, the <code class="docutils literal notranslate"><span class="pre">cp
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-PosixPath(&#39;logs/pretrain/CPC/2024-02-01_22-29-11/checkpoints/last.ckpt&#39;)
+PosixPath(&#39;logs/pretrain/CPC/2024-02-01_23-52-39/checkpoints/last.ckpt&#39;)
 </pre></div></div>
 </div>
 </section>
@@ -397,7 +395,7 @@ previous notebooks.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-LightningExperiment(experiment_dir=logs/finetune/CPC/2024-02-01_22-38-32, model=CPC, run_id=2024-02-01_22-38-32, finished=False)
+LightningExperiment(experiment_dir=logs/finetune/CPC/2024-02-02_00-03-12, model=CPC, run_id=2024-02-02_00-03-12, finished=False)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -414,7 +412,7 @@ LightningExperiment(experiment_dir=logs/finetune/CPC/2024-02-01_22-38-32, model=
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/finetune/CPC/2024-02-01_22-38-32 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
+/usr/local/lib/python3.10/dist-packages/lightning/fabric/loggers/csv_logs.py:198: Experiment logs directory logs/finetune/CPC/2024-02-02_00-03-12 exists and is not empty. Previous log files in this directory will be deleted when the new ones are saved!
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
 IPU available: False, using: 0 IPUs
@@ -430,10 +428,10 @@ HPU available: False, using: 0 HPUs
 <div class="highlight"><pre>
 Setting up experiment: CPC...
 Running experiment: CPC...
-Loading model from: logs/pretrain/CPC/2024-02-01_22-29-11/checkpoints/last.ckpt...
+Loading model from: logs/pretrain/CPC/2024-02-01_23-52-39/checkpoints/last.ckpt...
 Model loaded successfully
 Training will start
-        Experiment path: logs/finetune/CPC/2024-02-01_22-38-32
+        Experiment path: logs/finetune/CPC/2024-02-02_00-03-12
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -471,56 +469,18 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d4283777cdd14ff1ba3978d107c1d23a", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f478640308374e5894df3302aa127e92", "version_major": 2, "version_minor": 0}</script></div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/usr/local/lib/python3.10/dist-packages/lightning/pytorch/loops/fit_loop.py:293: The number of training batches (11) is smaller than the logging interval Trainer(log_every_n_steps=50). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
 </pre></div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-`Trainer.fit` stopped: `max_epochs=10` reached.
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">--&gt; Overall fit time: 9.757 seconds
-</pre></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
-</pre></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Training finished
-Last checkpoint saved at: logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt
-Teardown experiment: CPC...
-</pre></div></div>
-</div>
 <p>We will pick the last checkpoint from the fine-tuning process to evaluate the model.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fine_tuned_checkpoint_path</span> <span class="o">=</span> <span class="n">cpc_experiment</span><span class="o">.</span><span class="n">checkpoint_dir</span> <span class="o">/</span> <span class="s2">&quot;last.ckpt&quot;</span>
@@ -529,8 +489,7 @@ Teardown experiment: CPC...
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -544,7 +503,7 @@ PosixPath(&#39;logs/finetune/CPC/2024-02-01_22-38-32/checkpoints/last.ckpt&#39;)
 <p>The signature of the <code class="docutils literal notranslate"><span class="pre">CPCTest</span></code> class is very similar to the <code class="docutils literal notranslate"><span class="pre">CPCTrain</span></code> class. Also, we will use the same data module used in the finetuning process. However, differently from the train process the test process uses the <code class="docutils literal notranslate"><span class="pre">.test</span></code> method in the trainer and not the <code class="docutils literal notranslate"><span class="pre">.fit</span></code> method. Also, the <code class="docutils literal notranslate"><span class="pre">load</span></code> parameter is used to load the checkpoint obtained in the finetuning process (that load the weights from <code class="docutils literal notranslate"><span class="pre">SSLDiscriminator</span></code>, backbone and prediction haad).</p>
 <p>Let’s create experiments to test the CPC model, using the test set from different datasets besides KuHAR.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -749,8 +708,11 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
 </section>
 <section id="Other-advantages-of-using-LightningExperiment">
 <h2>Other advantages of using <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code><a class="headerlink" href="#Other-advantages-of-using-LightningExperiment" title="Link to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class also provides other advantages, such as: - Automatically generate CLI applications for the experiments, using the <code class="docutils literal notranslate"><span class="pre">jsonargparse</span></code> library. In fact, every parameter in the class constructor is automatically converted to a command line argument. This allows the user to run the experiment from the command line, using the same parameters as in the class constructor. - Default <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code> files are created, and the hyperparameters are logged
-in the <code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code> file. The <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code> file contains the metrics logged during training, and can be used to analyze the performance of the model.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class also provides other advantages, such as:</p>
+<ul class="simple">
+<li><p>Automatically generate CLI applications for the experiments, using the <code class="docutils literal notranslate"><span class="pre">jsonargparse</span></code> library. In fact, every parameter in the class constructor is automatically converted to a command line argument. This allows the user to run the experiment from the command line, using the same parameters as in the class constructor.</p></li>
+<li><p>Default <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code> files are created, and the hyperparameters are logged in the <code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code> file. The <code class="docutils literal notranslate"><span class="pre">metrics.csv</span></code> file contains the metrics logged during training, and can be used to analyze the performance of the model.</p></li>
+</ul>
 </section>
 </section>
 

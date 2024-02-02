@@ -17,6 +17,7 @@
     "The returned type of the `__getitem__` method is not specified, but it is usually a 2-element tuple with the input and the target. The input is the data that will be used to make the predictions, and the target is the data that the model will try to predict.\n",
     "\n",
     "For now, this framework provide implementations for the `Dataset` objects for time-series data, where data is organized in two different ways:\n",
+    "\n",
     "- A directory with several CSV files, where each file contains a time-series. Each row in a CSV file is a time-step, each column is a feature, and the whole file is a time-series. This is handled by the `SeriesFolderCSVDataset` class.\n",
     "- A single CSV file with a windowed time-series. Each row in the CSV file is a window, and each column is a feature. This is handled by the `MultiModalSeriesCSVDataset` class.\n",
     "\n",
@@ -70,6 +71,7 @@
     "Note that, each feature (column) represent a dimension of the time-series, while the rows represent the time-steps.\n",
     "\n",
     "Thus, the `SeriesFolderCSVDataset` class minimally requires:\n",
+    "\n",
     "- `data_path`: the path to the directory containing the CSV files\n",
     "- `features`: a list of strings with the names of the features columns, e.g. `['accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z']`\n",
     "- `label`: a string with the name of the label column, e.g. `'class'`"
@@ -121,6 +123,7 @@
    "source": [
     "We can get the number of samples in the dataset with the `len` function, and we can retrive a sample with the `__getitem__` method, that is, using `[]`, such as `dataset[0]`.\n",
     "The dataset may return:\n",
+    "\n",
     "- A 2-element tuple, where the first element is a 2D numpy array with shape `(num_features, time_steps)`, and the second element is a 1D tensor with shape `(time_steps,)`.\n",
     "- A 2D numpy array with shape `(num_features, time_steps)`, if `label` is `None`, at the time of the dataset object's creation.\n",
     "\n",
@@ -226,6 +229,7 @@
     "Note that, each feature (column) represent a dimension of the time-series, while the rows represent the samples.\n",
     "\n",
     "The `MultiModalSeriesCSVDataset` class minimally requires:\n",
+    "\n",
     "- `data_path`: the path to the CSV file\n",
     "- `feature_prefixes`: a list of strings with the prefixes of the feature columns, e.g. `['accel-x', 'accel-y']`. The class will look for columns with these prefixes and will consider them as features of a modality.\n",
     "- `label`: a string with the name of the label column, e.g. `'class'`\n",
@@ -273,6 +277,7 @@
    "source": [
     "We can get the number of samples in the dataset with the `len` function, and we can retrive a sample with the `__getitem__` method, that is, using `[]`, such as `dataset[0]`.\n",
     "The dataset may return:\n",
+    "\n",
     "- A 2-element tuple, where the first element is a 2D numpy array with shape `(num_features, time_steps)`, and the second element is a 1D tensor with shape `(time_steps,)`.\n",
     "- A 2D numpy array with shape `(num_features, time_steps)`, if `label` is `None`, at the time of the dataset object's creation.\n",
     "\n",
@@ -460,6 +465,7 @@
     "## Summary\n",
     "\n",
     "First, we need to check which is our dataset and how the data is organized.\n",
+    "\n",
     "- If data is organized in a directory with several CSV files, we use the `SeriesFolderCSVDataset` class. \n",
     "- If data is organized in a single CSV file with a windowed time-series, we use the `MultiModalSeriesCSVDataset` class.\n",
     "\n",

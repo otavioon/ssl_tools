@@ -55,6 +55,7 @@
     "The `train_dataloader` method will use `train.csv`, `val_dataloader` will use `validation.csv` and `test_dataloader` will use `test.csv`.\n",
     "\n",
     "To create a `MultiModalHARSeriesDataModule`, we must pass:\n",
+    "\n",
     "- `data_path`: the path to the `KuHar` folder;\n",
     "- `feature_prefixes`: the prefixes of the features in the CSV files. In this case, we have `accel-x`, `accel-y`, `accel-z`, `gyro-x`, `gyro-y` and `gyro-z`;\n",
     "- `batch_size`: the batch size for the data loaders; and\n",
