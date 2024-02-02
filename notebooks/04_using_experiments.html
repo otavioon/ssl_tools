@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using Experiments &mdash; SSLTools  documentation</title>
+  <title>4. Using Experiments &mdash; SSLTools  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
@@ -56,7 +56,7 @@
 <li class="toctree-l2"><a class="reference internal" href="01_structuring_input.html">1. Structuring the input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="02_training_model.html">2. Training a Pytorch Lighning model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03_training_ssl_model.html">3. Training a self-supervised model (CPC)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Using Experiments</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4. Using Experiments</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Experiment-Structure">Experiment Structure</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#The-Experiment-class">The <code class="docutils literal notranslate"><span class="pre">Experiment</span></code> class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#The-LightningExperiment-class">The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class</a></li>
@@ -95,7 +95,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
-      <li class="breadcrumb-item active">Using Experiments</li>
+      <li class="breadcrumb-item active">4. Using Experiments</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/notebooks/04_using_experiments.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -105,8 +105,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="Using-Experiments">
-<h1>Using Experiments<a class="headerlink" href="#Using-Experiments" title="Link to this heading"></a></h1>
+  <section id="4.-Using-Experiments">
+<h1>4. Using Experiments<a class="headerlink" href="#4.-Using-Experiments" title="Link to this heading"></a></h1>
 <p>Although the process of training and evaluating models becomes easier due to the abstractions and facilities provided by this framework and Pytorch Lightning, we also standarize the way we conduct experiments, in order to allow for a more systematic and organized approach to the development of models.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class aims to standartize the way we conduct experiments, including: default callacks and loggers, the directory structure for the logs and checkpoints, logging of hyperparameters, and the way we handle the training and evaluation of models and data modules.</p>
 <p>In this notebook, we will demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">LightningExperiment</span></code> class to conduct experiments in a systematic and organized way.</p>
@@ -744,14 +744,6 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
 </div>
 <div class="output_area docutils container">
 <script type="application/vnd.jupyter.widget-view+json">{"model_id": "bc9753a4e8d549daad98bc8a70185c97", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>

@@ -4,7 +4,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Using Experiments\n",
+    "# 4. Using Experiments\n",
     "\n",
     "Although the process of training and evaluating models becomes easier due to the abstractions and facilities provided by this framework and Pytorch Lightning, we also standarize the way we conduct experiments, in order to allow for a more systematic and organized approach to the development of models.\n",
     "\n",
@@ -891,13 +891,6 @@
     "    results[dataset] = cpc_experiment.execute()\n",
     "    print(f\"Test on dataset {dataset} finished!\")"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
   },
   {
    "cell_type": "markdown",
