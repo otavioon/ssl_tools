@@ -67,11 +67,11 @@ def get_parser(commands: Dict[str, Experiment]):
     return parser
 
 
-def auto_main(commands: Dict[str, Experiment]):
+def auto_main(commands: Dict[str, Experiment], print_args: bool = False):
     parser = get_parser(commands)
     args = parser.parse_args()
-    # print(args)
-
+    if print_args:
+        print(args)
     experiment = commands[args.subcommand](**args[args.subcommand])
     experiment.execute()
 
