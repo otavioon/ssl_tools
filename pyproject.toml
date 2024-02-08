@@ -23,12 +23,6 @@ dependencies = [
     "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
     "lightly",
     "lightning",
-<<<<<<< HEAD
-    "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
-    "scipy",
-    "plotly",
-=======
->>>>>>> refs/remotes/origin/main
     "numpy",
     "pandas",
     "plotly",
@@ -50,9 +44,4 @@ docs = ["sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "sphinx-argpar
 "Homepage" = "https://github.com/otavioon/ssl_tools"
 
 [tool.setuptools]
-<<<<<<< HEAD
 py-modules = ["ssl_tools"]
-
-=======
-py-modules = ["ssl_tools"]
->>>>>>> refs/remotes/origin/main
