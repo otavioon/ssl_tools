@@ -190,59 +190,59 @@ class Simple2DConvNetwork(SimpleClassificationNet):
         )
 
 
-def main():
-    from torch.utils.data import DataLoader
+# def main():
+#     from torch.utils.data import DataLoader
 
-    class RandomDataset:
-        def __init__(
-            self,
-            num_samples: int = 64,
-            num_classes: int = 6,
-            input_shape: tuple = (6, 60),
-        ):
-            self.num_samples = num_samples
-            self.num_classes = num_classes
-            self.input_shape = input_shape
+#     class RandomDataset:
+#         def __init__(
+#             self,
+#             num_samples: int = 64,
+#             num_classes: int = 6,
+#             input_shape: tuple = (6, 60),
+#         ):
+#             self.num_samples = num_samples
+#             self.num_classes = num_classes
+#             self.input_shape = input_shape
 
-        def __len__(self):
-            return self.num_samples
+#         def __len__(self):
+#             return self.num_samples
 
-        def __getitem__(self, idx):
-            return (
-                torch.randn(*self.input_shape),
-                torch.randint(0, self.num_classes, (1,)).item(),
-            )
+#         def __getitem__(self, idx):
+#             return (
+#                 torch.randn(*self.input_shape),
+#                 torch.randint(0, self.num_classes, (1,)).item(),
+#             )
 
-    class RandomDataModule(L.LightningDataModule):
-        def __init__(
-            self, num_samples, num_classes, input_shape, batch_size: int = 1
-        ):
-            super().__init__()
-            self.num_samples = num_samples
-            self.num_classes = num_classes
-            self.input_shape = input_shape
-            self.batch_size = batch_size
+#     class RandomDataModule(L.LightningDataModule):
+#         def __init__(
+#             self, num_samples, num_classes, input_shape, batch_size: int = 1
+#         ):
+#             super().__init__()
+#             self.num_samples = num_samples
+#             self.num_classes = num_classes
+#             self.input_shape = input_shape
+#             self.batch_size = batch_size
 
-        def train_dataloader(self):
-            return DataLoader(
-                RandomDataset(
-                    self.num_samples, self.num_classes, self.input_shape
-                ),
-                batch_size=self.batch_size,
-            )
+#         def train_dataloader(self):
+#             return DataLoader(
+#                 RandomDataset(
+#                     self.num_samples, self.num_classes, self.input_shape
+#                 ),
+#                 batch_size=self.batch_size,
+#             )
 
-    data_module = RandomDataModule(
-        num_samples=10, num_classes=6, input_shape=(6, 1, 60), batch_size=8
-    )
+#     data_module = RandomDataModule(
+#         num_samples=10, num_classes=6, input_shape=(6, 1, 60), batch_size=8
+#     )
 
-    model = Simple2DConvNetwork(input_shape=(6, 1, 60), num_classes=6)
+#     model = Simple2DConvNetwork(input_shape=(6, 1, 60), num_classes=6)
 
-    trainer = L.Trainer(
-        max_epochs=1, logger=False, devices=1, accelerator="cpu"
-    )
+#     trainer = L.Trainer(
+#         max_epochs=1, logger=False, devices=1, accelerator="cpu"
+#     )
 
-    trainer.fit(model, datamodule=data_module)
+#     trainer.fit(model, datamodule=data_module)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
