@@ -6,6 +6,43 @@ from typing import Tuple
 
 from ssl_tools.models.nets.simple import SimpleReconstructionNet  
 
+
+# Equivalent Keras Code
+# class LSTMAutoEncoder:
+#     def __init__(self, time_units: int, lstm_units: int, 
+#             learning_rate: float = 0.0001):
+#         self.time_units = time_units
+#         self.lstm_units = lstm_units
+#         self.learning_rate = learning_rate
+#         self.model = self.build_model()
+
+#     def build_model(self):
+#         model = keras.Sequential()
+#         # shape [batch, time, features] => [batch, time, lstm_units]
+#         model.add(keras.layers.LSTM(
+#             units=128,
+#             input_shape=(self.time_units, self.lstm_units), # univariate input
+#             return_sequences=True)
+#         )
+#         #model.add(keras.layers.Dropout(rate=0.2))
+#         model.add(keras.layers.LSTM(units=64, return_sequences=False))
+#         model.add(keras.layers.RepeatVector(n=self.time_units))
+#         model.add(keras.layers.LSTM(units=64, return_sequences=True))
+#         model.add(keras.layers.LSTM(units=128, return_sequences=True))
+#         #model.add(keras.layers.Dropout(rate=0.2))
+#         # shape => [batch, time, features]
+#         model.add(keras.layers.TimeDistributed(
+#             keras.layers.Dense(units=self.lstm_units))
+#         ) # univariate output
+#         model.compile(
+#             loss=tf.losses.MeanSquaredError(),
+#             optimizer=tf.optimizers.Adam(learning_rate=self.learning_rate),
+#             metrics=[tf.metrics.MeanSquaredError()]
+#         )
+
+#         return model
+
+
 class _LSTMAutoEncoder(torch.nn.Module):
     def __init__(
         self,
