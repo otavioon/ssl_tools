@@ -63,6 +63,7 @@ class CovidDetectionTrain(LightningTrain):
             validation_split=self.validation_split,
             dataset_transforms=None,
             balance=self.balance,
+            train_baseline_only=False
         )
 
 
@@ -92,6 +93,7 @@ class CovidDetectionEvaluator(LightningTest):
             train_transforms=None,
             batch_size=self.batch_size,
             num_workers=self.num_workers,
+            train_baseline_only=False
         )
 
     def run_model(

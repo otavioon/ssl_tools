@@ -27,6 +27,7 @@ class CovidUserAnomalyDataModule(L.LightningDataModule):
         shuffle_train: bool = True,
         discard_last_batch: bool = True,
         balance: bool = False,
+        train_baseline_only: bool = True,
     ):
         super().__init__()
         self.data_path = data_path
@@ -44,6 +45,7 @@ class CovidUserAnomalyDataModule(L.LightningDataModule):
         self.shuffle_train = shuffle_train
         self.discard_last_batch = discard_last_batch
         self.balance = balance
+        self.train_baseline_only = train_baseline_only
 
     def setup(self, stage: str):
         data = pd.read_csv(self.data_path)
@@ -94,8 +96,8 @@ class CovidUserAnomalyDataModule(L.LightningDataModule):
         # Switch between train and test
         if stage == "fit":
             # Filter only baseline data
-            # TODO add this
-            # data = data[data["baseline"] == True]
+            if self.train_baseline_only:
+                data = data[data["baseline"] == True]
 
             # train_test_split
             train_data = data.sample(frac=1 - self.validation_split)
