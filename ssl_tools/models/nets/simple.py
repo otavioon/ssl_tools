@@ -28,6 +28,8 @@ class SimpleClassificationNet(L.LightningModule):
         }
 
     def loss_func(self, y_hat, y):
+        y_hat = y_hat.view(-1, 1).float()
+        y = y.view(-1, 1).float()
         loss = self.loss_fn(y_hat, y)
         return loss
 
@@ -87,7 +89,63 @@ class SimpleClassificationNet(L.LightningModule):
         return optimizer
 
 
-class MLPClassificator(SimpleClassificationNet):
+class SimpleReconstructionNet(L.LightningModule):
+    def __init__(
+        self,
+        backbone: torch.nn.Module,
+        learning_rate: float = 1e-3,
+        loss_fn: torch.nn.Module = None,
+    ):
+        super().__init__()
+        self.backbone = backbone
+        self.learning_rate = learning_rate
+        self.loss_fn = loss_fn or torch.nn.MSELoss()
+
+    def loss_func(self, y_hat, y):
+        loss = self.loss_fn(y_hat, y)
+        return loss
+
+    def forward(self, x: torch.Tensor):
+        x = self.backbone(x)
+        return x
+
+    def single_step(self, batch: torch.Tensor, batch_idx: int, step_name: str):
+        x, _ = batch
+        y_hat = self.forward(x)
+        loss = self.loss_func(y_hat, x)
+        self.log(
+            f"{step_name}_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+        )
+        return loss
+
+    def training_step(self, batch: torch.Tensor, batch_idx: int):
+        return self.single_step(batch, batch_idx, "train")
+
+    def validation_step(self, batch: torch.Tensor, batch_idx: int):
+        return self.single_step(batch, batch_idx, "val")
+
+    def test_step(self, batch: torch.Tensor, batch_idx: int):
+        return self.single_step(batch, batch_idx, "test")
+
+    def predict_step(self, batch, batch_idx, dataloader_idx=None):
+        x, y = batch
+        y_hat = self.forward(x)
+        return y_hat
+
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=self.learning_rate,
+        )
+        return optimizer
+
+
+class MLPClassifier(SimpleClassificationNet):
     def __init__(
         self,
         input_size: int,
@@ -112,7 +170,10 @@ class MLPClassificator(SimpleClassificationNet):
                     f"fc{i+1}", torch.nn.Linear(hidden_size, hidden_size)
                 )
             backbone.add_module(f"relu{i+1}", torch.nn.ReLU())
-        fc = torch.nn.Linear(hidden_size, output_size)
+        fc = torch.nn.Sequential(
+            torch.nn.Linear(hidden_size, output_size),
+            torch.nn.Softmax(dim=1),
+        )
         super().__init__(
             backbone=backbone,
             fc=fc,

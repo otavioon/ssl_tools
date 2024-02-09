@@ -1,0 +1,25 @@
+name: lstm_ae
+run_id: '11_11'
+log_dir: anomaly_detection_results/2024-02-09_15-49-45
+seed: null
+stage_name: test
+batch_size: 256
+load: anomaly_detection_results/2024-02-09_15-49-45/train/lstm_ae/11/checkpoints/last.ckpt
+accelerator: gpu
+devices: 1
+strategy: auto
+num_nodes: 1
+num_workers: 48
+log_every_n_steps: 50
+limit_test_batches: 1.0
+train_data: /workspaces/torch/project/aimh/data/windowed_16_overlap_0_rate_10min_df_scaled.csv
+test_data: /workspaces/torch/project/aimh/data/windowed_16_overlap_0_rate_10min_df_scaled.csv
+input_shape:
+- 16
+- 1
+train_participant: 11
+test_participant: 11
+feature_column_prefix: RHR
+target_column: anomaly
+include_recovered_in_test: false
+results_dir: anomaly_detection_results/2024-02-09_15-49-45/test/lstm_ae/11_11/results

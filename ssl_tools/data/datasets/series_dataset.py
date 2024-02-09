@@ -1,3 +1,4 @@
+import itertools
 from typing import Callable, List, Optional, Tuple, Union
 from pathlib import Path
 from collections.abc import Iterable
@@ -5,6 +6,7 @@ from collections.abc import Iterable
 import numpy as np
 import pandas as pd
 import contextlib
+from imblearn.over_sampling import SMOTE
 
 
 class MultiModalSeriesCSVDataset:
@@ -469,6 +471,91 @@ class SeriesFolderCSVDataset:
         return (
             f"SeriesFolderCSVDataset at {self.data_path} ({len(self)} samples)"
         )
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
+class MultiModalDataframeDataset:
+    # datetime,RHR-0,RHR-1,RHR-2,RHR-3,RHR-4,RHR-5,RHR-6,RHR-7,RHR-8,RHR-9,RHR-10,RHR-11,RHR-12,RHR-13,RHR-14,RHR-15,anomaly,baseline,label,participant_id
+
+    def __init__(
+        self,
+        df: pd.DataFrame,
+        feature_column_prefix: str = "RHR",
+        target_column: str = "anomaly",
+        reshape: tuple = None,
+        transforms: List[callable] = None,
+        name: str = "participant",
+        dataset_transforms: List[callable] = None,
+        balance: bool = False,
+    ):
+        self.df = df
+        self.feature_column_prefix = feature_column_prefix
+        self.target_column = target_column
+        self.prefixes = [
+            c for c in df.columns if c.startswith(feature_column_prefix)
+        ]
+        self.reshape = reshape
+        self.transforms = transforms or [lambda x: x]
+        self.dataset_transforms = dataset_transforms
+        self.name = name
+
+        # Transforms at whole dataset level
+        self._dataset_transform()
+        if balance:
+            self._balance()
+
+        # The number of samples is the number of rows in the dataframe
+        # multiplied by the number of transforms
+        self.combinations = list(
+            itertools.product(self.df.index, self.transforms)
+        )
+
+    def _dataset_transform(self) -> np.ndarray:
+        if self.dataset_transforms is None:
+            return
+        datasets = []
+        for t in self.dataset_transforms:
+            df = self.df.copy()
+            values = df[self.prefixes].values
+            values = np.expand_dims(values, axis=-1)
+            transformed_values = t(values)
+            transformed_values = np.squeeze(transformed_values, axis=-1)
+            df[self.prefixes] = transformed_values
+            datasets.append(df)
+        self.df = pd.concat(datasets, ignore_index=True).reset_index(drop=True)
+
+    def _balance(self):
+        print("Balancing dataset...")
+        smote = SMOTE()
+        X, y = self.df[self.prefixes].values, self.df[self.target_column].values
+        y = y*1
+        print(
+            f"The dataset has {len(X)} samples: {np.unique(y, return_counts=True)}"
+        )
+        X, y = smote.fit_resample(X, y)
+        print(f"Now it has {len(X)} samples")
+        print(
+            f"The dataset has {len(X)} samples: {np.unique(y, return_counts=True)}"
+        )
+        self.df = pd.DataFrame(X, columns=self.prefixes)
+        self.df[self.target_column] = y
+
+    def __len__(self) -> int:
+        return len(self.combinations)
+
+    def __getitem__(self, index: int) -> Tuple[np.ndarray, int]:
+        index, transform = self.combinations[index]
+        x = self.df.loc[index, self.prefixes].values.astype(np.float32)
+        x = transform(x)
+        if self.reshape:
+            x = x.reshape(*self.reshape)
+        y = self.df.loc[index, self.target_column].astype(int)
+        return x, y
+
+    def __str__(self) -> str:
+        return f"Dataset {self.name}, with {len(self)} samples (prefixes: {self.feature_column_prefix})"
 
     def __repr__(self) -> str:
         return str(self)
