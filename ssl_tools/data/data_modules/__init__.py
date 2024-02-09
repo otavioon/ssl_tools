@@ -4,3 +4,5 @@ from .har import (
     TNCHARDataModule,
     TFCDataModule
 )
+
+from .covid_anomaly import CovidUserAnomalyDataModule

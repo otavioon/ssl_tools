@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Any, List, Union
 from abc import abstractmethod
@@ -37,7 +38,7 @@ class LightningExperiment(Experiment):
         self.devices = devices
         self.strategy = strategy
         self.num_nodes = num_nodes
-        self.num_workers = num_workers
+        self.num_workers = num_workers or os.cpu_count()
         self.log_every_n_steps = log_every_n_steps
         
         self._model = None

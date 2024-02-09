@@ -18,6 +18,7 @@ requires-python = ">=3.8"
 version = "0.0.1-dev"
 
 dependencies = [
+    "imbalanced-learn",
     "ipywidgets",
     "jsonargparse[all]",
     "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
