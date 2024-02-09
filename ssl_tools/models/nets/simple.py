@@ -28,26 +28,8 @@ class SimpleClassificationNet(L.LightningModule):
         }
 
     def loss_func(self, y_hat, y):
-        # TODO remove view -1
-        # y_hat = torch.nn.functional.softmax(y_hat, dim=1)
-
-        # print(y_hat.shape, y.shape)
-        # y_hat = y_hat.view(-1).float()
-        # y = y.view(-1).float()
-
-        # print(y_hat.shape, y.shape)
-        
-        # y_hat = y_hat.view(-1, 1)
-        # y = y.view(-1, 1)
-        
-        # print(y_hat.shape, y.shape)
-        
-        # print(y_hat.min(), y_hat.max(), y.min(), y.max())
-        
         y_hat = y_hat.view(-1, 1).float()
         y = y.view(-1, 1).float()
-        # print(y_hat.shape, y.shape)
-        
         loss = self.loss_fn(y_hat, y)
         return loss
 
