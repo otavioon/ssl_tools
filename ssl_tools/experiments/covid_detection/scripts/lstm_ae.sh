@@ -6,8 +6,8 @@ cd ..
 
 # LOG_DIR will be: anomaly_detection_results/2021-08-25_16-00-00/
 LOG_DIR="anomaly_detection_results/$(date +'%Y-%m-%d_%H-%M-%S')"
-TRAIN_DATA="/workspaces/torch/project/aimh/data/windowed_16_overlap_0_rate_10min_df_scaled.csv"
-TEST_DATA="/workspaces/torch/project/aimh/data/windowed_16_overlap_0_rate_10min_df_scaled.csv"
+TRAIN_DATA="data/windowed_16_overlap_0_rate_10min_df_scaled.csv"
+TEST_DATA="data/windowed_16_overlap_0_rate_10min_df_scaled.csv"
 TRAIN_PARTICIPANT=11
 TEST_PARTICIPANT=11
 EPOCHS=1
