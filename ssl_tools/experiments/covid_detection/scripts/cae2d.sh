@@ -17,7 +17,7 @@ NAME="cae2d"
 
 
 # ----------------- Train -----------------
-echo "Training LSTM Autoencoder"
+echo "Training CAE2D Autoencoder"
 echo "Log directory: ${LOG_DIR}. Train participant: ${TRAIN_PARTICIPANT}. Test participant: ${TEST_PARTICIPANT}"
 
 # PARTICIPANT = From 0 to 76 (77 participants)
