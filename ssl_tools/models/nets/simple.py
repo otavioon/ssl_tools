@@ -28,8 +28,6 @@ class SimpleClassificationNet(L.LightningModule):
         }
 
     def loss_func(self, y_hat, y):
-        y_hat = y_hat.view(-1, 1).float()
-        y = y.view(-1, 1).float()
         loss = self.loss_fn(y_hat, y)
         return loss
 
