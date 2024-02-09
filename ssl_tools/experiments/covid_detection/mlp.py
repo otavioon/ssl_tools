@@ -9,6 +9,11 @@ from ssl_tools.experiments import auto_main
 from ssl_tools.models.nets.simple import MLPClassifier
 import torch
 
+
+class FlattenBCELoss(torch.nn.BCELoss):
+    def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+        return super().forward(input.view(-1, 1).float(), target.view(-1, 1).float())
+
 class MLPClassifierTrain(CovidDetectionTrain):
     _MODEL_NAME = "mlp"
 
@@ -36,7 +41,7 @@ class MLPClassifierTrain(CovidDetectionTrain):
             num_hidden_layers=self.num_hidden_layers,
             output_size=self.num_classes,
             learning_rate=self.learning_rate,
-            loss_fn=torch.nn.BCELoss(),
+            loss_fn=FlattenBCELoss(),
         )
 
 
