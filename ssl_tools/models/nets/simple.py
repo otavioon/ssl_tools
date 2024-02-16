@@ -62,7 +62,7 @@ class SimpleClassificationNet(L.LightningModule):
             prog_bar=True,
             logger=True,
         )
-        self.compute_metrics(y_hat, y, step_name)
+        # self.compute_metrics(y_hat, y, step_name)
         return loss
 
     def training_step(self, batch: torch.Tensor, batch_idx: int):
