@@ -157,6 +157,7 @@ class MLPClassifier(SimpleClassificationNet):
         val_metrics: Dict[str, torch.Tensor] = None,
         test_metrics: Dict[str, torch.Tensor] = None,
     ):
+        self.hidden_size = hidden_size
         backbone = torch.nn.Sequential()
         for i in range(num_hidden_layers):
             if i == 0:
