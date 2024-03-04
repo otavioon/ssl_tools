@@ -24,6 +24,7 @@ dependencies = [
     "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
     "lightly",
     "lightning",
+    "mlflow",
     "numpy",
     "pandas",
     "plotly",
