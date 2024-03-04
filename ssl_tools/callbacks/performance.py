@@ -3,7 +3,7 @@ from lightning.pytorch.callbacks import Callback
 import time
 
 
-class PerformanceLog(Callback):
+class PerformanceLogger(Callback):
     """This callback logs the time taken for each epoch and the overall fit 
     time.
     """
