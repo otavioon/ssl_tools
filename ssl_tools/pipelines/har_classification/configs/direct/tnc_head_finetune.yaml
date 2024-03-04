@@ -1,0 +1,14 @@
+data: /workspaces/hiaac-m4/data/standartized_balanced/KuHar
+num_classes: 6
+transforms: identity
+experiment_name: model_finetune
+dataset_name: KuHar
+accelerator: gpu
+devices: 1
+max_epochs: 1
+batch_size: 32
+log_dir: ./mlruns
+registered_model_name: TNCPredictionHead_identity
+registered_model_tags: 
+  dataset: KuHar
+  stage: train

@@ -1,0 +1,3 @@
+encoding_size: 128
+batch_size: 128
+update_backbone: True

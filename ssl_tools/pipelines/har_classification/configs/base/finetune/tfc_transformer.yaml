@@ -1,0 +1,4 @@
+length_alignment: 60
+features_as_channels: True
+encoding_size: 128
+batch_size: 64

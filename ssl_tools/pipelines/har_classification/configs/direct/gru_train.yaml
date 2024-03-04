@@ -1,0 +1,14 @@
+data: /workspaces/hiaac-m4/data/standartized_balanced/KuHar
+hidden_size: 128
+in_channels: 6
+num_classes: 6
+encoding_size: 128
+dropout: 0.5
+transforms: identity
+experiment_name: model_train
+dataset_name: KuHar
+accelerator: gpu
+devices: 1
+max_epochs: 1
+batch_size: 32
+log_dir: ./mlruns

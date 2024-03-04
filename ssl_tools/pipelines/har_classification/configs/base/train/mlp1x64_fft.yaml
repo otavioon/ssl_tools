@@ -1,0 +1,6 @@
+input_size: 180
+hidden_size: 128
+num_hidden_layers: 1
+num_classes: 6
+transforms: fft
+batch_size: 128

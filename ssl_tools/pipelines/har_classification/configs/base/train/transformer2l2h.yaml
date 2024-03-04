@@ -1,0 +1,6 @@
+in_channels: 6
+dim_feedforward: 60
+num_classes: 6
+heads: 2
+num_layers: 2
+batch_size: 64

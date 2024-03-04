@@ -1,0 +1,16 @@
+data: /workspaces/hiaac-m4/data/standartized_balanced/KuHar
+transforms: 
+- identity
+- flatten
+
+experiment_name: model_eval
+dataset_name: KuHar
+registered_model_name: MLP_identity
+registered_model_tags: 
+  dataset: KuHar
+  stage: finetune
+
+accelerator: gpu
+devices: 1
+batch_size: 32
+log_dir: ./mlruns
