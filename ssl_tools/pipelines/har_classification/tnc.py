@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from typing import List
 import lightning as L
 import torch
 
@@ -19,7 +20,6 @@ from ssl_tools.pipelines.har_classification.utils import (
     Spectrogram,
 )
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
-
 
 
 # TODO: A way of removing the need to add the path to the root of
@@ -42,7 +42,6 @@ import torch
 
 from torchmetrics import Accuracy
 from ssl_tools.models.ssl.classifier import SSLDiscriminator
-
 
 
 class TNCPreTrain(LightningTrainMLFlow):
@@ -98,17 +97,23 @@ class TNCPreTrain(LightningTrainMLFlow):
             num_workers=self.num_workers,
         )
         return data_module
-    
-    
+
+
 class TNCFineTune(LightningFineTuneMLFlow):
-    def __init__(self, data: str, num_classes: int = 6, num_workers: int = None, **kwargs):
+    def __init__(
+        self,
+        data: str | List[str],
+        num_classes: int = 6,
+        num_workers: int = None,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         self.data = data
         self.num_classes = num_classes
         self.num_workers = (
             num_workers if num_workers is not None else os.cpu_count()
         )
-        
+
     def get_model(self) -> L.LightningModule:
         model: TNC = self.load_model()
         classifier = TNCPredictionHead(
@@ -122,8 +127,7 @@ class TNCFineTune(LightningFineTuneMLFlow):
             update_backbone=self.update_backbone,
         )
         return model
-        
-        
+
     def get_data_module(self) -> L.LightningDataModule:
         data_module = MultiModalHARSeriesDataModule(
             data_path=self.data,
@@ -135,9 +139,7 @@ class TNCFineTune(LightningFineTuneMLFlow):
 
         return data_module
 
+
 if __name__ == "__main__":
-    options = {
-        "train": TNCPreTrain,
-        "finetune": TNCFineTune
-    }
+    options = {"train": TNCPreTrain, "finetune": TNCFineTune}
     auto_main(options)

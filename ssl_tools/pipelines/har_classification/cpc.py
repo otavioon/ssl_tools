@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from typing import List
 import lightning as L
 import torch
 
@@ -97,7 +98,7 @@ class CPCPreTrain(LightningTrainMLFlow):
 class CPCFineTune(LightningFineTuneMLFlow):
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         encoding_size: int = 128,
         num_classes: int = 6,
         num_workers: int = None,

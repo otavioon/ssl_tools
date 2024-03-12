@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Tuple
+from typing import List, Tuple
 import lightning as L
 import torch
 
@@ -27,7 +27,7 @@ class Simple2DConvNetTrain(LightningTrainMLFlow):
 
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         input_shape: Tuple[int, int, int] = (6, 1, 60),
         num_classes: int = 6,
         transforms: str = "identity",
@@ -76,7 +76,7 @@ class Simple2DConvNetFineTune(LightningFineTuneMLFlow):
 
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         num_classes: int = 6,
         transforms: str = "identity",
         num_workers: int = None,

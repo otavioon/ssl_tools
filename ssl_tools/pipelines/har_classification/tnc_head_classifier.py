@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from typing import List
 import lightning as L
 import torch
 
@@ -26,7 +27,7 @@ class TNCHeadClassifierTrain(LightningTrainMLFlow):
 
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         input_size: int = 360,
         num_classes: int = 6,
         transforms: str = "identity",
@@ -77,7 +78,7 @@ class TNCHeadClassifierFineTune(LightningFineTuneMLFlow):
 
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         num_classes: int = 6,
         transforms: str = "identity",
         num_workers: int = None,

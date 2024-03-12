@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from typing import List
 import lightning as L
 
 from ssl_tools.pipelines.cli import auto_main
@@ -52,7 +53,7 @@ class GRUClassifierTrain(LightningTrainMLFlow):
 
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         hidden_size: int = 100,
         in_channels: int = 6,
         num_classes: int = 6,
@@ -115,7 +116,7 @@ class GRUClassifierFineTune(LightningFineTuneMLFlow):
 
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         num_classes: int = 6,
         encoding_size: int = 128,
         transforms: str = "identity",

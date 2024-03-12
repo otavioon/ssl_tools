@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from typing import List
 import lightning as L
 import torch
 
@@ -24,7 +25,7 @@ from ssl_tools.models.ssl.classifier import SSLDiscriminator
 class MLPClassifierTrain(LightningTrainMLFlow):
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         input_size: int = 360,
         hidden_size: int = 64,
         num_hidden_layers: int = 1,
@@ -77,7 +78,7 @@ class MLPClassifierTrain(LightningTrainMLFlow):
 class MLPClassifierFineTune(LightningFineTuneMLFlow):
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         num_classes: int = 6,
         transforms: str = "identity",
         num_workers: int = None,

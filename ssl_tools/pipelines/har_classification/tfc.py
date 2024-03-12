@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from typing import List
 import lightning as L
 import torch
 
@@ -35,7 +36,7 @@ from ssl_tools.data.data_modules import TFCDataModule
 class TFCTrain(LightningTrainMLFlow):
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         label: str = "standard activity code",
         encoding_size: int = 128,
         in_channels: int = 6,
@@ -90,7 +91,7 @@ class TFCTrain(LightningTrainMLFlow):
 class TFCFineTune(LightningFineTuneMLFlow):
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         num_classes: int = 6,
         num_workers: int = None,
         length_alignment: int = 60,

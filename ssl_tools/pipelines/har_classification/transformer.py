@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Tuple
+from typing import List, Tuple
 import lightning as L
 import torch
 
@@ -28,7 +28,7 @@ class SimpleTransformerTrain(LightningTrainMLFlow):
 
     def __init__(
         self,
-        data: str,
+        data: str | List[str],
         in_channels: int = 6,
         dim_feedforward=60,
         num_classes: int = 6,
@@ -73,7 +73,11 @@ class SimpleTransformerTrain(LightningTrainMLFlow):
 
 class SimpleTransformerFineTune(LightningFineTuneMLFlow):
     def __init__(
-        self, data: str, num_classes: int = 6, num_workers: int = None, **kwargs
+        self,
+        data: str | List[str],
+        num_classes: int = 6,
+        num_workers: int = None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self.data = data
@@ -93,7 +97,7 @@ class SimpleTransformerFineTune(LightningFineTuneMLFlow):
             update_backbone=self.update_backbone,
         )
         return model
-    
+
     def get_data_module(self) -> L.LightningDataModule:
         data_module = MultiModalHARSeriesDataModule(
             data_path=self.data,
