@@ -5,7 +5,7 @@ from ssl_tools.data.datasets import (
     TFCDataset,
 )
 
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, ConcatDataset
 from typing import Callable, Dict, Iterable, Union, List
 
 from pathlib import Path
@@ -213,7 +213,7 @@ class UserActivityFolderDataModule(L.LightningDataModule):
             "test",
             "predict",
         ], f"Invalid split_name: {split_name}"
-        
+
         if split_name == "predict":
             split_name = "test"
 
@@ -254,9 +254,7 @@ class UserActivityFolderDataModule(L.LightningDataModule):
         else:
             raise ValueError(f"Invalid setup stage: {stage}")
 
-    def _get_loader(
-        self, split_name: str, shuffle: bool
-    ) -> DataLoader:
+    def _get_loader(self, split_name: str, shuffle: bool) -> DataLoader:
         """Get a dataloader for the given split.
 
         Parameters
@@ -291,10 +289,10 @@ class UserActivityFolderDataModule(L.LightningDataModule):
 
     def predict_dataloader(self) -> DataLoader:
         return self._get_loader("predict", shuffle=False)
-    
+
     def __str__(self):
         return f"UserActivityFolderDataModule(data_path={self.data_path}, batch_size={self.batch_size})"
-    
+
     def __repr__(self) -> str:
         return str(self)
 
@@ -455,7 +453,7 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
     def __init__(
         self,
         # Dataset params
-        data_path: PathLike,
+        data_path: PathLike | List[PathLike],
         feature_prefixes: List[str] = (
             "accel-x",
             "accel-y",
@@ -534,7 +532,10 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
             Number of workers to load data. If None, then use all cores
         """
         super().__init__()
-        self.data_path = Path(data_path)
+        self.data_path = (
+            data_path if isinstance(data_path, list) else [data_path]
+        )
+        self.data_path = [Path(data) for data in self.data_path]
         self.feature_prefixes = feature_prefixes
         self.label = label
         self.features_as_channels = features_as_channels
@@ -565,18 +566,26 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
             "test",
             "predict",
         ], f"Invalid split_name: {split_name}"
-        
+
         if split_name == "predict":
             split_name = "test"
 
-        return MultiModalSeriesCSVDataset(
-            self.data_path / f"{split_name}.csv",
-            feature_prefixes=self.feature_prefixes,
-            label=self.label,
-            features_as_channels=self.features_as_channels,
-            cast_to=self.cast_to,
-            transforms=self.transforms[split_name],
-        )
+        datasets = []
+        for data in self.data_path:
+            dataset = MultiModalSeriesCSVDataset(
+                data / f"{split_name}.csv",
+                feature_prefixes=self.feature_prefixes,
+                label=self.label,
+                features_as_channels=self.features_as_channels,
+                cast_to=self.cast_to,
+                transforms=self.transforms[split_name],
+            )
+            datasets.append(dataset)
+
+        if len(datasets) == 1:
+            return datasets[0]
+        else:
+            return ConcatDataset(datasets)
 
     def setup(self, stage: str):
         """Assign the datasets to the corresponding split. ``self.datasets``
@@ -606,9 +615,7 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
         else:
             raise ValueError(f"Invalid setup stage: {stage}")
 
-    def _get_loader(
-        self, split_name: str, shuffle: bool
-    ) -> DataLoader:
+    def _get_loader(self, split_name: str, shuffle: bool) -> DataLoader:
         """Get a dataloader for the given split.
 
         Parameters
@@ -643,10 +650,10 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
 
     def predict_dataloader(self) -> DataLoader:
         return self._get_loader("predict", shuffle=False)
-    
+
     def __str__(self):
         return f"MultiModalHARSeriesDataModule(data_path={self.data_path}, batch_size={self.batch_size})"
-    
+
     def __repr__(self) -> str:
         return str(self)
 
@@ -655,7 +662,7 @@ class TFCDataModule(L.LightningDataModule):
     def __init__(
         self,
         # Dataset Params
-        data_path: PathLike,
+        data_path: PathLike | List[PathLike],
         feature_prefixes: Union[str, List[str]] = (
             "accel-x",
             "accel-y",
@@ -710,7 +717,7 @@ class TFCDataModule(L.LightningDataModule):
             - Dict[str, List[Callable]]: A dictionary with the split name as
                 key and a list of transforms as value. The split name must be
                 one of: "train", "validation", "test" or "predict".
-            If None. an ``AddGaussianNoise`` transform will be used with the 
+            If None. an ``AddGaussianNoise`` transform will be used with the
             given ``jitter_ratio``.
         frequency_transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
             Transforms to be applied to frequency domain data. This could be:
@@ -719,7 +726,7 @@ class TFCDataModule(L.LightningDataModule):
                 data. The same transforms will be applied to all splits.
             - Dict[str, List[Callable]]: A dictionary with the split name as
                 key and a list of transforms as value. The split name must be
-                one of: "train", "validation", "test" or "predict".            
+                one of: "train", "validation", "test" or "predict".
             If None, an ``AddRemoveFrequency`` transform will be used.
         cast_to : str, optional
             Cast the data to the given type, by default "float32"
@@ -737,7 +744,10 @@ class TFCDataModule(L.LightningDataModule):
             Number of workers to load data, by default None (use all cores)
         """
         super().__init__()
-        self.data_path = Path(data_path)
+        self.data_path = (
+            data_path if isinstance(data_path, list) else [data_path]
+        )
+        self.data_path = [Path(data) for data in self.data_path]
         self.batch_size = batch_size
         self.num_workers = (
             num_workers if num_workers is not None else os.cpu_count()
@@ -808,7 +818,7 @@ class TFCDataModule(L.LightningDataModule):
         split_name : str
             Name of the split (train, validation or test). This will be used to
             load the corresponding CSV file.
-            
+
         Returns
         -------
         TFCDataset
@@ -820,21 +830,26 @@ class TFCDataModule(L.LightningDataModule):
             "test",
             "predict",
         ], f"Invalid split_name: {split_name}"
-        
+
         if split_name == "predict":
             split_name = "test"
 
-        path = self.data_path / f"{split_name}.csv"
-        
-        # Creates a MultiModalSeriesCSVDataset
-        dataset = MultiModalSeriesCSVDataset(
-            data_path=path,
-            feature_prefixes=self.feature_prefixes,
-            label=self.label,
-            features_as_channels=self.features_as_channels,
-            cast_to=self.cast_to,
-        )
-        
+        datasets = []
+        for data in self.data_path:
+            dataset = MultiModalSeriesCSVDataset(
+                data_path=data / f"{split_name}.csv",
+                feature_prefixes=self.feature_prefixes,
+                label=self.label,
+                features_as_channels=self.features_as_channels,
+                cast_to=self.cast_to,
+            )
+            datasets.append(dataset)
+
+        if len(datasets) == 1:
+            dataset =  datasets[0]
+        else:
+            dataset =  ConcatDataset(datasets)
+
         # Wraps the MultiModalSeriesCSVDataset with a TFCDataset
         tfc_dataset = TFCDataset(
             dataset,
@@ -874,9 +889,7 @@ class TFCDataModule(L.LightningDataModule):
         else:
             raise ValueError(f"Invalid setup stage: {stage}")
 
-    def _get_loader(
-        self, split_name: str, shuffle: bool
-    ) -> DataLoader:
+    def _get_loader(self, split_name: str, shuffle: bool) -> DataLoader:
         """Get a dataloader for the given split.
 
         Parameters
