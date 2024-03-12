@@ -11,3 +11,6 @@ class Pipeline(HyperparametersMixin):
     @abstractmethod
     def run(self) -> Any:
         raise NotImplementedError
+
+    def __call__(self):
+        return self.run()
