@@ -6,6 +6,7 @@ from tempfile import TemporaryDirectory
 import traceback
 from typing import Dict
 import lightning as L
+import tqdm
 import yaml
 from ssl_tools.models.nets.simple import SimpleClassificationNet
 from ssl_tools.pipelines.base import Pipeline
@@ -121,7 +122,7 @@ class EmbeddingEvaluator(Pipeline):
         registered_model_name: str,
         registered_model_tags: Dict[str, str] = None,
         experiment_tags: Dict[str, str] = None,
-        n_classes: int = 6,
+        n_classes: int = 7,
         # Optional parameters
         run_name: str = None,
         accelerator: str = "cpu",
@@ -233,9 +234,9 @@ class EmbeddingEvaluator(Pipeline):
     def _compute_classification_metrics(
         self, y_hat_logits: torch.Tensor, y: torch.Tensor, n_classes: int
     ) -> pd.DataFrame:
-        print("-------------------------------------------")
-        print(y_hat_logits.shape, y.shape, n_classes)
-        print("-------------------------------------------")
+        # print("-------------------------------------------")
+        # print(y_hat_logits.shape, y.shape, n_classes)
+        # print("-------------------------------------------")
         results = {
             "accuracy": [
                 torchmetrics.functional.accuracy(
@@ -341,13 +342,14 @@ class EmbeddingEvaluator(Pipeline):
             y = torch.LongTensor(y)
             # Predict
             y_hat_logits = self.predict(model, dataloader, trainer)
+            n_classes = y_hat_logits.shape[1]
             y_hat = torch.argmax(y_hat_logits, dim=1)
             # Get embeddings
             embeddings = generate_embeddings(model, dataloader, trainer)
             embeddings = embeddings.reshape(embeddings.shape[0], -1)
             # Get number of classes
             # n_classes = len(torch.unique(y))
-            n_classes = self.n_classes
+            # n_classes = self.n_classes
             classes = list(range(n_classes))
 
             # ------------ Evaluation ------------
@@ -427,9 +429,9 @@ class EmbeddingEvaluator(Pipeline):
         classes = list(range(n_classes))
         with TemporaryDirectory() as temp_dir:
             temp_dir = Path(temp_dir)
-            pickle_path = temp_dir / "model.pkl"
-            with open(pickle_path, "wb") as f:
-                pickle.dump(model, f)
+            # pickle_path = temp_dir / "model.pkl"
+            # with open(pickle_path, "wb") as f:
+            #     pickle.dump(model, f)
 
             # Generate predictions CSV
             predictions = pd.DataFrame(
@@ -464,7 +466,7 @@ class EmbeddingEvaluator(Pipeline):
                 scale=1,
             )
 
-            print(f"Using artifact path: {artifact_path}")
+            # print(f"Using artifact path: {artifact_path}" )
 
             # Log artifacts
             self.client.log_artifacts(
@@ -524,8 +526,8 @@ class EmbeddingEvaluator(Pipeline):
             y_hat_test = model.predict(X_test_emb)
             self._evaluate_embeddings(
                 model=model,
-                y_hat=y_hat_val,
-                y=y_val,
+                y_hat=y_hat_test,
+                y=y_test,
                 n_classes=n_classes,
                 run_id=run_id,
                 artifact_path=artifact_path,
@@ -548,8 +550,8 @@ class EmbeddingEvaluator(Pipeline):
             y_hat_test = model.predict(X_test_emb)
             self._evaluate_embeddings(
                 model=model,
-                y_hat=y_hat_val,
-                y=y_val,
+                y_hat=y_hat_test,
+                y=y_test,
                 n_classes=n_classes,
                 run_id=run_id,
                 artifact_path=artifact_path,
@@ -562,7 +564,7 @@ class EmbeddingEvaluator(Pipeline):
         trainer: L.Trainer,
     ):
         self.evaluate_model_performance(model, data_module, trainer)
-        self.evaluate_embeddings(model, data_module, trainer)
+        # self.evaluate_embeddings(model, data_module, trainer)
 
     def run(self):
         # Get all required components
@@ -619,21 +621,22 @@ class HAREmbeddingEvaluator(EmbeddingEvaluator):
 
 
 def run_evaluator_wrapper(evaluator: EmbeddingEvaluator):
+    # return evaluator.run()
     try:
-        evaluator.run()
-        return True
+        return evaluator.run()
     except Exception as e:
-        print(f"Error running evaluator: {e}")
+        print(f" ------- Error running evaluator: {e} ----------")
         traceback.print_exc()
-        return False
+        print("----------------------------------------------------")
+        raise e
 
 
 class EvaluateAll(Pipeline):
     def __init__(
         self,
         root_dataset_dir: str,
-        experiment_id: str,
-        experiment_name: str,
+        experiment_id: str | List[str],  # The experiment(s) to evaluate
+        experiment_names: str | List[str],  # Name of the experiment (result)
         config_dir: str = None,
         log_dir: str = "./mlruns",
         skip_existing: bool = True,
@@ -643,12 +646,17 @@ class EvaluateAll(Pipeline):
         num_workers: int = None,
         strategy: str = "auto",
         batch_size: int = 1,
-        stage_to_evaluate: str = "finetune",
+        use_ray: bool = False,
+        ray_address: str = None,
     ):
         self.root_dataset_dir = Path(root_dataset_dir)
         self.config_dir = Path(config_dir) if config_dir is not None else None
         self.experiment_id = experiment_id
-        self.experiment_name = experiment_name
+        self.experiment_names = experiment_names
+        if isinstance(experiment_names, list):
+            self.experiment_name = experiment_names[0]
+        else:
+            self.experiment_name = experiment_names
         self.skip_existing = skip_existing
         self.log_dir = log_dir
         self.accelerator = accelerator
@@ -659,8 +667,16 @@ class EvaluateAll(Pipeline):
         )
         self.strategy = strategy
         self.batch_size = batch_size
-        self.stage_to_evaluate = stage_to_evaluate
-        assert self.stage_to_evaluate in ["finetune", "train"]
+        self.use_ray = use_ray
+        self.ray_address = ray_address
+
+        self._client = None
+
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = mlflow.client.MlflowClient(tracking_uri=self.log_dir)
+        return self._client
 
     def summarize(self, runs):
         res = []
@@ -673,27 +689,18 @@ class EvaluateAll(Pipeline):
                 # Tags
                 model=r.data.tags["model"],
                 trained_on=r.data.tags["trained_on"],
-                # finetune_on=r.data.tags["finetune_on"],
                 stage=r.data.tags["stage"],
-                # params
-                # update_backbone=r.data.params["update_backbone"] == "True",
-                # trained_model_run_id=r.data.params["model_version/run_id"],
+                finetune_on=r.data.tags.get("finetune_on", ""),
+                test_on=r.data.tags.get("test_on", ""),
+                update_backbone=r.data.params.get("update_backbone", "False"),
             )
 
-            if self.stage_to_evaluate == "finetune":
-                d["finetune_on"] = r.data.tags["finetune_on"]
-                d["update_backbone"] = (
-                    r.data.params["update_backbone"] == "True"
-                )
-                d["trained_model_run_id"] = r.data.params[
-                    "model_version/run_id"
-                ]
-
+            d["update_backbone"] = d["update_backbone"] == "True"
+            d["freeze"] = not d["update_backbone"]
             res.append(d)
         return pd.DataFrame(res)
 
-    def locate_config(self,
-                      model_name):
+    def locate_config(self, model_name):
         if self.config_dir is None:
             return dict()
         config_file = self.config_dir / f"{model_name}.yaml"
@@ -701,158 +708,136 @@ class EvaluateAll(Pipeline):
             return dict()
         with open(config_file, "r") as f:
             config = yaml.safe_load(f)
-            print(f"Loaded configuration from: {config_file}")
+            # print(f"Loaded configuration from: {config_file}")
             return config
 
-    def run(self):
-        client = mlflow.client.MlflowClient(tracking_uri=self.log_dir)
-        runs = client.search_runs(
-            self.experiment_id,
-            run_view_type=ViewType.ACTIVE_ONLY,
+    def get_runs(self, experiment_ids, search_string: str = "") -> pd.DataFrame:
+        runs = self.client.search_runs(
+            experiment_ids=experiment_ids,
+            filter_string=search_string,
             max_results=50000,
             order_by=["start_time DESC"],
         )
         runs = self.summarize(runs)
+        return runs
+
+    def filter_runs(self, runs):
+        experiment_ids = [
+            self.client.get_experiment_by_name(experiment).experiment_id
+            for experiment in self.experiment_names
+        ]
+        already_executed_runs = self.get_runs(
+            experiment_ids,
+            search_string="tags.`stage` = 'test'",
+        )
+        runs = runs[
+            ~runs[["model", "trained_on", "finetune_on", "update_backbone"]]
+            .apply(tuple, axis=1)
+            .isin(
+                already_executed_runs[
+                    ["model", "trained_on", "finetune_on", "update_backbone"]
+                ].apply(tuple, axis=1)
+            )
+        ]
+        return runs
+
+    def run(self):
+        runs = self.get_runs(
+            self.experiment_id, search_string="tags.`stage` != 'test'"
+        )
+
+        if self.skip_existing:
+            runs = self.filter_runs(runs)
 
         configs_to_run = []
 
-        print(f"Number of runs: {len(runs)}")
-        
-        print(runs.head().to_markdown())
-
-        for dataset_dir in self.root_dataset_dir.iterdir():
+        for dataset_dir in tqdm.tqdm(self.root_dataset_dir.iterdir()):
             if not dataset_dir.is_dir():
                 continue
-
-            # if dataset_dir.name in ["UCI", "WISDM"]:
-            #     continue
-
             for i, (row_idx, row) in enumerate(runs.iterrows()):
-                print(f"--- Analysing {i} / {len(runs)}")
                 model = row["model"]
                 trained_on = row["trained_on"]
-                # finetune_on = row["finetune_on"]
-                # update_backbone = row["update_backbone"]
 
-                try:
-                    if self.skip_existing:
-                        query = (
-                            f"tags.model='{model}'"
-                            + f" and tags.trained_on='{trained_on}'"
-                            + f" and tags.test_on='{dataset_dir.name}'"
-                            + f" and tags.stage='test'"
-                        )
+                evaluator_kwargs = {
+                    "experiment_name": self.experiment_name,
+                    "registered_model_name": model,
+                    "registered_model_tags": {
+                        "model": model,
+                        "trained_on": trained_on,
+                        "stage": row["stage"],
+                        # "finetune_on": finetune_on,
+                    },
+                    "experiment_tags": {
+                        "model": model,
+                        "trained_on": trained_on,
+                        # "finetune_on": finetune_on,
+                        "test_on": str(dataset_dir.name),
+                        "stage": "test",
+                        # "freeze": not update_backbone,
+                        # "update_backbone": str(update_backbone),
+                    },
+                    "log_dir": self.log_dir,
+                    "data": str(dataset_dir),
+                    "num_workers": self.num_workers,
+                    "accelerator": self.accelerator,
+                    "devices": self.devices,
+                    "num_nodes": self.num_nodes,
+                    "strategy": self.strategy,
+                    "batch_size": self.batch_size,
+                }
 
-                        if self.stage_to_evaluate == "finetune":
-                            query = (
-                                query
-                                + f" and tags.finetune_on='{row['finetune_on']}'"
-                                + f" and tags.update_backbone='{str(row['update_backbone'])}'"
-                            )
-
-                        experiment = client.get_experiment_by_name(
-                            self.experiment_name
-                        )
-                        if experiment is not None:
-                            print(
-                                f"Looking for existing runs with query: {query}"
-                            )
-                            existing_runs = client.search_runs(
-                                experiment.experiment_id,
-                                filter_string=query,
-                                run_view_type=ViewType.ACTIVE_ONLY,
-                                max_results=1,
-                            )
-                            if len(existing_runs) > 0:
-                                print(
-                                    f"Skipping {query} because it already exists"
-                                )
-                                continue
-                            else:
-                                print(
-                                    f"No run that matches query: {query} found. Running..."
-                                )
-                        else:
-                            print(
-                                f"Experiment {self.experiment_name} does not exist. Creating..."
-                            )
-
-                    evaluator_kwargs = {
-                        "experiment_name": self.experiment_name,
-                        "registered_model_name": model,
-                        "registered_model_tags": {
-                            "model": model,
-                            "trained_on": trained_on,
-                            "stage": self.stage_to_evaluate,
-                            # "finetune_on": finetune_on,
-                        },
-                        "experiment_tags": {
-                            "model": model,
-                            "trained_on": trained_on,
-                            # "finetune_on": finetune_on,
-                            "test_on": str(dataset_dir.name),
-                            "stage": "test",
-                            # "freeze": not update_backbone,
-                            # "update_backbone": str(update_backbone),
-                        },
-                        "log_dir": self.log_dir,
-                        "data": str(dataset_dir),
-                        "num_workers": self.num_workers,
-                        "accelerator": self.accelerator,
-                        "devices": self.devices,
-                        "num_nodes": self.num_nodes,
-                        "strategy": self.strategy,
-                        "batch_size": self.batch_size,
-                    }
-
-                    if self.stage_to_evaluate == "finetune":
-                        evaluator_kwargs["registered_model_tags"][
-                            "finetune_on"
-                        ] = row["finetune_on"]
-                        evaluator_kwargs["experiment_tags"]["finetune_on"] = (
-                            row["finetune_on"]
-                        )
-                        evaluator_kwargs["experiment_tags"][
-                            "update_backbone"
-                        ] = str(row["update_backbone"])
-
-                    config = self.locate_config(model)
-                    # if "batch_size" in config:
-                    # evaluator_kwargs["batch_size"] = config["batch_size"]
-                    evaluator_kwargs["transforms"] = config.get(
-                        "transforms", "identity"
+                if row["finetune_on"] != "":
+                    evaluator_kwargs["registered_model_tags"]["finetune_on"] = (
+                        row["finetune_on"]
                     )
-                    evaluator = HAREmbeddingEvaluator(**evaluator_kwargs)
-                    configs_to_run.append(evaluator)
-                    # print(evaluator_kwargs)
-
-                    # print(f"*** Running evaluator for {model}, {trained_on}, {finetune_on}, {update_backbone}, {dataset_dir.name}")
-                    # run_evaluator_wrapper(evaluator)
-                    # print("*** Finished running evaluator")
-
-                except Exception as e:
-                    traceback.print_exc()
-                    print(
-                        f"Error creating evaluator for ({model}, {trained_on}, {dataset_dir.name})"
+                    evaluator_kwargs["experiment_tags"]["finetune_on"] = row[
+                        "finetune_on"
+                    ]
+                    evaluator_kwargs["experiment_tags"]["update_backbone"] = (
+                        str(row["update_backbone"])
                     )
-                    print(e)
 
-        # print(f"There are {len(configs_to_run)} configurations to run")
-        # # results = process_map(run_evaluator_wrapper, configs_to_run, max_workers=4)
-        # results = []
-        # for i, config in enumerate(configs_to_run):
-        #     print(
-        #         f"---------- Running config ({i} / {len(configs_to_run)}) ----------"
-        #     )
-        #     res = run_evaluator_wrapper(config)
-        #     results.append(res)
-        #     print("-------------------------------------------")
-        #     print()
+                config = self.locate_config(model)
+                evaluator_kwargs["transforms"] = config.get(
+                    "transforms", "identity"
+                )
+                evaluator = HAREmbeddingEvaluator(**evaluator_kwargs)
+                configs_to_run.append(evaluator)
+                
+        print(f"Found {len(configs_to_run)} configurations to run")
 
-        # ok = sum(r * 1 for r in results)
-        # not_ok = len(results) - ok
+        if self.use_ray:
+            import ray
 
-        # print(f"OK: {ok}/{len(results)}. Not OK: {not_ok}/{len(results)}")
+            ray.init(address=self.ray_address)
+            remotes_to_run = [
+                ray.remote(
+                    num_gpus=0.10,
+                    num_cpus=2,
+                    max_calls=1,
+                    max_retries=0,
+                    retry_exceptions=False,
+                )(run_evaluator_wrapper).remote(evaluator)
+                for evaluator in configs_to_run
+            ]
+            ready, not_ready = ray.wait(
+                remotes_to_run, num_returns=len(remotes_to_run)
+            )
+            print(f"Ready: {len(ready)}. Not ready: {len(not_ready)}")
+            ray.shutdown()
+        else:
+            for i, evaluator in enumerate(configs_to_run):
+                print(f"Running evaluator {i+1}/{len(configs_to_run)}")
+                evaluator.run()
+                print("----------------------------------------------------")
+                
+                
+            results = process_map(
+                run_evaluator_wrapper, configs_to_run, max_workers=4
+            )
+            ok = sum(r * 1 for r in results)
+            not_ok = len(results) - ok
+            print(f"OK: {ok}/{len(results)}. Not OK: {not_ok}/{len(results)}")
 
 
 class CSVGenerator(Pipeline):
@@ -893,22 +878,20 @@ class CSVGenerator(Pipeline):
             if "test_accuracy" not in run.data.metrics:
                 continue
             
-            data = dict(run.data)
+            # print(run)
+            
+            d = {
+                "model": run.data.tags["model"],
+                "test_accuracy": run.data.metrics["test_accuracy"],
+                "validation_accuracy": run.data.metrics["validation_accuracy"],
+                "update_backbone": run.data.tags.get("update_backbone", ""),
+                "trained_on": run.data.tags["trained_on"],
+                "finetune_on": run.data.tags.get("finetune_on", ""),
+                "test_on": run.data.tags["test_on"],
+                "run_name": run.info.run_name,
+            }
 
-            results.append(
-                {
-                    "model": data["tags"]["model"],
-                    "test_accuracy": data["metrics"]["test_accuracy"],
-                    "validation_accuracy": data["metrics"][
-                        "validation_accuracy"
-                    ],
-                    "update_backbone": data.get("experiment_tags/update_backbone", ""),
-                    "trained_on": data["tags"]["trained_on"],
-                    "finetune_on": data["tags"].get("finetune_on", ""),
-                    "test_on": data["tags"]["test_on"],
-                    "run_name": run.info.run_name,
-                }
-            )
+            results.append(d)
 
         df = pd.DataFrame(results)
         test_datasets = sorted(df["test_on"].unique())
@@ -919,6 +902,7 @@ class CSVGenerator(Pipeline):
             ["model", "trained_on", "finetune_on", "update_backbone"]
         ):
             freeze = ""
+            # print(f"Update backbone: {update_backbone}")
             if finetune == "":
                 freeze = ""
             else:
@@ -929,7 +913,7 @@ class CSVGenerator(Pipeline):
                         freeze = False
                     else:
                         freeze = True
-                    
+
             # test_acc_mean = group["test_accuracy"].mean()
             # val_acc_mean = group["validation_accuracy"].mean()
             row = [model, train, finetune, freeze]
@@ -944,10 +928,12 @@ class CSVGenerator(Pipeline):
             # row.append(test_acc_mean)
             results.append(row)
 
-        columns = (
-            ["model",  "trained_on", "finetune_on", "freeze"]
-            + test_datasets
-        )
+        columns = [
+            "model",
+            "trained_on",
+            "finetune_on",
+            "freeze",
+        ] + test_datasets
         df = pd.DataFrame(results, columns=columns)
         df.to_csv(self.results_file, index=False)
         print(f"Results saved to {self.results_file.resolve()}")
