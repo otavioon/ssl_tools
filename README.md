@@ -32,6 +32,13 @@ cd ssl_tools
 pip install -e .
 ```
 
+Windows will probably require the installation of Visual CPP Build Tools (https://visualstudio.microsoft.com/es/visual-cpp-build-tools/) 
+![image](https://github.com/otavioon/ssl_tools/assets/3834743/da629eb8-f22b-42d9-9803-c0eaac8f0091)
+
+After clicking on "Modify", just check "Desktop Development with C++" and "Install".
+![image](https://github.com/otavioon/ssl_tools/assets/3834743/f0d50929-7ce7-4356-bb01-b871d8920904)
+
+
 ## Main Components
 
 The framework is decoupled in different components to allow easy customization
