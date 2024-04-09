@@ -86,6 +86,7 @@ class TimeAmplitudeModulation(Transform):
 
     def __call__(self, sample: np.ndarray):
         return self.transform(sample)
+
 class RandomSmoothing(Transform):
     def __init__(self, sigma_range=(1, 1)):
         self.sigma_range = sigma_range
