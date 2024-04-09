@@ -5,8 +5,9 @@ from ssl_tools.data.datasets import (
     TFCDataset,
 )
 
-from torch.utils.data import DataLoader, ConcatDataset
+from torch.utils.data import DataLoader, ConcatDataset, Subset
 from typing import Callable, Dict, Iterable, Union, List
+import random
 
 from pathlib import Path
 from ssl_tools.transforms.time_1d import AddGaussianNoise
@@ -14,6 +15,7 @@ from ssl_tools.transforms.signal_1d import AddRemoveFrequency
 
 import os
 from ssl_tools.utils.types import PathLike
+from ssl_tools.data.datasets.augmented_dataset import AugmentedDataset
 
 import lightning as L
 
@@ -469,6 +471,7 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
         # Loader params
         batch_size: int = 1,
         num_workers: int = None,
+        data_percentage: float = 1.0,
     ):
         """Define the dataloaders for train, validation and test splits for
         HAR datasets. This datasets assumes that the data is in a single CSV
@@ -543,7 +546,7 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
         self.cast_to = cast_to
         self.batch_size = batch_size
         self.num_workers = parse_num_workers(num_workers)
-
+        self.data_percentage = data_percentage
         self.datasets = {}
 
     def _load_dataset(self, split_name: str) -> MultiModalSeriesCSVDataset:
@@ -580,6 +583,14 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
                 cast_to=self.cast_to,
                 transforms=self.transforms[split_name],
             )
+
+            if split_name == "train" and self.data_percentage < 1.0:
+                indices = list(range(len(dataset)))
+                indices = random.sample(
+                    indices, int(len(indices) * self.data_percentage)
+                )
+                dataset = Subset(dataset, indices)
+
             datasets.append(dataset)
 
         if len(datasets) == 1:
@@ -656,6 +667,31 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
 
     def __repr__(self) -> str:
         return str(self)
+
+
+class AugmentedMultiModalHARSeriesDataModule(MultiModalHARSeriesDataModule):
+    def __init__(
+        self,
+        train_transforms: List[Callable],
+        validation_transforms: List[Callable] = None,
+        test_transforms: List[Callable] = None,
+        **kwargs,
+    ):
+        kwargs.pop("transforms", None)
+        
+        super().__init__(**kwargs)
+        self.transforms = {
+            "train": train_transforms,
+            "validation": validation_transforms,
+            "test": test_transforms,
+        }
+
+    def _load_dataset(self, split_name: str) -> MultiModalSeriesCSVDataset:
+        dataset = super()._load_dataset(split_name)
+        transforms = self.transforms[split_name]
+        if transforms is not None:
+            dataset = AugmentedDataset(dataset, transforms)
+        return dataset
 
 
 class TFCDataModule(L.LightningDataModule):
@@ -846,9 +882,9 @@ class TFCDataModule(L.LightningDataModule):
             datasets.append(dataset)
 
         if len(datasets) == 1:
-            dataset =  datasets[0]
+            dataset = datasets[0]
         else:
-            dataset =  ConcatDataset(datasets)
+            dataset = ConcatDataset(datasets)
 
         # Wraps the MultiModalSeriesCSVDataset with a TFCDataset
         tfc_dataset = TFCDataset(
