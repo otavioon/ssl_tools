@@ -1,0 +1,8 @@
+class_path: ssl_tools.models.nets.cnn_pf.CNN_PFF_2D
+init_args:
+  pad_at: 3
+  input_shape:
+    - 1
+    - 6
+    - 60
+  num_classes: 7  

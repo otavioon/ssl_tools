@@ -1,0 +1,8 @@
+class_path: ssl_tools.models.nets.imu_transformer.IMUTransformerEncoder
+init_args:
+  input_shape:
+    - 6
+    - 60
+  transformer_dim: 64
+  nhead: 8
+  num_classes: 7  

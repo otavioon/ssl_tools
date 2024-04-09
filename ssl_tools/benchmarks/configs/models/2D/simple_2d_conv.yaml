@@ -1,0 +1,7 @@
+class_path: ssl_tools.models.nets.convnet.Simple2DConvNetwork
+init_args:
+  input_shape:
+    - 1
+    - 6
+    - 60
+  num_classes: 7  

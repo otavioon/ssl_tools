@@ -1,0 +1,11 @@
+data_path: "/workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/"
+default_trainer_config_file: "./configs/trainer/dry_run.yaml"
+data_module_configs_path: "./configs/data_modules/"
+model_configs_path: "./configs/models/"
+output_path: "./outputs_dry_run/"
+skip_existing: False
+use_ray: False
+ray_address: null    #"localhost:8265"
+dry_run: True
+dry_run_limit: 3
+leave_one_out: True
