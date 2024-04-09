@@ -34,7 +34,7 @@ class SimpleClassificationNet(L.LightningModule):
     def forward(self, x: torch.Tensor):
         x = self.backbone(x)
         if self.flatten:
-            x = x.view(x.size(0), -1)
+            x = x.reshape(x.size(0), -1)
         x = self.fc(x)
         return x
 
@@ -62,7 +62,7 @@ class SimpleClassificationNet(L.LightningModule):
             prog_bar=True,
             logger=True,
         )
-        # self.compute_metrics(y_hat, y, step_name)
+        self.compute_metrics(y_hat, y, step_name)
         return loss
 
     def training_step(self, batch: torch.Tensor, batch_idx: int):
