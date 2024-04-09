@@ -2,22 +2,25 @@ accelerator: gpu
 devices: 1
 max_epochs: 100
 strategy: auto
-enable_checkpointing: False
-# callbacks:
-#   # Checkpointing
-#   - class_path: lightning.pytorch.callbacks.ModelCheckpoint
-#     init_args:
-#       monitor: val_loss
-#       mode: min
-#       save_top_k: 1
-#       verbose: True
-#   # Early stopping
-#   - class_path: lightning.pytorch.callbacks.EarlyStopping
-#     init_args:
-#       monitor: val_loss
-#       mode: min
-#       patience: 10
-#       verbose: True
-#   # Performance logging
-#   - class_path: ssl_tools.callbacks.performance.PerformanceLogger
-#     init_args: {}
+enable_checkpointing: True
+logger:
+  class_path: lightning.pytorch.loggers.CSVLogger
+callbacks:
+  # Checkpointing
+  - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+    init_args:
+      monitor: val_loss
+      mode: min
+      save_top_k: 1
+      verbose: False
+      save_last: True
+  # Early stopping
+  - class_path: lightning.pytorch.callbacks.EarlyStopping
+    init_args:
+      monitor: val_loss
+      mode: min
+      patience: 20
+      verbose: False
+  # Performance logging
+  - class_path: ssl_tools.callbacks.performance.PerformanceLogger
+    init_args: {}
