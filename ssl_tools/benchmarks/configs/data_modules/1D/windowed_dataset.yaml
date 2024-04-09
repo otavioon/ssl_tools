@@ -1,0 +1,11 @@
+
+class_path: ssl_tools.data.data_modules.MultiModalHARSeriesDataModule
+init_args:
+  data_path: null             # Must be set in the config
+  features_as_channels: True
+  data_percentage: 1.0
+  batch_size: 32
+  transforms:
+  - class_path: ssl_tools.transforms.utils.Cast
+    init_args:
+      dtype: float32

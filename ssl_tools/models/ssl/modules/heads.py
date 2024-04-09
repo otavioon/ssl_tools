@@ -26,6 +26,8 @@ class TFCPredictionHead(ProjectionHead):
         hidden_dim: int = 64,
         output_dim: int = 2,
     ):
+        self.output_dim = output_dim
+        
         super().__init__(
             [
                 (
@@ -48,6 +50,8 @@ class TNCPredictionHead(ProjectionHead):
         output_dim: int = 6,
         dropout_prob: float = 0,
     ):
+        self.output_dim = output_dim
+        
         super().__init__(
             [
                 (

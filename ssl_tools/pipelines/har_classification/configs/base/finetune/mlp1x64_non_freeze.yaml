@@ -1,0 +1,4 @@
+num_classes: 6
+transforms: flatten
+batch_size: 128
+update_backbone: True

@@ -1,0 +1,11 @@
+data: /workspaces/hiaac-m4/data/standartized_balanced/KuHar
+input_size: 360
+num_classes: 6
+transforms: identity
+experiment_name: model_train
+dataset_name: KuHar
+accelerator: gpu
+devices: 1
+max_epochs: 1
+batch_size: 32
+log_dir: ./mlruns

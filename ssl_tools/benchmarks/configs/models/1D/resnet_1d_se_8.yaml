@@ -1,0 +1,6 @@
+class_path: ssl_tools.models.nets.resnet_1d.ResNetSE1D_8
+init_args:
+  input_shape:
+    - 6
+    - 60
+  num_classes: 7  

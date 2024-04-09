@@ -1,0 +1,56 @@
+class_path: ssl_tools.data.data_modules.har.AugmentedMultiModalHARSeriesDataModule
+init_args:
+  data_path: null             # Must be set in the config
+  features_as_channels: True
+  data_percentage: 1.0
+  batch_size: 32
+  transforms:
+    # View 0
+    - class_path: ssl_tools.transforms.utils.Composer
+      init_args: 
+        transforms:
+          - class_path: ssl_tools.transforms.time_1d.AddGaussianNoise
+            init_args:
+              mean: 0.0
+              std: 0.1
+          - class_path: ssl_tools.transforms.utils.Cast
+            init_args:
+              dtype: float32
+    # View 1
+    - class_path: ssl_tools.transforms.utils.Composer
+      init_args: 
+        transforms:
+          - class_path: ssl_tools.transforms.time_1d.RandomSmoothing
+            init_args: {}
+          - class_path: ssl_tools.transforms.utils.Cast
+            init_args:
+              dtype: float32
+    # View 2
+    - class_path: ssl_tools.transforms.utils.Composer
+      init_args: 
+        transforms:
+          - class_path: ssl_tools.transforms.time_1d.Scale
+            init_args: 
+              mean: 1.0
+              sigma: 0.5
+          - class_path: ssl_tools.transforms.utils.Cast
+            init_args:
+              dtype: float32
+    # View 3
+    - class_path: ssl_tools.transforms.utils.Composer
+      init_args: 
+        transforms:
+          - class_path: ssl_tools.transforms.time_1d.LeftToRightFlip
+            init_args: {}
+          - class_path: ssl_tools.transforms.utils.Cast
+            init_args:
+              dtype: float32
+    # View 4
+    - class_path: ssl_tools.transforms.utils.Composer
+      init_args: 
+        transforms:
+          - class_path: ssl_tools.transforms.utils.Identity
+            init_args: {}
+          - class_path: ssl_tools.transforms.utils.Cast
+            init_args:
+              dtype: float32

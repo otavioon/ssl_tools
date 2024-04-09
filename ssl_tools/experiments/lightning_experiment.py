@@ -3,11 +3,18 @@ from pathlib import Path
 from typing import Any, List, Union
 from abc import abstractmethod
 import lightning as L
-from lightning.pytorch.loggers import Logger, CSVLogger
-from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
+from lightning.pytorch.loggers import Logger, CSVLogger, MLFlowLogger
+from lightning.pytorch.callbacks import (
+    ModelCheckpoint,
+    RichProgressBar,
+    DeviceStatsMonitor,
+    EarlyStopping,
+    ModelSummary
+)
 import torch
 from ssl_tools.callbacks.performance import PerformanceLog
 from ssl_tools.experiments.experiment import Experiment
+
 
 class LightningExperiment(Experiment):
     _MODEL_NAME: str = "model"
@@ -30,7 +37,7 @@ class LightningExperiment(Experiment):
     ):
         name = name or self._MODEL_NAME
         super().__init__(name=name, *args, **kwargs)
-        
+
         self.stage_name = stage_name or self._STAGE_NAME
         self.batch_size = batch_size
         self.load = load
@@ -40,7 +47,7 @@ class LightningExperiment(Experiment):
         self.num_nodes = num_nodes
         self.num_workers = num_workers or os.cpu_count()
         self.log_every_n_steps = log_every_n_steps
-        
+
         self._model = None
         self._logger = None
         self._callbacks = None
@@ -58,37 +65,39 @@ class LightningExperiment(Experiment):
     @property
     def checkpoint_dir(self) -> Path:
         return self.experiment_dir / "checkpoints"
-    
+
     @property
     def model(self) -> L.LightningModule:
         if self._model is None:
             self._model = self.get_model()
         return self._model
-    
+
     @property
     def data_module(self) -> L.LightningDataModule:
         if self._data_module is None:
             self._data_module = self.get_data_module()
         return self._data_module
-    
+
     @property
     def logger(self) -> Logger:
         if self._logger is None:
             self._logger = self.get_logger()
         return self._logger
-    
+
     @property
-    def callbacks(self) ->List[L.Callback]:
+    def callbacks(self) -> List[L.Callback]:
         if self._callbacks is None:
             self._callbacks = self.get_callbacks()
         return self._callbacks
-    
+
     @property
     def hyperparameters(self) -> dict:
         def nested_convert(data):
             if isinstance(data, dict):
                 return {
-                    key: nested_convert(value) for key, value in data.items() if not key.startswith("_")
+                    key: nested_convert(value)
+                    for key, value in data.items()
+                    if not key.startswith("_")
                 }
             elif isinstance(data, Path):
                 return str(data.expanduser())
@@ -96,8 +105,7 @@ class LightningExperiment(Experiment):
                 return data
 
         hyperparams = self.__dict__.copy()
-        
-        
+
         if getattr(self.model, "get_config", None):
             hyperparams.update(self.model.get_config())
         hyperparams = nested_convert(hyperparams)
@@ -189,7 +197,7 @@ class LightningExperiment(Experiment):
         # ----------------------------------------------------------------------
         # 1. Instantiate model and data module
         # ----------------------------------------------------------------------
-        model = self.model        
+        model = self.model
         data_module = self.data_module
 
         if self.load:
@@ -213,7 +221,7 @@ class LightningExperiment(Experiment):
         # 5. Train/Tests the model
         # ----------------------------------------------------------------------
         self._result = self.run_model(model, data_module, trainer)
-        
+
         self._run_count += 1
         return self._result
 
@@ -273,8 +281,8 @@ class LightningExperiment(Experiment):
 
 
 class LightningTrain(LightningExperiment):
-    _STAGE_NAME="train"
-    
+    _STAGE_NAME = "train"
+
     def __init__(
         self,
         stage_name: str = "train",
@@ -284,6 +292,7 @@ class LightningTrain(LightningExperiment):
         checkpoint_metric_mode: str = "min",
         limit_train_batches: Union[float, int] = 1.0,
         limit_val_batches: Union[float, int] = 1.0,
+        patience: int = None,
         *args,
         **kwargs,
     ):
@@ -292,6 +301,7 @@ class LightningTrain(LightningExperiment):
         self.learning_rate = learning_rate
         self.checkpoint_metric = checkpoint_metric
         self.checkpoint_metric_mode = checkpoint_metric_mode
+        self.patience = patience
         self.limit_train_batches = limit_train_batches
         self.limit_val_batches = limit_val_batches
 
@@ -303,6 +313,11 @@ class LightningTrain(LightningExperiment):
         List[L.Callback]
             A list of callbacks to use for the experiment
         """
+        callbacks = []
+        
+        model_summary = ModelSummary(max_depth=3)
+        callbacks.append(model_summary)
+
         # Get the checkpoint callback
         checkpoint_callback = ModelCheckpoint(
             monitor=self.checkpoint_metric,
@@ -310,14 +325,29 @@ class LightningTrain(LightningExperiment):
             dirpath=self.checkpoint_dir,
             save_last=True,
         )
+        callbacks.append(checkpoint_callback)
 
         performance_log = PerformanceLog()
+        callbacks.append(performance_log)
 
         rich_progress_bar = RichProgressBar(
             leave=False, console_kwargs={"soft_wrap": True}
         )
+        callbacks.append(rich_progress_bar)
 
-        return [checkpoint_callback, rich_progress_bar, performance_log]
+        # device_stats = DeviceStatsMonitor()
+        # callbacks.append(device_stats)
+
+        if self.patience:
+            early_stopping = EarlyStopping(
+                monitor=self.checkpoint_metric,
+                mode=self.checkpoint_metric_mode,
+                patience=self.patience,
+                verbose=True,
+            )
+            callbacks.append(early_stopping)
+
+        return callbacks
 
     def get_trainer(
         self, logger: Logger, callbacks: List[L.Callback]
@@ -365,12 +395,14 @@ class LightningTrain(LightningExperiment):
 
 
 class LightningTest(LightningExperiment):
-    _STAGE_NAME="test"
-    
-    def __init__(self, limit_test_batches: Union[float, int] = 1.0, *args, **kwargs):
+    _STAGE_NAME = "test"
+
+    def __init__(
+        self, limit_test_batches: Union[float, int] = 1.0, *args, **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.limit_test_batches = limit_test_batches
-    
+
     def get_callbacks(self) -> List[L.Callback]:
         """Get the callbacks to use for the experiment.
 
@@ -409,7 +441,7 @@ class LightningTest(LightningExperiment):
             devices=self.devices,
             num_nodes=self.num_nodes,
             limit_test_batches=self.limit_test_batches,
-            log_every_n_steps=self.log_every_n_steps
+            log_every_n_steps=self.log_every_n_steps,
         )
         return trainer
 
@@ -443,7 +475,7 @@ class LightningSSLTrain(LightningTrain):
             using ``load_backbone``. The ``load`` parameter is used to load the
             full model (backbone + head).
         """
-        super().__init__(stage_name=training_mode,*args, **kwargs)
+        super().__init__(stage_name=training_mode, *args, **kwargs)
         self.training_mode = training_mode
         self.load_backbone = load_backbone
         assert self.training_mode in ["pretrain", "finetune"]
@@ -523,4 +555,3 @@ class LightningSSLTrain(LightningTrain):
             _description_
         """
         raise NotImplementedError
-

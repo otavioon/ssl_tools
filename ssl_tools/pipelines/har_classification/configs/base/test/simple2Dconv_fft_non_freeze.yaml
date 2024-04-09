@@ -1,0 +1,5 @@
+num_classes: 6
+transforms: 
+- fft
+- dimension_adder
+batch_size: 128

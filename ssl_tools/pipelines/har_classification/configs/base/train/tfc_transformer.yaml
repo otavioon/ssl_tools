@@ -1,0 +1,4 @@
+in_channels: 6
+length_alignment: 60
+features_as_channels: True
+batch_size: 64

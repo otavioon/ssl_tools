@@ -34,7 +34,7 @@ class SimpleClassificationNet(L.LightningModule):
     def forward(self, x: torch.Tensor):
         x = self.backbone(x)
         if self.flatten:
-            x = x.view(x.size(0), -1)
+            x = x.reshape(x.size(0), -1)
         x = self.fc(x)
         return x
 
@@ -157,6 +157,7 @@ class MLPClassifier(SimpleClassificationNet):
         val_metrics: Dict[str, torch.Tensor] = None,
         test_metrics: Dict[str, torch.Tensor] = None,
     ):
+        self.hidden_size = hidden_size
         backbone = torch.nn.Sequential()
         for i in range(num_hidden_layers):
             if i == 0:

@@ -1,0 +1,10 @@
+data_path: "/workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/"
+default_trainer_config_file: "./configs/trainer/default.yaml"
+data_module_configs_path: "./configs/data_modules/"
+model_configs_path: "./configs/models/"
+output_path: "./outputs/benchmark_a2/"
+skip_existing: True
+use_ray: True
+ray_address: "172.17.0.3:6379"
+dry_run: False
+leave_one_out: True

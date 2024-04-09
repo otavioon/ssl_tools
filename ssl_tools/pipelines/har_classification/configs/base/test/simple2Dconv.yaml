@@ -1,0 +1,3 @@
+num_classes: 6
+batch_size: 128
+transforms: dimension_adder

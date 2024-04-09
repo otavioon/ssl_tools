@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # TODO: A way of removing the need to add the path to the root of
 # the project

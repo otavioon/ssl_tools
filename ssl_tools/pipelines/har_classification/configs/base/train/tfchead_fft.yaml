@@ -1,0 +1,4 @@
+input_size: 180
+num_classes: 6
+transforms: fft
+batch_size: 128

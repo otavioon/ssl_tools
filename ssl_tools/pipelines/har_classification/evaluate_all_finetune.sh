@@ -1,0 +1,1 @@
+python evaluator.py evaluate-all --experiment_name har_results --experiment_id 405350719407705640  --root_dataset_dir /workspaces/hiaac-m4/data/standartized_balanced/ --batch_size 256 --accelerator gpu --devices 1 --config_dir configs/base/test --log_dir mlruns/ --stage_to_evaluate "finetune" --skip_existing true

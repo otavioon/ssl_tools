@@ -1,0 +1,3 @@
+input_size: 360
+num_classes: 6
+batch_size: 128

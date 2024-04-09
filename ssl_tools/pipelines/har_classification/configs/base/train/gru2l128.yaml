@@ -1,0 +1,4 @@
+num_layers: 2
+encoding_size: 128
+num_classes: 6
+batch_size: 128
