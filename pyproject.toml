@@ -26,6 +26,7 @@ dependencies = [
     "lightning",
     "mlflow",
     "numpy",
+    "omegaconf",
     "pandas",
     "plotly",
     "PyYAML",
