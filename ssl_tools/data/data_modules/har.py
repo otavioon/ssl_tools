@@ -16,6 +16,8 @@ from ssl_tools.transforms.signal_1d import AddRemoveFrequency
 import os
 from ssl_tools.utils.types import PathLike
 from ssl_tools.data.datasets.augmented_dataset import AugmentedDataset
+from ssl_tools.data.data_modules.base import SimpleDataModule
+from ssl_tools.data.datasets.domain_dataset import DomainDataset
 
 import lightning as L
 
@@ -82,7 +84,7 @@ def parse_num_workers(num_workers: int) -> int:
     return num_workers if num_workers is not None else os.cpu_count()
 
 
-class UserActivityFolderDataModule(L.LightningDataModule):
+class UserActivityFolderDataModule(SimpleDataModule):
     def __init__(
         self,
         # Dataset Params
@@ -451,7 +453,7 @@ class TNCHARDataModule(UserActivityFolderDataModule):
         return dataset
 
 
-class MultiModalHARSeriesDataModule(L.LightningDataModule):
+class MultiModalHARSeriesDataModule(SimpleDataModule):
     def __init__(
         self,
         # Dataset params
@@ -472,6 +474,7 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
         batch_size: int = 1,
         num_workers: int = None,
         data_percentage: float = 1.0,
+        domain_info: bool = False,
     ):
         """Define the dataloaders for train, validation and test splits for
         HAR datasets. This datasets assumes that the data is in a single CSV
@@ -548,6 +551,7 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
         self.num_workers = parse_num_workers(num_workers)
         self.data_percentage = data_percentage
         self.datasets = {}
+        self.domain_info = domain_info
 
     def _load_dataset(self, split_name: str) -> MultiModalSeriesCSVDataset:
         """Create a ``MultiModalSeriesCSVDataset`` dataset with the given split.
@@ -574,7 +578,7 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
             split_name = "test"
 
         datasets = []
-        for data in self.data_path:
+        for i, data in enumerate(self.data_path):
             dataset = MultiModalSeriesCSVDataset(
                 data / f"{split_name}.csv",
                 feature_prefixes=self.feature_prefixes,
@@ -591,6 +595,9 @@ class MultiModalHARSeriesDataModule(L.LightningDataModule):
                 )
                 dataset = Subset(dataset, indices)
 
+            if self.domain_info:
+                dataset = DomainDataset(dataset, i)
+                
             datasets.append(dataset)
 
         if len(datasets) == 1:
@@ -694,7 +701,7 @@ class AugmentedMultiModalHARSeriesDataModule(MultiModalHARSeriesDataModule):
         return dataset
 
 
-class TFCDataModule(L.LightningDataModule):
+class TFCDataModule(SimpleDataModule):
     def __init__(
         self,
         # Dataset Params
