@@ -12,7 +12,7 @@ from lightning.pytorch.callbacks import (
     ModelSummary
 )
 import torch
-from ssl_tools.callbacks.performance import PerformanceLog
+from ssl_tools.callbacks.performance import PerformanceLogger
 from ssl_tools.experiments.experiment import Experiment
 
 
@@ -327,7 +327,7 @@ class LightningTrain(LightningExperiment):
         )
         callbacks.append(checkpoint_callback)
 
-        performance_log = PerformanceLog()
+        performance_log = PerformanceLogger()
         callbacks.append(performance_log)
 
         rich_progress_bar = RichProgressBar(
@@ -411,7 +411,7 @@ class LightningTest(LightningExperiment):
         List[L.Callback]
             The list of callbacks to use for the experiment.
         """
-        performance_log = PerformanceLog()
+        performance_log = PerformanceLogger()
         rich_progress_bar = RichProgressBar(
             leave=False, console_kwargs={"soft_wrap": True}
         )
