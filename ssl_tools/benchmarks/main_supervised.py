@@ -25,7 +25,8 @@ class ExperimentArgs:
     data: Dict[str, Any]
     test_data: Dict[str, Any]
     seed: int = 42
-        
+    num_classes: int = 7
+
 
 def cli_main(experiment: ExperimentArgs):
     class DummyModel(L.LightningModule):
@@ -43,7 +44,7 @@ def cli_main(experiment: ExperimentArgs):
         "data": experiment.data,
         "seed_everything": experiment.seed,
     }
-    
+
     # print(cli_args)
 
     # Instantiate model, trainer, and train_datamodule
@@ -70,14 +71,35 @@ def cli_main(experiment: ExperimentArgs):
 
     # Attach model test metrics
     model.metrics["test"]["accuracy"] = Accuracy(
-        task="multiclass", num_classes=7
+        task="multiclass", num_classes=experiment.num_classes
     )
 
     # Perform FIT
     trainer.fit(model, train_data_module)
 
-    # Perform test and return metrics
+    # Last model
+    # trainer.logger.log_metrics("loaded_model", -1)
     metrics = trainer.test(model, test_data_module)
+    metrics = {f"{k}_last": v for k, v in metrics[0].items()}
+    trainer.logger.log_metrics(metrics)
+    
+        
+    for loss_name in ["train_loss", "val_loss"]:
+        
+        ckpts = [
+            path
+            for path in Path(
+                trainer.checkpoint_callback.best_model_path
+            ).parent.glob("*.ckpt")
+            if loss_name in path.stem
+        ]
+        
+        for chkpt in ckpts:
+            metrics = trainer.test(model, test_data_module, ckpt_path=chkpt)
+            metrics = {f"{k}@{loss_name}@{chkpt.stem}": v for k, v in metrics[0].items()}
+            trainer.logger.log_metrics(metrics)
+    
+    # Perform test and return metrics
     return metrics
 
 
@@ -109,8 +131,8 @@ def run_using_ray(experiments: List[ExperimentArgs], ray_address: str = None):
     ray.init(address=ray_address)
     remotes_to_run = [
         ray.remote(
-            num_gpus=0.25,
-            num_cpus=4,
+            num_gpus=0.10,
+            num_cpus=2,
             max_calls=1,
             max_retries=0,
             retry_exceptions=False,
@@ -134,23 +156,45 @@ class SupervisedConfigParser:
         self,
         data_path: str,
         default_trainer_config: str,
-        data_module_configs: str,
-        model_configs: str,
+        data_module_configs: str | List[str],
+        model_configs: str | List[str],
         output_dir: str = "benchmarks/",
         skip_existing: bool = True,
-        enable_checkpointing: bool = False,
         seed: int = 42,
         leave_one_out: bool = False,
+        data_shapes_file: str = None,
+        num_classes: int = 7,
     ):
-        self.data_path = data_path
-        self.default_trainer_config = default_trainer_config
+        self.output_dir = Path(output_dir)
+        self.data_path = Path(data_path)
+        self.default_trainer_config = Path(default_trainer_config)
         self.data_module_configs = data_module_configs
         self.model_configs = model_configs
-        self.output_dir = output_dir
         self.skip_existing = skip_existing
-        self.enable_checkpointing = enable_checkpointing
         self.seed = seed
         self.leave_one_out = leave_one_out
+        self.data_shapes_file = data_shapes_file
+        self.num_classes = num_classes
+
+    @staticmethod
+    def scan_configs(configs_path: Path) -> List[Path]:
+        if not isinstance(configs_path, list):
+            configs_path = [configs_path]
+
+        files = []
+        for path in configs_path:
+            path = Path(path)
+
+            if not path.exists():
+                raise ValueError(f"Invalid path: {path}")
+            if path.is_file():
+                files.append(path)
+            elif path.is_dir():
+                paths = [Path(f) for f in sorted(path.rglob("*.yaml"))]
+                files.extend(paths)
+            else:
+                raise ValueError(f"Invalid path: {path}")
+        return files
 
     # TODO automate this, using the a query string, sql like
     def filter_experiments(self, experiments: List[ExperimentArgs]):
@@ -165,16 +209,18 @@ class SupervisedConfigParser:
         input_type = ["1D", "2D"]
         now = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
 
-        models = list(sorted(self.model_configs.rglob("*.yaml")))
-        data_modules = list(sorted(self.data_module_configs.rglob("*.yaml")))
+        models = self.scan_configs(self.model_configs)
+        data_modules = self.scan_configs(self.data_module_configs)
         datasets = list(sorted(self.data_path.glob("*")))
+        data_shapes = None
+        if self.data_shapes_file:
+            with open(self.data_shapes_file, "r") as f:
+                data_shapes = yaml.safe_load(f)
+                
         experiments = []
 
         initial_trainer_config = yaml.safe_load(
             self.default_trainer_config.read_text()
-        )
-        initial_trainer_config["enable_checkpointing"] = (
-            self.enable_checkpointing
         )
 
         # Segment datasets into train and test
@@ -243,14 +289,17 @@ class SupervisedConfigParser:
                             "version": version,
                         },
                     }
+                    
+                    if data_shapes:
+                        model_config["init_args"]["input_shape"] = data_shapes[train_set_name]
 
                     # TODO ------- remove this when all gpu bugs were fixed --------
                     if (
                         "lstm" in model_name
                         or "inception" in model_name
-                        or "cnn_haetal_2d" in model_name
-                        or "cnn_pf" in model_name
-                        or "cnn_pff" in model_name
+                        # or "cnn_haetal_2d" in model_name
+                        # or "cnn_pf" in model_name
+                        # or "cnn_pff" in model_name
                     ):
                         trainer_config["accelerator"] = "cpu"
                     else:
@@ -268,6 +317,7 @@ class SupervisedConfigParser:
                             data=data_module_config,
                             test_data=test_data_module_config,
                             seed=self.seed,
+                            num_classes=self.num_classes
                         )
                     )
         experiments = self.filter_experiments(experiments)
@@ -323,28 +373,30 @@ def run(
 def main(
     data_path: str,
     default_trainer_config_file: str,
-    data_module_configs_path: str,
-    model_configs_path: str,
+    data_module_configs_path: str | List[str],
+    model_configs_path: str | List[str],
     output_path: str = "benchmarks/",
     skip_existing: bool = True,
     ray_address: str = None,
     use_ray: bool = True,
-    enable_checkpointing: bool = False,
     seed: int = 42,
     dry_run: bool = False,
     dry_run_limit: int = 5,
     leave_one_out: bool = False,
+    data_shapes_file: str = None,
+    num_classes: int = 7,
 ):
     parser = SupervisedConfigParser(
-        data_path=Path(data_path),
+        data_path=data_path,
         default_trainer_config=Path(default_trainer_config_file),
-        data_module_configs=Path(data_module_configs_path),
-        model_configs=Path(model_configs_path),
-        output_dir=Path(output_path),
+        data_module_configs=data_module_configs_path,
+        model_configs=model_configs_path,
+        output_dir=output_path,
         skip_existing=skip_existing,
-        enable_checkpointing=enable_checkpointing,
         seed=seed,
         leave_one_out=leave_one_out,
+        data_shapes_file=data_shapes_file,
+        num_classes=num_classes
     )
     return run(
         parser,

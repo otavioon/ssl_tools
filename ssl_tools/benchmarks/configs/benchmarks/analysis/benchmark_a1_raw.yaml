@@ -1,0 +1,4 @@
+results_dir: outputs/benchmark_a1_raw/
+query: ~`data_module`.str.contains("augmented")
+output_dir: results
+result_file: results_benchmark_a1_raw.csv

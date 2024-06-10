@@ -1,4 +1,5 @@
-data_path: "/workspaces/hiaac-m4/ssl_tools/data/standartized_balanced/"
+data_path: "/workspaces/hiaac-m4/ssl_tools/data/raw_balanced/"
+data_shapes_file: "/workspaces/hiaac-m4/ssl_tools/ssl_tools/benchmarks/raw_dataset_shapes.yaml"
 default_trainer_config_file: "./configs/trainer/default.yaml"
 data_module_configs_path: 
   - "./configs/data_modules/1D/windowed_dataset.yaml"
@@ -6,7 +7,7 @@ data_module_configs_path:
 model_configs_path: 
   - "./configs/models/1D"
   - "./configs/models/2D"
-output_path: "./outputs/benchmark_a1/"
+output_path: "./outputs/benchmark_a1_raw/"
 skip_existing: True
 use_ray: True
 ray_address: "172.17.0.3:6379"

@@ -13,7 +13,13 @@ from ssl_tools.models.utils import ZeroPadder2D
 
 # (I1) 3 x 3, (C1) 2 x 3, (S1) 3 x 5, (C2) 2 x 3.
 class CNN_PF_Backbone(torch.nn.Module):
-    def __init__(self, pad_at: int, input_shape: Tuple[int, int, int], out_channels: int = 16, include_middle: bool = False):
+    def __init__(
+        self,
+        pad_at: int,
+        input_shape: Tuple[int, int, int],
+        out_channels: int = 16,
+        include_middle: bool = False,
+    ):
         super().__init__()
         self.pad_at = pad_at
         self.input_shape = input_shape
@@ -55,7 +61,7 @@ class CNN_PF_Backbone(torch.nn.Module):
                 padding=1,
             ),
         )
-        
+
         if self.include_middle:
             self.middle_part = torch.nn.Sequential(
                 torch.nn.Conv2d(
@@ -71,15 +77,17 @@ class CNN_PF_Backbone(torch.nn.Module):
                     padding=1,
                 ),
             )
-        
-        
+
         self.shared_part = torch.nn.Sequential(
             torch.nn.Conv2d(
-                in_channels=self.out_channels * 3 if self.include_middle else self.out_channels * 2,
+                in_channels=(
+                    self.out_channels * 3
+                    if self.include_middle
+                    else self.out_channels * 2
+                ),
                 out_channels=64,
                 kernel_size=(3, 5),
                 stride=(1, 1),
-                
             ),
             torch.nn.ReLU(),
             torch.nn.MaxPool2d(
@@ -100,7 +108,11 @@ class CNN_PF_Backbone(torch.nn.Module):
         upper_x = x[:, :, : self.pad_at + self.first_pad_size, :]
         upper_x = self.upper_part(upper_x)
         zeros_1 = torch.zeros(
-            upper_x.size(0), upper_x.size(1), 3 - 1, upper_x.size(3)
+            upper_x.size(0),
+            upper_x.size(1),
+            3 - 1,
+            upper_x.size(3),
+            device=x.device,
         )
 
         upper_x = torch.cat(
@@ -112,22 +124,26 @@ class CNN_PF_Backbone(torch.nn.Module):
         lower_x = x[:, :, self.pad_at :, :]
         lower_x = self.lower_part(lower_x)
         zeros_2 = torch.zeros(
-            lower_x.size(0), lower_x.size(1), 3 - 1, lower_x.size(3)
+            lower_x.size(0),
+            lower_x.size(1),
+            3 - 1,
+            lower_x.size(3),
+            device=x.device,
         )
 
         lower_x = torch.cat(
             [zeros_2, lower_x],
             dim=2,
         )
-        
+
         if self.include_middle:
             # x is already middle
             middle_x = self.middle_part(x)
             concatenated_x = torch.cat([upper_x, middle_x, lower_x], dim=1)
-        
+
         else:
             concatenated_x = torch.cat([upper_x, lower_x], dim=1)
-        
+
         result_x = self.shared_part(concatenated_x)
         return result_x
 
@@ -170,7 +186,6 @@ class CNN_PF_2D(SimpleClassificationNet):
                 "acc": Accuracy(task="multiclass", num_classes=num_classes)
             },
         )
-
 
     def _calculate_fc_input_features(
         self, backbone: torch.nn.Module, input_shape: Tuple[int, int, int]
@@ -230,8 +245,8 @@ class CNN_PFF_2D(CNN_PF_2D):
 #     )
 
 #     trainer.fit(model, datamodule=data_module)
-    
-    
+
+
 # def test_cnn_pff_2d():
 #     input_shape = (1, 6, 60)
 

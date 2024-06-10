@@ -28,7 +28,8 @@ class ZeroPadder2D(torch.nn.Module):
         for i in self.pad_at:
             left = x[:, :, :i, :]
             zeros = torch.zeros(
-                x.shape[0], x.shape[1], self.padding_size, x.shape[3]
+                x.shape[0], x.shape[1], self.padding_size, x.shape[3],
+                device=x.device
             )
             right = x[:, :, i:, :]
 

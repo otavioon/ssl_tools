@@ -25,7 +25,7 @@ class CovidUserAnomalyDataModule(L.LightningDataModule):
         validation_split: float = 0.2,
         dataset_transforms: List[callable] = None,
         shuffle_train: bool = True,
-        discard_last_batch: bool = True,
+        discard_last_batch: bool = False,
         balance: bool = False,
         train_baseline_only: bool = True,
     ):
@@ -46,6 +46,11 @@ class CovidUserAnomalyDataModule(L.LightningDataModule):
         self.discard_last_batch = discard_last_batch
         self.balance = balance
         self.train_baseline_only = train_baseline_only
+        
+        # Remove val_dataloader method if validation_split is 0
+        # This avoids lightning to fetch the val_dataloader
+        if self.validation_split == 0:
+            delattr(self, "val_dataloader")
 
     def setup(self, stage: str):
         data = pd.read_csv(self.data_path)
@@ -100,28 +105,40 @@ class CovidUserAnomalyDataModule(L.LightningDataModule):
                 data = data[data["baseline"] == True]
 
             # train_test_split
-            train_data = data.sample(frac=1 - self.validation_split)
-            val_data = data.drop(train_data.index)
+            if self.validation_split != 0:
+                train_data = data.sample(frac=1 - self.validation_split)
+                val_data = data.drop(train_data.index)
 
-            self.train_dataset = MultiModalDataframeDataset(
-                train_data,
-                feature_column_prefix=self.feature_column_prefix,
-                target_column=self.target_column,
-                reshape=self.reshape,
-                transforms=self.train_transforms,
-                name=f"{self.participants}_train",
-                dataset_transforms=self.dataset_transforms,
-                balance=self.balance,
-            )
+                self.train_dataset = MultiModalDataframeDataset(
+                    train_data,
+                    feature_column_prefix=self.feature_column_prefix,
+                    target_column=self.target_column,
+                    reshape=self.reshape,
+                    transforms=self.train_transforms,
+                    name=f"{self.participants}_train",
+                    dataset_transforms=self.dataset_transforms,
+                    balance=self.balance,
+                )
 
-            self.validation_dataset = MultiModalDataframeDataset(
-                val_data,
-                feature_column_prefix=self.feature_column_prefix,
-                target_column=self.target_column,
-                reshape=self.reshape,
-                transforms=self.train_transforms,
-                name=f"{self.participants}_validation",
-            )
+                self.validation_dataset = MultiModalDataframeDataset(
+                    val_data,
+                    feature_column_prefix=self.feature_column_prefix,
+                    target_column=self.target_column,
+                    reshape=self.reshape,
+                    transforms=self.train_transforms,
+                    name=f"{self.participants}_validation",
+                )
+            else:
+                self.train_dataset = MultiModalDataframeDataset(
+                    data,
+                    feature_column_prefix=self.feature_column_prefix,
+                    target_column=self.target_column,
+                    reshape=self.reshape,
+                    transforms=self.train_transforms,
+                    name=f"{self.participants}_train",
+                    dataset_transforms=self.dataset_transforms,
+                    balance=self.balance,
+                )
 
         else:
             # elif stage == "test" or stage == "predict":
@@ -173,3 +190,9 @@ class CovidUserAnomalyDataModule(L.LightningDataModule):
             shuffle=False,
             drop_last=self.discard_last_batch,
         )
+        
+    def __str__(self) -> str:
+        return f"CovidUserAnomalyDataModule (Data={self.data_path}, {len(self.participants)} participant selected)"
+
+    def __repr__(self) -> str:
+        return str(self)

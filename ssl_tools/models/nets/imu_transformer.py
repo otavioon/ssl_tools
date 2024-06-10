@@ -6,6 +6,7 @@ from ssl_tools.models.nets.simple import SimpleClassificationNet
 from ssl_tools.models.utils import RandomDataModule
 import lightning as L
 
+L.pytorch.callbacks.Callback
 
 """
 IMUTransformerEncoder model

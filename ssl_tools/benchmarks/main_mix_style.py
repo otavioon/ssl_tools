@@ -7,6 +7,7 @@ from dassl.modeling.ops.mixstyle import (
     random_mixstyle,
     deactivate_mixstyle,
 )
+from dassl.modeling.ops import Conv2dDynamic
 
 import torch
 from sklearn.manifold import TSNE
@@ -36,6 +37,8 @@ from torchmetrics import Accuracy
 from ssl_tools.models.nets.simple import SimpleClassificationNet
 from ssl_tools.models.utils import RandomDataModule
 import lightning as L
+
+from ssl_tools.models.utils import ZeroPadder2D
 
 import ray
 
@@ -131,6 +134,174 @@ class CNN_HaEtAl_1D(SimpleClassificationNet2):
 
     def _create_backbone(self, input_shape: Tuple[int, int]) -> torch.nn.Module:
         return CNN_HaEtAl_1D_Backbone(input_channels=input_shape[0])
+
+    def _calculate_fc_input_features(
+        self, backbone: torch.nn.Module, input_shape: Tuple[int, int, int]
+    ) -> int:
+        """Run a single forward pass with a random input to get the number of
+        features after the convolutional layers.
+
+        Parameters
+        ----------
+        backbone : torch.nn.Module
+            The backbone of the network
+        input_shape : Tuple[int, int, int]
+            The input shape of the network.
+
+        Returns
+        -------
+        int
+            The number of features after the convolutional layers.
+        """
+        random_input = torch.randn(1, *input_shape)
+        with torch.no_grad():
+            out = backbone(random_input)
+        return out.view(out.size(0), -1).size(1)
+
+    def _create_fc(
+        self, input_features: int, num_classes: int
+    ) -> torch.nn.Module:
+        return torch.nn.Sequential(
+            torch.nn.Linear(in_features=input_features, out_features=128),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.5),
+            torch.nn.Linear(in_features=128, out_features=num_classes),
+            # torch.nn.Softmax(dim=1),
+        )
+
+
+# ******************************************
+# CNN_HaEtAl_2D
+# ******************************************
+def conv3x3(
+    in_planes: int,
+    out_planes: int,
+    stride: int = 1,
+    groups: int = 1,
+    dilation: int = 1,
+) -> nn.Conv2d:
+    """3x3 convolution with padding"""
+    return nn.Conv2d(
+        in_planes,
+        out_planes,
+        kernel_size=3,
+        stride=stride,
+        padding=dilation,
+        groups=groups,
+        bias=False,
+        dilation=dilation,
+    )
+
+
+def conv3x3_dynamic(
+    in_planes: int,
+    out_planes: int,
+    stride: int = 1,
+    attention_in_channels: int = None,
+) -> Conv2dDynamic:
+    """3x3 convolution with padding"""
+    return Conv2dDynamic(
+        in_planes,
+        out_planes,
+        kernel_size=3,
+        stride=stride,
+        padding=1,
+        bias=False,
+        attention_in_channels=attention_in_channels,
+    )
+
+
+class CNN_HaEtAl_2D_Backbone(torch.nn.Module):
+    def __init__(self, pad_at: int, in_channels: int = 1):
+        super().__init__()
+        self.first_kernel_size = 4
+        self.in_channels = in_channels
+        self.pad_at = pad_at
+
+        # Add padding
+        self.zero_padder = ZeroPadder2D(
+            pad_at=self.pad_at,
+            padding_size=self.first_kernel_size - 1,  # kernel size - 1
+        )
+        # First 2D convolutional layer
+        self.conv1 = torch.nn.Conv2d(
+            in_channels=in_channels,
+            out_channels=32,
+            kernel_size=(self.first_kernel_size, self.first_kernel_size),
+            stride=(1, 1),
+        )
+        self.relu1 = torch.nn.ReLU()
+        self.maxpool1 = torch.nn.MaxPool2d(
+            kernel_size=(3, 3),
+            stride=(3, 3),
+            padding=1,
+        )
+        self.mixstyle1 = MixStyle(0.5, 0.1, mix="random")
+
+        # Second 2D convolutional layer
+        self.conv2 = torch.nn.Conv2d(
+            in_channels=32,
+            out_channels=64,
+            kernel_size=(5, 5),
+            stride=(1, 1),
+            padding=2,
+        )
+        self.relu2 = torch.nn.ReLU()
+        self.maxpool2 = torch.nn.MaxPool2d(
+            kernel_size=(3, 3),
+            stride=(3, 3),
+            padding=1,
+        )
+        self.mixstyle2 = MixStyle(0.5, 0.1, mix="random")
+
+    def forward(self, x):
+        x = self.zero_padder(x)
+        x = self.conv1(x)
+        x = self.relu1(x)
+        x = self.maxpool1(x)
+        x = self.mixstyle1(x)
+        x = self.conv2(x)
+        x = self.relu2(x)
+        x = self.maxpool2(x)
+        x = self.mixstyle2(x)
+        return x
+
+
+class CNN_HaEtAl_2D(SimpleClassificationNet2):
+    def __init__(
+        self,
+        pad_at: List[int] = (3,),
+        input_shape: Tuple[int, int, int] = (1, 6, 60),
+        num_classes: int = 6,
+        learning_rate: float = 1e-3,
+    ):
+        self.pad_at = pad_at
+        self.input_shape = input_shape
+        self.num_classes = num_classes
+
+        backbone = self._create_backbone(input_shape=input_shape)
+        self.fc_input_channels = self._calculate_fc_input_features(
+            backbone, input_shape
+        )
+        fc = self._create_fc(self.fc_input_channels, num_classes)
+        super().__init__(
+            backbone=backbone,
+            fc=fc,
+            learning_rate=learning_rate,
+            flatten=True,
+            loss_fn=torch.nn.CrossEntropyLoss(),
+            val_metrics={
+                "acc": Accuracy(task="multiclass", num_classes=num_classes)
+            },
+            test_metrics={
+                "acc": Accuracy(task="multiclass", num_classes=num_classes)
+            },
+        )
+
+    def _create_backbone(self, input_shape: Tuple[int, int]) -> torch.nn.Module:
+        return CNN_HaEtAl_2D_Backbone(
+            pad_at=self.pad_at, in_channels=input_shape[0]
+        )
 
     def _calculate_fc_input_features(
         self, backbone: torch.nn.Module, input_shape: Tuple[int, int, int]
@@ -412,35 +583,6 @@ class ResNetSE1D_5(ResNet1DBase):
 ################################################################################
 
 
-def run(
-    model,
-    trainer,
-    train_data_module,
-    test_data_module,
-    analyser,
-    mix: bool = True,
-):
-    if mix:
-        context = run_with_mixstyle
-    else:
-        context = run_without_mixstyle
-
-    with context(model):
-        print(f"Training model with {'MixStyle' if mix else 'No MixStyle'}...")
-        trainer.fit(model, train_data_module)
-
-        print(f"Testing model with {'MixStyle' if mix else 'No MixStyle'}...")
-        trainer.test(model, test_data_module)
-
-        print(f"Analysing model with {'MixStyle' if mix else 'No MixStyle'}...")
-        return analyser(trainer, model, test_data_module)
-
-
-################################################################################
-# Main code
-################################################################################
-
-
 @dataclass
 class ExperimentArgs:
     trainer_cls: Any
@@ -586,6 +728,11 @@ def run_serial(experiments: List[ExperimentArgs]):
         _run_experiment_wrapper(exp_args)
 
 
+################################################################################
+# Main code
+################################################################################
+
+
 def main_loo():
     datasets = [
         Path("/workspaces/hiaac-m4/data/standartized_balanced/KuHar"),
@@ -621,7 +768,7 @@ def main_loo():
                 "logger": {
                     "class_path": "lightning.pytorch.loggers.CSVLogger",
                     "init_args": {
-                        "save_dir": "logs/ResNetSE1D_8/",
+                        "save_dir": "logs/CNN_HaEtAl_2D/",
                         "name": dataset.stem,
                         "version": run_id,
                     },
@@ -641,9 +788,9 @@ def main_loo():
                     },
                 ],
             },
-            model_cls=ResNetSE1D_8,
+            model_cls=CNN_HaEtAl_2D,
             model_args={
-                "input_shape": (6, 60),
+                "input_shape": (1, 6, 60),
                 "num_classes": 7,
                 "learning_rate": 1e-3,
             },
@@ -653,10 +800,10 @@ def main_loo():
                 "batch_size": 128,
                 "num_workers": 16,
                 "transforms": [
-                    # {
-                    #     "class_path": "ssl_tools.transforms.utils.Unsqueeze",
-                    #     "init_args": {"axis": 0},
-                    # },
+                    {
+                        "class_path": "ssl_tools.transforms.utils.Unsqueeze",
+                        "init_args": {"axis": 0},
+                    },
                     {
                         "class_path": "ssl_tools.transforms.utils.Cast",
                         "init_args": {"dtype": "float32"},
@@ -669,10 +816,10 @@ def main_loo():
                 "batch_size": 128,
                 "num_workers": 8,
                 "transforms": [
-                    # {
-                    #     "class_path": "ssl_tools.transforms.utils.Unsqueeze",
-                    #     "init_args": {"axis": 0},
-                    # },
+                    {
+                        "class_path": "ssl_tools.transforms.utils.Unsqueeze",
+                        "init_args": {"axis": 0},
+                    },
                     {
                         "class_path": "ssl_tools.transforms.utils.Cast",
                         "init_args": {"dtype": "float32"},
@@ -681,14 +828,14 @@ def main_loo():
                 "domain_info": True,
             },
             seed=42,
-            mix=False,
+            mix=True,
         )
 
         experiments.append(experiment)
         # cli_main(experiment)
 
-    run_serial(experiments)
-    # run_using_ray(experiments)
+    # run_serial(experiments)
+    run_using_ray(experiments)
 
 
 if __name__ == "__main__":
