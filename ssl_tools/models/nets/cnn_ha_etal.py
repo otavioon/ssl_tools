@@ -213,8 +213,6 @@ class CNN_HaEtAl_2D(SimpleClassificationNet):
         )
         
         
-import dassl
-        
         
 # def test_cnn_1d():
 #     input_shape = (1, 6, 60)

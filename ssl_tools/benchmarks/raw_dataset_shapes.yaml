@@ -1,0 +1,18 @@
+KuHar:
+  - 6
+  - 300
+MotionSense:
+  - 6
+  - 150
+RealWorld_thigh:
+  - 6
+  - 150
+RealWorld_waist:
+  - 6
+  - 150
+UCI:
+  - 6
+  - 150
+WISDM:
+  - 6
+  - 60

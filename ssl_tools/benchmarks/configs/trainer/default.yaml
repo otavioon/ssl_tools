@@ -2,22 +2,45 @@ accelerator: gpu
 devices: 1
 max_epochs: 100
 strategy: auto
-enable_checkpointing: False
-# callbacks:
-#   # Checkpointing
-#   - class_path: lightning.pytorch.callbacks.ModelCheckpoint
-#     init_args:
-#       monitor: val_loss
-#       mode: min
-#       save_top_k: 1
-#       verbose: True
-#   # Early stopping
-#   - class_path: lightning.pytorch.callbacks.EarlyStopping
-#     init_args:
-#       monitor: val_loss
-#       mode: min
-#       patience: 10
-#       verbose: True
-#   # Performance logging
-#   - class_path: ssl_tools.callbacks.performance.PerformanceLogger
-#     init_args: {}
+log_every_n_steps: 10
+enable_progress_bar: False
+enable_model_summary: False
+logger:
+  class_path: lightning.pytorch.loggers.CSVLogger
+  init_args: {}
+callbacks:
+  # Checkpointing
+  - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+    init_args:
+      monitor: val_loss
+      mode: min
+      save_top_k: 3
+      verbose: False
+      save_last: True
+      save_weights_only: True
+      every_n_epochs: 3
+      save_on_train_epoch_end: False
+      auto_insert_metric_name: True
+      filename: "{epoch}-{step}-{val_loss:.2f}"
+  - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+    init_args:
+      monitor: train_loss
+      mode: min
+      save_top_k: 3
+      verbose: False
+      save_last: False
+      save_weights_only: True
+      every_n_epochs: 3
+      save_on_train_epoch_end: False
+      auto_insert_metric_name: True
+      filename: "{epoch}-{step}-{train_loss:.2f}"
+  # Early stopping
+  - class_path: lightning.pytorch.callbacks.EarlyStopping
+    init_args:
+      monitor: val_loss
+      mode: min
+      patience: 50
+      verbose: False
+  # Performance logging
+  - class_path: ssl_tools.callbacks.performance.PerformanceLogger
+    init_args: {}

@@ -188,3 +188,11 @@ ssl_tools/experiments/har_classification/mlp_classifier.py
 ssl_tools/benchmarks/outputs/
 ssl_tools/benchmarks/outputs_loo/
 ssl_tools/benchmarks/outputs_dry_run/
+ssl_tools/analysis/logs/
+ssl_tools/benchmarks/logs/
+ssl_tools/benchmarks/old_outputs/
+ssl_tools/benchmarks/old_results/
+ssl_tools/benchmarks/test/
+
+# Torch checkpoints
+*.ckpt

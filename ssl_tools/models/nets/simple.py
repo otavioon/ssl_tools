@@ -135,12 +135,16 @@ class SimpleReconstructionNet(L.LightningModule):
         y_hat = self.forward(x)
         return y_hat
 
-    def configure_optimizers(self):
+    def configure_optimizers(self):        
         optimizer = torch.optim.Adam(
             self.parameters(),
             lr=self.learning_rate,
         )
         return optimizer
+        # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        #     optimizer, T_max=10, eta_min=0
+        # )
+        # return [optimizer], [scheduler]
 
 
 class MLPClassifier(SimpleClassificationNet):

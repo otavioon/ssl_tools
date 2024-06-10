@@ -256,7 +256,7 @@ class InceptionTime(SimpleClassificationNet):
         int
             The number of features after the convolutional layers.
         """
-        random_input = torch.randn(1, *input_shape)
+        random_input = torch.randn(1, *input_shape, requires_grad=False)
         with torch.no_grad():
             out = backbone(random_input)
         return out.view(out.size(0), -1).size(1)
@@ -265,7 +265,9 @@ class InceptionTime(SimpleClassificationNet):
         self, input_features: int, num_classes: int
     ) -> torch.nn.Module:
         return torch.nn.Sequential(
-            torch.nn.Linear(in_features=input_features, out_features=num_classes),
+            torch.nn.Linear(
+                in_features=input_features, out_features=num_classes
+            ),
             # torch.nn.Softmax(dim=1),
         )
 
@@ -292,23 +294,22 @@ class InceptionTime(SimpleClassificationNet):
 #     trainer.fit(model, datamodule=data_module)
 
 
+# from torchview import draw_graph
 
-    # from torchview import draw_graph
-
-    # model = InceptionTime()
-    # result = model(torch.rand(1, 6, 60))
-    # print(f"Result.shape: {result.shape}")
-    # model_graph = draw_graph(
-    #     model,
-    #     input_size=(64, 6, 60),
-    #     device="cpu",
-    #     expand_nested=True,
-    #     show_shapes=True,
-    #     save_graph=True,
-    #     filename="inception_graph",
-    # )
-    # model_graph.visual_graph.render("inception_graph.png", format="png")
-    # print(f"Graph saved to `inception_graph.png`")
+# model = InceptionTime()
+# result = model(torch.rand(1, 6, 60))
+# print(f"Result.shape: {result.shape}")
+# model_graph = draw_graph(
+#     model,
+#     input_size=(64, 6, 60),
+#     device="cpu",
+#     expand_nested=True,
+#     show_shapes=True,
+#     save_graph=True,
+#     filename="inception_graph",
+# )
+# model_graph.visual_graph.render("inception_graph.png", format="png")
+# print(f"Graph saved to `inception_graph.png`")
 
 
 # if __name__ == "__main__":
