@@ -58,9 +58,12 @@
 <li class="toctree-l2"><a class="reference internal" href="03_training_ssl_model.html">3. Training a self-supervised model: Contrastive Predictive Coding (CPC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_using_experiments.html">4. Using Experiments</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">5. Training an Anomaly Detection Model for Covid Anomaly Detection</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Predict">Predict</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Training">Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Predicting">Predicting</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Defining-Anomaly-Threshold">Defining Anomaly Threshold</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Predicting-on-Test-set">Predicting on Test set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Visualizing-Metrics-and-Confusion-Matrix">Visualizing Metrics and Confusion Matrix</a></li>
 </ul>
 </li>
 </ul>
@@ -99,10 +102,29 @@
              
   <section id="5.-Training-an-Anomaly-Detection-Model-for-Covid-Anomaly-Detection">
 <h1>5. Training an Anomaly Detection Model for Covid Anomaly Detection<a class="headerlink" href="#5.-Training-an-Anomaly-Detection-Model-for-Covid-Anomaly-Detection" title="Link to this heading"></a></h1>
+<section id="Overview">
+<h2>Overview<a class="headerlink" href="#Overview" title="Link to this heading"></a></h2>
 <p>In this tutorial, we will train an anomaly detection model using a simple <a class="reference external" href="https://www.medrxiv.org/content/10.1101/2021.01.08.21249474v1">LSTM-AutoEncoder model</a>. Data can be obtained from <a class="reference external" href="https://iscteiul365-my.sharepoint.com/:u:/g/personal/oonia_iscte-iul_pt/ERZLm1ruUNpMqkSwjpqhE9wB_7loVWAC4yZWuIH2RKGOlQ?e=kD4HlI">this link</a>. This is a processed version of data from original Stanford dataset-Phase 2. The overall pre-processing pipeline used is illustrated in Figure below.</p>
 <p><img alt="preprocessing" src="../_images/stanford_data_processing.png" /></p>
-<p>Data was aquired from diferent sources (Germin, FitBit, Apple Watch) and pre-processed to have a common format. In this form, data has two columns: heart rate and number of user steps in last minute. Then the processing pipeline was applied to the data. The pipeline is composed of the following steps: 1. Once data was standardized, the resting heart rate was extracted (<code class="docutils literal notranslate"><span class="pre">Resting</span> <span class="pre">Heart</span> <span class="pre">Rate</span> <span class="pre">Extractor</span></code>, in Figure). This process takes as input <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> that is the number of minutes
-that the user has to be at rest to consider the heart rate as resting. This variable looks at user steps and, when user steps is 0 for <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> minutes, the heart rate is considered as resting. At the end of this process, we will have a new dataframe with: the date and the resting heart rate of the last minute. 2. The second step is adding labels.</p>
+<p>Data was aquired from diferent sources (Germin, FitBit, Apple Watch) and pre-processed to have a common format. In this form, data has two columns: heart rate and number of user steps in last minute.</p>
+<p>The processing pipeline is then applied to the data. The pipeline is composed of the following steps: 1. Once data was standardized, the resting heart rate was extracted (<code class="docutils literal notranslate"><span class="pre">Resting</span> <span class="pre">Heart</span> <span class="pre">Rate</span> <span class="pre">Extractor</span></code>, in Figure). This process takes as input <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> that is the number of minutes that the user has to be at rest to consider the heart rate as resting. <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> variable looks at user steps and, when user steps is 0 for <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> minutes, the heart rate is
+considered as resting. At the end of this process, we will have a new dataframe with: the date (<code class="docutils literal notranslate"><span class="pre">datetime</span></code> column) and the resting heart rate of the last minute (<code class="docutils literal notranslate"><span class="pre">RHR</span></code> column). 2. The smoother process is applied to the data (<code class="docutils literal notranslate"><span class="pre">Smoother</span></code>, in Figure). This process takes as input <code class="docutils literal notranslate"><span class="pre">smooth_window_sample</span></code> that is the number of samples that we will use to smooth the data, and <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code> that is the sample rate. The smoother process will apply a moving average filter to the data, with a
+window of <code class="docutils literal notranslate"><span class="pre">smooth_window_sample</span></code> samples. Then the data is downsampled to <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code> samples per minute. This process will produce a new dataframe with the date (<code class="docutils literal notranslate"><span class="pre">datetime</span></code> column), the resting heart rate at desired sampling rate (<code class="docutils literal notranslate"><span class="pre">RHR</span></code> column). 3. The second step is adding labels (<code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">Adder</span></code>, in Figure). Is is also illustrated in Figure below. This process takes 3 inputs: <code class="docutils literal notranslate"><span class="pre">baseline_days</span></code>, <code class="docutils literal notranslate"><span class="pre">before_onset</span></code>, and <code class="docutils literal notranslate"><span class="pre">after_onset</span></code>. The <code class="docutils literal notranslate"><span class="pre">baseline_days</span></code> is the number of days before
+the onset of the symptoms that we consider as baseline (in figure below, this is 21 days). Thus, using the dataframe from last step, a new column named <code class="docutils literal notranslate"><span class="pre">baseline</span></code> is added, which is a boolean column that is True if the date is in the baseline period (21 days before onset). The <code class="docutils literal notranslate"><span class="pre">before_onset</span></code> and <code class="docutils literal notranslate"><span class="pre">after_onset</span></code> are the number of days before and after the onset of the symptoms that we consider as the anomaly period (7 days before and 21 days before, in Figure below). A new column named
+<code class="docutils literal notranslate"><span class="pre">anomaly</span></code> is added, which is a boolean column that is True if the date is in the anomaly period. Finnaly, we also add a <code class="docutils literal notranslate"><span class="pre">status</span></code> column,that is a metadata column for a descriptive status of the date. If can be: - <code class="docutils literal notranslate"><span class="pre">normal</span></code>: if the date is in the baseline period; - <code class="docutils literal notranslate"><span class="pre">before</span> <span class="pre">onset</span></code>: if the date is in the period before the onset of the symptoms; - <code class="docutils literal notranslate"><span class="pre">onset</span></code> if the date is the onset of the symptoms (day); - <code class="docutils literal notranslate"><span class="pre">after</span> <span class="pre">onset</span></code> if the date is in the period after the onset of the symptoms, but
+before the recovery; - <code class="docutils literal notranslate"><span class="pre">recovered</span></code> if the date is in the recovery period. 4. Once the labels were added we normalize the data (<code class="docutils literal notranslate"><span class="pre">Standardizer</span></code> in Figure above). This process perform a Z-norm scale on the data. The Z-norm scale is calculated as: <span class="math notranslate nohighlight">\(z = \frac{x - \mu}{\sigma}\)</span>, where <span class="math notranslate nohighlight">\(x\)</span> is the value, <span class="math notranslate nohighlight">\(\mu\)</span> is the mean of the column and <span class="math notranslate nohighlight">\(\sigma\)</span> is the standard deviation of the column. An important note here is that the mean and standard deviation are calculated only for
+the baseline period, and then applied to the entire dataset. 5. The last step is to create the sequences (<code class="docutils literal notranslate"><span class="pre">Transposer</span></code>, in Figure), that will group <span class="math notranslate nohighlight">\(n\)</span> rows and transform it into columns (features). This process takes as input <code class="docutils literal notranslate"><span class="pre">window_size</span></code> and <code class="docutils literal notranslate"><span class="pre">overlap</span></code> parameters and creates sequences of <code class="docutils literal notranslate"><span class="pre">window_size</span></code> samples with an overlap of <code class="docutils literal notranslate"><span class="pre">overlap</span></code> samples. Thus, if we have a dataset with 100 samples, a <code class="docutils literal notranslate"><span class="pre">window_size</span></code> of 20 and an <code class="docutils literal notranslate"><span class="pre">overlap</span></code> of 0, we will have 5 sequences of 20 samples
+each (<em>i.e.</em> 5 rows with 20 columns). Each element of the sequence will be a column in the dataframe, numbered from 0 to 19. Thus, for example, the sequences will have columns <code class="docutils literal notranslate"><span class="pre">RHR-0</span></code>, <code class="docutils literal notranslate"><span class="pre">RHR-1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">RHR-19</span></code>, where the first row is the first 20 samples, the second row is the second 20 samples, and so on. This is useful as it is the format that the LSTM-AutoEncoder model expects as input. An important note is that we do not mix sequences from anomaly and non-anomaly periods. Thus, no label
+is mixed, that is, an anomaly sample only has anomaly time-steps.</p>
+<p>This will produce a dataframe (CSV file) for each user. In processed dataset, we joined all users in a single file and add a column <code class="docutils literal notranslate"><span class="pre">participant_id</span></code> to identify the user. This makes easier to work with the data in the next steps.</p>
+<p><img alt="labeling" src="../_images/anomaly_periods.png" /></p>
+<p>We already generated several files, with different parameters and operations of the pre-processing pipeline: * <code class="docutils literal notranslate"><span class="pre">rhr_df</span></code>: dataframe with the resting heart rate without normalization (step 4) and transposing (step 5). The <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> is 12, <code class="docutils literal notranslate"><span class="pre">smooth_window_sample</span></code> is 400, <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code> is 1 hour, <code class="docutils literal notranslate"><span class="pre">baseline_days</span></code> is 21, <code class="docutils literal notranslate"><span class="pre">before_onset</span></code> is 7, and <code class="docutils literal notranslate"><span class="pre">after_onset</span></code> is 21. * <code class="docutils literal notranslate"><span class="pre">rhr_df_scaled</span></code>: same as <code class="docutils literal notranslate"><span class="pre">rhr_df</span></code>, but with normalization. * <code class="docutils literal notranslate"><span class="pre">windowed_16_overlap_0_rate_10min_df</span></code>: same
+dataframe as <code class="docutils literal notranslate"><span class="pre">rhr_df</span></code> with the resting heart rate normalized (step 4) and transposed (step 5). The <code class="docutils literal notranslate"><span class="pre">window_size</span></code> is 16, <code class="docutils literal notranslate"><span class="pre">overlap</span></code> is 0, and <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code> is 10 minutes. * <code class="docutils literal notranslate"><span class="pre">windowed_16_overlap_0_rate_10min_scaled_df</span></code>: same dataframe as <code class="docutils literal notranslate"><span class="pre">windowed_16_overlap_0_rate_10min_df</span></code>, but with normalization.</p>
+<p><strong>NOTE</strong>: The files follows this naming convention: <code class="docutils literal notranslate"><span class="pre">windowed_{window_size}_overlap_{overlap}_rate_{sample_rate}_df.csv</span></code>. If sample_rate is ommited, it is, by default 1 hour. <strong>NOTE</strong>: The files may and with <code class="docutils literal notranslate"><span class="pre">fold_X</span></code>, where <code class="docutils literal notranslate"><span class="pre">X</span></code> is the fold number. This is used for cross-validation purposes.</p>
+</section>
+<section id="Training">
+<h2>Training<a class="headerlink" href="#Training" title="Link to this heading"></a></h2>
+<p>Let’s import some libraries</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -118,6 +140,7 @@ that the user has to be at rest to consider the heart rate as resting. This vari
 </pre></div>
 </div>
 </div>
+<p>Load data and inspect</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -445,6 +468,9 @@ that the user has to be at rest to consider the heart rate as resting. This vari
 <p>31737 rows × 21 columns</p>
 </div></div>
 </div>
+<p>Creating a <a class="reference external" href="https://lightning.ai/docs/pytorch/stable/data/datamodule.html">LightningDataModule</a>. * The first parameter is the path to the CSV file. * <code class="docutils literal notranslate"><span class="pre">participants</span></code>: is a list of participants to include in dataset. If nothing is passed, all participants in CSV are included. * <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>: is the batch size to use in the dataloader. * <code class="docutils literal notranslate"><span class="pre">num_workers</span></code>: is the number of workers to use in the dataloader. * <code class="docutils literal notranslate"><span class="pre">reshape</span></code>: is the shape of the input data. For LSTM-AutoEncoder, it is
+<code class="docutils literal notranslate"><span class="pre">(sequence_length,</span> <span class="pre">num_features)</span></code>, or, in our case <code class="docutils literal notranslate"><span class="pre">(16,</span> <span class="pre">1)</span></code></p>
+<p><strong>NOTE</strong>: The training data is only data where baseline is True. The test data will be only data where baseline is False.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -469,6 +495,7 @@ that the user has to be at rest to consider the heart rate as resting. This vari
 CovidUserAnomalyDataModule (Data=/workspaces/hiaac-m4/data/Stanford-COVID/processed/windowed_16_overlap_8_df_scaled.csv, 1 participant selected)
 </pre></div></div>
 </div>
+<p>Let’s create the lightning model</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -497,6 +524,7 @@ LSTMAutoencoder(
 )
 </pre></div></div>
 </div>
+<p>Creting Trainer</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -527,6 +555,7 @@ HPU available: False, using: 0 HPUs
 &lt;lightning.pytorch.trainer.trainer.Trainer at 0x7f98860215a0&gt;
 </pre></div></div>
 </div>
+<p>Fit the model using training data from the datamodule</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -1182,8 +1211,11 @@ HPU available: False, using: 0 HPUs
 `Trainer.fit` stopped: `max_epochs=100` reached.
 </pre></div></div>
 </div>
+</section>
+<section id="Predicting">
+<h2>Predicting<a class="headerlink" href="#Predicting" title="Link to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_losses</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">loss_fn</span><span class="p">):</span>
@@ -1196,8 +1228,6 @@ HPU available: False, using: 0 HPUs
 </pre></div>
 </div>
 </div>
-<section id="Predict">
-<h2>Predict<a class="headerlink" href="#Predict" title="Link to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -1397,6 +1427,9 @@ HPU available: False, using: 0 HPUs
 <p>94 rows × 4 columns</p>
 </div></div>
 </div>
+</section>
+<section id="Visualizing-Metrics-and-Confusion-Matrix">
+<h3>Visualizing Metrics and Confusion Matrix<a class="headerlink" href="#Visualizing-Metrics-and-Confusion-Matrix" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
@@ -1485,7 +1518,7 @@ ROC AUC: 0.5
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_05_covid_anomaly_detection_19_0.png" src="../_images/notebooks_05_covid_anomaly_detection_19_0.png" />
+<img alt="../_images/notebooks_05_covid_anomaly_detection_30_0.png" src="../_images/notebooks_05_covid_anomaly_detection_30_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
