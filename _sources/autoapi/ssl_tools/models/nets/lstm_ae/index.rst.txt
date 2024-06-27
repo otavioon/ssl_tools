@@ -1,0 +1,42 @@
+ssl_tools.models.nets.lstm_ae
+=============================
+
+.. py:module:: ssl_tools.models.nets.lstm_ae
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.lstm_ae.LSTMAutoencoder
+   ssl_tools.models.nets.lstm_ae._LSTMAutoEncoder
+
+
+Module Contents
+---------------
+
+.. py:class:: LSTMAutoencoder(input_shape = (16, 1), learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleReconstructionNet`
+
+
+   
+   Create a LSTM Autoencoder model
+
+   Parameters
+   ----------
+   input_shape : Tuple[int, int], optional
+       The shape of the input. The first element is the sequence length and the second is the number of features, by default (16, 1)
+   learning_rate : float, optional
+       Learning rate for Adam optimizer, by default 1e-3
+
+
+.. py:class:: _LSTMAutoEncoder(input_shape = (16, 1))
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+

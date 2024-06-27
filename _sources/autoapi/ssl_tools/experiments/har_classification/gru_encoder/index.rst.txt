@@ -1,0 +1,106 @@
+ssl_tools.experiments.har_classification.gru_encoder
+====================================================
+
+.. py:module:: ssl_tools.experiments.har_classification.gru_encoder
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.gru_encoder.options
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.gru_encoder.GRUClassifier
+   ssl_tools.experiments.har_classification.gru_encoder.GRUClassifierTest
+   ssl_tools.experiments.har_classification.gru_encoder.GRUClassifierTrain
+
+
+Module Contents
+---------------
+
+.. py:class:: GRUClassifier(hidden_size = 100, in_channels = 6, num_classes = 6, encoding_size = 100, num_layers = 1, dropout = 0.0, bidirectional = True)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+.. py:class:: GRUClassifierTest(data, hidden_size = 100, in_channels = 6, num_classes = 6, encoding_size = 100, num_layers = 1, dropout = 0.0, bidirectional = True, transforms = 'identity', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.har_classification._classification_base.EvaluatorBase`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'GRU'
+
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:class:: GRUClassifierTrain(data, hidden_size = 100, in_channels = 6, num_classes = 6, encoding_size = 100, num_layers = 1, dropout = 0.0, bidirectional = True, transforms = 'identity', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.LightningTrain`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'GRU'
+
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:data:: options
+

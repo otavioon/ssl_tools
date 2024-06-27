@@ -1,0 +1,30 @@
+ssl_tools.pipelines.base
+========================
+
+.. py:module:: ssl_tools.pipelines.base
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.base.Pipeline
+
+
+Module Contents
+---------------
+
+.. py:class:: Pipeline
+
+   Bases: :py:obj:`lightning.pytorch.core.mixins.HyperparametersMixin`
+
+
+   .. py:method:: __call__()
+
+
+   .. py:method:: run()
+      :abstractmethod:
+
+
+

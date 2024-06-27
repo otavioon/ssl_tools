@@ -1,0 +1,45 @@
+ssl_tools.data.datasets.augmented_dataset
+=========================================
+
+.. py:module:: ssl_tools.data.datasets.augmented_dataset
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.data.datasets.augmented_dataset.AugmentedDataset
+
+
+Module Contents
+---------------
+
+.. py:class:: AugmentedDataset(dataset, transforms)
+
+   Bases: :py:obj:`torch.utils.data.Dataset`
+
+
+   Note: this class assumes that dataset is a Dataset object, and that
+   the __getitem__ method of the dataset returns a tuple of n elements.
+
+   _summary_
+
+   Parameters
+   ----------
+   dataset : Dataset
+       _description_
+   transforms : Dict[int, Callable]
+       As each element (result of __getitem__) of the dataset is a
+       n-element tuple, the transforms are applied to the n-th element
+       of the tuple. The key of the dictionary is the index of the
+       element of the tuple to apply the transform (0-indexed), and the
+       value is the transform to apply.
+
+
+   .. py:method:: __getitem__(idx)
+
+
+   .. py:method:: __len__()
+
+

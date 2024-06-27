@@ -1,14 +1,19 @@
-:py:mod:`ssl_tools.experiments.har_classification.tnc`
-======================================================
+ssl_tools.experiments.har_classification.tnc
+============================================
 
 .. py:module:: ssl_tools.experiments.har_classification.tnc
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.tnc.options
+
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -16,20 +21,13 @@ Classes
    ssl_tools.experiments.har_classification.tnc.TNCTrain
 
 
-
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   ssl_tools.experiments.har_classification.tnc.options
-
+Module Contents
+---------------
 
 .. py:class:: TNCTest(data, encoding_size = 10, in_channel = 6, window_size = 60, mc_sample_size = 20, w = 0.05, num_classes = 6, *args, **kwargs)
 
-
    Bases: :py:obj:`ssl_tools.experiments.LightningTest`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -48,10 +46,11 @@ Attributes
        If True, the samples are padded to the length of the longest sample
        in the dataset.
 
+
    .. py:attribute:: _MODEL_NAME
       :value: 'TNC'
 
-      
+
 
    .. py:method:: get_data_module()
 
@@ -61,6 +60,7 @@ Attributes
       -------
       L.LightningDataModule
           The datamodule to use for the experiment
+
 
 
    .. py:method:: get_model()
@@ -76,8 +76,8 @@ Attributes
 
 .. py:class:: TNCTrain(data, encoding_size = 10, in_channel = 6, window_size = 60, mc_sample_size = 20, w = 0.05, significance_level = 0.01, repeat = 5, pad_length = True, num_classes = 6, update_backbone = False, *args, **kwargs)
 
-
    Bases: :py:obj:`ssl_tools.experiments.LightningSSLTrain`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -101,10 +101,11 @@ Attributes
        If True, the backbone will be updated during training. Only used in
        finetune mode.
 
+
    .. py:attribute:: _MODEL_NAME
       :value: 'TNC'
 
-      
+
 
    .. py:method:: get_finetune_data_module()
 
@@ -119,6 +120,7 @@ Attributes
       ------
       NotImplementedError
           _description_
+
 
 
    .. py:method:: get_finetune_model(load_backbone = None)
@@ -137,6 +139,7 @@ Attributes
           The model to use for fine-tuning
 
 
+
    .. py:method:: get_pretrain_data_module()
 
       The data module to use for pre-training.
@@ -145,6 +148,7 @@ Attributes
       -------
       L.LightningDataModule
           The data module to use for pre-training
+
 
 
    .. py:method:: get_pretrain_model()
@@ -159,6 +163,4 @@ Attributes
 
 
 .. py:data:: options
-
-   
 

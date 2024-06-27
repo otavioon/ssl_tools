@@ -1,34 +1,32 @@
-:py:mod:`ssl_tools.models.ssl.cpc`
-==================================
+ssl_tools.models.ssl.cpc
+========================
 
 .. py:module:: ssl_tools.models.ssl.cpc
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.models.ssl.cpc.CPC
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    ssl_tools.models.ssl.cpc.build_cpc
 
 
+Module Contents
+---------------
 
 .. py:class:: CPC(encoder, density_estimator, auto_regressor, lr = 0.001, weight_decay = 0.0, window_size = 4, n_size = 5)
 
-
    Bases: :py:obj:`lightning.LightningModule`, :py:obj:`ssl_tools.utils.configurable.Configurable`
+
 
    Implements the Contrastive Predictive Coding (CPC) model, as described in
    https://arxiv.org/abs/1807.03748. The implementation was adapted from
@@ -65,6 +63,7 @@ Functions
        Number of negative samples to be used in the contrastive loss
        (steps to predict)
 
+
    .. py:method:: _shared_step(batch, batch_idx, prefix)
 
 
@@ -84,6 +83,7 @@ Functions
       -------
       torch.Tensor
           A tensor of size (B, encoder_output_size), with the samples encoded
+
 
 
    .. py:method:: configure_optimizers()
@@ -107,6 +107,7 @@ Functions
           A tensor of size (B, encoder_output_size), with the samples encoded.
 
 
+
    .. py:method:: get_config()
 
 
@@ -120,7 +121,6 @@ Functions
 
 
    .. py:method:: validation_step(batch, batch_idx)
-
 
 
 .. py:function:: build_cpc(encoding_size = 150, in_channels = 6, gru_hidden_size = 100, gru_num_layers = 1, gru_bidirectional = True, dropout = 0.0, learning_rate = 0.001, weight_decay = 0.0, window_size = 4, n_size = 5)

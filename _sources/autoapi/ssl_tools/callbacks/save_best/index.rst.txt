@@ -1,0 +1,25 @@
+ssl_tools.callbacks.save_best
+=============================
+
+.. py:module:: ssl_tools.callbacks.save_best
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.callbacks.save_best.PickleBestModelAndLoad
+
+
+Module Contents
+---------------
+
+.. py:class:: PickleBestModelAndLoad(model_name, filename = 'best_model.pt', model_tags = None, model_description = None)
+
+   Bases: :py:obj:`lightning.Callback`
+
+
+   .. py:method:: on_train_end(trainer, module)
+
+

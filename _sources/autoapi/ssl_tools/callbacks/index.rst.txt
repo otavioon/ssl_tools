@@ -1,15 +1,16 @@
-:py:mod:`ssl_tools.callbacks`
-=============================
+ssl_tools.callbacks
+===================
 
 .. py:module:: ssl_tools.callbacks
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   performance/index.rst
+   /autoapi/ssl_tools/callbacks/performance/index
+   /autoapi/ssl_tools/callbacks/save_best/index
 
 

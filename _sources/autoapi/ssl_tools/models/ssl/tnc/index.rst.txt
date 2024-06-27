@@ -1,14 +1,11 @@
-:py:mod:`ssl_tools.models.ssl.tnc`
-==================================
+ssl_tools.models.ssl.tnc
+========================
 
 .. py:module:: ssl_tools.models.ssl.tnc
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -16,20 +13,21 @@ Classes
    ssl_tools.models.ssl.tnc.TNCDiscriminator
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    ssl_tools.models.ssl.tnc.build_tnc
 
 
+Module Contents
+---------------
 
 .. py:class:: TNC(discriminator, encoder, mc_sample_size = 20, w = 0.05, learning_rate=0.001)
 
-
    Bases: :py:obj:`lightning.LightningModule`, :py:obj:`ssl_tools.utils.configurable.Configurable`
+
 
    Configurable interface for models and other objects that can be 
    configured with a dictionary. For now, this interface is used to save the hyperparameters of the models.
@@ -56,6 +54,7 @@ Functions
        sampling a positive window from the non-neighboring region.
    learning_rate : _type_, optional
        The learning rate of the optimizer, by default 1e-3
+
 
    .. py:method:: _shared_step(x_t, x_p, x_n, stage)
 
@@ -85,6 +84,7 @@ Functions
           respectively.
 
 
+
    .. py:method:: configure_optimizers()
 
 
@@ -106,6 +106,7 @@ Functions
           The predicted labels.
 
 
+
    .. py:method:: test_step(batch, batch_idx)
 
 
@@ -115,11 +116,10 @@ Functions
    .. py:method:: validation_step(batch, batch_idx)
 
 
-
 .. py:class:: TNCDiscriminator(input_size = 10, n_classes = 1)
 
-
    Bases: :py:obj:`torch.nn.Module`
+
 
    
    Simple discriminator network. As usued by `Tonekaboni et al.`
@@ -137,6 +137,7 @@ Functions
        Size of the input sample, by default 10
    n_classes : int, optional
        Number of output classes (output_size), by default 1
+
 
    .. py:method:: forward(x)
 

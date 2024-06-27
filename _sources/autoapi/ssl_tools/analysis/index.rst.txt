@@ -1,15 +1,16 @@
-:py:mod:`ssl_tools.analysis`
-============================
+ssl_tools.analysis
+==================
 
 .. py:module:: ssl_tools.analysis
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   plot_metrics/index.rst
+   /autoapi/ssl_tools/analysis/latent_analysis/index
+   /autoapi/ssl_tools/analysis/plot_metrics/index
 
 

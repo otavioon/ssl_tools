@@ -1,0 +1,71 @@
+ssl_tools.models.nets.multi_channel_cnn
+=======================================
+
+.. py:module:: ssl_tools.models.nets.multi_channel_cnn
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.multi_channel_cnn.MultiChannelCNN_HAR
+   ssl_tools.models.nets.multi_channel_cnn._MultiChannelCNN_HAR
+
+
+Module Contents
+---------------
+
+.. py:class:: MultiChannelCNN_HAR(input_shape = (1, 6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   
+   Create a simple 1D Convolutional Network with 3 layers and 2 fully
+   connected layers.
+
+   Parameters
+   ----------
+   input_shape : Tuple[int, int], optional
+       A 2-tuple containing the number of input channels and the number of
+       features, by default (6, 60).
+   num_classes : int, optional
+       Number of output classes, by default 6
+   learning_rate : float, optional
+       Learning rate for Adam optimizer, by default 1e-3
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_channels)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: _MultiChannelCNN_HAR(input_channels = 1, concatenate = True)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+

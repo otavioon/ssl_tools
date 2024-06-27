@@ -1,16 +1,16 @@
-:py:mod:`ssl_tools.data`
-========================
+ssl_tools.data
+==============
 
 .. py:module:: ssl_tools.data
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   data_modules/index.rst
-   datasets/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/ssl_tools/data/data_modules/index
+   /autoapi/ssl_tools/data/datasets/index
 
 

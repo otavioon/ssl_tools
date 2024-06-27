@@ -1,16 +1,137 @@
-:py:mod:`ssl_tools.models.nets`
-===============================
+ssl_tools.models.nets
+=====================
 
 .. py:module:: ssl_tools.models.nets
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   convnet/index.rst
-   wisenet/index.rst
+   /autoapi/ssl_tools/models/nets/cnn_ha_etal/index
+   /autoapi/ssl_tools/models/nets/cnn_pf/index
+   /autoapi/ssl_tools/models/nets/convae/index
+   /autoapi/ssl_tools/models/nets/convnet/index
+   /autoapi/ssl_tools/models/nets/deep_conv_lstm/index
+   /autoapi/ssl_tools/models/nets/deep_convnet/index
+   /autoapi/ssl_tools/models/nets/imu_transformer/index
+   /autoapi/ssl_tools/models/nets/inception_time/index
+   /autoapi/ssl_tools/models/nets/lstm_ae/index
+   /autoapi/ssl_tools/models/nets/multi_channel_cnn/index
+   /autoapi/ssl_tools/models/nets/resnet1d/index
+   /autoapi/ssl_tools/models/nets/resnet_1d/index
+   /autoapi/ssl_tools/models/nets/simple/index
+   /autoapi/ssl_tools/models/nets/transformer/index
+   /autoapi/ssl_tools/models/nets/wisenet/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.MLPClassifier
+   ssl_tools.models.nets.Simple1DConvNetwork
+   ssl_tools.models.nets.Simple2DConvNetwork
+
+
+Package Contents
+----------------
+
+.. py:class:: MLPClassifier(input_size, hidden_size, num_hidden_layers, output_size, learning_rate = 0.001, flatten = True, loss_fn = None, train_metrics = None, val_metrics = None, test_metrics = None)
+
+   Bases: :py:obj:`SimpleClassificationNet`
+
+
+.. py:class:: Simple1DConvNetwork(input_shape = (6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   
+   Create a simple 1D Convolutional Network with 3 layers and 2 fully
+   connected layers.
+
+   Parameters
+   ----------
+   input_shape : Tuple[int, int], optional
+       A 2-tuple containing the number of input channels and the number of
+       features, by default (6, 60).
+   num_classes : int, optional
+       Number of output classes, by default 6
+   learning_rate : float, optional
+       Learning rate for Adam optimizer, by default 1e-3
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_channels)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: Simple2DConvNetwork(input_shape = (6, 1, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   
+   Create a simple 2D Convolutional Network with 3 layers and 2 fully
+   connected layers.
+
+   Parameters
+   ----------
+   input_shape : Tuple[int, int, int], optional
+       A 3-tuple containing the number of input channels, and the number of
+       the 2D input shape, by default (6, 1, 60).
+   num_classes : int, optional
+       Number of output classes, by default 6
+   learning_rate : float, optional
+       Learning rate for Adam optimizer, by default 1e-3
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_channels)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
 
 

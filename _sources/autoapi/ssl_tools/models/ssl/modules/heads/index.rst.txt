@@ -1,14 +1,11 @@
-:py:mod:`ssl_tools.models.ssl.modules.heads`
-============================================
+ssl_tools.models.ssl.modules.heads
+==================================
 
 .. py:module:: ssl_tools.models.ssl.modules.heads
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -18,28 +15,25 @@ Classes
    ssl_tools.models.ssl.modules.heads.TNCPredictionHead
 
 
-
+Module Contents
+---------------
 
 .. py:class:: CPCPredictionHead(input_dim = 10, hidden_dim1 = 64, hidden_dim2 = 64, output_dim = 6, dropout_prob = 0)
-
 
    Bases: :py:obj:`TNCPredictionHead`
 
 
 .. py:class:: TFCPredictionHead(input_dim = 2 * 128, hidden_dim = 64, output_dim = 2)
 
-
    Bases: :py:obj:`lightly.models.modules.heads.ProjectionHead`
 
 
 .. py:class:: TFCProjectionHead(input_dim, hidden_dim = 256, output_dim = 128)
 
-
    Bases: :py:obj:`lightly.models.modules.heads.ProjectionHead`
 
 
 .. py:class:: TNCPredictionHead(input_dim = 10, hidden_dim1 = 64, hidden_dim2 = 64, output_dim = 6, dropout_prob = 0)
-
 
    Bases: :py:obj:`lightly.models.modules.heads.ProjectionHead`
 

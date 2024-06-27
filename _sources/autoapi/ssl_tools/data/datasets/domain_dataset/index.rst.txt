@@ -1,0 +1,25 @@
+ssl_tools.data.datasets.domain_dataset
+======================================
+
+.. py:module:: ssl_tools.data.datasets.domain_dataset
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.data.datasets.domain_dataset.DomainDataset
+
+
+Module Contents
+---------------
+
+.. py:class:: DomainDataset(dataset, domain)
+
+   .. py:method:: __getitem__(idx)
+
+
+   .. py:method:: __len__()
+
+

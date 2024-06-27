@@ -1,0 +1,87 @@
+ssl_tools.experiments.covid_detection.mlp
+=========================================
+
+.. py:module:: ssl_tools.experiments.covid_detection.mlp
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.mlp.options
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.mlp.FlattenBCELoss
+   ssl_tools.experiments.covid_detection.mlp.MLPClassifierTest
+   ssl_tools.experiments.covid_detection.mlp.MLPClassifierTrain
+
+
+Module Contents
+---------------
+
+.. py:class:: FlattenBCELoss
+
+   Bases: :py:obj:`torch.nn.BCELoss`
+
+
+   .. py:method:: forward(input, target)
+
+
+.. py:class:: MLPClassifierTest(input_size = 16, hidden_size = 128, num_hidden_layers = 1, num_classes = 1, learning_rate = 0.001, *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.covid_detection.classification_base.CovidDetectionEvaluator`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'mlp'
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:class:: MLPClassifierTrain(input_size = 16, hidden_size = 128, num_hidden_layers = 1, num_classes = 1, learning_rate = 0.001, *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.covid_detection.classification_base.CovidDetectionTrain`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'mlp'
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:data:: options
+

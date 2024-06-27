@@ -1,23 +1,27 @@
-:py:mod:`ssl_tools.experiments.experiment`
-==========================================
+ssl_tools.experiments.experiment
+================================
 
 .. py:module:: ssl_tools.experiments.experiment
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.experiment.EXPERIMENT_VERSION_FORMAT
+
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.experiments.experiment.Experiment
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -25,30 +29,20 @@ Functions
    ssl_tools.experiments.experiment.get_parser
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   ssl_tools.experiments.experiment.EXPERIMENT_VERSION_FORMAT
-
+Module Contents
+---------------
 
 .. py:data:: EXPERIMENT_VERSION_FORMAT
    :value: '%Y-%m-%d_%H-%M-%S'
 
-   
 
 .. py:class:: Experiment(name = 'experiment', run_id = None, log_dir = 'logs', seed = None)
 
-
    Bases: :py:obj:`abc.ABC`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
-
-   .. py:property:: experiment_dir
-      :type: pathlib.Path
 
 
    .. py:method:: __call__()
@@ -59,16 +53,24 @@ Attributes
       Return repr(self).
 
 
+
    .. py:method:: __str__()
 
       Return str(self).
 
 
+
    .. py:method:: execute()
+
+
+   .. py:property:: experiment_dir
+      :type: pathlib.Path
+
 
 
    .. py:method:: run()
       :abstractmethod:
+
 
 
    .. py:method:: setup()
@@ -77,10 +79,7 @@ Attributes
    .. py:method:: teardown()
 
 
-
-.. py:function:: auto_main(commands)
-
+.. py:function:: auto_main(commands, print_args = False)
 
 .. py:function:: get_parser(commands)
-
 

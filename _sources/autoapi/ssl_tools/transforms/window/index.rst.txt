@@ -1,0 +1,22 @@
+ssl_tools.transforms.window
+===========================
+
+.. py:module:: ssl_tools.transforms.window
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.transforms.window.Windowize
+
+
+Module Contents
+---------------
+
+.. py:class:: Windowize(time_segments = 15, stride = None)
+
+   .. py:method:: __call__(x)
+
+

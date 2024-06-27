@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.benchmarks.main_mix_style &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ssl_tools.benchmarks.main_supervised" href="../main_supervised/index.html" />
+    <link rel="prev" title="ssl_tools.benchmarks" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">ssl_tools</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html">ssl_tools.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">ssl_tools</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools.benchmarks</a></li>
+      <li class="breadcrumb-item active">ssl_tools.benchmarks.main_mix_style</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ssl_tools/benchmarks/main_mix_style/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.benchmarks.main_mix_style">
+<span id="ssl-tools-benchmarks-main-mix-style"></span><h1>ssl_tools.benchmarks.main_mix_style<a class="headerlink" href="#module-ssl_tools.benchmarks.main_mix_style" title="Link to this heading"></a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D" title="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNN_HaEtAl_1D</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D_Backbone" title="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D_Backbone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNN_HaEtAl_1D_Backbone</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D" title="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNN_HaEtAl_2D</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D_Backbone" title="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D_Backbone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNN_HaEtAl_2D_Backbone</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ConvolutionalBlock" title="ssl_tools.benchmarks.main_mix_style.ConvolutionalBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvolutionalBlock</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs" title="ssl_tools.benchmarks.main_mix_style.ExperimentArgs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExperimentArgs</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNet1DBase" title="ssl_tools.benchmarks.main_mix_style.ResNet1DBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNet1DBase</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNet1D_8" title="ssl_tools.benchmarks.main_mix_style.ResNet1D_8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNet1D_8</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNetBlock" title="ssl_tools.benchmarks.main_mix_style.ResNetBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNetBlock</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNetSE1D_5" title="ssl_tools.benchmarks.main_mix_style.ResNetSE1D_5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNetSE1D_5</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNetSE1D_8" title="ssl_tools.benchmarks.main_mix_style.ResNetSE1D_8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNetSE1D_8</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNetSEBlock" title="ssl_tools.benchmarks.main_mix_style.ResNetSEBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNetSEBlock</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2" title="ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleClassificationNet2</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.SqueezeAndExcitation1D" title="ssl_tools.benchmarks.main_mix_style.SqueezeAndExcitation1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqueezeAndExcitation1D</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style._ResNet1D" title="ssl_tools.benchmarks.main_mix_style._ResNet1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_ResNet1D</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style._run_experiment_wrapper" title="ssl_tools.benchmarks.main_mix_style._run_experiment_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_run_experiment_wrapper</span></code></a>(experiment_args)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.cli_main" title="ssl_tools.benchmarks.main_mix_style.cli_main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli_main</span></code></a>(experiment)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.conv3x3" title="ssl_tools.benchmarks.main_mix_style.conv3x3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conv3x3</span></code></a>(in_planes, out_planes[, stride, groups, dilation])</p></td>
+<td><p>3x3 convolution with padding</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.conv3x3_dynamic" title="ssl_tools.benchmarks.main_mix_style.conv3x3_dynamic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conv3x3_dynamic</span></code></a>(in_planes, out_planes[, stride, ...])</p></td>
+<td><p>3x3 convolution with padding</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.main_loo" title="ssl_tools.benchmarks.main_mix_style.main_loo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main_loo</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.pretty_print_experiment_args" title="ssl_tools.benchmarks.main_mix_style.pretty_print_experiment_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pretty_print_experiment_args</span></code></a>(args[, indent])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.run_serial" title="ssl_tools.benchmarks.main_mix_style.run_serial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_serial</span></code></a>(experiments)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.run_using_ray" title="ssl_tools.benchmarks.main_mix_style.run_using_ray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_using_ray</span></code></a>(experiments[, ray_address])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">CNN_HaEtAl_1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">60)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2" title="ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleClassificationNet2</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D._calculate_fc_input_features">
+<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D._calculate_fc_input_features" title="Link to this definition"></a></dt>
+<dd><p>Run a single forward pass with a random input to get the number of
+features after the convolutional layers.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>backbone<span class="classifier">torch.nn.Module</span></dt><dd><p>The backbone of the network</p>
+</dd>
+<dt>input_shape<span class="classifier">Tuple[int, int, int]</span></dt><dd><p>The input shape of the network.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>int</dt><dd><p>The number of features after the convolutional layers.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backbone</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D._create_backbone">
+<span class="sig-name descname"><span class="pre">_create_backbone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D._create_backbone" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D._create_fc">
+<span class="sig-name descname"><span class="pre">_create_fc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D._create_fc" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_features</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D_Backbone">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">CNN_HaEtAl_1D_Backbone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D_Backbone" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_channels</strong> (<em>int</em>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D_Backbone.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D_Backbone.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">CNN_HaEtAl_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pad_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">60)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2" title="ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleClassificationNet2</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pad_at</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D._calculate_fc_input_features">
+<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D._calculate_fc_input_features" title="Link to this definition"></a></dt>
+<dd><p>Run a single forward pass with a random input to get the number of
+features after the convolutional layers.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>backbone<span class="classifier">torch.nn.Module</span></dt><dd><p>The backbone of the network</p>
+</dd>
+<dt>input_shape<span class="classifier">Tuple[int, int, int]</span></dt><dd><p>The input shape of the network.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>int</dt><dd><p>The number of features after the convolutional layers.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backbone</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D._create_backbone">
+<span class="sig-name descname"><span class="pre">_create_backbone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D._create_backbone" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D._create_fc">
+<span class="sig-name descname"><span class="pre">_create_fc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D._create_fc" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_features</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D_Backbone">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">CNN_HaEtAl_2D_Backbone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pad_at</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D_Backbone" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pad_at</strong> (<em>int</em>)</p></li>
+<li><p><strong>in_channels</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D_Backbone.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D_Backbone.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ConvolutionalBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ConvolutionalBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ConvolutionalBlock" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<em>int</em>)</p></li>
+<li><p><strong>activation_cls</strong> (<em>torch.nn.Module</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ConvolutionalBlock.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ConvolutionalBlock.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ExperimentArgs</span></span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.data_cls">
+<span class="sig-name descname"><span class="pre">data_cls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.data_cls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.mix">
+<span class="sig-name descname"><span class="pre">mix</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.mix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.model_args">
+<span class="sig-name descname"><span class="pre">model_args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.model_args" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.model_cls">
+<span class="sig-name descname"><span class="pre">model_cls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.model_cls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.seed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.test_data_args">
+<span class="sig-name descname"><span class="pre">test_data_args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.test_data_args" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.train_data_args">
+<span class="sig-name descname"><span class="pre">train_data_args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.train_data_args" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.trainer_args">
+<span class="sig-name descname"><span class="pre">trainer_args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.trainer_args" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ExperimentArgs.trainer_cls">
+<span class="sig-name descname"><span class="pre">trainer_cls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs.trainer_cls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNet1DBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ResNet1DBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resnet_block_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ResNetBlock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.nn.ReLU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">60)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_residual_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNet1DBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2" title="ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleClassificationNet2</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resnet_block_cls</strong> (<em>type</em>)</p></li>
+<li><p><strong>activation_cls</strong> (<em>type</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_residual_blocks</strong> (<em>int</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNet1DBase._calculate_fc_input_features">
+<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNet1DBase._calculate_fc_input_features" title="Link to this definition"></a></dt>
+<dd><p>Run a single forward pass with a random input to get the number of
+features after the convolutional layers.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>backbone<span class="classifier">torch.nn.Module</span></dt><dd><p>The backbone of the network</p>
+</dd>
+<dt>input_shape<span class="classifier">Tuple[int, int, int]</span></dt><dd><p>The input shape of the network.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>int</dt><dd><p>The number of features after the convolutional layers.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backbone</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNet1D_8">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ResNet1D_8</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNet1D_8" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNet1DBase" title="ssl_tools.benchmarks.main_mix_style.ResNet1DBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNet1DBase</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNetBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ResNetBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.nn.ReLU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mix_style_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNetBlock" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<em>int</em>)</p></li>
+<li><p><strong>activation_cls</strong> (<em>torch.nn.Module</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNetBlock.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNetBlock.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNetSE1D_5">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ResNetSE1D_5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNetSE1D_5" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNet1DBase" title="ssl_tools.benchmarks.main_mix_style.ResNet1DBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNet1DBase</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNetSE1D_8">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ResNetSE1D_8</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNetSE1D_8" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNet1DBase" title="ssl_tools.benchmarks.main_mix_style.ResNet1DBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNet1DBase</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.ResNetSEBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">ResNetSEBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.ResNetSEBlock" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ResNetBlock" title="ssl_tools.benchmarks.main_mix_style.ResNetBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNetBlock</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">SimpleClassificationNet2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flatten</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../models/nets/simple/index.html#ssl_tools.models.nets.simple.SimpleClassificationNet" title="ssl_tools.models.nets.simple.SimpleClassificationNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.models.nets.simple.SimpleClassificationNet</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backbone</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>fc</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+<li><p><strong>flatten</strong> (<em>bool</em>)</p></li>
+<li><p><strong>loss_fn</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>train_metrics</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>torch.Tensor</em><em>]</em>)</p></li>
+<li><p><strong>val_metrics</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>torch.Tensor</em><em>]</em>)</p></li>
+<li><p><strong>test_metrics</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>torch.Tensor</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2.single_step">
+<span class="sig-name descname"><span class="pre">single_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2.single_step" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>torch.Tensor</em>)</p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>)</p></li>
+<li><p><strong>step_name</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.SqueezeAndExcitation1D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">SqueezeAndExcitation1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.SqueezeAndExcitation1D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<em>int</em>)</p></li>
+<li><p><strong>reduction_ratio</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.SqueezeAndExcitation1D.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.SqueezeAndExcitation1D.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style._ResNet1D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">_ResNet1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_block_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ResNetBlock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.nn.ReLU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_residual_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style._ResNet1D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>activation_cls</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>num_residual_blocks</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style._ResNet1D.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style._ResNet1D.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style._run_experiment_wrapper">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">_run_experiment_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style._run_experiment_wrapper" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>experiment_args</strong> (<a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs" title="ssl_tools.benchmarks.main_mix_style.ExperimentArgs"><em>ExperimentArgs</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.cli_main">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">cli_main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.cli_main" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>experiment</strong> (<a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs" title="ssl_tools.benchmarks.main_mix_style.ExperimentArgs"><em>ExperimentArgs</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.conv3x3">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">conv3x3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_planes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_planes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.conv3x3" title="Link to this definition"></a></dt>
+<dd><p>3x3 convolution with padding</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_planes</strong> (<em>int</em>)</p></li>
+<li><p><strong>out_planes</strong> (<em>int</em>)</p></li>
+<li><p><strong>stride</strong> (<em>int</em>)</p></li>
+<li><p><strong>groups</strong> (<em>int</em>)</p></li>
+<li><p><strong>dilation</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Conv2d</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.conv3x3_dynamic">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">conv3x3_dynamic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_planes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_planes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_in_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.conv3x3_dynamic" title="Link to this definition"></a></dt>
+<dd><p>3x3 convolution with padding</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_planes</strong> (<em>int</em>)</p></li>
+<li><p><strong>out_planes</strong> (<em>int</em>)</p></li>
+<li><p><strong>stride</strong> (<em>int</em>)</p></li>
+<li><p><strong>attention_in_channels</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dassl.modeling.ops.Conv2dDynamic</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.main_loo">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">main_loo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.main_loo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.pretty_print_experiment_args">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">pretty_print_experiment_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.pretty_print_experiment_args" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs" title="ssl_tools.benchmarks.main_mix_style.ExperimentArgs"><em>ExperimentArgs</em></a>)</p></li>
+<li><p><strong>indent</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.run_serial">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">run_serial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiments</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.run_serial" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>experiments</strong> (<em>List</em><em>[</em><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs" title="ssl_tools.benchmarks.main_mix_style.ExperimentArgs"><em>ExperimentArgs</em></a><em>]</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.benchmarks.main_mix_style.run_using_ray">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.benchmarks.main_mix_style.</span></span><span class="sig-name descname"><span class="pre">run_using_ray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.benchmarks.main_mix_style.run_using_ray" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiments</strong> (<em>List</em><em>[</em><a class="reference internal" href="#ssl_tools.benchmarks.main_mix_style.ExperimentArgs" title="ssl_tools.benchmarks.main_mix_style.ExperimentArgs"><em>ExperimentArgs</em></a><em>]</em>)</p></li>
+<li><p><strong>ray_address</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ssl_tools.benchmarks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../main_supervised/index.html" class="btn btn-neutral float-right" title="ssl_tools.benchmarks.main_supervised" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

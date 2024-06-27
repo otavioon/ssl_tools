@@ -1,17 +1,18 @@
-:py:mod:`ssl_tools.utils`
-=========================
+ssl_tools.utils
+===============
 
 .. py:module:: ssl_tools.utils
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   configurable/index.rst
-   data/index.rst
-   types/index.rst
+   /autoapi/ssl_tools/utils/configurable/index
+   /autoapi/ssl_tools/utils/data/index
+   /autoapi/ssl_tools/utils/layers/index
+   /autoapi/ssl_tools/utils/types/index
 
 

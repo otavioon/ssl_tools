@@ -1,32 +1,31 @@
-:py:mod:`ssl_tools.losses.nxtent`
-=================================
+ssl_tools.losses.nxtent
+=======================
 
 .. py:module:: ssl_tools.losses.nxtent
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.losses.nxtent.NTXentLoss_poly
 
 
-
+Module Contents
+---------------
 
 .. py:class:: NTXentLoss_poly(temperature = 0.2, use_cosine_similarity = True)
 
-
    Bases: :py:obj:`lightning.LightningModule`
+
 
    .. py:method:: _cosine_simililarity(x, y)
 
 
    .. py:method:: _dot_simililarity(x, y)
       :staticmethod:
+
 
 
    .. py:method:: _get_correlated_mask(batch_size)
@@ -36,6 +35,5 @@ Classes
 
 
    .. py:method:: forward(zis, zjs)
-
 
 

@@ -1,26 +1,24 @@
-:py:mod:`ssl_tools.models.ssl.classifier`
-=========================================
+ssl_tools.models.ssl.classifier
+===============================
 
 .. py:module:: ssl_tools.models.ssl.classifier
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.models.ssl.classifier.SSLDiscriminator
 
 
-
+Module Contents
+---------------
 
 .. py:class:: SSLDiscriminator(backbone, head, loss_fn, learning_rate = 0.001, update_backbone = True, metrics = None, optimizer_cls = None)
 
-
    Bases: :py:obj:`lightning.LightningModule`
+
 
    
    A generic SSL Discriminator model. It takes a backbone and a head
@@ -52,6 +50,7 @@ Classes
        The metrics to use during training. The keys are the names of the
        metrics, and the values are the metrics themselves.
 
+
    .. py:method:: _compute_metrics(y_hat, y, stage)
 
       Compute the metrics.
@@ -72,6 +71,7 @@ Classes
           metrics, and the values are the values of the metrics.
 
 
+
    .. py:method:: _freeze(model)
 
       Freezes the model, i.e. sets the requires_grad parameter of all the
@@ -81,6 +81,7 @@ Classes
       ----------
       model : _type_
           The model to freeze
+
 
 
    .. py:method:: _loss_func(y_hat, y)
@@ -95,11 +96,13 @@ Classes
           The ground truth labels
 
 
+
    .. py:method:: configure_optimizers()
 
       Configures the optimizer. If ``update_backbone`` is True, it will
       update the parameters of the backbone and the head. Otherwise, it will
       only update the parameters of the head.
+
 
 
    .. py:method:: forward(x)
@@ -120,6 +123,7 @@ Classes
           The predictions of the model.
 
 
+
    .. py:method:: predict_step(batch, batch_idx)
 
       Performs a prediction step. It only performs a forward pass through
@@ -136,6 +140,7 @@ Classes
       -------
       torch.Tensor
           The predictions of the model
+
 
 
    .. py:method:: test_step(batch, batch_idx)
@@ -157,6 +162,7 @@ Classes
           The loss of the model
 
 
+
    .. py:method:: training_step(batch, batch_idx)
 
       Performs a training step. It first performs a forward pass through
@@ -174,6 +180,7 @@ Classes
       -------
       torch.Tensor
           The loss of the model
+
 
 
    .. py:method:: validation_step(batch, batch_idx)

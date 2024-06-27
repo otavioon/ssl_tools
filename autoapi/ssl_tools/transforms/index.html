@@ -7,7 +7,7 @@
   <title>ssl_tools.transforms &mdash; SSLTools  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
 
   
   <!--[if lt IE 9]>
@@ -17,14 +17,14 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="ssl_tools.transforms.signal_1d" href="signal_1d/index.html" />
-    <link rel="prev" title="ssl_tools.models.ssl.tnc" href="../models/ssl/tnc/index.html" /> 
+    <link rel="next" title="ssl_tools.transforms.pad" href="pad/index.html" />
+    <link rel="prev" title="ssl_tools.pipelines.utils" href="../pipelines/utils/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,16 +53,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../experiments.html">Running Experiments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../api.html">Programming Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">ssl_tools</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../models/index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html">ssl_tools.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -86,8 +88,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../api.html">Programming Reference</a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools</a></li>
+      <li class="breadcrumb-item active">ssl_tools.transforms</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/ssl_tools/transforms/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -98,14 +100,17 @@
            <div itemprop="articleBody">
              
   <section id="module-ssl_tools.transforms">
-<span id="ssl-tools-transforms"></span><h1><a class="reference internal" href="#module-ssl_tools.transforms" title="ssl_tools.transforms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a><a class="headerlink" href="#module-ssl_tools.transforms" title="Link to this heading"></a></h1>
+<span id="ssl-tools-transforms"></span><h1>ssl_tools.transforms<a class="headerlink" href="#module-ssl_tools.transforms" title="Link to this heading"></a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="signal_1d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms.signal_1d</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="time_1d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms.time_1d</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="pad/index.html">ssl_tools.transforms.pad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signal_1d/index.html">ssl_tools.transforms.signal_1d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time_1d/index.html">ssl_tools.transforms.time_1d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time_1d_full/index.html">ssl_tools.transforms.time_1d_full</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html">ssl_tools.transforms.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="window/index.html">ssl_tools.transforms.window</a></li>
 </ul>
 </div>
 </section>
@@ -115,8 +120,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../models/ssl/tnc/index.html" class="btn btn-neutral float-left" title="ssl_tools.models.ssl.tnc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="signal_1d/index.html" class="btn btn-neutral float-right" title="ssl_tools.transforms.signal_1d" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../pipelines/utils/index.html" class="btn btn-neutral float-left" title="ssl_tools.pipelines.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pad/index.html" class="btn btn-neutral float-right" title="ssl_tools.transforms.pad" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

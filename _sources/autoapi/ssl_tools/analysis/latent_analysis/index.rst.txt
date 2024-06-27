@@ -1,0 +1,40 @@
+ssl_tools.analysis.latent_analysis
+==================================
+
+.. py:module:: ssl_tools.analysis.latent_analysis
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.analysis.latent_analysis.LatentAnalysis
+   ssl_tools.analysis.latent_analysis.LayerOutputSaverHook
+
+
+Module Contents
+---------------
+
+.. py:class:: LatentAnalysis(layers, sklearn_cls, output_name_suffix = 'transformed', **sklearn_kwargs)
+
+   .. py:method:: __call__(trainer, model, data_module)
+
+
+.. py:class:: LayerOutputSaverHook
+
+   .. py:method:: _forward_hook(module, inputs, outputs, layer_name)
+
+
+   .. py:method:: attach_hooks(model, layer_names)
+
+
+   .. py:method:: outputs_from_layer(layer_name, concat = True)
+
+
+   .. py:method:: remove_hooks()
+
+
+   .. py:method:: run_model_with_hooks(model, layer_names)
+
+

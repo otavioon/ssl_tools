@@ -1,26 +1,24 @@
-:py:mod:`ssl_tools.data.datasets.tfc`
-=====================================
+ssl_tools.data.datasets.tfc
+===========================
 
 .. py:module:: ssl_tools.data.datasets.tfc
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.data.datasets.tfc.TFCDataset
 
 
-
+Module Contents
+---------------
 
 .. py:class:: TFCDataset(data, length_alignment = 178, time_transforms = None, frequency_transforms = None, cast_to = 'float32', only_time_frequency = False)
 
-
    Bases: :py:obj:`torch.utils.data.Dataset`
+
 
    
    Time-Frequency Contrastive (TFC) Dataset. This dataset is intented
@@ -77,8 +75,8 @@ Classes
        torch.Tensor([[-0.5020, -0.5020, -0.5020,  ..., -0.5020, -0.5020, -0.5020]]),   # frequency augmented
    )
 
-   .. py:class:: FFT(absolute = True)
 
+   .. py:class:: FFT(absolute = True)
 
       
       Simple wrapper to apply the FFT to the data
@@ -87,6 +85,7 @@ Classes
       ----------
       absolute : bool, optional
           If True, returns the absolute value of FFT, by default True
+
 
       .. py:method:: __call__(x)
 
@@ -101,6 +100,7 @@ Classes
          -------
          np.ndarray
              The FFT of the data
+
 
 
 
@@ -125,6 +125,7 @@ Classes
       -------
       np.ndarray
           The transformed data
+
 
 
    .. py:method:: _apply_transforms_per_axis(data, transforms)

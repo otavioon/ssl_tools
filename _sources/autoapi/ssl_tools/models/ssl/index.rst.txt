@@ -1,18 +1,18 @@
-:py:mod:`ssl_tools.models.ssl`
-==============================
+ssl_tools.models.ssl
+====================
 
 .. py:module:: ssl_tools.models.ssl
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   classifier/index.rst
-   cpc/index.rst
-   tfc/index.rst
-   tnc/index.rst
+   /autoapi/ssl_tools/models/ssl/classifier/index
+   /autoapi/ssl_tools/models/ssl/cpc/index
+   /autoapi/ssl_tools/models/ssl/tfc/index
+   /autoapi/ssl_tools/models/ssl/tnc/index
 
 

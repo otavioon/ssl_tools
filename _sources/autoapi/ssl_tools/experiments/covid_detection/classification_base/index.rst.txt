@@ -1,0 +1,61 @@
+ssl_tools.experiments.covid_detection.classification_base
+=========================================================
+
+.. py:module:: ssl_tools.experiments.covid_detection.classification_base
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.classification_base.CovidDetectionEvaluator
+   ssl_tools.experiments.covid_detection.classification_base.CovidDetectionTrain
+
+
+Module Contents
+---------------
+
+.. py:class:: CovidDetectionEvaluator(data, feature_column_prefix = 'RHR', target_column = 'anomaly', results_file = 'results.csv', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.LightningTest`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+
+   .. py:method:: run_model(model, data_module, trainer)
+
+
+.. py:class:: CovidDetectionTrain(data, reshape = None, validation_split = 0.1, balance = False, feature_column_prefix = 'RHR', target_column = 'anomaly', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.LightningTrain`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+

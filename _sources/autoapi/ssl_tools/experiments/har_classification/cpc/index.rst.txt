@@ -1,14 +1,19 @@
-:py:mod:`ssl_tools.experiments.har_classification.cpc`
-======================================================
+ssl_tools.experiments.har_classification.cpc
+============================================
 
 .. py:module:: ssl_tools.experiments.har_classification.cpc
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.cpc.options
+
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -16,20 +21,13 @@ Classes
    ssl_tools.experiments.har_classification.cpc.CPCTrain
 
 
-
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   ssl_tools.experiments.har_classification.cpc.options
-
+Module Contents
+---------------
 
 .. py:class:: CPCTest(data, encoding_size = 150, in_channel = 6, window_size = 4, num_classes = 6, *args, **kwargs)
 
-
    Bases: :py:obj:`ssl_tools.experiments.LightningTest`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -50,10 +48,11 @@ Attributes
        If True, the backbone will be updated during training. Only used in
        finetune mode.
 
+
    .. py:attribute:: _MODEL_NAME
       :value: 'CPC'
 
-      
+
 
    .. py:method:: get_data_module()
 
@@ -63,6 +62,7 @@ Attributes
       -------
       L.LightningDataModule
           The datamodule to use for the experiment
+
 
 
    .. py:method:: get_model(load_backbone = None)
@@ -78,8 +78,8 @@ Attributes
 
 .. py:class:: CPCTrain(data, encoding_size = 150, in_channel = 6, window_size = 4, pad_length = False, num_classes = 6, update_backbone = False, *args, **kwargs)
 
-
    Bases: :py:obj:`ssl_tools.experiments.LightningSSLTrain`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -103,10 +103,11 @@ Attributes
        If True, the backbone will be updated during training. Only used in
        finetune mode.
 
+
    .. py:attribute:: _MODEL_NAME
       :value: 'CPC'
 
-      
+
 
    .. py:method:: get_finetune_data_module()
 
@@ -121,6 +122,7 @@ Attributes
       ------
       NotImplementedError
           _description_
+
 
 
    .. py:method:: get_finetune_model(load_backbone = None)
@@ -139,6 +141,7 @@ Attributes
           The model to use for fine-tuning
 
 
+
    .. py:method:: get_pretrain_data_module()
 
       The data module to use for pre-training.
@@ -147,6 +150,7 @@ Attributes
       -------
       L.LightningDataModule
           The data module to use for pre-training
+
 
 
    .. py:method:: get_pretrain_model()
@@ -161,6 +165,4 @@ Attributes
 
 
 .. py:data:: options
-
-   
 

@@ -1,0 +1,138 @@
+ssl_tools.pipelines.har_classification.tfc_head_classifier
+==========================================================
+
+.. py:module:: ssl_tools.pipelines.har_classification.tfc_head_classifier
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.har_classification.tfc_head_classifier.options
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.har_classification.tfc_head_classifier.TFCHeadClassifierFineTune
+   ssl_tools.pipelines.har_classification.tfc_head_classifier.TFCHeadClassifierTrain
+
+
+Module Contents
+---------------
+
+.. py:class:: TFCHeadClassifierFineTune(data, num_classes = 6, transforms = 'identity', num_workers = None, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow`
+
+
+   
+   Train a model using Lightning framework.
+
+   Parameters
+   ----------
+   experiment_name : str
+       Name of the experiment.
+   model_name : str
+       Name of the model.
+   dataset_name : str
+       Name of the dataset.
+   run_name : str, optional
+       The name of the run, by default None
+   accelerator : str, optional
+       The accelerator to use, by default "cpu"
+   devices : int, optional
+       Number of accelerators to use, by default 1
+   num_nodes : int, optional
+       Number of nodes, by default 1
+   strategy : str, optional
+       Training strategy, by default "auto"
+   max_epochs : int, optional
+       Maximium number of epochs, by default 1
+   batch_size : int, optional
+       Batch size, by default 1
+   limit_train_batches : int | float, optional
+       Limit the number of batches to train, by default 1.0
+   limit_val_batches : int | float, optional
+       Limit the number of batches to test, by default 1.0
+   checkpoint_monitor_metric : str, optional
+       The metric to monitor for checkpointing, by default None
+   checkpoint_monitor_mode : str, optional
+       The mode for checkpointing, by default "min"
+   patience : int, optional
+       The patience for early stopping, by default None
+   log_dir : str, optional
+       Location where logs will be saved, by default "./runs"
+
+
+   .. py:attribute:: MODEL
+      :value: 'TFCPredictionHead'
+
+
+
+   .. py:method:: get_data_module()
+
+
+   .. py:method:: get_model()
+
+
+.. py:class:: TFCHeadClassifierTrain(data, input_size = 360, num_classes = 6, transforms = 'identity', num_workers = None, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow`
+
+
+   
+   Train a model using Lightning framework.
+
+   Parameters
+   ----------
+   experiment_name : str
+       Name of the experiment.
+   model_name : str
+       Name of the model.
+   dataset_name : str
+       Name of the dataset.
+   run_name : str, optional
+       The name of the run, by default None
+   accelerator : str, optional
+       The accelerator to use, by default "cpu"
+   devices : int, optional
+       Number of accelerators to use, by default 1
+   num_nodes : int, optional
+       Number of nodes, by default 1
+   strategy : str, optional
+       Training strategy, by default "auto"
+   max_epochs : int, optional
+       Maximium number of epochs, by default 1
+   batch_size : int, optional
+       Batch size, by default 1
+   limit_train_batches : int | float, optional
+       Limit the number of batches to train, by default 1.0
+   limit_val_batches : int | float, optional
+       Limit the number of batches to test, by default 1.0
+   checkpoint_monitor_metric : str, optional
+       The metric to monitor for checkpointing, by default None
+   checkpoint_monitor_mode : str, optional
+       The mode for checkpointing, by default "min"
+   patience : int, optional
+       The patience for early stopping, by default None
+   log_dir : str, optional
+       Location where logs will be saved, by default "./runs"
+
+
+   .. py:attribute:: MODEL
+      :value: 'TFCPredictionHead'
+
+
+
+   .. py:method:: get_data_module()
+
+
+   .. py:method:: get_model()
+
+
+.. py:data:: options
+

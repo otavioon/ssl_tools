@@ -1,26 +1,34 @@
-:py:mod:`ssl_tools.utils.data`
-==============================
+ssl_tools.utils.data
+====================
 
 .. py:module:: ssl_tools.utils.data
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.utils.data.ConcatDataset
 
 
+Functions
+---------
 
+.. autoapisummary::
+
+   ssl_tools.utils.data.full_dataset_from_dataloader
+   ssl_tools.utils.data.get_full_data_split
+   ssl_tools.utils.data.get_split_dataloader
+
+
+Module Contents
+---------------
 
 .. py:class:: ConcatDataset(datasets)
 
-
    Concatenate multiple datasets1
+
 
    .. py:method:: __getitem__(i)
 
@@ -32,4 +40,10 @@ Classes
       :staticmethod:
 
 
+
+.. py:function:: full_dataset_from_dataloader(dataloader)
+
+.. py:function:: get_full_data_split(data_module, stage)
+
+.. py:function:: get_split_dataloader(stage, data_module)
 

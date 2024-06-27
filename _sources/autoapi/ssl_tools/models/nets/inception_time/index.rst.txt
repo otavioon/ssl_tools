@@ -1,0 +1,77 @@
+ssl_tools.models.nets.inception_time
+====================================
+
+.. py:module:: ssl_tools.models.nets.inception_time
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.inception_time.InceptionModule
+   ssl_tools.models.nets.inception_time.InceptionTime
+   ssl_tools.models.nets.inception_time.ShortcutLayer
+   ssl_tools.models.nets.inception_time._InceptionTime
+
+
+Module Contents
+---------------
+
+.. py:class:: InceptionModule(input_shape = (6, 60), stride = 1, kernel_size = 41, nb_filters = 32, use_bottleneck = True, bottleneck_size = 32)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: build_model()
+
+
+   .. py:method:: forward(input_tensor)
+
+
+.. py:class:: InceptionTime(input_shape = (6, 60), nb_filters=32, use_residual = True, use_bottleneck = True, depth = 6, kernel_size = 41, num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: ShortcutLayer(input_tensor_shape, out_tensor_shape)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(input_tensor, output_tensor)
+
+
+.. py:class:: _InceptionTime(input_shape = (6, 60), nb_filters=32, use_residual = True, use_bottleneck = True, depth = 6, kernel_size = 41)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: build_model()
+
+
+   .. py:method:: forward(x)
+
+

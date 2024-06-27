@@ -1,13 +1,19 @@
-:py:mod:`ssl_tools.utils.types`
-===============================
+ssl_tools.utils.types
+=====================
 
 .. py:module:: ssl_tools.utils.types
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.utils.types.PathLike
 
 
 Module Contents
 ---------------
 
 .. py:data:: PathLike
-
-   
 

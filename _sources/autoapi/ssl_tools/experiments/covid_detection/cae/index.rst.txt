@@ -1,0 +1,78 @@
+ssl_tools.experiments.covid_detection.cae
+=========================================
+
+.. py:module:: ssl_tools.experiments.covid_detection.cae
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.cae.options
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.cae.ConvolutionalAutoencoderAnomalyDetectionTest
+   ssl_tools.experiments.covid_detection.cae.ConvolutionalAutoencoderAnomalyDetectionTrain
+
+
+Module Contents
+---------------
+
+.. py:class:: ConvolutionalAutoencoderAnomalyDetectionTest(train_data, test_data, train_participant, test_participant, input_shape, feature_column_prefix = 'RHR', target_column = 'anomaly', include_recovered_in_test = False, results_dir = 'results', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.covid_detection.anomaly_detection_base.CovidAnomalyDetectionEvaluator`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'cae'
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:class:: ConvolutionalAutoencoderAnomalyDetectionTrain(data, input_shape, participant_ids = None, validation_split = 0.1, augment = False, feature_column_prefix = 'RHR', target_column = 'anomaly', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.covid_detection.anomaly_detection_base.CovidAnomalyDetectionTrain`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'cae'
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:data:: options
+

@@ -1,15 +1,16 @@
-:py:mod:`ssl_tools.losses`
-==========================
+ssl_tools.losses
+================
 
 .. py:module:: ssl_tools.losses
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   nxtent/index.rst
+   /autoapi/ssl_tools/losses/contrastive_loss/index
+   /autoapi/ssl_tools/losses/nxtent/index
 
 

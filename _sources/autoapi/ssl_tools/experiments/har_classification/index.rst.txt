@@ -1,17 +1,25 @@
-:py:mod:`ssl_tools.experiments.har_classification`
-==================================================
+ssl_tools.experiments.har_classification
+========================================
 
 .. py:module:: ssl_tools.experiments.har_classification
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   cpc/index.rst
-   tfc/index.rst
-   tnc/index.rst
+   /autoapi/ssl_tools/experiments/har_classification/_classification_base/index
+   /autoapi/ssl_tools/experiments/har_classification/cpc/index
+   /autoapi/ssl_tools/experiments/har_classification/gru_encoder/index
+   /autoapi/ssl_tools/experiments/har_classification/mlp_classifier/index
+   /autoapi/ssl_tools/experiments/har_classification/simple1Dconv_classifier/index
+   /autoapi/ssl_tools/experiments/har_classification/simple2Dconv_classifier/index
+   /autoapi/ssl_tools/experiments/har_classification/tfc/index
+   /autoapi/ssl_tools/experiments/har_classification/tfc_head_classifier/index
+   /autoapi/ssl_tools/experiments/har_classification/tnc/index
+   /autoapi/ssl_tools/experiments/har_classification/tnc_head_classifier/index
+   /autoapi/ssl_tools/experiments/har_classification/utils/index
 
 

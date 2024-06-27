@@ -1,0 +1,22 @@
+ssl_tools.experiments.covid_detection
+=====================================
+
+.. py:module:: ssl_tools.experiments.covid_detection
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/ssl_tools/experiments/covid_detection/anomaly_detection_base/index
+   /autoapi/ssl_tools/experiments/covid_detection/cae/index
+   /autoapi/ssl_tools/experiments/covid_detection/cae2d/index
+   /autoapi/ssl_tools/experiments/covid_detection/ccae/index
+   /autoapi/ssl_tools/experiments/covid_detection/classfication_report/index
+   /autoapi/ssl_tools/experiments/covid_detection/classification_base/index
+   /autoapi/ssl_tools/experiments/covid_detection/lstm_ae/index
+   /autoapi/ssl_tools/experiments/covid_detection/mlp/index
+
+

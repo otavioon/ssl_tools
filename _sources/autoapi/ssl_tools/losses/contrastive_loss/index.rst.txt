@@ -1,0 +1,25 @@
+ssl_tools.losses.contrastive_loss
+=================================
+
+.. py:module:: ssl_tools.losses.contrastive_loss
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.losses.contrastive_loss.ContrastiveLoss
+
+
+Module Contents
+---------------
+
+.. py:class:: ContrastiveLoss(margin = 1.0)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(y_true, y_pred)
+
+

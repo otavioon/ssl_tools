@@ -1,0 +1,19 @@
+ssl_tools.benchmarks.simple_trainer
+===================================
+
+.. py:module:: ssl_tools.benchmarks.simple_trainer
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.benchmarks.simple_trainer.cli_main
+
+
+Module Contents
+---------------
+
+.. py:function:: cli_main()
+

@@ -1,27 +1,26 @@
-:py:mod:`ssl_tools.transforms.signal_1d`
-========================================
+ssl_tools.transforms.signal_1d
+==============================
 
 .. py:module:: ssl_tools.transforms.signal_1d
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.transforms.signal_1d.AddRemoveFrequency
    ssl_tools.transforms.signal_1d.FFT
+   ssl_tools.transforms.signal_1d.WelchPowerSpectralDensity
 
 
-
+Module Contents
+---------------
 
 .. py:class:: AddRemoveFrequency(add_pertub_ratio=0.1, remove_pertub_ratio=0.1)
 
-
    Bases: :py:obj:`librep.base.Transform`
+
 
    .. py:method:: __call__(sample)
 
@@ -35,16 +34,71 @@ Classes
    .. py:method:: transform(sample)
 
 
+.. py:class:: FFT(absolute = True)
 
-.. py:class:: FFT
+   
+   Simple wrapper to apply the FFT to the data
 
+   Parameters
+   ----------
+   absolute : bool, optional
+       If True, returns the absolute value of FFT, by default True
 
-   Bases: :py:obj:`librep.base.Transform`
 
    .. py:method:: __call__(sample)
 
 
-   .. py:method:: transform(sample)
+   .. py:method:: transform(x)
+
+      Apply the FFT to the data
+
+      Parameters
+      ----------
+      x : np.ndarray
+          A 1-D array with the data
+
+      Returns
+      -------
+      np.ndarray
+          The FFT of the data
+
+
+
+.. py:class:: WelchPowerSpectralDensity(fs = 1 / 20, nperseg = None, noverlap = None, return_onesided=False, absolute = True)
+
+   
+   Simple wrapper to apply the Welch Power Spectral Density to the data
+
+   Parameters
+   ----------
+   fs : int, optional
+       The sampling frequency, by default 20
+   nperseg : int, optional
+       The number of data points in each segment, by default 30
+   noverlap : int, optional
+       The number of points of overlap between segments, by default 15
+   return_onesided : bool, optional
+       If True, return the one-sided PSD, by default False
+   absolute : bool, optional
+       If True, returns the absolute value of PSD, by default True
+
+
+   .. py:method:: __call__(sample)
+
+
+   .. py:method:: transform(x)
+
+      Apply the Welch Power Spectral Density to the data
+
+      Parameters
+      ----------
+      x : np.ndarray
+          A 1-D array with the data
+
+      Returns
+      -------
+      np.ndarray
+          The Welch Power Spectral Density of the data
 
 
 

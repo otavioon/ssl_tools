@@ -1,33 +1,33 @@
-:py:mod:`ssl_tools.callbacks.performance`
-=========================================
+ssl_tools.callbacks.performance
+===============================
 
 .. py:module:: ssl_tools.callbacks.performance
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.callbacks.performance.PerformanceLogger
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   ssl_tools.callbacks.performance.PerformanceLog
-
-
-
-
-.. py:class:: PerformanceLog
-
+.. py:class:: PerformanceLogger
 
    Bases: :py:obj:`lightning.pytorch.callbacks.Callback`
+
 
    This callback logs the time taken for each epoch and the overall fit 
    time.
 
+
    .. py:method:: on_fit_end(trainer, module)
 
       Called when fit ends.
+
 
 
    .. py:method:: on_fit_start(trainer, module)
@@ -35,10 +35,12 @@ Classes
       Called when fit begins.
 
 
+
    .. py:method:: on_train_epoch_end(trainer, module)
 
       Called when the train epoch ends.
               
+
 
 
    .. py:method:: on_train_epoch_start(trainer, module)

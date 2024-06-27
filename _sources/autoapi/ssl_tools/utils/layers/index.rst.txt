@@ -1,0 +1,31 @@
+ssl_tools.utils.layers
+======================
+
+.. py:module:: ssl_tools.utils.layers
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.utils.layers.OutputLoggerCallback
+
+
+Module Contents
+---------------
+
+.. py:class:: OutputLoggerCallback(layers)
+
+   Bases: :py:obj:`lightning.Callback`
+
+
+   .. py:method:: count(module, input, output, layer_name)
+
+
+   .. py:method:: setup(trainer, pl_module, stage)
+
+
+   .. py:method:: teardown(trainer, pl_module, stage)
+
+

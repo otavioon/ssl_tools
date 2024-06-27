@@ -1,26 +1,23 @@
-:py:mod:`ssl_tools.data.data_modules.har`
-=========================================
+ssl_tools.data.data_modules.har
+===============================
 
 .. py:module:: ssl_tools.data.data_modules.har
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
+   ssl_tools.data.data_modules.har.AugmentedMultiModalHARSeriesDataModule
    ssl_tools.data.data_modules.har.MultiModalHARSeriesDataModule
    ssl_tools.data.data_modules.har.TFCDataModule
    ssl_tools.data.data_modules.har.TNCHARDataModule
    ssl_tools.data.data_modules.har.UserActivityFolderDataModule
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -28,11 +25,13 @@ Functions
    ssl_tools.data.data_modules.har.parse_transforms
 
 
+Module Contents
+---------------
 
-.. py:class:: MultiModalHARSeriesDataModule(data_path, feature_prefixes = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = 'standard activity code', features_as_channels = True, transforms = None, cast_to = 'float32', batch_size = 1, num_workers = None)
+.. py:class:: AugmentedMultiModalHARSeriesDataModule(train_transforms, validation_transforms = None, test_transforms = None, **kwargs)
 
+   Bases: :py:obj:`MultiModalHARSeriesDataModule`
 
-   Bases: :py:obj:`lightning.LightningDataModule`
 
    
    Define the dataloaders for train, validation and test splits for
@@ -96,6 +95,92 @@ Functions
    num_workers : int, optional
        Number of workers to load data. If None, then use all cores
 
+
+   .. py:method:: _load_dataset(split_name)
+
+      Create a ``MultiModalSeriesCSVDataset`` dataset with the given split.
+
+      Parameters
+      ----------
+      split_name : str
+          The name of the split. This must be one of: "train", "validation",
+          "test" or "predict".
+
+      Returns
+      -------
+      MultiModalSeriesCSVDataset
+          A MultiModalSeriesCSVDataset dataset with the given split.
+
+
+
+.. py:class:: MultiModalHARSeriesDataModule(data_path, feature_prefixes = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = 'standard activity code', features_as_channels = True, transforms = None, cast_to = 'float32', batch_size = 1, num_workers = None, data_percentage = 1.0, domain_info = False)
+
+   Bases: :py:obj:`ssl_tools.data.data_modules.base.SimpleDataModule`
+
+
+   
+   Define the dataloaders for train, validation and test splits for
+   HAR datasets. This datasets assumes that the data is in a single CSV
+   file with series of data. Each row is a single sample that can be
+   composed of multiple modalities (series). Each column is a feature of
+   some series with the prefix indicating the series. The suffix may
+   indicates the time step. For instance, if we have two series, accel-x
+   and accel-y, the data will look something like:
+
+   +-----------+-----------+-----------+-----------+--------+
+   | accel-x-0 | accel-x-1 | accel-y-0 | accel-y-1 |  class |
+   +-----------+-----------+-----------+-----------+--------+
+   | 0.502123  | 0.02123   | 0.502123  | 0.502123  |  0     |
+   | 0.6820123 | 0.02123   | 0.502123  | 0.502123  |  1     |
+   | 0.498217  | 0.00001   | 1.414141  | 3.141592  |  2     |
+   +-----------+-----------+-----------+-----------+--------+
+
+   The ``feature_prefixes`` parameter is used to select the columns that
+   will be used as features. For instance, if we want to use only the
+   accel-x series, we can set ``feature_prefixes=["accel-x"]``. If we want
+   to use both accel-x and accel-y, we can set
+   ``feature_prefixes=["accel-x", "accel-y"]``. If None is passed, all
+   columns will be used as features, except the label column.
+   The label column is specified by the ``label`` parameter.
+
+   The dataset will return a 2-element tuple with the data and the label,
+   if the ``label`` parameter is specified, otherwise return only the data.
+
+   If ``features_as_channels`` is ``True``, the data will be returned as a
+   vector of shape `(C, T)`, where C is the number of channels (features)
+   and `T` is the number of time steps. Else, the data will be returned as
+   a vector of shape  T*C (a single vector with all the features).
+
+   Parameters
+   ----------
+   data_path : PathLike
+       The path to the folder with "train.csv", "validation.csv" and
+       "test.csv" files inside it.
+   feature_prefixes : Union[str, List[str]], optional
+       The prefix of the column names in the dataframe that will be used
+       to become features. If None, all columns except the label will be
+       used as features.
+   label : str, optional
+       The name of the column that will be used as label
+   features_as_channels : bool, optional
+       If True, the data will be returned as a vector of shape (C, T),
+       else the data will be returned as a vector of shape  T*C.
+   cast_to: str, optional
+       Cast the numpy data to the specified type
+   transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
+       This could be:
+       - None: No transforms will be applied
+       - List[Callable]: A list of transforms that will be applied to the
+           data. The same transforms will be applied to all splits.
+       - Dict[str, List[Callable]]: A dictionary with the split name as
+           key and a list of transforms as value. The split name must be
+           one of: "train", "validation", "test" or "predict".
+   batch_size : int, optional
+       The size of the batch
+   num_workers : int, optional
+       Number of workers to load data. If None, then use all cores
+
+
    .. py:method:: __repr__()
 
 
@@ -120,6 +205,7 @@ Functions
           A dataloader for the given split.
 
 
+
    .. py:method:: _load_dataset(split_name)
 
       Create a ``MultiModalSeriesCSVDataset`` dataset with the given split.
@@ -134,6 +220,7 @@ Functions
       -------
       MultiModalSeriesCSVDataset
           A MultiModalSeriesCSVDataset dataset with the given split.
+
 
 
    .. py:method:: predict_dataloader()
@@ -159,6 +246,7 @@ Functions
           If the stage is not one of: "fit", "test" or "predict"
 
 
+
    .. py:method:: test_dataloader()
 
 
@@ -168,11 +256,10 @@ Functions
    .. py:method:: val_dataloader()
 
 
-
 .. py:class:: TFCDataModule(data_path, feature_prefixes = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = 'standard activity code', features_as_channels = True, length_alignment = 60, time_transforms = None, frequency_transforms = None, cast_to = 'float32', jitter_ratio = 2, only_time_frequency = False, batch_size = 32, num_workers = None)
 
+   Bases: :py:obj:`ssl_tools.data.data_modules.base.SimpleDataModule`
 
-   Bases: :py:obj:`lightning.LightningDataModule`
 
    
    Define a dataloader for ``TFCDataset``. This is a wrapper around
@@ -205,7 +292,7 @@ Functions
        - Dict[str, List[Callable]]: A dictionary with the split name as
            key and a list of transforms as value. The split name must be
            one of: "train", "validation", "test" or "predict".
-       If None. an ``AddGaussianNoise`` transform will be used with the 
+       If None. an ``AddGaussianNoise`` transform will be used with the
        given ``jitter_ratio``.
    frequency_transforms : Union[List[Callable], Dict[str, List[Callable]]], optional
        Transforms to be applied to frequency domain data. This could be:
@@ -214,7 +301,7 @@ Functions
            data. The same transforms will be applied to all splits.
        - Dict[str, List[Callable]]: A dictionary with the split name as
            key and a list of transforms as value. The split name must be
-           one of: "train", "validation", "test" or "predict".            
+           one of: "train", "validation", "test" or "predict".
        If None, an ``AddRemoveFrequency`` transform will be used.
    cast_to : str, optional
        Cast the data to the given type, by default "float32"
@@ -230,6 +317,7 @@ Functions
        The size of the batch, by default 1
    num_workers : int, optional
        Number of workers to load data, by default None (use all cores)
+
 
    .. py:method:: _get_loader(split_name, shuffle)
 
@@ -249,6 +337,7 @@ Functions
           A dataloader for the given split.
 
 
+
    .. py:method:: _load_dataset(split_name)
 
       Create a ``TFCDataset``
@@ -258,11 +347,12 @@ Functions
       split_name : str
           Name of the split (train, validation or test). This will be used to
           load the corresponding CSV file.
-          
+
       Returns
       -------
       TFCDataset
           A TFC dataset with the given split.
+
 
 
    .. py:method:: predict_dataloader()
@@ -288,6 +378,7 @@ Functions
           If the stage is not one of: "fit", "test" or "predict"
 
 
+
    .. py:method:: test_dataloader()
 
 
@@ -297,11 +388,10 @@ Functions
    .. py:method:: val_dataloader()
 
 
-
 .. py:class:: TNCHARDataModule(data_path, features = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = None, pad = False, transforms = None, batch_size = 1, num_workers = None, cast_to = 'float32', window_size = 60, mc_sample_size = 20, significance_level = 0.01, repeat = 1)
 
-
    Bases: :py:obj:`UserActivityFolderDataModule`
+
 
    
    Define the dataloaders for train, validation and test splits for
@@ -390,6 +480,7 @@ Functions
    repeat : int, optional
        Simple repeat the element of the dataset ``repeat`` times,
 
+
    .. py:method:: _load_dataset(split_name)
 
       Create a ``TNCDataset`` dataset with the given split.
@@ -409,8 +500,8 @@ Functions
 
 .. py:class:: UserActivityFolderDataModule(data_path, features = ('accel-x', 'accel-y', 'accel-z', 'gyro-x', 'gyro-y', 'gyro-z'), label = None, pad = False, transforms = None, cast_to = 'float32', batch_size = 1, num_workers = None)
 
+   Bases: :py:obj:`ssl_tools.data.data_modules.base.SimpleDataModule`
 
-   Bases: :py:obj:`lightning.LightningDataModule`
 
    
    Define the dataloaders for train, validation and test splits for
@@ -487,6 +578,7 @@ Functions
    num_workers : int, optional
        Number of workers to load data. If None, then use all cores
 
+
    .. py:method:: __repr__()
 
 
@@ -511,6 +603,7 @@ Functions
           A dataloader for the given split.
 
 
+
    .. py:method:: _load_dataset(split_name)
 
       Create a ``SeriesFolderCSVDataset`` dataset with the given split.
@@ -525,6 +618,7 @@ Functions
       -------
       SeriesFolderCSVDataset
           The dataset with the given split.
+
 
 
    .. py:method:: predict_dataloader()
@@ -550,6 +644,7 @@ Functions
           If the stage is not one of: "fit", "test" or "predict"
 
 
+
    .. py:method:: test_dataloader()
 
 
@@ -557,7 +652,6 @@ Functions
 
 
    .. py:method:: val_dataloader()
-
 
 
 .. py:function:: parse_num_workers(num_workers)

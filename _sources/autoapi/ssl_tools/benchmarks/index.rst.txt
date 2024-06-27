@@ -1,0 +1,18 @@
+ssl_tools.benchmarks
+====================
+
+.. py:module:: ssl_tools.benchmarks
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/ssl_tools/benchmarks/main_mix_style/index
+   /autoapi/ssl_tools/benchmarks/main_supervised/index
+   /autoapi/ssl_tools/benchmarks/main_supervised_analysis/index
+   /autoapi/ssl_tools/benchmarks/simple_trainer/index
+
+

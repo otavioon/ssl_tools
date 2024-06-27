@@ -1,0 +1,100 @@
+ssl_tools.experiments.har_classification.tnc_head_classifier
+============================================================
+
+.. py:module:: ssl_tools.experiments.har_classification.tnc_head_classifier
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.tnc_head_classifier.options
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.tnc_head_classifier.TNCHeadClassifierTest
+   ssl_tools.experiments.har_classification.tnc_head_classifier.TNCHeadClassifierTrain
+
+
+Module Contents
+---------------
+
+.. py:class:: TNCHeadClassifierTest(data, input_size = 360, num_classes = 6, transforms = 'identity', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.har_classification._classification_base.EvaluatorBase`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'TNCPredictionHead'
+
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:class:: TNCHeadClassifierTrain(data, input_size = 360, num_classes = 6, transforms = 'identity', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.LightningTrain`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:attribute:: _MODEL_NAME
+      :value: 'TNCPredictionHead'
+
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+
+   .. py:method:: get_model()
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:data:: options
+

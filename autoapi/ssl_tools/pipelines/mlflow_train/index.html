@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.pipelines.mlflow_train &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ssl_tools.pipelines.utils" href="../utils/index.html" />
+    <link rel="prev" title="ssl_tools.pipelines.cli" href="../cli/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">ssl_tools</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/index.html">ssl_tools.models</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html">ssl_tools.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">ssl_tools</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools.pipelines</a></li>
+      <li class="breadcrumb-item active">ssl_tools.pipelines.mlflow_train</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ssl_tools/pipelines/mlflow_train/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.pipelines.mlflow_train">
+<span id="ssl-tools-pipelines-mlflow-train"></span><h1>ssl_tools.pipelines.mlflow_train<a class="headerlink" href="#module-ssl_tools.pipelines.mlflow_train" title="Link to this heading"></a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow" title="ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightningFineTuneMLFlow</span></code></a></p></td>
+<td><p>Train a model using Lightning framework.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow" title="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightningTrainMLFlow</span></code></a></p></td>
+<td><p>Train a model using Lightning framework.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.pipelines.mlflow_train.</span></span><span class="sig-name descname"><span class="pre">LightningFineTuneMLFlow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registered_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registered_model_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow" title="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightningTrainMLFlow</span></code></a></p>
+<p>Train a model using Lightning framework.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>experiment_name<span class="classifier">str</span></dt><dd><p>Name of the experiment.</p>
+</dd>
+<dt>model_name<span class="classifier">str</span></dt><dd><p>Name of the model.</p>
+</dd>
+<dt>dataset_name<span class="classifier">str</span></dt><dd><p>Name of the dataset.</p>
+</dd>
+<dt>run_name<span class="classifier">str, optional</span></dt><dd><p>The name of the run, by default None</p>
+</dd>
+<dt>accelerator<span class="classifier">str, optional</span></dt><dd><p>The accelerator to use, by default “cpu”</p>
+</dd>
+<dt>devices<span class="classifier">int, optional</span></dt><dd><p>Number of accelerators to use, by default 1</p>
+</dd>
+<dt>num_nodes<span class="classifier">int, optional</span></dt><dd><p>Number of nodes, by default 1</p>
+</dd>
+<dt>strategy<span class="classifier">str, optional</span></dt><dd><p>Training strategy, by default “auto”</p>
+</dd>
+<dt>max_epochs<span class="classifier">int, optional</span></dt><dd><p>Maximium number of epochs, by default 1</p>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>Batch size, by default 1</p>
+</dd>
+<dt>limit_train_batches<span class="classifier">int | float, optional</span></dt><dd><p>Limit the number of batches to train, by default 1.0</p>
+</dd>
+<dt>limit_val_batches<span class="classifier">int | float, optional</span></dt><dd><p>Limit the number of batches to test, by default 1.0</p>
+</dd>
+<dt>checkpoint_monitor_metric<span class="classifier">str, optional</span></dt><dd><p>The metric to monitor for checkpointing, by default None</p>
+</dd>
+<dt>checkpoint_monitor_mode<span class="classifier">str, optional</span></dt><dd><p>The mode for checkpointing, by default “min”</p>
+</dd>
+<dt>patience<span class="classifier">int, optional</span></dt><dd><p>The patience for early stopping, by default None</p>
+</dd>
+<dt>log_dir<span class="classifier">str, optional</span></dt><dd><p>Location where logs will be saved, by default “./runs”</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow.client">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">client</span></span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow.client" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningFineTuneMLFlow.load_model" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.LightningModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>registered_model_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>registered_model_tags</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>update_backbone</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.pipelines.mlflow_train.</span></span><span class="sig-name descname"><span class="pre">LightningTrainMLFlow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_train_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_val_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_monitor_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_monitor_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./mlruns'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#ssl_tools.pipelines.base.Pipeline" title="ssl_tools.pipelines.base.Pipeline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.pipelines.base.Pipeline</span></code></a></p>
+<p>Train a model using Lightning framework.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>experiment_name<span class="classifier">str</span></dt><dd><p>Name of the experiment.</p>
+</dd>
+<dt>model_name<span class="classifier">str</span></dt><dd><p>Name of the model.</p>
+</dd>
+<dt>dataset_name<span class="classifier">str</span></dt><dd><p>Name of the dataset.</p>
+</dd>
+<dt>run_name<span class="classifier">str, optional</span></dt><dd><p>The name of the run, by default None</p>
+</dd>
+<dt>accelerator<span class="classifier">str, optional</span></dt><dd><p>The accelerator to use, by default “cpu”</p>
+</dd>
+<dt>devices<span class="classifier">int, optional</span></dt><dd><p>Number of accelerators to use, by default 1</p>
+</dd>
+<dt>num_nodes<span class="classifier">int, optional</span></dt><dd><p>Number of nodes, by default 1</p>
+</dd>
+<dt>strategy<span class="classifier">str, optional</span></dt><dd><p>Training strategy, by default “auto”</p>
+</dd>
+<dt>max_epochs<span class="classifier">int, optional</span></dt><dd><p>Maximium number of epochs, by default 1</p>
+</dd>
+<dt>batch_size<span class="classifier">int, optional</span></dt><dd><p>Batch size, by default 1</p>
+</dd>
+<dt>limit_train_batches<span class="classifier">int | float, optional</span></dt><dd><p>Limit the number of batches to train, by default 1.0</p>
+</dd>
+<dt>limit_val_batches<span class="classifier">int | float, optional</span></dt><dd><p>Limit the number of batches to test, by default 1.0</p>
+</dd>
+<dt>checkpoint_monitor_metric<span class="classifier">str, optional</span></dt><dd><p>The metric to monitor for checkpointing, by default None</p>
+</dd>
+<dt>checkpoint_monitor_mode<span class="classifier">str, optional</span></dt><dd><p>The mode for checkpointing, by default “min”</p>
+</dd>
+<dt>patience<span class="classifier">int, optional</span></dt><dd><p>The patience for early stopping, by default None</p>
+</dd>
+<dt>log_dir<span class="classifier">str, optional</span></dt><dd><p>Location where logs will be saved, by default “./runs”</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_callbacks">
+<span class="sig-name descname"><span class="pre">get_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_callbacks" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[lightning.Callback]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_data_module">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_data_module" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.LightningDataModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_logger">
+<span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_logger" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.pytorch.loggers.Logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_model">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_model" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.LightningModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_trainer">
+<span class="sig-name descname"><span class="pre">get_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callacks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.get_trainer" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>)</p></li>
+<li><p><strong>callacks</strong> (<em>List</em><em>[</em><em>lightning.Callback</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>lightning.Trainer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.pipelines.mlflow_train.LightningTrainMLFlow.run" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.LightningModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>run_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>accelerator</strong> (<em>str</em>)</p></li>
+<li><p><strong>devices</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>)</p></li>
+<li><p><strong>strategy</strong> (<em>str</em>)</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>)</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>limit_train_batches</strong> (<em>int</em><em> | </em><em>float</em>)</p></li>
+<li><p><strong>limit_val_batches</strong> (<em>int</em><em> | </em><em>float</em>)</p></li>
+<li><p><strong>checkpoint_monitor_metric</strong> (<em>str</em>)</p></li>
+<li><p><strong>checkpoint_monitor_mode</strong> (<em>str</em>)</p></li>
+<li><p><strong>patience</strong> (<em>int</em>)</p></li>
+<li><p><strong>log_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>model_tags</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../cli/index.html" class="btn btn-neutral float-left" title="ssl_tools.pipelines.cli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../utils/index.html" class="btn btn-neutral float-right" title="ssl_tools.pipelines.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

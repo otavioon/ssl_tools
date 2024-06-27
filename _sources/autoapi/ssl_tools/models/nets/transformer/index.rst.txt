@@ -1,0 +1,25 @@
+ssl_tools.models.nets.transformer
+=================================
+
+.. py:module:: ssl_tools.models.nets.transformer
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.transformer.SimpleTransformer
+
+
+Module Contents
+---------------
+
+.. py:class:: SimpleTransformer(in_channels = 6, dim_feedforward=60, num_classes = 6, heads = 2, num_layers = 2, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: configure_optimizers()
+
+

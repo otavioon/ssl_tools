@@ -7,7 +7,7 @@
   <title>ssl_tools.models.ssl.tnc &mdash; SSLTools  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=fd3f3429" />
 
   
   <!--[if lt IE 9]>
@@ -17,13 +17,13 @@
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="ssl_tools.transforms" href="../../../transforms/index.html" />
+    <link rel="next" title="ssl_tools.models.utils" href="../../utils/index.html" />
     <link rel="prev" title="ssl_tools.models.ssl.tfc" href="../tfc/index.html" /> 
 </head>
 
@@ -53,16 +53,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../experiments.html">Running Experiments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">ssl_tools</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
-<li class="toctree-l4 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html">ssl_tools.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -86,10 +88,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../../../api.html">Programming Reference</a></li>
-          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
-          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.tnc</span></code></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">ssl_tools</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">ssl_tools.models</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools.models.ssl</a></li>
+      <li class="breadcrumb-item active">ssl_tools.models.ssl.tnc</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../../_sources/autoapi/ssl_tools/models/ssl/tnc/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -100,11 +102,9 @@
            <div itemprop="articleBody">
              
   <section id="module-ssl_tools.models.ssl.tnc">
-<span id="ssl-tools-models-ssl-tnc"></span><h1><a class="reference internal" href="#module-ssl_tools.models.ssl.tnc" title="ssl_tools.models.ssl.tnc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.tnc</span></code></a><a class="headerlink" href="#module-ssl_tools.models.ssl.tnc" title="Link to this heading"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<span id="ssl-tools-models-ssl-tnc"></span><h1>ssl_tools.models.ssl.tnc<a class="headerlink" href="#module-ssl_tools.models.ssl.tnc" title="Link to this heading"></a></h1>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.ssl.tnc.TNC" title="ssl_tools.models.ssl.tnc.TNC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TNC</span></code></a></p></td>
@@ -117,7 +117,7 @@
 </table>
 </section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.ssl.tnc.build_tnc" title="ssl_tools.models.ssl.tnc.build_tnc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_tnc</span></code></a>([encoding_size, in_channel, mc_sample_size, ...])</p></td>
@@ -125,6 +125,9 @@
 </tr>
 </tbody>
 </table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.models.ssl.tnc.TNC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.ssl.tnc.</span></span><span class="sig-name descname"><span class="pre">TNC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mc_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.tnc.TNC" title="Link to this definition"></a></dt>
@@ -135,7 +138,7 @@ configured with a dictionary. For now, this interface is used to save the hyperp
 described in <a class="reference external" href="https://arxiv.org/pdf/2106.00750.pdf">https://arxiv.org/pdf/2106.00750.pdf</a>. The implementation
 was adapted from <a class="reference external" href="https://github.com/sanatonek/TNC_representation_learning">https://github.com/sanatonek/TNC_representation_learning</a></p>
 <section id="parameters">
-<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>discriminator<span class="classifier">torch.nn.Module</span></dt><dd><p>A discriminator model that takes as input the concatenation of the
 representation of the current time step and the representation of
@@ -159,7 +162,7 @@ sampling a positive window from the non-neighboring region.</p>
 <span class="sig-name descname"><span class="pre">_shared_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.tnc.TNC._shared_step" title="Link to this definition"></a></dt>
 <dd><p>Runs TNC and returns the representation and the loss.</p>
 <section id="id1">
-<h5>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>x_t<span class="classifier">torch.Tensor</span></dt><dd><p>A tensor with the sample of the current time step. It is expected
 to be the shape (B, C, T), where B is the batch size, C is the
@@ -178,7 +181,7 @@ number of channels (features) and T is the number of time steps.</p>
 </dl>
 </section>
 <section id="returns">
-<h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Tuple[torch.Tensor, torch.Tensor]</dt><dd><p>A 2-element tuple containing the representation and the loss,
 respectively.</p>
@@ -188,10 +191,10 @@ respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x_t</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>x_p</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>x_n</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>stage</strong> (<em>str</em>) – </p></li>
+<li><p><strong>x_t</strong> (<em>torch.Tensor</em>)</p></li>
+<li><p><strong>x_p</strong> (<em>torch.Tensor</em>)</p></li>
+<li><p><strong>x_n</strong> (<em>torch.Tensor</em>)</p></li>
+<li><p><strong>stage</strong> (<em>str</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -225,7 +228,7 @@ respectively.</p>
 <span class="sig-name descname"><span class="pre">loss_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_hat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.ssl.tnc.TNC.loss_function" title="Link to this definition"></a></dt>
 <dd><p>Calculate the loss.</p>
 <section id="id2">
-<h5>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h5>
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>y<span class="classifier">torch.Tensor</span></dt><dd><p>The ground truth labels.</p>
 </dd>
@@ -236,8 +239,8 @@ respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>y_hat</strong> (<em>torch.Tensor</em>) – </p></li>
+<li><p><strong>y</strong> (<em>torch.Tensor</em>)</p></li>
+<li><p><strong>y_hat</strong> (<em>torch.Tensor</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -262,10 +265,10 @@ respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>discriminator</strong> (<em>torch.nn.Module</em>) – </p></li>
-<li><p><strong>encoder</strong> (<em>torch.nn.Module</em>) – </p></li>
-<li><p><strong>mc_sample_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>w</strong> (<em>float</em>) – </p></li>
+<li><p><strong>discriminator</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>encoder</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>mc_sample_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>w</strong> (<em>float</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -288,7 +291,7 @@ Neighborhood Coding” (<a class="reference external" href="https://arxiv.org/ab
 </dd>
 </dl>
 <section id="id3">
-<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>input_size<span class="classifier">int, optional</span></dt><dd><p>Size of the input sample, by default 10</p>
 </dd>
@@ -306,8 +309,8 @@ neighbourhood.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>n_classes</strong> (<em>int</em>) – </p></li>
+<li><p><strong>input_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>n_classes</strong> (<em>int</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -319,7 +322,7 @@ neighbourhood.</p>
 <dd><p>Builds a TNC model. This function aids the creation of a TNC model
 by providing default values for the parameters.</p>
 <section id="id4">
-<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>encoding_size<span class="classifier">int, optional</span></dt><dd><p>The size of the encoding. This is the size of the representation.</p>
 </dd>
@@ -347,7 +350,7 @@ computing the final results.</p>
 </dl>
 </section>
 <section id="id5">
-<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>TNC</dt><dd><p>The TNC model.</p>
 </dd>
@@ -356,14 +359,14 @@ computing the final results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>encoding_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>in_channel</strong> (<em>int</em>) – </p></li>
-<li><p><strong>mc_sample_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>w</strong> (<em>float</em>) – </p></li>
-<li><p><strong>gru_hidden_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>gru_num_layers</strong> (<em>int</em>) – </p></li>
-<li><p><strong>gru_bidirectional</strong> (<em>bool</em>) – </p></li>
-<li><p><strong>dropout</strong> (<em>float</em>) – </p></li>
+<li><p><strong>encoding_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>in_channel</strong> (<em>int</em>)</p></li>
+<li><p><strong>mc_sample_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>w</strong> (<em>float</em>)</p></li>
+<li><p><strong>gru_hidden_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>gru_num_layers</strong> (<em>int</em>)</p></li>
+<li><p><strong>gru_bidirectional</strong> (<em>bool</em>)</p></li>
+<li><p><strong>dropout</strong> (<em>float</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -374,14 +377,13 @@ computing the final results.</p>
 
 </section>
 </section>
-</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../tfc/index.html" class="btn btn-neutral float-left" title="ssl_tools.models.ssl.tfc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../../transforms/index.html" class="btn btn-neutral float-right" title="ssl_tools.transforms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../utils/index.html" class="btn btn-neutral float-right" title="ssl_tools.models.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

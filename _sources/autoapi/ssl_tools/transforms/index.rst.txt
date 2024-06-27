@@ -1,17 +1,20 @@
-:py:mod:`ssl_tools.transforms`
-==============================
+ssl_tools.transforms
+====================
 
 .. py:module:: ssl_tools.transforms
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   signal_1d/index.rst
-   time_1d/index.rst
-   utils/index.rst
+   /autoapi/ssl_tools/transforms/pad/index
+   /autoapi/ssl_tools/transforms/signal_1d/index
+   /autoapi/ssl_tools/transforms/time_1d/index
+   /autoapi/ssl_tools/transforms/time_1d_full/index
+   /autoapi/ssl_tools/transforms/utils/index
+   /autoapi/ssl_tools/transforms/window/index
 
 

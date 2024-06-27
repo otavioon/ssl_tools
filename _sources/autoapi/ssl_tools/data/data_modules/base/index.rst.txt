@@ -1,0 +1,44 @@
+ssl_tools.data.data_modules.base
+================================
+
+.. py:module:: ssl_tools.data.data_modules.base
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.data.data_modules.base.SimpleDataModule
+
+
+Module Contents
+---------------
+
+.. py:class:: SimpleDataModule
+
+   Bases: :py:obj:`lightning.LightningDataModule`
+
+
+   .. py:method:: _get_loader(split_name, shuffle)
+      :abstractmethod:
+
+
+
+   .. py:method:: _load_dataset(split_name)
+      :abstractmethod:
+
+
+
+   .. py:method:: predict_dataloader()
+
+
+   .. py:method:: test_dataloader()
+
+
+   .. py:method:: train_dataloader()
+
+
+   .. py:method:: val_dataloader()
+
+

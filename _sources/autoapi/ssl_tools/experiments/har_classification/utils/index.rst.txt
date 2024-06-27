@@ -1,0 +1,87 @@
+ssl_tools.experiments.har_classification.utils
+==============================================
+
+.. py:module:: ssl_tools.experiments.har_classification.utils
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.utils.DimensionAdder
+   ssl_tools.experiments.har_classification.utils.FFT
+   ssl_tools.experiments.har_classification.utils.Flatten
+   ssl_tools.experiments.har_classification.utils.Spectrogram
+
+
+Module Contents
+---------------
+
+.. py:class:: DimensionAdder(dim)
+
+   .. py:method:: __call__(x)
+
+
+.. py:class:: FFT(absolute = True, centered = False)
+
+   .. py:method:: __call__(x)
+
+      Aplly FFT to the input signal. It apply the FFT into each channel
+      of the input signal.
+
+      Parameters
+      ----------
+      x : np.ndarray
+          An array with shape (n_channels, n_samples) containing the input
+
+      Returns
+      -------
+      np.ndarray
+          The FFT of the input signal. The shape of the output is
+          (n_channels, n_samples) if absolute is False, and
+          (n_channels, n_samples//2) if absolute is True.
+
+
+
+.. py:class:: Flatten
+
+   .. py:method:: __call__(x)
+
+      Flatten the input signal. It apply the flatten into each channel
+      of the input signal.
+
+      Parameters
+      ----------
+      x : np.ndarray
+          An array with shape (n_channels, n_samples) containing the input
+
+      Returns
+      -------
+      np.ndarray
+          The flatten of the input signal. The shape of the output is
+          (n_channels, n_samples).
+
+
+
+.. py:class:: Spectrogram(fs=20, nperseg=16, noverlap=8, nfft=16)
+
+   .. py:method:: __call__(x)
+
+      Aplly Spectrogram to the input signal. It apply the Spectrogram into each channel
+      of the input signal.
+
+      Parameters
+      ----------
+      x : np.ndarray
+          An array with shape (n_channels, n_samples) containing the input
+
+      Returns
+      -------
+      np.ndarray
+          The Spectrogram of the input signal. The shape of the output is
+          (n_channels, n_samples) if absolute is False, and
+          (n_channels, n_samples//2) if absolute is True.
+
+
+

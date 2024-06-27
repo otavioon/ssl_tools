@@ -7,7 +7,7 @@
   <title>ssl_tools.experiments &mdash; SSLTools  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
 
   
   <!--[if lt IE 9]>
@@ -17,13 +17,13 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="ssl_tools.experiments.har_classification" href="har_classification/index.html" />
+    <link rel="next" title="ssl_tools.experiments.covid_detection" href="covid_detection/index.html" />
     <link rel="prev" title="ssl_tools.data.datasets.tnc" href="../data/datasets/tnc/index.html" /> 
 </head>
 
@@ -53,16 +53,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../experiments.html">Running Experiments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../api.html">Programming Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">ssl_tools</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../models/index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html">ssl_tools.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -86,8 +88,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../api.html">Programming Reference</a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools</a></li>
+      <li class="breadcrumb-item active">ssl_tools.experiments</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/ssl_tools/experiments/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -98,17 +100,13 @@
            <div itemprop="articleBody">
              
   <section id="module-ssl_tools.experiments">
-<span id="ssl-tools-experiments"></span><h1><a class="reference internal" href="#module-ssl_tools.experiments" title="ssl_tools.experiments"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a><a class="headerlink" href="#module-ssl_tools.experiments" title="Link to this heading"></a></h1>
+<span id="ssl-tools-experiments"></span><h1>ssl_tools.experiments<a class="headerlink" href="#module-ssl_tools.experiments" title="Link to this heading"></a></h1>
 <section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="har_classification/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="har_classification/cpc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.cpc</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="har_classification/tfc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.tfc</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="har_classification/tnc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.tnc</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="covid_detection/index.html">ssl_tools.experiments.covid_detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="har_classification/index.html">ssl_tools.experiments.har_classification</a></li>
 </ul>
 </div>
 </section>
@@ -116,15 +114,13 @@
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="experiment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.experiment</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightning_experiment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.lightning_experiment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiment/index.html">ssl_tools.experiments.experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightning_experiment/index.html">ssl_tools.experiments.lightning_experiment</a></li>
 </ul>
 </div>
 </section>
-<section id="package-contents">
-<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.Experiment" title="ssl_tools.experiments.Experiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Experiment</span></code></a></p></td>
@@ -146,14 +142,17 @@
 </table>
 </section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.auto_main" title="ssl_tools.experiments.auto_main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">auto_main</span></code></a>(commands)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.auto_main" title="ssl_tools.experiments.auto_main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">auto_main</span></code></a>(commands[, print_args])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.experiments.Experiment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'experiment'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'logs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.Experiment" title="Link to this definition"></a></dt>
@@ -163,23 +162,13 @@ inheritance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – </p></li>
-<li><p><strong>run_id</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – </p></li>
-<li><p><strong>log_dir</strong> (<em>str</em>) – </p></li>
-<li><p><strong>seed</strong> (<em>int</em>) – </p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>run_id</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>log_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>seed</strong> (<em>int</em>)</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py property">
-<dt class="sig sig-object py" id="ssl_tools.experiments.Experiment.experiment_dir">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">experiment_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#ssl_tools.experiments.Experiment.experiment_dir" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pathlib.Path</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="ssl_tools.experiments.Experiment.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.Experiment.__call__" title="Link to this definition"></a></dt>
@@ -206,6 +195,16 @@ inheritance.</p>
 <dt class="sig sig-object py" id="ssl_tools.experiments.Experiment.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.Experiment.execute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ssl_tools.experiments.Experiment.experiment_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">experiment_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#ssl_tools.experiments.Experiment.experiment_dir" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ssl_tools.experiments.Experiment.run">
@@ -238,19 +237,40 @@ inheritance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – </p></li>
-<li><p><strong>stage_name</strong> (<em>str</em>) – </p></li>
-<li><p><strong>batch_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>load</strong> (<em>str</em>) – </p></li>
-<li><p><strong>accelerator</strong> (<em>str</em>) – </p></li>
-<li><p><strong>devices</strong> (<em>int</em>) – </p></li>
-<li><p><strong>strategy</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_nodes</strong> (<em>int</em>) – </p></li>
-<li><p><strong>num_workers</strong> (<em>int</em>) – </p></li>
-<li><p><strong>log_every_n_steps</strong> (<em>int</em>) – </p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>stage_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>load</strong> (<em>str</em>)</p></li>
+<li><p><strong>accelerator</strong> (<em>str</em>)</p></li>
+<li><p><strong>devices</strong> (<em>int</em>)</p></li>
+<li><p><strong>strategy</strong> (<em>str</em>)</p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>)</p></li>
+<li><p><strong>log_every_n_steps</strong> (<em>int</em>)</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment._MODEL_NAME">
+<span class="sig-name descname"><span class="pre">_MODEL_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'model'</span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment._MODEL_NAME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment._STAGE_NAME">
+<span class="sig-name descname"><span class="pre">_STAGE_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'stage'</span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment._STAGE_NAME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.__str__" title="Link to this definition"></a></dt>
+<dd><p>Return str(self).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.callbacks">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">lightning.Callback</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.callbacks" title="Link to this definition"></a></dt>
@@ -301,12 +321,164 @@ inheritance.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_callbacks">
+<span class="sig-name descname"><span class="pre">get_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_callbacks" title="Link to this definition"></a></dt>
+<dd><p>Get the callbacks to use for the experiment.</p>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>List[L.Callback]</dt><dd><p>A list of callbacks to use for the experiment</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[lightning.Callback]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_data_module">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_data_module" title="Link to this definition"></a></dt>
+<dd><p>Get the datamodule to use for the experiment.</p>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>L.LightningDataModule</dt><dd><p>The datamodule to use for the experiment</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.LightningDataModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_logger">
+<span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_logger" title="Link to this definition"></a></dt>
+<dd><p>Get the logger to use for the experiment.</p>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Logger</dt><dd><p>The logger to use for the experiment</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.pytorch.loggers.Logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_model">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_model" title="Link to this definition"></a></dt>
+<dd><p>Get the model to use for the experiment.</p>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>L.LightningModule</dt><dd><p>The model to use for the experiment</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.LightningModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_trainer">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_trainer" title="Link to this definition"></a></dt>
+<dd><p>Get trainer to use for the experiment.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>logger<span class="classifier">_type_</span></dt><dd><p>The logger to use for the experiment</p>
+</dd>
+<dt>callbacks<span class="classifier">List[L.Callback]</span></dt><dd><p>A list of callbacks to use for the experiment</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>L.Trainer</dt><dd><p>The trainer to use for the experiment</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>)</p></li>
+<li><p><strong>callbacks</strong> (<em>List</em><em>[</em><em>lightning.Callback</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>lightning.Trainer</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.hyperparameters">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hyperparameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.hyperparameters" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.load_checkpoint">
+<span class="sig-name descname"><span class="pre">load_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.load_checkpoint" title="Link to this definition"></a></dt>
+<dd><p>Load the model to use for the experiment.</p>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>L.LightningModule</dt><dd><p>The model to use for the experiment</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>lightning.LightningModule</em>)</p></li>
+<li><p><strong>path</strong> (<em>pathlib.Path</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>lightning.LightningModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.log_hyperparams">
+<span class="sig-name descname"><span class="pre">log_hyperparams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.log_hyperparams" title="Link to this definition"></a></dt>
+<dd><p>Log the hyperparameters for reproducibility purposes.</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>model<span class="classifier">L.LightningModule</span></dt><dd><p>The model to log the hyperparameters from</p>
+</dd>
+<dt>logger<span class="classifier">Logger</span></dt><dd><p>The logger to use for logging the hyperparameters</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -331,189 +503,6 @@ inheritance.</p>
 </dl>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.trainer">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trainer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">lightning.Trainer</span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.trainer" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>lightning.Trainer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment._MODEL_NAME">
-<span class="sig-name descname"><span class="pre">_MODEL_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'model'</span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment._MODEL_NAME" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment._STAGE_NAME">
-<span class="sig-name descname"><span class="pre">_STAGE_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'stage'</span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment._STAGE_NAME" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.__str__" title="Link to this definition"></a></dt>
-<dd><p>Return str(self).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_callbacks">
-<span class="sig-name descname"><span class="pre">get_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_callbacks" title="Link to this definition"></a></dt>
-<dd><p>Get the callbacks to use for the experiment.</p>
-<section id="returns">
-<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>List[L.Callback]</dt><dd><p>A list of callbacks to use for the experiment</p>
-</dd>
-</dl>
-</section>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[lightning.Callback]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_data_module">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_data_module" title="Link to this definition"></a></dt>
-<dd><p>Get the datamodule to use for the experiment.</p>
-<section id="id1">
-<h4>Returns<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>L.LightningDataModule</dt><dd><p>The datamodule to use for the experiment</p>
-</dd>
-</dl>
-</section>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>lightning.LightningDataModule</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_logger">
-<span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_logger" title="Link to this definition"></a></dt>
-<dd><p>Get the logger to use for the experiment.</p>
-<section id="id2">
-<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>Logger</dt><dd><p>The logger to use for the experiment</p>
-</dd>
-</dl>
-</section>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>lightning.pytorch.loggers.Logger</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_model">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_model" title="Link to this definition"></a></dt>
-<dd><p>Get the model to use for the experiment.</p>
-<section id="id3">
-<h4>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>L.LightningModule</dt><dd><p>The model to use for the experiment</p>
-</dd>
-</dl>
-</section>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>lightning.LightningModule</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.get_trainer">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.get_trainer" title="Link to this definition"></a></dt>
-<dd><p>Get trainer to use for the experiment.</p>
-<section id="parameters">
-<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>logger<span class="classifier">_type_</span></dt><dd><p>The logger to use for the experiment</p>
-</dd>
-<dt>callbacks<span class="classifier">List[L.Callback]</span></dt><dd><p>A list of callbacks to use for the experiment</p>
-</dd>
-</dl>
-</section>
-<section id="id4">
-<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>L.Trainer</dt><dd><p>The trainer to use for the experiment</p>
-</dd>
-</dl>
-</section>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>) – </p></li>
-<li><p><strong>callbacks</strong> (<em>List</em><em>[</em><em>lightning.Callback</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>lightning.Trainer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.load_checkpoint">
-<span class="sig-name descname"><span class="pre">load_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.load_checkpoint" title="Link to this definition"></a></dt>
-<dd><p>Load the model to use for the experiment.</p>
-<section id="id5">
-<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>L.LightningModule</dt><dd><p>The model to use for the experiment</p>
-</dd>
-</dl>
-</section>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>lightning.LightningModule</em>) – </p></li>
-<li><p><strong>path</strong> (<em>pathlib.Path</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>lightning.LightningModule</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.log_hyperparams">
-<span class="sig-name descname"><span class="pre">log_hyperparams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.log_hyperparams" title="Link to this definition"></a></dt>
-<dd><p>Log the hyperparameters for reproducibility purposes.</p>
-<section id="id6">
-<h4>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>model<span class="classifier">L.LightningModule</span></dt><dd><p>The model to log the hyperparameters from</p>
-</dd>
-<dt>logger<span class="classifier">Logger</span></dt><dd><p>The logger to use for logging the hyperparameters</p>
-</dd>
-</dl>
-</section>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.run" title="Link to this definition"></a></dt>
@@ -532,9 +521,9 @@ inheritance.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>lightning.LightningModule</em>) – </p></li>
-<li><p><strong>data_module</strong> (<em>lightning.LightningDataModule</em>) – </p></li>
-<li><p><strong>trainer</strong> (<em>lightning.Trainer</em>) – </p></li>
+<li><p><strong>model</strong> (<em>lightning.LightningModule</em>)</p></li>
+<li><p><strong>data_module</strong> (<em>lightning.LightningDataModule</em>)</p></li>
+<li><p><strong>trainer</strong> (<em>lightning.Trainer</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -544,6 +533,16 @@ inheritance.</p>
 <dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.setup" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ssl_tools.experiments.LightningExperiment.trainer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trainer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">lightning.Trainer</span></em><a class="headerlink" href="#ssl_tools.experiments.LightningExperiment.trainer" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lightning.Trainer</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -556,7 +555,7 @@ inheritance.</p>
 <p>Wraps the LightningTrain class to provide a more specific interface
 for SSL experiments (training).</p>
 <section id="id7">
-<h4>Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>training_mode<span class="classifier">str, optional</span></dt><dd><p>The training mode. It could be either “pretrain” or “finetune”</p>
 </dd>
@@ -571,7 +570,7 @@ full model (backbone + head).</p>
 <span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningSSLTrain.get_data_module" title="Link to this definition"></a></dt>
 <dd><p>Get the datamodule to use for the experiment.</p>
 <section id="id8">
-<h5>Returns<a class="headerlink" href="#id8" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningDataModule</dt><dd><p>The datamodule to use for the experiment</p>
 </dd>
@@ -589,14 +588,14 @@ full model (backbone + head).</p>
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_finetune_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningSSLTrain.get_finetune_data_module" title="Link to this definition"></a></dt>
 <dd><p>The data module to use for fine-tuning.</p>
 <section id="id9">
-<h5>Returns<a class="headerlink" href="#id9" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningDataModule</dt><dd><p>The data module to use for fine-tuning</p>
 </dd>
 </dl>
 </section>
 <section id="raises">
-<h5>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h5>
+<h4>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>NotImplementedError</dt><dd><p>_description_</p>
 </dd>
@@ -614,7 +613,7 @@ full model (backbone + head).</p>
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_finetune_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningSSLTrain.get_finetune_model" title="Link to this definition"></a></dt>
 <dd><p>Get the model to use for fine-tuning.</p>
 <section id="id10">
-<h5>Parameters<a class="headerlink" href="#id10" title="Link to this heading"></a></h5>
+<h4>Parameters<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>load_backbone<span class="classifier">str, optional</span></dt><dd><p>The path to the backbone to load. The backbone must be loaded
 inside this method, if it is not None.</p>
@@ -622,7 +621,7 @@ inside this method, if it is not None.</p>
 </dl>
 </section>
 <section id="id11">
-<h5>Returns<a class="headerlink" href="#id11" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningModule</dt><dd><p>The model to use for fine-tuning</p>
 </dd>
@@ -630,7 +629,7 @@ inside this method, if it is not None.</p>
 </section>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>load_backbone</strong> (<em>str</em>) – </p>
+<dd class="field-odd"><p><strong>load_backbone</strong> (<em>str</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>lightning.LightningModule</p>
@@ -643,7 +642,7 @@ inside this method, if it is not None.</p>
 <span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningSSLTrain.get_model" title="Link to this definition"></a></dt>
 <dd><p>Get the model to use for the experiment.</p>
 <section id="id12">
-<h5>Returns<a class="headerlink" href="#id12" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningModule</dt><dd><p>The model to use for the experiment</p>
 </dd>
@@ -661,7 +660,7 @@ inside this method, if it is not None.</p>
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_pretrain_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningSSLTrain.get_pretrain_data_module" title="Link to this definition"></a></dt>
 <dd><p>The data module to use for pre-training.</p>
 <section id="id13">
-<h5>Returns<a class="headerlink" href="#id13" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningDataModule</dt><dd><p>The data module to use for pre-training</p>
 </dd>
@@ -679,7 +678,7 @@ inside this method, if it is not None.</p>
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_pretrain_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningSSLTrain.get_pretrain_model" title="Link to this definition"></a></dt>
 <dd><p>Get the model to use for the pretraining phase.</p>
 <section id="id14">
-<h5>Returns<a class="headerlink" href="#id14" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id14" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningModule</dt><dd><p>The model to use for the pretraining phase</p>
 </dd>
@@ -696,8 +695,8 @@ inside this method, if it is not None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>training_mode</strong> (<em>str</em>) – </p></li>
-<li><p><strong>load_backbone</strong> (<em>str</em>) – </p></li>
+<li><p><strong>training_mode</strong> (<em>str</em>)</p></li>
+<li><p><strong>load_backbone</strong> (<em>str</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -711,7 +710,7 @@ inside this method, if it is not None.</p>
 inheritance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>limit_test_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p>
+<dd class="field-odd"><p><strong>limit_test_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>)</p>
 </dd>
 </dl>
 <dl class="py attribute">
@@ -724,7 +723,7 @@ inheritance.</p>
 <span class="sig-name descname"><span class="pre">get_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningTest.get_callbacks" title="Link to this definition"></a></dt>
 <dd><p>Get the callbacks to use for the experiment.</p>
 <section id="id15">
-<h4>Returns<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<h3>Returns<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>List[L.Callback]</dt><dd><p>The list of callbacks to use for the experiment.</p>
 </dd>
@@ -742,7 +741,7 @@ inheritance.</p>
 <span class="sig-name descname"><span class="pre">get_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningTest.get_trainer" title="Link to this definition"></a></dt>
 <dd><p>Get trainer to use for the experiment.</p>
 <section id="id16">
-<h4>Parameters<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>logger<span class="classifier">_type_</span></dt><dd><p>The logger to use for the experiment</p>
 </dd>
@@ -751,7 +750,7 @@ inheritance.</p>
 </dl>
 </section>
 <section id="id17">
-<h4>Returns<a class="headerlink" href="#id17" title="Link to this heading"></a></h4>
+<h3>Returns<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>L.Trainer</dt><dd><p>The trainer to use for the experiment</p>
 </dd>
@@ -760,8 +759,8 @@ inheritance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>) – </p></li>
-<li><p><strong>callbacks</strong> (<em>List</em><em>[</em><em>lightning.Callback</em><em>]</em>) – </p></li>
+<li><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>)</p></li>
+<li><p><strong>callbacks</strong> (<em>List</em><em>[</em><em>lightning.Callback</em><em>]</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -776,9 +775,9 @@ inheritance.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>lightning.LightningModule</em>) – </p></li>
-<li><p><strong>data_module</strong> (<em>lightning.LightningDataModule</em>) – </p></li>
-<li><p><strong>trainer</strong> (<em>lightning.Trainer</em>) – </p></li>
+<li><p><strong>model</strong> (<em>lightning.LightningModule</em>)</p></li>
+<li><p><strong>data_module</strong> (<em>lightning.LightningDataModule</em>)</p></li>
+<li><p><strong>trainer</strong> (<em>lightning.Trainer</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -791,20 +790,21 @@ inheritance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.experiments.LightningTrain">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.</span></span><span class="sig-name descname"><span class="pre">LightningTrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_metric_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_train_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_val_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningTrain" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.</span></span><span class="sig-name descname"><span class="pre">LightningTrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_metric_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_train_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_val_batches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningTrain" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#ssl_tools.experiments.LightningExperiment" title="ssl_tools.experiments.LightningExperiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightningExperiment</span></code></a></p>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stage_name</strong> (<em>str</em>) – </p></li>
-<li><p><strong>epochs</strong> (<em>int</em>) – </p></li>
-<li><p><strong>learning_rate</strong> (<em>float</em>) – </p></li>
-<li><p><strong>checkpoint_metric</strong> (<em>str</em>) – </p></li>
-<li><p><strong>checkpoint_metric_mode</strong> (<em>str</em>) – </p></li>
-<li><p><strong>limit_train_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p></li>
-<li><p><strong>limit_val_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>stage_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+<li><p><strong>checkpoint_metric</strong> (<em>str</em>)</p></li>
+<li><p><strong>checkpoint_metric_mode</strong> (<em>str</em>)</p></li>
+<li><p><strong>limit_train_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>limit_val_batches</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>patience</strong> (<em>int</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -818,7 +818,7 @@ inheritance.</p>
 <span class="sig-name descname"><span class="pre">get_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningTrain.get_callbacks" title="Link to this definition"></a></dt>
 <dd><p>Get the callbacks to use for the experiment.</p>
 <section id="id18">
-<h4>Returns<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
+<h3>Returns<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>List[L.Callback]</dt><dd><p>A list of callbacks to use for the experiment</p>
 </dd>
@@ -836,7 +836,7 @@ inheritance.</p>
 <span class="sig-name descname"><span class="pre">get_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.LightningTrain.get_trainer" title="Link to this definition"></a></dt>
 <dd><p>Get trainer to use for the experiment.</p>
 <section id="id19">
-<h4>Parameters<a class="headerlink" href="#id19" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>logger<span class="classifier">_type_</span></dt><dd><p>The logger to use for the experiment</p>
 </dd>
@@ -845,7 +845,7 @@ inheritance.</p>
 </dl>
 </section>
 <section id="id20">
-<h4>Returns<a class="headerlink" href="#id20" title="Link to this heading"></a></h4>
+<h3>Returns<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>L.Trainer</dt><dd><p>The trainer to use for the experiment</p>
 </dd>
@@ -854,8 +854,8 @@ inheritance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>) – </p></li>
-<li><p><strong>callbacks</strong> (<em>List</em><em>[</em><em>lightning.Callback</em><em>]</em>) – </p></li>
+<li><p><strong>logger</strong> (<em>lightning.pytorch.loggers.Logger</em>)</p></li>
+<li><p><strong>callbacks</strong> (<em>List</em><em>[</em><em>lightning.Callback</em><em>]</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -870,9 +870,9 @@ inheritance.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>lightning.LightningModule</em>) – </p></li>
-<li><p><strong>data_module</strong> (<em>lightning.LightningDataModule</em>) – </p></li>
-<li><p><strong>trainer</strong> (<em>lightning.Trainer</em>) – </p></li>
+<li><p><strong>model</strong> (<em>lightning.LightningModule</em>)</p></li>
+<li><p><strong>data_module</strong> (<em>lightning.LightningDataModule</em>)</p></li>
+<li><p><strong>trainer</strong> (<em>lightning.Trainer</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -882,15 +882,20 @@ inheritance.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ssl_tools.experiments.auto_main">
-<span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.</span></span><span class="sig-name descname"><span class="pre">auto_main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commands</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.auto_main" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.</span></span><span class="sig-name descname"><span class="pre">auto_main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.auto_main" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>commands</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#ssl_tools.experiments.Experiment" title="ssl_tools.experiments.Experiment"><em>Experiment</em></a><em>]</em>) – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>commands</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#ssl_tools.experiments.Experiment" title="ssl_tools.experiments.Experiment"><em>Experiment</em></a><em>]</em>)</p></li>
+<li><p><strong>print_args</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
 </dd>
 </dl>
 </dd></dl>
 
-</section>
 </section>
 </section>
 
@@ -899,7 +904,7 @@ inheritance.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../data/datasets/tnc/index.html" class="btn btn-neutral float-left" title="ssl_tools.data.datasets.tnc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="har_classification/index.html" class="btn btn-neutral float-right" title="ssl_tools.experiments.har_classification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="covid_detection/index.html" class="btn btn-neutral float-right" title="ssl_tools.experiments.covid_detection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

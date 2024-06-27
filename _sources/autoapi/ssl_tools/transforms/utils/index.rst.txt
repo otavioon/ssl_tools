@@ -1,29 +1,32 @@
-:py:mod:`ssl_tools.transforms.utils`
-====================================
+ssl_tools.transforms.utils
+==========================
 
 .. py:module:: ssl_tools.transforms.utils
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.transforms.utils.Cast
+   ssl_tools.transforms.utils.Composer
+   ssl_tools.transforms.utils.Flatten
+   ssl_tools.transforms.utils.Identity
+   ssl_tools.transforms.utils.PerChannelTransform
+   ssl_tools.transforms.utils.Reshape
+   ssl_tools.transforms.utils.Squeeze
+   ssl_tools.transforms.utils.StackComposer
+   ssl_tools.transforms.utils.Unsqueeze
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   ssl_tools.transforms.utils.Composer
-   ssl_tools.transforms.utils.Flatten
-   ssl_tools.transforms.utils.Identity
-   ssl_tools.transforms.utils.Reshape
-
-
-
-
-.. py:class:: Composer(transforms)
-
+.. py:class:: Cast(dtype)
 
    Bases: :py:obj:`librep.base.Transform`
+
 
    .. py:method:: __call__(X)
 
@@ -31,29 +34,107 @@ Classes
    .. py:method:: transform(X)
 
 
-
-.. py:class:: Flatten
-
+.. py:class:: Composer(transforms)
 
    Bases: :py:obj:`librep.base.Transform`
 
+
+   .. py:method:: __call__(X)
+
+
    .. py:method:: transform(X)
 
+
+.. py:class:: Flatten
+
+   Bases: :py:obj:`librep.base.Transform`
+
+
+   .. py:method:: __call__(X)
+
+
+   .. py:method:: transform(X)
 
 
 .. py:class:: Identity
 
+   Bases: :py:obj:`librep.base.Transform`
+
+
+   .. py:method:: __call__(X)
+
 
    .. py:method:: transform(X)
+
+
+.. py:class:: PerChannelTransform(transform)
+
+   Bases: :py:obj:`librep.base.Transform`
+
+
+   .. py:method:: __call__(X)
+
+
+   .. py:method:: transform(X)
+
+      Split the data into channels and apply the transforms to each channel
+      separately.
+
+      Parameters
+      ----------
+      data : np.ndarray
+          The data to be transformed. It must be a 2-D array with the shape
+          (C, T), where C is the number of channels and T is the number of
+          time steps.
+      transforms : List[Transform]
+          A sequence of transforms to apply in the data
+
+      Returns
+      -------
+      np.ndarray
+          An 2-D array with the transformed data. The array has the number of
+          channels as the first dimension.
 
 
 
 .. py:class:: Reshape(shape)
 
-
    Bases: :py:obj:`librep.base.Transform`
+
+
+   .. py:method:: __call__(X)
+
 
    .. py:method:: transform(X)
 
+
+.. py:class:: Squeeze(axis=None)
+
+   Bases: :py:obj:`librep.base.Transform`
+
+
+   .. py:method:: __call__(X)
+
+
+   .. py:method:: transform(X)
+
+
+.. py:class:: StackComposer(transforms)
+
+   .. py:method:: __call__(x)
+
+
+   .. py:method:: transform(X)
+
+
+.. py:class:: Unsqueeze(axis)
+
+   Bases: :py:obj:`librep.base.Transform`
+
+
+   .. py:method:: __call__(X)
+
+
+   .. py:method:: transform(X)
 
 

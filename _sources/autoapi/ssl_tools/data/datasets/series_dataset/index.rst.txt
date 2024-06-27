@@ -1,25 +1,49 @@
-:py:mod:`ssl_tools.data.datasets.series_dataset`
-================================================
+ssl_tools.data.datasets.series_dataset
+======================================
 
 .. py:module:: ssl_tools.data.datasets.series_dataset
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.data.datasets.series_dataset.MultiModalDataframeDataset
+   ssl_tools.data.datasets.series_dataset.MultiModalSeriesCSVDataset
+   ssl_tools.data.datasets.series_dataset.SeriesFolderCSVDataset
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: MultiModalDataframeDataset(df, feature_column_prefix = 'RHR', target_column = 'anomaly', reshape = None, transforms = None, name = 'participant', dataset_transforms = None, balance = False)
 
-.. autoapisummary::
-
-   ssl_tools.data.datasets.series_dataset.MultiModalSeriesCSVDataset
-   ssl_tools.data.datasets.series_dataset.SeriesFolderCSVDataset
+   .. py:method:: __getitem__(index)
 
 
+   .. py:method:: __len__()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+   .. py:method:: _balance()
+
+
+   .. py:method:: _dataset_transform()
 
 
 .. py:class:: MultiModalSeriesCSVDataset(data_path, feature_prefixes = None, label = None, features_as_channels = True, cast_to = 'float32', transforms = None)
-
 
    
    This datasets assumes that the data is in a single CSV file with
@@ -103,6 +127,7 @@ Classes
    3
 
 
+
    .. py:method:: __getitem__(index)
 
 
@@ -114,9 +139,11 @@ Classes
       Return repr(self).
 
 
+
    .. py:method:: __str__()
 
       Return str(self).
+
 
 
    .. py:method:: _load_data()
@@ -132,7 +159,6 @@ Classes
 
 
 .. py:class:: SeriesFolderCSVDataset(data_path, features = None, label = None, pad = False, cast_to = 'float32', transforms = None, lazy = False)
-
 
    
    This dataset assumes that the data is in a folder with multiple CSV
@@ -225,6 +251,7 @@ Classes
        If True, the data will be loaded lazily (i.e. the CSV files will be
        read only when needed)
 
+
    .. py:method:: __getitem__(idx)
 
       Get a single sample from the dataset
@@ -241,6 +268,7 @@ Classes
           specified, otherwise only the data.
 
 
+
    .. py:method:: __len__()
 
 
@@ -249,14 +277,17 @@ Classes
       Return repr(self).
 
 
+
    .. py:method:: __str__()
 
       Return str(self).
 
 
+
    .. py:method:: _disable_fix_length()
 
       Decorator to disable fix_length when calling a function
+
 
 
    .. py:method:: _get_longest_sample_size()
@@ -267,6 +298,7 @@ Classes
       -------
       int
           The size of the longest sample in the dataset
+
 
 
    .. py:method:: _pad_data(data)
@@ -285,6 +317,7 @@ Classes
           The padded data
 
 
+
    .. py:method:: _read_all_csv()
 
       Read all the CSV files in the data directory
@@ -293,6 +326,7 @@ Classes
       -------
       Union[Tuple[np.ndarray, np.ndarray], np.ndarray]
           A list of 2-element tuple with the data and the label. If the label is not specified, the second element of the tuples are None.
+
 
 
    .. py:method:: _read_csv(path)
@@ -309,6 +343,7 @@ Classes
       Tuple[np.ndarray, Optional[np.ndarray]]
           A 2-element tuple with the data and the label. If the label is not
           specified, the second element is None.
+
 
 
    .. py:method:: _scan_data()

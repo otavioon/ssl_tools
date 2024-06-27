@@ -1,0 +1,53 @@
+ssl_tools.pipelines.har_classification.conv1d_conss
+===================================================
+
+.. py:module:: ssl_tools.pipelines.har_classification.conv1d_conss
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.har_classification.conv1d_conss.experiment
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.har_classification.conv1d_conss.PartialEmbeddingEvaluator
+   ssl_tools.pipelines.har_classification.conv1d_conss.PartialEmbeddingEvaluatorCallback
+   ssl_tools.pipelines.har_classification.conv1d_conss.Simple1DConvNetFineTune2
+
+
+Module Contents
+---------------
+
+.. py:class:: PartialEmbeddingEvaluator(experiment_name, model, data_module, trainer, **kwargs)
+
+   Bases: :py:obj:`evaluator.EmbeddingEvaluator`
+
+
+   .. py:method:: run()
+
+
+.. py:class:: PartialEmbeddingEvaluatorCallback(experiment_name, frequency = 1, **partal_embedding_evaluator_kwargs)
+
+   Bases: :py:obj:`lightning.pytorch.callbacks.Callback`
+
+
+   .. py:method:: on_validation_end(trainer, pl_module)
+
+
+.. py:class:: Simple1DConvNetFineTune2
+
+   Bases: :py:obj:`simple1Dconv_classifier.Simple1DConvNetFineTune`
+
+
+   .. py:method:: get_callbacks()
+
+
+.. py:data:: experiment
+

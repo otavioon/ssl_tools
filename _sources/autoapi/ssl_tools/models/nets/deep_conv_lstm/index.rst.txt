@@ -1,0 +1,59 @@
+ssl_tools.models.nets.deep_conv_lstm
+====================================
+
+.. py:module:: ssl_tools.models.nets.deep_conv_lstm
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.deep_conv_lstm.ConvLSTMCell
+   ssl_tools.models.nets.deep_conv_lstm.DeepConvLSTM
+
+
+Module Contents
+---------------
+
+.. py:class:: ConvLSTMCell(input_shape)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: _calculate_conv_output_shape(backbone, input_shape)
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: DeepConvLSTM(input_shape = (1, 6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_shape)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+

@@ -1,14 +1,19 @@
-:py:mod:`ssl_tools.experiments.har_classification.tfc`
-======================================================
+ssl_tools.experiments.har_classification.tfc
+============================================
 
 .. py:module:: ssl_tools.experiments.har_classification.tfc
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification.tfc.options
+
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -16,20 +21,13 @@ Classes
    ssl_tools.experiments.har_classification.tfc.TFCTrain
 
 
-
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   ssl_tools.experiments.har_classification.tfc.options
-
+Module Contents
+---------------
 
 .. py:class:: TFCTest(data, label = 'standard activity code', encoding_size = 128, in_channels = 6, length_alignment = 178, use_cosine_similarity = True, temperature = 0.5, features_as_channels = False, num_classes = 6, *args, **kwargs)
 
-
    Bases: :py:obj:`ssl_tools.experiments.LightningTest`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -72,10 +70,11 @@ Attributes
        If True, the backbone will be updated during training. Only used in
        finetune mode.
 
+
    .. py:attribute:: _MODEL_NAME
       :value: 'TFC'
 
-      
+
 
    .. py:method:: get_data_module()
 
@@ -85,6 +84,7 @@ Attributes
       -------
       L.LightningDataModule
           The datamodule to use for the experiment
+
 
 
    .. py:method:: get_model()
@@ -100,8 +100,8 @@ Attributes
 
 .. py:class:: TFCTrain(data, label = 'standard activity code', encoding_size = 128, in_channels = 6, length_alignment = 178, use_cosine_similarity = True, temperature = 0.5, features_as_channels = False, jitter_ratio = 2, num_classes = 6, update_backbone = False, *args, **kwargs)
 
-
    Bases: :py:obj:`ssl_tools.experiments.LightningSSLTrain`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -144,10 +144,11 @@ Attributes
        If True, the backbone will be updated during training. Only used in
        finetune mode.
 
+
    .. py:attribute:: _MODEL_NAME
       :value: 'TFC'
 
-      
+
 
    .. py:method:: get_finetune_data_module()
 
@@ -162,6 +163,7 @@ Attributes
       ------
       NotImplementedError
           _description_
+
 
 
    .. py:method:: get_finetune_model(load_backbone = None)
@@ -180,6 +182,7 @@ Attributes
           The model to use for fine-tuning
 
 
+
    .. py:method:: get_pretrain_data_module()
 
       The data module to use for pre-training.
@@ -188,6 +191,7 @@ Attributes
       -------
       L.LightningDataModule
           The data module to use for pre-training
+
 
 
    .. py:method:: get_pretrain_model()
@@ -202,6 +206,4 @@ Attributes
 
 
 .. py:data:: options
-
-   
 

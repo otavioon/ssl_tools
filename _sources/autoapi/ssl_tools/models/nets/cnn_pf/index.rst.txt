@@ -1,0 +1,59 @@
+ssl_tools.models.nets.cnn_pf
+============================
+
+.. py:module:: ssl_tools.models.nets.cnn_pf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.cnn_pf.CNN_PFF_2D
+   ssl_tools.models.nets.cnn_pf.CNN_PF_2D
+   ssl_tools.models.nets.cnn_pf.CNN_PF_Backbone
+
+
+Module Contents
+---------------
+
+.. py:class:: CNN_PFF_2D(*args, **kwargs)
+
+   Bases: :py:obj:`CNN_PF_2D`
+
+
+.. py:class:: CNN_PF_2D(pad_at, input_shape = (1, 6, 60), out_channels = 16, num_classes = 6, learning_rate = 0.001, include_middle = False)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: CNN_PF_Backbone(pad_at, input_shape, out_channels = 16, include_middle = False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+

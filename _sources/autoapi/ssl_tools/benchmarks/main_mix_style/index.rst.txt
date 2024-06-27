@@ -1,0 +1,270 @@
+ssl_tools.benchmarks.main_mix_style
+===================================
+
+.. py:module:: ssl_tools.benchmarks.main_mix_style
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D
+   ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_1D_Backbone
+   ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D
+   ssl_tools.benchmarks.main_mix_style.CNN_HaEtAl_2D_Backbone
+   ssl_tools.benchmarks.main_mix_style.ConvolutionalBlock
+   ssl_tools.benchmarks.main_mix_style.ExperimentArgs
+   ssl_tools.benchmarks.main_mix_style.ResNet1DBase
+   ssl_tools.benchmarks.main_mix_style.ResNet1D_8
+   ssl_tools.benchmarks.main_mix_style.ResNetBlock
+   ssl_tools.benchmarks.main_mix_style.ResNetSE1D_5
+   ssl_tools.benchmarks.main_mix_style.ResNetSE1D_8
+   ssl_tools.benchmarks.main_mix_style.ResNetSEBlock
+   ssl_tools.benchmarks.main_mix_style.SimpleClassificationNet2
+   ssl_tools.benchmarks.main_mix_style.SqueezeAndExcitation1D
+   ssl_tools.benchmarks.main_mix_style._ResNet1D
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.benchmarks.main_mix_style._run_experiment_wrapper
+   ssl_tools.benchmarks.main_mix_style.cli_main
+   ssl_tools.benchmarks.main_mix_style.conv3x3
+   ssl_tools.benchmarks.main_mix_style.conv3x3_dynamic
+   ssl_tools.benchmarks.main_mix_style.main_loo
+   ssl_tools.benchmarks.main_mix_style.pretty_print_experiment_args
+   ssl_tools.benchmarks.main_mix_style.run_serial
+   ssl_tools.benchmarks.main_mix_style.run_using_ray
+
+
+Module Contents
+---------------
+
+.. py:class:: CNN_HaEtAl_1D(input_shape = (1, 6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`SimpleClassificationNet2`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_shape)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: CNN_HaEtAl_1D_Backbone(input_channels = 1)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: CNN_HaEtAl_2D(pad_at = (3, ), input_shape = (1, 6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`SimpleClassificationNet2`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_shape)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: CNN_HaEtAl_2D_Backbone(pad_at, in_channels = 1)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: ConvolutionalBlock(in_channels, activation_cls = None)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: ExperimentArgs
+
+   .. py:attribute:: data_cls
+      :type:  Any
+
+
+   .. py:attribute:: mix
+      :type:  bool
+      :value: True
+
+
+
+   .. py:attribute:: model_args
+      :type:  Dict[str, Any]
+
+
+   .. py:attribute:: model_cls
+      :type:  Any
+
+
+   .. py:attribute:: seed
+      :type:  int
+      :value: 42
+
+
+
+   .. py:attribute:: test_data_args
+      :type:  Dict[str, Any]
+
+
+   .. py:attribute:: train_data_args
+      :type:  Dict[str, Any]
+
+
+   .. py:attribute:: trainer_args
+      :type:  Dict[str, Any]
+
+
+   .. py:attribute:: trainer_cls
+      :type:  Any
+
+
+.. py:class:: ResNet1DBase(resnet_block_cls = ResNetBlock, activation_cls = torch.nn.ReLU, input_shape = (6, 60), num_classes = 6, num_residual_blocks = 5, reduction_ratio=2, learning_rate = 0.001)
+
+   Bases: :py:obj:`SimpleClassificationNet2`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+.. py:class:: ResNet1D_8(*args, **kwargs)
+
+   Bases: :py:obj:`ResNet1DBase`
+
+
+.. py:class:: ResNetBlock(in_channels = 64, activation_cls = torch.nn.ReLU, mix_style_factor=False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: ResNetSE1D_5(*args, **kwargs)
+
+   Bases: :py:obj:`ResNet1DBase`
+
+
+.. py:class:: ResNetSE1D_8(*args, **kwargs)
+
+   Bases: :py:obj:`ResNet1DBase`
+
+
+.. py:class:: ResNetSEBlock(*args, **kwargs)
+
+   Bases: :py:obj:`ResNetBlock`
+
+
+.. py:class:: SimpleClassificationNet2(backbone, fc, learning_rate = 0.001, flatten = True, loss_fn = None, train_metrics = None, val_metrics = None, test_metrics = None)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: single_step(batch, batch_idx, step_name)
+
+
+.. py:class:: SqueezeAndExcitation1D(in_channels, reduction_ratio = 2)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(input_tensor)
+
+
+.. py:class:: _ResNet1D(input_shape, residual_block_cls=ResNetBlock, activation_cls = torch.nn.ReLU, num_residual_blocks = 5, reduction_ratio=2)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+
+.. py:function:: _run_experiment_wrapper(experiment_args)
+
+.. py:function:: cli_main(experiment)
+
+.. py:function:: conv3x3(in_planes, out_planes, stride = 1, groups = 1, dilation = 1)
+
+   3x3 convolution with padding
+
+
+.. py:function:: conv3x3_dynamic(in_planes, out_planes, stride = 1, attention_in_channels = None)
+
+   3x3 convolution with padding
+
+
+.. py:function:: main_loo()
+
+.. py:function:: pretty_print_experiment_args(args, indent = 4)
+
+.. py:function:: run_serial(experiments)
+
+.. py:function:: run_using_ray(experiments, ray_address = None)
+

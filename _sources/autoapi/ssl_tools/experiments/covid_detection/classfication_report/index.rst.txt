@@ -1,0 +1,61 @@
+ssl_tools.experiments.covid_detection.classfication_report
+==========================================================
+
+.. py:module:: ssl_tools.experiments.covid_detection.classfication_report
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.classfication_report._balanced_accuracy_score
+   ssl_tools.experiments.covid_detection.classfication_report._matthews_corrcoef
+   ssl_tools.experiments.covid_detection.classfication_report._roc_auc_score
+   ssl_tools.experiments.covid_detection.classfication_report.accuracy_score
+   ssl_tools.experiments.covid_detection.classfication_report.classification_report
+   ssl_tools.experiments.covid_detection.classfication_report.f1_score
+   ssl_tools.experiments.covid_detection.classfication_report.f2_score
+   ssl_tools.experiments.covid_detection.classfication_report.f2_score
+   ssl_tools.experiments.covid_detection.classfication_report.fbeta_score
+   ssl_tools.experiments.covid_detection.classfication_report.negative_precision_score
+   ssl_tools.experiments.covid_detection.classfication_report.precision_score
+   ssl_tools.experiments.covid_detection.classfication_report.recall_score
+   ssl_tools.experiments.covid_detection.classfication_report.specificity_score
+   ssl_tools.experiments.covid_detection.classfication_report.uar_score
+   ssl_tools.experiments.covid_detection.classfication_report.wrap_zero_div
+
+
+Module Contents
+---------------
+
+.. py:function:: _balanced_accuracy_score(y_true, y_pred, labels)
+
+.. py:function:: _matthews_corrcoef(y_true, y_pred, labels)
+
+.. py:function:: _roc_auc_score(y_true, y_pred, labels)
+
+.. py:function:: accuracy_score(tn, fp, fn, tp)
+
+.. py:function:: classification_report(y_true, y_pred, labels=None)
+
+.. py:function:: f1_score(tn, fp, fn, tp)
+
+.. py:function:: f2_score(tn, fp, fn, tp)
+
+.. py:function:: f2_score(tn, fp, fn, tp)
+
+.. py:function:: fbeta_score(tn, fp, fn, tp, beta=0.1)
+
+.. py:function:: negative_precision_score(tn, fp, fn, tp)
+
+.. py:function:: precision_score(tn, fp, fn, tp)
+
+.. py:function:: recall_score(tn, fp, fn, tp)
+
+.. py:function:: specificity_score(tn, fp, fn, tp)
+
+.. py:function:: uar_score(tn, fp, fn, tp)
+
+.. py:function:: wrap_zero_div(func)
+

@@ -1,34 +1,32 @@
-:py:mod:`ssl_tools.analysis.plot_metrics`
-=========================================
+ssl_tools.analysis.plot_metrics
+===============================
 
 .. py:module:: ssl_tools.analysis.plot_metrics
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.analysis.plot_metrics.PlotMetrics
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    ssl_tools.analysis.plot_metrics.main
 
 
+Module Contents
+---------------
 
 .. py:class:: PlotMetrics
 
-
    Class for plotting metrics from a training/predict run.
+
 
    .. py:method:: accuracy(root_experiment_dir, results_file = 'results.csv', hyperparams_file = 'hparams.yaml', metric = 'test_acc', title = 'Results')
 
@@ -64,6 +62,7 @@ Functions
           Title of the plot.
 
 
+
    .. py:method:: epoch_loss(experiment_dir, losses = ('train_loss', 'val_loss'), metrics_file = 'metrics.csv', title = 'Loss')
 
       Plot the loss over epochs.
@@ -84,5 +83,4 @@ Functions
 
 
 .. py:function:: main()
-
 

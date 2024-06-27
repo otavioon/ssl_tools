@@ -1,17 +1,26 @@
-:py:mod:`ssl_tools.models`
-==========================
+ssl_tools.models
+================
 
 .. py:module:: ssl_tools.models
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   layers/index.rst
-   nets/index.rst
-   ssl/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/ssl_tools/models/layers/index
+   /autoapi/ssl_tools/models/nets/index
+   /autoapi/ssl_tools/models/ssl/index
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/ssl_tools/models/utils/index
 
 

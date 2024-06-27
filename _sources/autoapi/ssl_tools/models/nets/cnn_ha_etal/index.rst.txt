@@ -1,0 +1,78 @@
+ssl_tools.models.nets.cnn_ha_etal
+=================================
+
+.. py:module:: ssl_tools.models.nets.cnn_ha_etal
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.cnn_ha_etal.CNN_HaEtAl_1D
+   ssl_tools.models.nets.cnn_ha_etal.CNN_HaEtAl_2D
+
+
+Module Contents
+---------------
+
+.. py:class:: CNN_HaEtAl_1D(input_shape = (1, 6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_shape)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: CNN_HaEtAl_2D(pad_at = (3, ), input_shape = (1, 6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_backbone(input_shape)
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+

@@ -1,0 +1,22 @@
+ssl_tools.pipelines.cli
+=======================
+
+.. py:module:: ssl_tools.pipelines.cli
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.cli.auto_main
+   ssl_tools.pipelines.cli.get_parser
+
+
+Module Contents
+---------------
+
+.. py:function:: auto_main(commands, print_args = False)
+
+.. py:function:: get_parser(commands)
+

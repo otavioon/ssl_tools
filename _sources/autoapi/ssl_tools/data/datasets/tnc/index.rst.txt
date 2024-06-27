@@ -1,26 +1,24 @@
-:py:mod:`ssl_tools.data.datasets.tnc`
-=====================================
+ssl_tools.data.datasets.tnc
+===========================
 
 .. py:module:: ssl_tools.data.datasets.tnc
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.data.datasets.tnc.TNCDataset
 
 
-
+Module Contents
+---------------
 
 .. py:class:: TNCDataset(data, window_size, mc_sample_size = 20, significance_level = 0.01, repeat = 1, cast_to = 'float32')
 
-
    Bases: :py:obj:`torch.utils.data.Dataset`
+
 
    
    Temporal Neighbourhood Coding (TNC) dataset. This dataset is used
@@ -58,6 +56,7 @@ Classes
    cast_to : str, optional
        Cast the data to the given type, by default "float32"
 
+
    .. py:method:: __getitem__(idx)
 
       Get a sample from the dataset. The sample is a tuple with 3
@@ -79,6 +78,7 @@ Classes
       -------
       Tuple[np.ndarray, np.ndarray, np.ndarray]
           A tuple with 3 elements (W_t, X_p, X_n).
+
 
 
    .. py:method:: __len__()
@@ -103,6 +103,7 @@ Classes
           A 2-element tuple. The first element is a numpy array with the
           shape (mc_sample_size, n_features, window_size). The second element
           is the delta, used to adjust the neighbourhood size.
+
 
 
    .. py:method:: _find_non_neighours(data, t, delta = 0.0)

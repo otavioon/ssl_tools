@@ -1,0 +1,124 @@
+ssl_tools.models.nets.resnet1d
+==============================
+
+.. py:module:: ssl_tools.models.nets.resnet1d
+
+.. autoapi-nested-parse::
+
+   resnet for 1-d signal data, pytorch version
+    
+   Shenda Hong, Oct 2019
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.resnet1d.BasicBlock
+   ssl_tools.models.nets.resnet1d.MyConv1dPadSame
+   ssl_tools.models.nets.resnet1d.MyMaxPool1dPadSame
+   ssl_tools.models.nets.resnet1d.ResNet1D
+   ssl_tools.models.nets.resnet1d._ResNet1D
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.resnet1d.main
+
+
+Module Contents
+---------------
+
+.. py:class:: BasicBlock(in_channels, out_channels, kernel_size, stride, groups, downsample, use_bn, use_do, is_first_block=False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   ResNet Basic Block
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: MyConv1dPadSame(in_channels, out_channels, kernel_size, stride, groups=1)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   extend nn.Conv1d to support SAME padding
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: MyMaxPool1dPadSame(kernel_size)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   extend nn.MaxPool1d to support SAME padding
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: ResNet1D(input_shape, base_filters=128, kernel_size=16, stride=2, groups=32, n_block=48, num_classes=6, downsample_gap=2, increasefilter_gap=4, use_bn=True, use_do=True, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
+
+
+
+   .. py:method:: _create_fc(input_features, num_classes)
+
+
+.. py:class:: _ResNet1D(in_channels, base_filters=64, kernel_size=16, stride=2, groups=32, n_block=48, n_classes=6, downsample_gap=2, increasefilter_gap=4, use_bn=True, use_do=True, verbose=False)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   Input:
+       X: (n_samples, n_channel, n_length)
+       Y: (n_samples)
+
+   Output:
+       out: (n_samples)
+
+   Pararmetes:
+       in_channels: dim of input, the same as n_channel
+       base_filters: number of filters in the first several Conv layer, it will double at every 4 layers
+       kernel_size: width of kernel
+       stride: stride of kernel moving
+       groups: set larget to 1 as ResNeXt
+       n_block: number of blocks
+       n_classes: number of classes
+
+
+
+   .. py:method:: forward(x)
+
+
+.. py:function:: main()
+

@@ -1,0 +1,85 @@
+ssl_tools.models.nets.simple
+============================
+
+.. py:module:: ssl_tools.models.nets.simple
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.simple.MLPClassifier
+   ssl_tools.models.nets.simple.SimpleClassificationNet
+   ssl_tools.models.nets.simple.SimpleReconstructionNet
+
+
+Module Contents
+---------------
+
+.. py:class:: MLPClassifier(input_size, hidden_size, num_hidden_layers, output_size, learning_rate = 0.001, flatten = True, loss_fn = None, train_metrics = None, val_metrics = None, test_metrics = None)
+
+   Bases: :py:obj:`SimpleClassificationNet`
+
+
+.. py:class:: SimpleClassificationNet(backbone, fc, learning_rate = 0.001, flatten = True, loss_fn = None, train_metrics = None, val_metrics = None, test_metrics = None)
+
+   Bases: :py:obj:`lightning.LightningModule`
+
+
+   .. py:method:: compute_metrics(y_hat, y, step_name)
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x)
+
+
+   .. py:method:: loss_func(y_hat, y)
+
+
+   .. py:method:: predict_step(batch, batch_idx, dataloader_idx=None)
+
+
+   .. py:method:: single_step(batch, batch_idx, step_name)
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+.. py:class:: SimpleReconstructionNet(backbone, learning_rate = 0.001, loss_fn = None)
+
+   Bases: :py:obj:`lightning.LightningModule`
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x)
+
+
+   .. py:method:: loss_func(y_hat, y)
+
+
+   .. py:method:: predict_step(batch, batch_idx, dataloader_idx=None)
+
+
+   .. py:method:: single_step(batch, batch_idx, step_name)
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+

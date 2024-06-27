@@ -1,26 +1,24 @@
-:py:mod:`ssl_tools.models.layers.gru`
-=====================================
+ssl_tools.models.layers.gru
+===========================
 
 .. py:module:: ssl_tools.models.layers.gru
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    ssl_tools.models.layers.gru.GRUEncoder
 
 
-
+Module Contents
+---------------
 
 .. py:class:: GRUEncoder(hidden_size = 100, in_channels = 6, encoding_size = 10, num_layers = 1, dropout = 0.0, bidirectional = True)
 
-
    Bases: :py:obj:`torch.nn.Module`
+
 
    
    Gate Recurrent Unit (GRU) Encoder.
@@ -61,7 +59,7 @@ Classes
    bidirectional : bool, optional
        If ``True``, becomes a bidirectional GRU, by default True
 
-   .. py:method:: forward(x)
 
+   .. py:method:: forward(x)
 
 

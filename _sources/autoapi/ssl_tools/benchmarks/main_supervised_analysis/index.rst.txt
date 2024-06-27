@@ -1,0 +1,19 @@
+ssl_tools.benchmarks.main_supervised_analysis
+=============================================
+
+.. py:module:: ssl_tools.benchmarks.main_supervised_analysis
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.benchmarks.main_supervised_analysis.analysis
+
+
+Module Contents
+---------------
+
+.. py:function:: analysis(results_dir, query = None, output_dir = None, result_file = 'results.csv', print_results = True, remove_on_error = False)
+

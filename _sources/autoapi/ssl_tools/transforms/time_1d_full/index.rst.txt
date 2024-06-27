@@ -1,0 +1,130 @@
+ssl_tools.transforms.time_1d_full
+=================================
+
+.. py:module:: ssl_tools.transforms.time_1d_full
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.transforms.time_1d_full.Composer
+   ssl_tools.transforms.time_1d_full.ConcatComposer
+   ssl_tools.transforms.time_1d_full.Identity
+   ssl_tools.transforms.time_1d_full.MagnitudeWarp
+   ssl_tools.transforms.time_1d_full.Permutate
+   ssl_tools.transforms.time_1d_full.Rotate
+   ssl_tools.transforms.time_1d_full.Scale
+   ssl_tools.transforms.time_1d_full.TimeWarp
+   ssl_tools.transforms.time_1d_full.WindowSlice
+   ssl_tools.transforms.time_1d_full.WindowWarp
+
+
+Module Contents
+---------------
+
+.. py:class:: Composer(transforms)
+
+   .. py:method:: __call__(dataset, labels = None)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: ConcatComposer(transforms, axis = 0)
+
+   .. py:method:: __call__(dataset, labels = None)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: Identity
+
+   .. py:method:: __call__(dataset)
+
+
+.. py:class:: MagnitudeWarp(sigma = 0.2, knot = 4)
+
+   .. py:method:: __call__(dataset)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: Permutate(max_segments = 5, segment_mode = 'equal')
+
+   .. py:method:: __call__(dataset)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: Rotate
+
+   .. py:method:: __call__(dataset)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: Scale(sigma = 0.1)
+
+   .. py:method:: __call__(dataset)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: TimeWarp(sigma = 0.2, knot = 4)
+
+   .. py:method:: __call__(dataset)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: WindowSlice(reduce_ratio = 0.9)
+
+   .. py:method:: __call__(dataset)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
+.. py:class:: WindowWarp(window_ratio=0.1, scales=[0.5, 2.0])
+
+   .. py:method:: __call__(dataset)
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+

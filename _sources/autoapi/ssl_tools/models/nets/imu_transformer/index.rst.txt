@@ -1,0 +1,86 @@
+ssl_tools.models.nets.imu_transformer
+=====================================
+
+.. py:module:: ssl_tools.models.nets.imu_transformer
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.imu_transformer.IMUCNN
+   ssl_tools.models.nets.imu_transformer.IMUTransformerEncoder
+   ssl_tools.models.nets.imu_transformer._IMUTransformerEncoder
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.imu_transformer.test_imu_cnn
+   ssl_tools.models.nets.imu_transformer.test_imu_transformer
+
+
+Module Contents
+---------------
+
+.. py:class:: IMUCNN(input_shape = (6, 60), hidden_dim = 64, num_classes = 6, dropout_factor = 0.1, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+
+   .. py:method:: _create_backbone(input_shape, hidden_dim, dropout_factor)
+
+
+   .. py:method:: _create_fc(input_features, hidden_dim, num_classes)
+
+
+.. py:class:: IMUTransformerEncoder(input_shape = (6, 60), transformer_dim = 64, encode_position = True, nhead = 8, dim_feedforward = 128, transformer_dropout = 0.1, transformer_activation = 'gelu', num_encoder_layers = 6, num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+   .. py:method:: _create_backbone(input_shape, transformer_dim, encode_position, nhead, dim_feedforward, transformer_dropout, transformer_activation, num_encoder_layers)
+
+
+   .. py:method:: _create_fc(transform_dim, num_classes)
+
+
+.. py:class:: _IMUTransformerEncoder(input_shape = (6, 60), transformer_dim = 64, encode_position = True, nhead = 8, dim_feedforward = 128, transformer_dropout = 0.1, transformer_activation = 'gelu', num_encoder_layers = 6)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   
+   input_shape: (tuple) shape of the input data
+   transformer_dim: (int) dimension of the transformer
+   encode_position: (bool) whether to encode position or not
+   nhead: (int) number of attention heads
+   dim_feedforward: (int) dimension of the feedforward network
+   transformer_dropout: (float) dropout rate for the transformer
+   transformer_activation: (str) activation function for the transformer
+   num_encoder_layers: (int) number of transformer encoder layers
+   num_classes: (int) number of output classes
+
+
+   .. py:method:: forward(x)
+
+      Forward
+
+      Parameters
+      ----------
+      x : _type_
+          A tensor of shape (B, C, S) with B = batch size, C = channels, S = sequence length
+
+
+
+
+.. py:function:: test_imu_cnn()
+
+.. py:function:: test_imu_transformer()
+

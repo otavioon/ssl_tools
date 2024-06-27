@@ -1,0 +1,130 @@
+ssl_tools.experiments.covid_detection.anomaly_detection_base
+============================================================
+
+.. py:module:: ssl_tools.experiments.covid_detection.anomaly_detection_base
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.CovidAnomalyDetectionEvaluator
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.CovidAnomalyDetectionTrain
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.RMSELoss
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.kmeans_threshold
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.mean_absolute_error
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.mean_squared_error
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.root_mean_squared_error
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.sigma_threshold
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.zscore_threshold_max
+   ssl_tools.experiments.covid_detection.anomaly_detection_base.zscore_threshold_std
+
+
+Module Contents
+---------------
+
+.. py:class:: CovidAnomalyDetectionEvaluator(train_data, test_data, train_participant, test_participant, input_shape, feature_column_prefix = 'RHR', target_column = 'anomaly', include_recovered_in_test = False, results_dir = 'results', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.LightningTest`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:method:: _calc_static_anomaly_thresholds(losses)
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+
+   .. py:method:: get_model()
+      :abstractmethod:
+
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+   .. py:method:: run_model(model, data_module, trainer)
+
+
+.. py:class:: CovidAnomalyDetectionTrain(data, input_shape, participant_ids = None, validation_split = 0.1, augment = False, feature_column_prefix = 'RHR', target_column = 'anomaly', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.LightningTrain`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:method:: _get_transforms()
+
+
+   .. py:method:: get_data_module()
+
+      Get the datamodule to use for the experiment.
+
+      Returns
+      -------
+      L.LightningDataModule
+          The datamodule to use for the experiment
+
+
+
+   .. py:method:: get_model()
+      :abstractmethod:
+
+
+      Get the model to use for the experiment.
+
+      Returns
+      -------
+      L.LightningModule
+          The model to use for the experiment
+
+
+
+.. py:class:: RMSELoss(eps=1e-06, *args, **kwargs)
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(y_hat, y)
+
+
+.. py:function:: kmeans_threshold(X_recon, n_clusters=1)
+
+.. py:function:: mean_absolute_error(X, X_recon)
+
+.. py:function:: mean_squared_error(X, X_recon)
+
+.. py:function:: root_mean_squared_error(X, X_recon)
+
+.. py:function:: sigma_threshold(X_recon, sigma)
+
+.. py:function:: zscore_threshold_max(X_recon)
+
+.. py:function:: zscore_threshold_std(X_recon, std)
+

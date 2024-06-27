@@ -1,33 +1,31 @@
-:py:mod:`ssl_tools.experiments`
-===============================
+ssl_tools.experiments
+=====================
 
 .. py:module:: ssl_tools.experiments
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   har_classification/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/ssl_tools/experiments/covid_detection/index
+   /autoapi/ssl_tools/experiments/har_classification/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   experiment/index.rst
-   lightning_experiment/index.rst
+   /autoapi/ssl_tools/experiments/experiment/index
+   /autoapi/ssl_tools/experiments/lightning_experiment/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -38,26 +36,24 @@ Classes
    ssl_tools.experiments.LightningTrain
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    ssl_tools.experiments.auto_main
 
 
+Package Contents
+----------------
 
 .. py:class:: Experiment(name = 'experiment', run_id = None, log_dir = 'logs', seed = None)
 
-
    Bases: :py:obj:`abc.ABC`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
-
-   .. py:property:: experiment_dir
-      :type: pathlib.Path
 
 
    .. py:method:: __call__()
@@ -68,16 +64,24 @@ Functions
       Return repr(self).
 
 
+
    .. py:method:: __str__()
 
       Return str(self).
 
 
+
    .. py:method:: execute()
+
+
+   .. py:property:: experiment_dir
+      :type: pathlib.Path
+
 
 
    .. py:method:: run()
       :abstractmethod:
+
 
 
    .. py:method:: setup()
@@ -86,66 +90,56 @@ Functions
    .. py:method:: teardown()
 
 
-
 .. py:class:: LightningExperiment(name = None, stage_name = None, batch_size = 1, load = None, accelerator = 'cpu', devices = 1, strategy = 'auto', num_nodes = 1, num_workers = None, log_every_n_steps = 50, *args, **kwargs)
 
-
    Bases: :py:obj:`ssl_tools.experiments.experiment.Experiment`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
+
+   .. py:attribute:: _MODEL_NAME
+      :type:  str
+      :value: 'model'
+
+
+
+   .. py:attribute:: _STAGE_NAME
+      :type:  str
+      :value: 'stage'
+
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+
    .. py:property:: callbacks
       :type: List[lightning.Callback]
+
 
 
    .. py:property:: checkpoint_dir
       :type: pathlib.Path
 
 
+
    .. py:property:: data_module
       :type: lightning.LightningDataModule
+
 
 
    .. py:property:: experiment_dir
       :type: pathlib.Path
 
 
+
    .. py:property:: finished
       :type: bool
 
-
-   .. py:property:: hyperparameters
-      :type: dict
-
-
-   .. py:property:: logger
-      :type: lightning.pytorch.loggers.Logger
-
-
-   .. py:property:: model
-      :type: lightning.LightningModule
-
-
-   .. py:property:: trainer
-      :type: lightning.Trainer
-
-
-   .. py:attribute:: _MODEL_NAME
-      :type: str
-      :value: 'model'
-
-      
-
-   .. py:attribute:: _STAGE_NAME
-      :type: str
-      :value: 'stage'
-
-      
-
-   .. py:method:: __str__()
-
-      Return str(self).
 
 
    .. py:method:: get_callbacks()
@@ -158,8 +152,10 @@ Functions
           A list of callbacks to use for the experiment
 
 
+
    .. py:method:: get_data_module()
       :abstractmethod:
+
 
       Get the datamodule to use for the experiment.
 
@@ -167,6 +163,7 @@ Functions
       -------
       L.LightningDataModule
           The datamodule to use for the experiment
+
 
 
    .. py:method:: get_logger()
@@ -179,8 +176,10 @@ Functions
           The logger to use for the experiment
 
 
+
    .. py:method:: get_model()
       :abstractmethod:
+
 
       Get the model to use for the experiment.
 
@@ -190,8 +189,10 @@ Functions
           The model to use for the experiment
 
 
+
    .. py:method:: get_trainer(logger, callbacks)
       :abstractmethod:
+
 
       Get trainer to use for the experiment.
 
@@ -208,6 +209,12 @@ Functions
           The trainer to use for the experiment
 
 
+
+   .. py:property:: hyperparameters
+      :type: dict
+
+
+
    .. py:method:: load_checkpoint(model, path)
 
       Load the model to use for the experiment.
@@ -216,6 +223,7 @@ Functions
       -------
       L.LightningModule
           The model to use for the experiment
+
 
 
    .. py:method:: log_hyperparams(logger)
@@ -230,6 +238,17 @@ Functions
           The logger to use for logging the hyperparameters
 
 
+
+   .. py:property:: logger
+      :type: lightning.pytorch.loggers.Logger
+
+
+
+   .. py:property:: model
+      :type: lightning.LightningModule
+
+
+
    .. py:method:: run()
 
       Runs the experiment. This method:
@@ -241,18 +260,24 @@ Functions
       5. Trains/Tests the model
 
 
+
    .. py:method:: run_model(model, data_module, trainer)
       :abstractmethod:
+
 
 
    .. py:method:: setup()
 
 
+   .. py:property:: trainer
+      :type: lightning.Trainer
+
+
 
 .. py:class:: LightningSSLTrain(training_mode = 'pretrain', load_backbone = None, *args, **kwargs)
 
-
    Bases: :py:obj:`LightningTrain`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -270,6 +295,7 @@ Functions
        using ``load_backbone``. The ``load`` parameter is used to load the
        full model (backbone + head).
 
+
    .. py:method:: get_data_module()
 
       Get the datamodule to use for the experiment.
@@ -280,8 +306,10 @@ Functions
           The datamodule to use for the experiment
 
 
+
    .. py:method:: get_finetune_data_module()
       :abstractmethod:
+
 
       The data module to use for fine-tuning.
 
@@ -296,8 +324,10 @@ Functions
           _description_
 
 
+
    .. py:method:: get_finetune_model(load_backbone = None)
       :abstractmethod:
+
 
       Get the model to use for fine-tuning.
 
@@ -313,6 +343,7 @@ Functions
           The model to use for fine-tuning
 
 
+
    .. py:method:: get_model()
 
       Get the model to use for the experiment.
@@ -323,8 +354,10 @@ Functions
           The model to use for the experiment
 
 
+
    .. py:method:: get_pretrain_data_module()
       :abstractmethod:
+
 
       The data module to use for pre-training.
 
@@ -334,8 +367,10 @@ Functions
           The data module to use for pre-training
 
 
+
    .. py:method:: get_pretrain_model()
       :abstractmethod:
+
 
       Get the model to use for the pretraining phase.
 
@@ -348,16 +383,17 @@ Functions
 
 .. py:class:: LightningTest(limit_test_batches = 1.0, *args, **kwargs)
 
-
    Bases: :py:obj:`LightningExperiment`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
+
    .. py:attribute:: _STAGE_NAME
       :value: 'test'
 
-      
+
 
    .. py:method:: get_callbacks()
 
@@ -369,6 +405,7 @@ Functions
           The list of callbacks to use for the experiment.
 
 
+
    .. py:method:: get_trainer(logger, callbacks)
 
       Get trainer to use for the experiment.
@@ -386,22 +423,23 @@ Functions
           The trainer to use for the experiment
 
 
+
    .. py:method:: run_model(model, data_module, trainer)
 
 
-
-.. py:class:: LightningTrain(stage_name = 'train', epochs = 1, learning_rate = 0.001, checkpoint_metric = None, checkpoint_metric_mode = 'min', limit_train_batches = 1.0, limit_val_batches = 1.0, *args, **kwargs)
-
+.. py:class:: LightningTrain(stage_name = 'train', epochs = 1, learning_rate = 0.001, checkpoint_metric = None, checkpoint_metric_mode = 'min', limit_train_batches = 1.0, limit_val_batches = 1.0, patience = None, *args, **kwargs)
 
    Bases: :py:obj:`LightningExperiment`
+
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
+
    .. py:attribute:: _STAGE_NAME
       :value: 'train'
 
-      
+
 
    .. py:method:: get_callbacks()
 
@@ -413,6 +451,7 @@ Functions
           A list of callbacks to use for the experiment
 
 
+
    .. py:method:: get_trainer(logger, callbacks)
 
       Get trainer to use for the experiment.
@@ -430,10 +469,9 @@ Functions
           The trainer to use for the experiment
 
 
+
    .. py:method:: run_model(model, data_module, trainer)
 
 
-
-.. py:function:: auto_main(commands)
-
+.. py:function:: auto_main(commands, print_args = False)
 

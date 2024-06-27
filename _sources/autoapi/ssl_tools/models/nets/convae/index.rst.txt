@@ -1,0 +1,58 @@
+ssl_tools.models.nets.convae
+============================
+
+.. py:module:: ssl_tools.models.nets.convae
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.convae.ContrastiveConvolutionalAutoEncoder
+   ssl_tools.models.nets.convae.ContrastiveConvolutionalAutoEncoder2D
+   ssl_tools.models.nets.convae.ConvolutionalAutoEncoder
+   ssl_tools.models.nets.convae.ConvolutionalAutoEncoder2D
+   ssl_tools.models.nets.convae._ConvolutionalAutoEncoder
+   ssl_tools.models.nets.convae._ConvolutionalAutoEncoder2D
+
+
+Module Contents
+---------------
+
+.. py:class:: ContrastiveConvolutionalAutoEncoder(input_shape = (1, 16), learning_rate = 0.001, margin = 1.0)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleReconstructionNet`
+
+
+.. py:class:: ContrastiveConvolutionalAutoEncoder2D(input_shape = (4, 4, 1), learning_rate = 0.001, margin = 1.0)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleReconstructionNet`
+
+
+.. py:class:: ConvolutionalAutoEncoder(input_shape = (1, 16), learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleReconstructionNet`
+
+
+.. py:class:: ConvolutionalAutoEncoder2D(input_shape = (1, 4, 4), learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleReconstructionNet`
+
+
+.. py:class:: _ConvolutionalAutoEncoder(input_shape = (1, 16))
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+
+.. py:class:: _ConvolutionalAutoEncoder2D(input_shape = (1, 4, 4))
+
+   Bases: :py:obj:`torch.nn.Module`
+
+
+   .. py:method:: forward(x)
+
+

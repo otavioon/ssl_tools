@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. Training an Anomaly Detection Model for Covid Anomaly Detection &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Programming Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">5. Training an Anomaly Detection Model for Covid Anomaly Detection</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/05_covid_anomaly_detection.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="5.-Training-an-Anomaly-Detection-Model-for-Covid-Anomaly-Detection">
+<h1>5. Training an Anomaly Detection Model for Covid Anomaly Detection<a class="headerlink" href="#5.-Training-an-Anomaly-Detection-Model-for-Covid-Anomaly-Detection" title="Link to this heading"></a></h1>
+<p>In this tutorial, we will train an anomaly detection model using a simple <a class="reference external" href="https://www.medrxiv.org/content/10.1101/2021.01.08.21249474v1">LSTM-AutoEncoder model</a>. Data can be obtained from <a class="reference external" href="https://iscteiul365-my.sharepoint.com/:u:/g/personal/oonia_iscte-iul_pt/ERZLm1ruUNpMqkSwjpqhE9wB_7loVWAC4yZWuIH2RKGOlQ?e=kD4HlI">this link</a>. This is a processed version of data from original Stanford dataset-Phase 2. The overall pre-processing pipeline used is illustrated in Figure below.</p>
+<p><img alt="preprocessing" src="../_images/stanford_data_processing.png" /></p>
+<p>Data was aquired from diferent sources (Germin, FitBit, Apple Watch) and pre-processed to have a common format. In this form, data has two columns: heart rate and number of user steps in last minute. Then the processing pipeline was applied to the data. The pipeline is composed of the following steps: 1. Once data was standardized, the resting heart rate was extracted (<code class="docutils literal notranslate"><span class="pre">Resting</span> <span class="pre">Heart</span> <span class="pre">Rate</span> <span class="pre">Extractor</span></code>, in Figure). This process takes as input <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> that is the number of minutes
+that the user has to be at rest to consider the heart rate as resting. This variable looks at user steps and, when user steps is 0 for <code class="docutils literal notranslate"><span class="pre">min_minutes_rest</span></code> minutes, the heart rate is considered as resting. At the end of this process, we will have a new dataframe with: the date and the resting heart rate of the last minute. 2. The second step is adding labels.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">ssl_tools.data.data_modules.covid_anomaly</span> <span class="kn">import</span> <span class="n">CovidUserAnomalyDataModule</span>
+<span class="kn">from</span> <span class="nn">ssl_tools.utils.data</span> <span class="kn">import</span> <span class="n">get_full_data_split</span>
+<span class="kn">from</span> <span class="nn">ssl_tools.models.nets.lstm_ae</span> <span class="kn">import</span> <span class="n">LSTMAutoencoder</span>
+<span class="kn">import</span> <span class="nn">lightning</span> <span class="k">as</span> <span class="nn">L</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">torchmetrics</span> <span class="kn">import</span> <span class="n">MeanSquaredError</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read CSV data</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;/workspaces/hiaac-m4/data/Stanford-COVID/processed/windowed_16_overlap_8_df_scaled.csv&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>datetime</th>
+      <th>RHR-0</th>
+      <th>RHR-1</th>
+      <th>RHR-2</th>
+      <th>RHR-3</th>
+      <th>RHR-4</th>
+      <th>RHR-5</th>
+      <th>RHR-6</th>
+      <th>RHR-7</th>
+      <th>RHR-8</th>
+      <th>...</th>
+      <th>RHR-10</th>
+      <th>RHR-11</th>
+      <th>RHR-12</th>
+      <th>RHR-13</th>
+      <th>RHR-14</th>
+      <th>RHR-15</th>
+      <th>anomaly</th>
+      <th>baseline</th>
+      <th>label</th>
+      <th>participant_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2027-01-14 21:00:00</td>
+      <td>1.170175</td>
+      <td>0.653752</td>
+      <td>-0.392374</td>
+      <td>-1.431553</td>
+      <td>-2.129013</td>
+      <td>-2.755962</td>
+      <td>-3.681322</td>
+      <td>-4.674443</td>
+      <td>-5.668570</td>
+      <td>...</td>
+      <td>-6.937363</td>
+      <td>-7.102118</td>
+      <td>-6.975790</td>
+      <td>-6.554774</td>
+      <td>-6.112156</td>
+      <td>-5.396099</td>
+      <td>False</td>
+      <td>True</td>
+      <td>normal</td>
+      <td>P110465</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2027-01-15 05:00:00</td>
+      <td>-5.668570</td>
+      <td>-6.373289</td>
+      <td>-6.937363</td>
+      <td>-7.102118</td>
+      <td>-6.975790</td>
+      <td>-6.554774</td>
+      <td>-6.112156</td>
+      <td>-5.396099</td>
+      <td>-4.415848</td>
+      <td>...</td>
+      <td>-2.656756</td>
+      <td>-1.305630</td>
+      <td>-0.072756</td>
+      <td>1.046195</td>
+      <td>1.530467</td>
+      <td>1.829053</td>
+      <td>False</td>
+      <td>False</td>
+      <td>normal</td>
+      <td>P110465</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2027-01-15 13:00:00</td>
+      <td>-4.415848</td>
+      <td>-3.467073</td>
+      <td>-2.656756</td>
+      <td>-1.305630</td>
+      <td>-0.072756</td>
+      <td>1.046195</td>
+      <td>1.530467</td>
+      <td>1.829053</td>
+      <td>1.223064</td>
+      <td>...</td>
+      <td>-0.424000</td>
+      <td>-1.145581</td>
+      <td>-1.355121</td>
+      <td>-2.321206</td>
+      <td>-3.124961</td>
+      <td>-3.928738</td>
+      <td>False</td>
+      <td>False</td>
+      <td>normal</td>
+      <td>P110465</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2027-01-15 21:00:00</td>
+      <td>1.223064</td>
+      <td>0.472444</td>
+      <td>-0.424000</td>
+      <td>-1.145581</td>
+      <td>-1.355121</td>
+      <td>-2.321206</td>
+      <td>-3.124961</td>
+      <td>-3.928738</td>
+      <td>-4.802627</td>
+      <td>...</td>
+      <td>-6.067744</td>
+      <td>-5.460156</td>
+      <td>-4.671143</td>
+      <td>-3.408943</td>
+      <td>-2.237883</td>
+      <td>-1.187843</td>
+      <td>False</td>
+      <td>False</td>
+      <td>normal</td>
+      <td>P110465</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2027-01-16 05:00:00</td>
+      <td>-4.802627</td>
+      <td>-5.831013</td>
+      <td>-6.067744</td>
+      <td>-5.460156</td>
+      <td>-4.671143</td>
+      <td>-3.408943</td>
+      <td>-2.237883</td>
+      <td>-1.187843</td>
+      <td>-0.062360</td>
+      <td>...</td>
+      <td>2.266944</td>
+      <td>3.794465</td>
+      <td>4.625745</td>
+      <td>4.827756</td>
+      <td>4.720000</td>
+      <td>4.677464</td>
+      <td>False</td>
+      <td>False</td>
+      <td>normal</td>
+      <td>P110465</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>31732</th>
+      <td>2024-12-13 00:00:00</td>
+      <td>-0.180702</td>
+      <td>-0.499793</td>
+      <td>-0.749829</td>
+      <td>-0.868485</td>
+      <td>-0.966754</td>
+      <td>-1.004670</td>
+      <td>-0.888210</td>
+      <td>-0.580762</td>
+      <td>-0.467943</td>
+      <td>...</td>
+      <td>0.092000</td>
+      <td>0.347840</td>
+      <td>0.636395</td>
+      <td>0.958195</td>
+      <td>1.170514</td>
+      <td>1.301841</td>
+      <td>False</td>
+      <td>False</td>
+      <td>recovered</td>
+      <td>P992022</td>
+    </tr>
+    <tr>
+      <th>31733</th>
+      <td>2024-12-13 08:00:00</td>
+      <td>-0.467943</td>
+      <td>-0.162740</td>
+      <td>0.092000</td>
+      <td>0.347840</td>
+      <td>0.636395</td>
+      <td>0.958195</td>
+      <td>1.170514</td>
+      <td>1.301841</td>
+      <td>1.477526</td>
+      <td>...</td>
+      <td>1.660344</td>
+      <td>1.656600</td>
+      <td>1.685652</td>
+      <td>1.747252</td>
+      <td>1.767329</td>
+      <td>1.793616</td>
+      <td>False</td>
+      <td>False</td>
+      <td>recovered</td>
+      <td>P992022</td>
+    </tr>
+    <tr>
+      <th>31734</th>
+      <td>2024-12-13 16:00:00</td>
+      <td>1.477526</td>
+      <td>1.657321</td>
+      <td>1.660344</td>
+      <td>1.656600</td>
+      <td>1.685652</td>
+      <td>1.747252</td>
+      <td>1.767329</td>
+      <td>1.793616</td>
+      <td>1.728615</td>
+      <td>...</td>
+      <td>1.509833</td>
+      <td>1.380749</td>
+      <td>1.263744</td>
+      <td>1.139997</td>
+      <td>1.024205</td>
+      <td>0.946663</td>
+      <td>False</td>
+      <td>False</td>
+      <td>recovered</td>
+      <td>P992022</td>
+    </tr>
+    <tr>
+      <th>31735</th>
+      <td>2024-12-14 00:00:00</td>
+      <td>1.728615</td>
+      <td>1.616265</td>
+      <td>1.509833</td>
+      <td>1.380749</td>
+      <td>1.263744</td>
+      <td>1.139997</td>
+      <td>1.024205</td>
+      <td>0.946663</td>
+      <td>1.136868</td>
+      <td>...</td>
+      <td>1.642153</td>
+      <td>1.909381</td>
+      <td>2.114439</td>
+      <td>2.282238</td>
+      <td>2.453691</td>
+      <td>2.587843</td>
+      <td>False</td>
+      <td>False</td>
+      <td>recovered</td>
+      <td>P992022</td>
+    </tr>
+    <tr>
+      <th>31736</th>
+      <td>2024-12-14 08:00:00</td>
+      <td>1.136868</td>
+      <td>1.380418</td>
+      <td>1.642153</td>
+      <td>1.909381</td>
+      <td>2.114439</td>
+      <td>2.282238</td>
+      <td>2.453691</td>
+      <td>2.587843</td>
+      <td>2.437232</td>
+      <td>...</td>
+      <td>2.359840</td>
+      <td>2.173400</td>
+      <td>2.098140</td>
+      <td>1.967669</td>
+      <td>1.784512</td>
+      <td>1.561848</td>
+      <td>False</td>
+      <td>False</td>
+      <td>recovered</td>
+      <td>P992022</td>
+    </tr>
+  </tbody>
+</table>
+<p>31737 rows × 21 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dm</span> <span class="o">=</span> <span class="n">CovidUserAnomalyDataModule</span><span class="p">(</span>
+    <span class="n">data_path</span><span class="p">,</span>
+    <span class="n">participants</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P992022&quot;</span><span class="p">],</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">reshape</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">dm</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CovidUserAnomalyDataModule (Data=/workspaces/hiaac-m4/data/Stanford-COVID/processed/windowed_16_overlap_8_df_scaled.csv, 1 participant selected)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LSTMAutoencoder</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+LSTMAutoencoder(
+  (backbone): _LSTMAutoEncoder(
+    (lstm1): LSTM(1, 128, batch_first=True)
+    (lstm2): LSTM(128, 64, batch_first=True)
+    (repeat_vector): Linear(in_features=64, out_features=1024, bias=True)
+    (lstm3): LSTM(64, 64, batch_first=True)
+    (lstm4): LSTM(64, 128, batch_first=True)
+    (time_distributed): Linear(in_features=128, out_features=1, bias=True)
+  )
+  (loss_fn): MSELoss()
+)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="n">trainer</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+GPU available: True (cuda), used: False
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/trainer/setup.py:187: GPU available but not used. You can set it by doing `Trainer(accelerator=&#39;gpu&#39;)`.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;lightning.pytorch.trainer.trainer.Trainer at 0x7f98860215a0&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+  | Name     | Type             | Params
+----------------------------------------------
+0 | backbone | _LSTMAutoEncoder | 316 K
+1 | loss_fn  | MSELoss          | 0
+----------------------------------------------
+316 K     Trainable params
+0         Non-trainable params
+316 K     Total params
+1.264     Total estimated model params size (MB)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "122a71df981c48c183eb2b4e7585103d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/trainer/connectors/data_connector.py:441: The &#39;val_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=47` in the `DataLoader` to improve performance.
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/trainer/connectors/data_connector.py:441: The &#39;train_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=47` in the `DataLoader` to improve performance.
+/usr/local/lib/python3.10/dist-packages/lightning/pytorch/loops/fit_loop.py:298: The number of training batches (5) is smaller than the logging interval Trainer(log_every_n_steps=50). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6c48146d8d214869a0d6bfbcf02956c4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4f33ded3cd1740b1a812e83beb2f0ec0", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4afd1e9812c64d6e8a91e2fdfde10e65", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5a62a9344bf24bb68f8186082a4a7b63", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "feaf5977c0fc4066a5f50da5a0e35247", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1af54416213d4d38be23c25cdbea768e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d1f5a8e798de46cf852ea6c340af1c36", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "52e069d4d90745ffbe1a5d8881176e1f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7ccdb005e9d84b1499669a4185e7230f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b47b2a5274e24202a7a2c903a09aa813", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ee1cd0cc5b6b42f5875f0b01c4b0488b", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d2bb51c5f9204081ae6b4ba06f08485b", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2d2541b200dd40e3b2ea052191698948", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b3baf1a99f954685b54f8bf934d1713a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d63e672642324ebbb23ff7a5e00eb184", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f2484b98e9274f04b30763bd8b44149e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "96faa333450046a4a52453d17b8c3904", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e33417cc08014055937502290d9b9ceb", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dd15fa1d820f470791a34170439a6e49", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5eb0be710fad44449cec25b47249fb46", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3938c24f7505414ca052304cfb372b7e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "aaf16782108149a1b0d32e7233426f74", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "34f6c08ab45f4937a8088e81937f0ae9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d8039d3e637b4a76861f829c77d2f396", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c3bd31387c924fcb90184f5f82ddfb7e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7907067d81aa466382efe42fdf504be1", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c2ebc814255946719e25af7e5a0eafe7", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0da9628584fa442fbf8f54237c8a1aa8", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "194a6f0cdb20463895bae1d14684578d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "87d4f14dc14049ed9cb3239b2f293dfe", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b6d023e75e14430b874f4f3a4d551ad2", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "87f3a37eaa1c4e1a909ecd7319c863e1", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fc71f84f92a849daa546ff1351e26944", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ae117f4de9ff48e992595b7ac9d29ae0", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7b95139fceb749a59231ac1dda4a6d49", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "aa80f9481a924a418a13d5fb53290ef4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a33c8949da2547509a9043f7ef41d783", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "02ec27bf5df640838df5c6e4fbc6bb34", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b46d3c7d59de40318e7e1da0e5942293", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "81dcc2873cf0475c8b5be6a35b9eba97", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b902ad7668df4aa797b595fc69f827b4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "21780b4a40024f8fbf8133e251f80881", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bb3118db7a274e83be867596b66976ed", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5dd64f8b4a834e658f9479a1fbb17e11", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c9b0602b5b164c469c9717e0d259b585", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "060a3564c4ef4ba693084194f6c2055f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dfe5247f90b24332adfd5db8afa3fd4c", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3f025674773f4309bb4b49f0c1541f9e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "af34334f3296414c91af7df6b8318711", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9a900064965f428d917cc5ef9b0987e2", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ef61f9b4f4e84ebd8fc54e9f23565e1c", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d286a434d5634846a4fe7d6e240681b6", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "385f13c4e6e4400984310cdf8efa4963", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d9b37db8450e46a5af9e89eb1ccfd015", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4d7db933c71e4db89a2843bd5fe85968", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a6192eb45fc54f25b2965819ac4b0e08", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5748d4c5f531412498cb1de322c3068d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1854e2b53cfc496995f932be114947d6", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d29f959cb111402b85f62d923738b2a5", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5fd0a48023104a10ad40c52dbbb9d987", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2fc9e4f2d86945f08ea6e7e98b4fb781", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "37de714e1c264706b99df33000021aa2", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3809186a92ea45c68868e94d0a3b22b5", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ebf312fe33474fe0b1f52671bf722624", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "645036d8b7164bd9b56ae1db92e2fec7", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b4ad0e66667b43c3bdf7325a8ce019c2", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2a00e5287dcd4c4d96d53d78f31913b8", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2253fd2a9b0944349a86a5d4db74a753", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8821da74e4ad41f89cc859665da2933d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a89677ff2886491dbb2410af9e558d42", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "431caf9167194e06aa91ed1bb16e1bbb", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4e9f8e04f8774005ab2614654314cbd3", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0be65477b5b544bd938febfd5839d293", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5d07f1aee8214771b465ff1c81d570b4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "43d0ee274feb42be82ed9070e838258a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7d91f9f9e9dd45f6aabb07b8cc5ef981", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "540a8b518d7f41a199b409e0ffb61da3", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f017b85d195f40bbbbaeb6241b2a59f4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7955b823ccfb44068a61732a3bba0a79", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "edd7c5c1fd434ff4bd1c1b3e3344b08c", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7592933a28724c849a2c9c64d3801283", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "286d5832a4fc4c7ea48e8bd31044423a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "be153ca382bd4048acc5d2ad9ea1d935", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "43c25d5423e44a35aac244e9abb186d6", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6d5f275018974e1390f97661df9b2dfb", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b97ce633c89a4d9e947819d865e70a4a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "00c63d005a404d409aaa8501e290011d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c071ffe6682f45c7bdf972c8936c3ace", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "06a17d6dee404131a59ee461aa44e458", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7bb94b417b4c482681ce96dd736af8f9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e224827b6c834c2191c49d6cdf7ab23e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1c906dea6f0641739d1154d84fd8d25c", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "58b07a8052ab4ea79a863b090ed2d9ae", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "33156aae32a94205b261086efc15175d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bb469f0d48b34328a5cb7f435929ed61", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2269ddb5c1af4af987be8989ff2691d9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dc73bcce23bc4226b46c6256d79cb53c", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b22316d5af8740cc8177f09d3ac361d7", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4454f60681e148d0865da4f6bdaf480d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "70fda9becc084eb99b6097553177be28", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e1a8daf0ad0848cab71ef796786c17f8", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+`Trainer.fit` stopped: `max_epochs=100` reached.
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_losses</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">loss_fn</span><span class="p">):</span>
+    <span class="n">losses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_y_pred</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">_y</span><span class="p">,</span> <span class="n">_y_pred</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">losses</span>
+</pre></div>
+</div>
+</div>
+<section id="Predict">
+<h2>Predict<a class="headerlink" href="#Predict" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span><span class="o">.</span><span class="n">dataset</span>
+
+<span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">test_dataloader</span><span class="p">()</span><span class="o">.</span><span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<section id="Defining-Anomaly-Threshold">
+<h3>Defining Anomaly Threshold<a class="headerlink" href="#Defining-Anomaly-Threshold" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_dataset</span><span class="p">])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_dataset</span><span class="p">])</span>
+<span class="n">x_train_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mse</span> <span class="o">=</span> <span class="n">MeanSquaredError</span><span class="p">()</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="n">compute_losses</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_train_hat</span><span class="p">,</span> <span class="n">mse</span><span class="p">)</span>
+
+<span class="n">anomaly_threshold</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+<span class="n">anomaly_threshold</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.3742748498916626
+</pre></div></div>
+</div>
+</section>
+<section id="Predicting-on-Test-set">
+<h3>Predicting on Test set<a class="headerlink" href="#Predicting-on-Test-set" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_test</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">test_dataset</span><span class="p">])</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">test_dataset</span><span class="p">])</span>
+
+<span class="n">x_test_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mse</span> <span class="o">=</span> <span class="n">MeanSquaredError</span><span class="p">()</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="n">compute_losses</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">x_test_hat</span><span class="p">,</span> <span class="n">mse</span><span class="p">)</span>
+
+<span class="n">y_test_hat</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">loss</span> <span class="o">&gt;</span> <span class="n">anomaly_threshold</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">loss</span> <span class="ow">in</span> <span class="n">losses</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;true&quot;</span><span class="p">:</span> <span class="n">y_test</span><span class="p">,</span>
+        <span class="s2">&quot;predicted&quot;</span><span class="p">:</span> <span class="n">y_test_hat</span><span class="p">,</span>
+        <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">losses</span><span class="p">,</span>
+        <span class="s2">&quot;anomaly_threshold&quot;</span><span class="p">:</span> <span class="n">anomaly_threshold</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">results_dataframe</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>true</th>
+      <th>predicted</th>
+      <th>loss</th>
+      <th>anomaly_threshold</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.023700</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.091413</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.054299</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.007486</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.024601</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0.089833</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0.051562</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0.132748</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0.158610</td>
+      <td>0.374275</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0.025522</td>
+      <td>0.374275</td>
+    </tr>
+  </tbody>
+</table>
+<p>94 rows × 4 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">balanced_accuracy_score</span><span class="p">,</span> <span class="n">roc_auc_score</span>
+
+<span class="c1"># Extract true and predicted labels from the results_dataframe</span>
+<span class="n">true_labels</span> <span class="o">=</span> <span class="n">results_dataframe</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">]</span>
+<span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">results_dataframe</span><span class="p">[</span><span class="s1">&#39;predicted&#39;</span><span class="p">]</span>
+
+<span class="c1"># Calculate the F1-score</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+
+<span class="c1"># Calculate the recall</span>
+<span class="n">recall</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+
+<span class="c1"># Calculate the balanced accuracy</span>
+<span class="n">balanced_acc</span> <span class="o">=</span> <span class="n">balanced_accuracy_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+
+<span class="c1"># Calculate the ROC AUC</span>
+<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+
+<span class="c1"># Print the results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F1-score:&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recall:&quot;</span><span class="p">,</span> <span class="n">recall</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Balanced Accuracy:&quot;</span><span class="p">,</span> <span class="n">balanced_acc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ROC AUC:&quot;</span><span class="p">,</span> <span class="n">roc_auc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+F1-score: 0.0
+Recall: 0.0
+Balanced Accuracy: 0.5
+ROC AUC: 0.5
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Get the true and predicted labels from the results_dataframe</span>
+<span class="n">true_labels</span> <span class="o">=</span> <span class="n">results_dataframe</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">]</span>
+<span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">results_dataframe</span><span class="p">[</span><span class="s1">&#39;predicted&#39;</span><span class="p">]</span>
+
+<span class="c1"># Compute the confusion matrix</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+
+<span class="c1"># Define the class labels</span>
+<span class="n">class_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">,</span> <span class="s1">&#39;Anomaly&#39;</span><span class="p">]</span>
+
+<span class="c1"># Plot the confusion matrix</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Confusion Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">tick_marks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_labels</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">tick_marks</span><span class="p">,</span> <span class="n">class_labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">tick_marks</span><span class="p">,</span> <span class="n">class_labels</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Predicted Label&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Label&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add the values to the confusion matrix plot</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">/</span> <span class="mf">2.</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="s1">&#39;d&#39;</span><span class="p">),</span>
+                 <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span> <span class="k">if</span> <span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span> <span class="k">else</span> <span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_05_covid_anomaly_detection_19_0.png" src="../_images/notebooks_05_covid_anomaly_detection_19_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,22 +1,24 @@
-:py:mod:`ssl_tools`
-===================
+ssl_tools
+=========
 
 .. py:module:: ssl_tools
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   analysis/index.rst
-   callbacks/index.rst
-   data/index.rst
-   experiments/index.rst
-   losses/index.rst
-   models/index.rst
-   transforms/index.rst
-   utils/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/ssl_tools/analysis/index
+   /autoapi/ssl_tools/benchmarks/index
+   /autoapi/ssl_tools/callbacks/index
+   /autoapi/ssl_tools/data/index
+   /autoapi/ssl_tools/experiments/index
+   /autoapi/ssl_tools/losses/index
+   /autoapi/ssl_tools/models/index
+   /autoapi/ssl_tools/pipelines/index
+   /autoapi/ssl_tools/transforms/index
+   /autoapi/ssl_tools/utils/index
 
 

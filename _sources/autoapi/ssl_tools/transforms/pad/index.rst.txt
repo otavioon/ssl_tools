@@ -1,0 +1,22 @@
+ssl_tools.transforms.pad
+========================
+
+.. py:module:: ssl_tools.transforms.pad
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.transforms.pad.ZeroPaddingBetween
+
+
+Module Contents
+---------------
+
+.. py:class:: ZeroPaddingBetween(pad_every = 3, padding_size = 2, discard_last = True)
+
+   .. py:method:: __call__(x)
+
+

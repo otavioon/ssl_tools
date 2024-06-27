@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ssl_tools.models.nets.resnet1d &mdash; SSLTools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="ssl_tools.models.nets.resnet_1d" href="../resnet_1d/index.html" />
+    <link rel="prev" title="ssl_tools.models.nets.multi_channel_cnn" href="../multi_channel_cnn/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            SSLTools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">ssl_tools</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html">ssl_tools.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">SSLTools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../api.html">Programming Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">ssl_tools</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">ssl_tools.models</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools.models.nets</a></li>
+      <li class="breadcrumb-item active">ssl_tools.models.nets.resnet1d</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/autoapi/ssl_tools/models/nets/resnet1d/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ssl_tools.models.nets.resnet1d">
+<span id="ssl-tools-models-nets-resnet1d"></span><h1>ssl_tools.models.nets.resnet1d<a class="headerlink" href="#module-ssl_tools.models.nets.resnet1d" title="Link to this heading"></a></h1>
+<p>resnet for 1-d signal data, pytorch version</p>
+<p>Shenda Hong, Oct 2019</p>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.nets.resnet1d.BasicBlock" title="ssl_tools.models.nets.resnet1d.BasicBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasicBlock</span></code></a></p></td>
+<td><p>ResNet Basic Block</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.models.nets.resnet1d.MyConv1dPadSame" title="ssl_tools.models.nets.resnet1d.MyConv1dPadSame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MyConv1dPadSame</span></code></a></p></td>
+<td><p>extend nn.Conv1d to support SAME padding</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.nets.resnet1d.MyMaxPool1dPadSame" title="ssl_tools.models.nets.resnet1d.MyMaxPool1dPadSame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MyMaxPool1dPadSame</span></code></a></p></td>
+<td><p>extend nn.MaxPool1d to support SAME padding</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.models.nets.resnet1d.ResNet1D" title="ssl_tools.models.nets.resnet1d.ResNet1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResNet1D</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.nets.resnet1d._ResNet1D" title="ssl_tools.models.nets.resnet1d._ResNet1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_ResNet1D</span></code></a></p></td>
+<td><p>Input:</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.nets.resnet1d.main" title="ssl_tools.models.nets.resnet1d.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.BasicBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.resnet1d.</span></span><span class="sig-name descname"><span class="pre">BasicBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_bn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_do</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_first_block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.BasicBlock" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<p>ResNet Basic Block</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.BasicBlock.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.BasicBlock.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.MyConv1dPadSame">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.resnet1d.</span></span><span class="sig-name descname"><span class="pre">MyConv1dPadSame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.MyConv1dPadSame" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<p>extend nn.Conv1d to support SAME padding</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.MyConv1dPadSame.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.MyConv1dPadSame.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.MyMaxPool1dPadSame">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.resnet1d.</span></span><span class="sig-name descname"><span class="pre">MyMaxPool1dPadSame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.MyMaxPool1dPadSame" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<p>extend nn.MaxPool1d to support SAME padding</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.MyMaxPool1dPadSame.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.MyMaxPool1dPadSame.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.ResNet1D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.resnet1d.</span></span><span class="sig-name descname"><span class="pre">ResNet1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsample_gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increasefilter_gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_bn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_do</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.ResNet1D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../simple/index.html#ssl_tools.models.nets.simple.SimpleClassificationNet" title="ssl_tools.models.nets.simple.SimpleClassificationNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.models.nets.simple.SimpleClassificationNet</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.ResNet1D._calculate_fc_input_features">
+<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.ResNet1D._calculate_fc_input_features" title="Link to this definition"></a></dt>
+<dd><p>Run a single forward pass with a random input to get the number of
+features after the convolutional layers.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>backbone<span class="classifier">torch.nn.Module</span></dt><dd><p>The backbone of the network</p>
+</dd>
+<dt>input_shape<span class="classifier">Tuple[int, int]</span></dt><dd><p>The input shape of the network.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>int</dt><dd><p>The number of features after the convolutional layers.</p>
+</dd>
+</dl>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backbone</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.ResNet1D._create_fc">
+<span class="sig-name descname"><span class="pre">_create_fc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.ResNet1D._create_fc" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_features</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d._ResNet1D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.resnet1d.</span></span><span class="sig-name descname"><span class="pre">_ResNet1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsample_gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increasefilter_gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_bn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_do</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d._ResNet1D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
+<dl class="simple">
+<dt>Input:</dt><dd><p>X: (n_samples, n_channel, n_length)
+Y: (n_samples)</p>
+</dd>
+<dt>Output:</dt><dd><p>out: (n_samples)</p>
+</dd>
+<dt>Pararmetes:</dt><dd><p>in_channels: dim of input, the same as n_channel
+base_filters: number of filters in the first several Conv layer, it will double at every 4 layers
+kernel_size: width of kernel
+stride: stride of kernel moving
+groups: set larget to 1 as ResNeXt
+n_block: number of blocks
+n_classes: number of classes</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d._ResNet1D.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d._ResNet1D.forward" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ssl_tools.models.nets.resnet1d.main">
+<span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.resnet1d.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.resnet1d.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../multi_channel_cnn/index.html" class="btn btn-neutral float-left" title="ssl_tools.models.nets.multi_channel_cnn" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../resnet_1d/index.html" class="btn btn-neutral float-right" title="ssl_tools.models.nets.resnet_1d" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, H.IAAC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+ssl_tools.models.nets.deep_convnet
+==================================
+
+.. py:module:: ssl_tools.models.nets.deep_convnet
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.deep_convnet.DeepConvNet
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.models.nets.deep_convnet.main
+
+
+Module Contents
+---------------
+
+.. py:class:: DeepConvNet(input_channels = 6, time_steps = 60, num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`lightning.LightningModule`
+
+
+   .. py:method:: _calculate_fc_input_features(input_channels, time_steps)
+
+      Calculate the number of input features of the fully connected layer.
+      Basically, it performs a forward pass with a dummy input to get the
+      output shape after the convolutional layers.
+
+      Parameters
+      ----------
+      input_channels : int
+          The number of input channels.
+
+      Returns
+      -------
+      int
+          The number of input features of the fully connected layer.
+
+
+
+   .. py:method:: _common_step(batch, batch_idx, prefix)
+
+
+   .. py:method:: _compute_metrics(y_hat, y, stage)
+
+      Compute the metrics.
+
+      Parameters
+      ----------
+      y_hat : torch.Tensor
+          The predictions of the model
+      y : torch.Tensor
+          The ground truth labels
+      stage : str
+          The stage of the training loop (train, val or test)
+
+      Returns
+      -------
+      Dict[str, float]
+          A dictionary containing the metrics. The keys are the names of the
+          metrics, and the values are the values of the metrics.
+
+
+
+   .. py:method:: configure_optimizers()
+
+
+   .. py:method:: forward(x)
+
+
+   .. py:method:: loss_function(X, y)
+
+
+   .. py:method:: predict_step(batch, batch_idx, dataloader_idx=None)
+
+
+   .. py:method:: test_step(batch, batch_idx)
+
+
+   .. py:method:: training_step(batch, batch_idx)
+
+
+   .. py:method:: validation_step(batch, batch_idx)
+
+
+.. py:function:: main()
+

@@ -1,0 +1,43 @@
+ssl_tools.data.data_modules.covid_anomaly
+=========================================
+
+.. py:module:: ssl_tools.data.data_modules.covid_anomaly
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.data.data_modules.covid_anomaly.CovidUserAnomalyDataModule
+
+
+Module Contents
+---------------
+
+.. py:class:: CovidUserAnomalyDataModule(data_path, participants = None, feature_column_prefix = 'RHR', target_column = 'anomaly', participant_column = 'participant_id', include_recovered_in_test = False, reshape = None, train_transforms = None, batch_size = 32, num_workers = 1, validation_split = 0.2, dataset_transforms = None, shuffle_train = True, discard_last_batch = False, balance = False, train_baseline_only = True)
+
+   Bases: :py:obj:`lightning.LightningDataModule`
+
+
+   .. py:method:: __repr__()
+
+
+   .. py:method:: __str__()
+
+
+   .. py:method:: predict_dataloader()
+
+
+   .. py:method:: setup(stage)
+
+
+   .. py:method:: test_dataloader()
+
+
+   .. py:method:: train_dataloader()
+
+
+   .. py:method:: val_dataloader()
+
+

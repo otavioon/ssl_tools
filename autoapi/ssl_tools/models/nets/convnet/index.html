@@ -7,7 +7,7 @@
   <title>ssl_tools.models.nets.convnet &mdash; SSLTools  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=fd3f3429" />
 
   
   <!--[if lt IE 9]>
@@ -17,14 +17,14 @@
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="ssl_tools.models.nets.wisenet" href="../wisenet/index.html" />
-    <link rel="prev" title="ssl_tools.models.nets" href="../index.html" /> 
+    <link rel="next" title="ssl_tools.models.nets.deep_conv_lstm" href="../deep_conv_lstm/index.html" />
+    <link rel="prev" title="ssl_tools.models.nets.convae" href="../convae/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,16 +53,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../experiments.html">Running Experiments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">ssl_tools</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
-<li class="toctree-l4 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html">ssl_tools.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -86,10 +88,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../../../api.html">Programming Reference</a></li>
-          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
-          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.nets</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.nets.convnet</span></code></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">ssl_tools</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">ssl_tools.models</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools.models.nets</a></li>
+      <li class="breadcrumb-item active">ssl_tools.models.nets.convnet</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../../_sources/autoapi/ssl_tools/models/nets/convnet/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -100,219 +102,206 @@
            <div itemprop="articleBody">
              
   <section id="module-ssl_tools.models.nets.convnet">
-<span id="ssl-tools-models-nets-convnet"></span><h1><a class="reference internal" href="#module-ssl_tools.models.nets.convnet" title="ssl_tools.models.nets.convnet"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.nets.convnet</span></code></a><a class="headerlink" href="#module-ssl_tools.models.nets.convnet" title="Link to this heading"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<span id="ssl-tools-models-nets-convnet"></span><h1>ssl_tools.models.nets.convnet<a class="headerlink" href="#module-ssl_tools.models.nets.convnet" title="Link to this heading"></a></h1>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork" title="ssl_tools.models.nets.convnet.Simple1DConvNetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Simple1DConvNetwork</span></code></a></p></td>
-<td><p>Model for human-activity-recognition.</p></td>
+<td><p>Create a simple 1D Convolutional Network with 3 layers and 2 fully</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork" title="ssl_tools.models.nets.convnet.Simple2DConvNetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Simple2DConvNetwork</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Create a simple 2D Convolutional Network with 3 layers and 2 fully</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.convnet.</span></span><span class="sig-name descname"><span class="pre">Simple1DConvNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">lightning.LightningModule</span></code></p>
-<p>Model for human-activity-recognition.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_channels</strong> (<em>int</em>) – </p></li>
-<li><p><strong>num_classes</strong> (<em>int</em>) – </p></li>
-<li><p><strong>time_steps</strong> (<em>int</em>) – </p></li>
-<li><p><strong>learning_rate</strong> (<em>float</em>) – </p></li>
-</ul>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.convnet.</span></span><span class="sig-name descname"><span class="pre">Simple1DConvNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">60)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../simple/index.html#ssl_tools.models.nets.simple.SimpleClassificationNet" title="ssl_tools.models.nets.simple.SimpleClassificationNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.models.nets.simple.SimpleClassificationNet</span></code></a></p>
+<p>Create a simple 1D Convolutional Network with 3 layers and 2 fully
+connected layers.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>input_shape<span class="classifier">Tuple[int, int], optional</span></dt><dd><p>A 2-tuple containing the number of input channels and the number of
+features, by default (6, 60).</p>
+</dd>
+<dt>num_classes<span class="classifier">int, optional</span></dt><dd><p>Number of output classes, by default 6</p>
+</dd>
+<dt>learning_rate<span class="classifier">float, optional</span></dt><dd><p>Learning rate for Adam optimizer, by default 1e-3</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork._calculate_fc_input_features">
-<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork._calculate_fc_input_features" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork._common_step">
-<span class="sig-name descname"><span class="pre">_common_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork._common_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork._compute_metrics">
-<span class="sig-name descname"><span class="pre">_compute_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork._compute_metrics" title="Link to this definition"></a></dt>
-<dd><p>Compute the metrics.</p>
-<section id="parameters">
-<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork._calculate_fc_input_features" title="Link to this definition"></a></dt>
+<dd><p>Run a single forward pass with a random input to get the number of
+features after the convolutional layers.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <dl class="simple">
-<dt>y_hat<span class="classifier">torch.Tensor</span></dt><dd><p>The predictions of the model</p>
+<dt>backbone<span class="classifier">torch.nn.Module</span></dt><dd><p>The backbone of the network</p>
 </dd>
-<dt>y<span class="classifier">_type_</span></dt><dd><p>The ground truth labels</p>
-</dd>
-<dt>stage<span class="classifier">str</span></dt><dd><p>The stage of the training loop (train, val or test)</p>
+<dt>input_shape<span class="classifier">Tuple[int, int]</span></dt><dd><p>The input shape of the network.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h4>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
 <dl class="simple">
-<dt>Dict[str, float]</dt><dd><p>A dictionary containing the metrics. The keys are the names of the
-metrics, and the values are the values of the metrics.</p>
+<dt>int</dt><dd><p>The number of features after the convolutional layers.</p>
 </dd>
 </dl>
 </section>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y_hat</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>y</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>stage</strong> (<em>str</em>) – </p></li>
+<li><p><strong>backbone</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, float]</p>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork.configure_optimizers">
-<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork.configure_optimizers" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork._create_backbone">
+<span class="sig-name descname"><span class="pre">_create_backbone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork._create_backbone" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_channels</strong> (<em>int</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork._create_fc">
+<span class="sig-name descname"><span class="pre">_create_fc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork._create_fc" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_features</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork.loss_function">
-<span class="sig-name descname"><span class="pre">loss_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork.loss_function" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork.predict_step">
-<span class="sig-name descname"><span class="pre">predict_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork.predict_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork.test_step">
-<span class="sig-name descname"><span class="pre">test_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork.test_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork.training_step">
-<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork.training_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple1DConvNetwork.validation_step">
-<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple1DConvNetwork.validation_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.convnet.</span></span><span class="sig-name descname"><span class="pre">Simple2DConvNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">lightning.LightningModule</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_channels</strong> (<em>int</em>) – </p></li>
-<li><p><strong>num_classes</strong> (<em>int</em>) – </p></li>
-<li><p><strong>time_steps</strong> (<em>int</em>) – </p></li>
-<li><p><strong>learning_rate</strong> (<em>float</em>) – </p></li>
-</ul>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.models.nets.convnet.</span></span><span class="sig-name descname"><span class="pre">Simple2DConvNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">1,</span> <span class="pre">60)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../simple/index.html#ssl_tools.models.nets.simple.SimpleClassificationNet" title="ssl_tools.models.nets.simple.SimpleClassificationNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl_tools.models.nets.simple.SimpleClassificationNet</span></code></a></p>
+<p>Create a simple 2D Convolutional Network with 3 layers and 2 fully
+connected layers.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>input_shape<span class="classifier">Tuple[int, int, int], optional</span></dt><dd><p>A 3-tuple containing the number of input channels, and the number of
+the 2D input shape, by default (6, 1, 60).</p>
+</dd>
+<dt>num_classes<span class="classifier">int, optional</span></dt><dd><p>Number of output classes, by default 6</p>
+</dd>
+<dt>learning_rate<span class="classifier">float, optional</span></dt><dd><p>Learning rate for Adam optimizer, by default 1e-3</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork._calculate_fc_input_features">
-<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork._calculate_fc_input_features" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork._common_step">
-<span class="sig-name descname"><span class="pre">_common_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork._common_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork._compute_metrics">
-<span class="sig-name descname"><span class="pre">_compute_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork._compute_metrics" title="Link to this definition"></a></dt>
-<dd><p>Compute the metrics.</p>
-<section id="id1">
-<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<span class="sig-name descname"><span class="pre">_calculate_fc_input_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backbone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork._calculate_fc_input_features" title="Link to this definition"></a></dt>
+<dd><p>Run a single forward pass with a random input to get the number of
+features after the convolutional layers.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
 <dl class="simple">
-<dt>y_hat<span class="classifier">torch.Tensor</span></dt><dd><p>The predictions of the model</p>
+<dt>backbone<span class="classifier">torch.nn.Module</span></dt><dd><p>The backbone of the network</p>
 </dd>
-<dt>y<span class="classifier">_type_</span></dt><dd><p>The ground truth labels</p>
-</dd>
-<dt>stage<span class="classifier">str</span></dt><dd><p>The stage of the training loop (train, val or test)</p>
+<dt>input_shape<span class="classifier">Tuple[int, int, int]</span></dt><dd><p>The input shape of the network.</p>
 </dd>
 </dl>
 </section>
-<section id="id2">
-<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<section id="id4">
+<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
 <dl class="simple">
-<dt>Dict[str, float]</dt><dd><p>A dictionary containing the metrics. The keys are the names of the
-metrics, and the values are the values of the metrics.</p>
+<dt>int</dt><dd><p>The number of features after the convolutional layers.</p>
 </dd>
 </dl>
 </section>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y_hat</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>y</strong> (<em>torch.Tensor</em>) – </p></li>
-<li><p><strong>stage</strong> (<em>str</em>) – </p></li>
+<li><p><strong>backbone</strong> (<em>torch.nn.Module</em>)</p></li>
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, float]</p>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork.configure_optimizers">
-<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork.configure_optimizers" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork._create_backbone">
+<span class="sig-name descname"><span class="pre">_create_backbone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork._create_backbone" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_channels</strong> (<em>int</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork.loss_function">
-<span class="sig-name descname"><span class="pre">loss_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork.loss_function" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork.predict_step">
-<span class="sig-name descname"><span class="pre">predict_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork.predict_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork.test_step">
-<span class="sig-name descname"><span class="pre">test_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork.test_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork.training_step">
-<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork.training_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork.validation_step">
-<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork.validation_step" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<dt class="sig sig-object py" id="ssl_tools.models.nets.convnet.Simple2DConvNetwork._create_fc">
+<span class="sig-name descname"><span class="pre">_create_fc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.models.nets.convnet.Simple2DConvNetwork._create_fc" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_features</strong> (<em>int</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -320,8 +309,8 @@ metrics, and the values are the values of the metrics.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="ssl_tools.models.nets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../wisenet/index.html" class="btn btn-neutral float-right" title="ssl_tools.models.nets.wisenet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../convae/index.html" class="btn btn-neutral float-left" title="ssl_tools.models.nets.convae" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../deep_conv_lstm/index.html" class="btn btn-neutral float-right" title="ssl_tools.models.nets.deep_conv_lstm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

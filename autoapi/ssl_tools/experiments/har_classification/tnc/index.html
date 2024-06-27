@@ -7,7 +7,7 @@
   <title>ssl_tools.experiments.har_classification.tnc &mdash; SSLTools  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=fd3f3429" />
 
   
   <!--[if lt IE 9]>
@@ -17,14 +17,14 @@
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="ssl_tools.experiments.experiment" href="../../experiment/index.html" />
-    <link rel="prev" title="ssl_tools.experiments.har_classification.tfc" href="../tfc/index.html" /> 
+    <link rel="next" title="ssl_tools.experiments.har_classification.tnc_head_classifier" href="../tnc_head_classifier/index.html" />
+    <link rel="prev" title="ssl_tools.experiments.har_classification.tfc_head_classifier" href="../tfc_head_classifier/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,16 +53,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../experiments.html">Running Experiments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../api.html">Programming Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">ssl_tools</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
-<li class="toctree-l4 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../models/index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html">ssl_tools.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -86,10 +88,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../../../api.html">Programming Reference</a></li>
-          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a></li>
-          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.tnc</span></code></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">ssl_tools</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">ssl_tools.experiments</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">ssl_tools.experiments.har_classification</a></li>
+      <li class="breadcrumb-item active">ssl_tools.experiments.har_classification.tnc</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../../_sources/autoapi/ssl_tools/experiments/har_classification/tnc/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -100,11 +102,19 @@
            <div itemprop="articleBody">
              
   <section id="module-ssl_tools.experiments.har_classification.tnc">
-<span id="ssl-tools-experiments-har-classification-tnc"></span><h1><a class="reference internal" href="#module-ssl_tools.experiments.har_classification.tnc" title="ssl_tools.experiments.har_classification.tnc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.tnc</span></code></a><a class="headerlink" href="#module-ssl_tools.experiments.har_classification.tnc" title="Link to this heading"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<span id="ssl-tools-experiments-har-classification-tnc"></span><h1>ssl_tools.experiments.har_classification.tnc<a class="headerlink" href="#module-ssl_tools.experiments.har_classification.tnc" title="Link to this heading"></a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.har_classification.tnc.options" title="ssl_tools.experiments.har_classification.tnc.options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">options</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.har_classification.tnc.TNCTest" title="ssl_tools.experiments.har_classification.tnc.TNCTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TNCTest</span></code></a></p></td>
@@ -116,15 +126,8 @@
 </tbody>
 </table>
 </section>
-<section id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ssl_tools.experiments.har_classification.tnc.options" title="ssl_tools.experiments.har_classification.tnc.options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">options</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="ssl_tools.experiments.har_classification.tnc.TNCTest">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ssl_tools.experiments.har_classification.tnc.</span></span><span class="sig-name descname"><span class="pre">TNCTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mc_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest" title="Link to this definition"></a></dt>
@@ -133,7 +136,7 @@
 inheritance.</p>
 <p>Trains the constrastive predictive coding model</p>
 <section id="parameters">
-<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>encoding_size<span class="classifier">int, optional</span></dt><dd><p>Size of the encoding (output of the linear layer)</p>
 </dd>
@@ -155,7 +158,7 @@ in the dataset.</p>
 <span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest.get_data_module" title="Link to this definition"></a></dt>
 <dd><p>Get the datamodule to use for the experiment.</p>
 <section id="returns">
-<h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningDataModule</dt><dd><p>The datamodule to use for the experiment</p>
 </dd>
@@ -173,7 +176,7 @@ in the dataset.</p>
 <span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTest.get_model" title="Link to this definition"></a></dt>
 <dd><p>Get the model to use for the experiment.</p>
 <section id="id1">
-<h5>Returns<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningModule</dt><dd><p>The model to use for the experiment</p>
 </dd>
@@ -190,13 +193,13 @@ in the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>str</em>) – </p></li>
-<li><p><strong>encoding_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>in_channel</strong> (<em>int</em>) – </p></li>
-<li><p><strong>window_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>mc_sample_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>w</strong> (<em>float</em>) – </p></li>
-<li><p><strong>num_classes</strong> (<em>int</em>) – </p></li>
+<li><p><strong>data</strong> (<em>str</em>)</p></li>
+<li><p><strong>encoding_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>in_channel</strong> (<em>int</em>)</p></li>
+<li><p><strong>window_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>mc_sample_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>w</strong> (<em>float</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -210,7 +213,7 @@ in the dataset.</p>
 inheritance.</p>
 <p>Trains the constrastive predictive coding model</p>
 <section id="id2">
-<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>encoding_size<span class="classifier">int, optional</span></dt><dd><p>Size of the encoding (output of the linear layer)</p>
 </dd>
@@ -237,14 +240,14 @@ finetune mode.</p>
 <span class="sig-name descname"><span class="pre">get_finetune_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_finetune_data_module" title="Link to this definition"></a></dt>
 <dd><p>The data module to use for fine-tuning.</p>
 <section id="id3">
-<h5>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningDataModule</dt><dd><p>The data module to use for fine-tuning</p>
 </dd>
 </dl>
 </section>
 <section id="raises">
-<h5>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h5>
+<h4>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>NotImplementedError</dt><dd><p>_description_</p>
 </dd>
@@ -262,7 +265,7 @@ finetune mode.</p>
 <span class="sig-name descname"><span class="pre">get_finetune_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_backbone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_finetune_model" title="Link to this definition"></a></dt>
 <dd><p>Get the model to use for fine-tuning.</p>
 <section id="id4">
-<h5>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>load_backbone<span class="classifier">str, optional</span></dt><dd><p>The path to the backbone to load. The backbone must be loaded
 inside this method, if it is not None.</p>
@@ -270,7 +273,7 @@ inside this method, if it is not None.</p>
 </dl>
 </section>
 <section id="id5">
-<h5>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningModule</dt><dd><p>The model to use for fine-tuning</p>
 </dd>
@@ -278,7 +281,7 @@ inside this method, if it is not None.</p>
 </section>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>load_backbone</strong> (<em>str</em>) – </p>
+<dd class="field-odd"><p><strong>load_backbone</strong> (<em>str</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>lightning.LightningModule</p>
@@ -291,7 +294,7 @@ inside this method, if it is not None.</p>
 <span class="sig-name descname"><span class="pre">get_pretrain_data_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_pretrain_data_module" title="Link to this definition"></a></dt>
 <dd><p>The data module to use for pre-training.</p>
 <section id="id6">
-<h5>Returns<a class="headerlink" href="#id6" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningDataModule</dt><dd><p>The data module to use for pre-training</p>
 </dd>
@@ -309,7 +312,7 @@ inside this method, if it is not None.</p>
 <span class="sig-name descname"><span class="pre">get_pretrain_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ssl_tools.experiments.har_classification.tnc.TNCTrain.get_pretrain_model" title="Link to this definition"></a></dt>
 <dd><p>Get the model to use for the pretraining phase.</p>
 <section id="id7">
-<h5>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h5>
+<h4>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>L.LightningModule</dt><dd><p>The model to use for the pretraining phase</p>
 </dd>
@@ -326,17 +329,17 @@ inside this method, if it is not None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>str</em>) – </p></li>
-<li><p><strong>encoding_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>in_channel</strong> (<em>int</em>) – </p></li>
-<li><p><strong>window_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>mc_sample_size</strong> (<em>int</em>) – </p></li>
-<li><p><strong>w</strong> (<em>float</em>) – </p></li>
-<li><p><strong>significance_level</strong> (<em>float</em>) – </p></li>
-<li><p><strong>repeat</strong> (<em>int</em>) – </p></li>
-<li><p><strong>pad_length</strong> (<em>bool</em>) – </p></li>
-<li><p><strong>num_classes</strong> (<em>int</em>) – </p></li>
-<li><p><strong>update_backbone</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>data</strong> (<em>str</em>)</p></li>
+<li><p><strong>encoding_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>in_channel</strong> (<em>int</em>)</p></li>
+<li><p><strong>window_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>mc_sample_size</strong> (<em>int</em>)</p></li>
+<li><p><strong>w</strong> (<em>float</em>)</p></li>
+<li><p><strong>significance_level</strong> (<em>float</em>)</p></li>
+<li><p><strong>repeat</strong> (<em>int</em>)</p></li>
+<li><p><strong>pad_length</strong> (<em>bool</em>)</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>)</p></li>
+<li><p><strong>update_backbone</strong> (<em>bool</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -349,14 +352,13 @@ inside this method, if it is not None.</p>
 
 </section>
 </section>
-</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../tfc/index.html" class="btn btn-neutral float-left" title="ssl_tools.experiments.har_classification.tfc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../experiment/index.html" class="btn btn-neutral float-right" title="ssl_tools.experiments.experiment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../tfc_head_classifier/index.html" class="btn btn-neutral float-left" title="ssl_tools.experiments.har_classification.tfc_head_classifier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tnc_head_classifier/index.html" class="btn btn-neutral float-right" title="ssl_tools.experiments.har_classification.tnc_head_classifier" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

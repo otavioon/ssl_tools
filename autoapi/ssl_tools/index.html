@@ -7,7 +7,7 @@
   <title>ssl_tools &mdash; SSLTools  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
 
   
   <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -53,16 +53,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../experiments.html">Running Experiments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../api.html">Programming Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ssl_tools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="models/index.html">ssl_tools.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/index.html">ssl_tools.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -86,7 +88,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../api.html">Programming Reference</a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></li>
+      <li class="breadcrumb-item active">ssl_tools</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/autoapi/ssl_tools/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,78 +99,21 @@
            <div itemprop="articleBody">
              
   <section id="module-ssl_tools">
-<span id="ssl-tools"></span><h1><a class="reference internal" href="#module-ssl_tools" title="ssl_tools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools</span></code></a><a class="headerlink" href="#module-ssl_tools" title="Link to this heading"></a></h1>
+<span id="ssl-tools"></span><h1>ssl_tools<a class="headerlink" href="#module-ssl_tools" title="Link to this heading"></a></h1>
 <section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="analysis/plot_metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.analysis.plot_metrics</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="callbacks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="callbacks/performance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.callbacks.performance</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data/data_modules/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.data_modules</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data/data_modules/har/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.data_modules.har</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="data/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data/datasets/series_dataset/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets.series_dataset</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data/datasets/tfc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets.tfc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data/datasets/tnc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.data.datasets.tnc</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="experiments/har_classification/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="experiments/har_classification/cpc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.cpc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="experiments/har_classification/tfc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.tfc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="experiments/har_classification/tnc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.har_classification.tnc</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="experiments/experiment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.experiment</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiments/lightning_experiment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.experiments.lightning_experiment</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="losses/nxtent/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.losses.nxtent</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="models/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="models/layers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.layers</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="models/layers/gru/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.layers.gru</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="models/nets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.nets</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="models/nets/convnet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.nets.convnet</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="models/nets/wisenet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.nets.wisenet</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="models/ssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="models/ssl/classifier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.classifier</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="models/ssl/cpc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.cpc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="models/ssl/tfc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.tfc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="models/ssl/tnc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.models.ssl.tnc</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transforms/signal_1d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms.signal_1d</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="transforms/time_1d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms.time_1d</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="transforms/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.transforms.utils</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utils/configurable/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils.configurable</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils.data</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/types/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ssl_tools.utils.types</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="analysis/index.html">ssl_tools.analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmarks/index.html">ssl_tools.benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks/index.html">ssl_tools.callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data/index.html">ssl_tools.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiments/index.html">ssl_tools.experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses/index.html">ssl_tools.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/index.html">ssl_tools.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines/index.html">ssl_tools.pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transforms/index.html">ssl_tools.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html">ssl_tools.utils</a></li>
 </ul>
 </div>
 </section>

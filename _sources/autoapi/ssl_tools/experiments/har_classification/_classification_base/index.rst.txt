@@ -1,0 +1,75 @@
+ssl_tools.experiments.har_classification._classification_base
+=============================================================
+
+.. py:module:: ssl_tools.experiments.har_classification._classification_base
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification._classification_base.EvaluatorBase
+   ssl_tools.experiments.har_classification._classification_base.PredictionHeadClassifier
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.experiments.har_classification._classification_base.full_dataset_from_dataloader
+   ssl_tools.experiments.har_classification._classification_base.generate_embeddings
+   ssl_tools.experiments.har_classification._classification_base.get_full_data_split
+   ssl_tools.experiments.har_classification._classification_base.get_split_dataloader
+
+
+Module Contents
+---------------
+
+.. py:class:: EvaluatorBase(results_file = 'results.csv', confusion_matrix_file = 'confusion_matrix.csv', confusion_matrix_image_file = 'confusion_matrix.png', tsne_plot_file = 'tsne_embeddings.png', embedding_file = 'embeddings.csv', predictions_file = 'predictions.csv', *args, **kwargs)
+
+   Bases: :py:obj:`ssl_tools.experiments.LightningTest`
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+
+   .. py:method:: _compute_classification_metrics(y_hat_logits, y, n_classes)
+
+
+   .. py:method:: _compute_embeddings(model, data_module, trainer)
+
+
+   .. py:method:: _plot_confusion_matrix(y_hat, y, n_classes, cm_file, cm_image_file)
+
+
+   .. py:method:: _plot_tnse_embeddings(embeddings, y, y_hat, n_components = 2, tsne_plot_file = 'tsne_embeddings.png')
+
+
+   .. py:method:: evaluate_embeddings(model, data_module, trainer)
+
+
+   .. py:method:: evaluate_model_performance(model, data_module, trainer)
+
+
+   .. py:method:: predict(model, dataloader, trainer)
+
+
+   .. py:method:: run_model(model, data_module, trainer)
+
+
+.. py:class:: PredictionHeadClassifier(prediction_head, num_classes = 6)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
+
+
+.. py:function:: full_dataset_from_dataloader(dataloader)
+
+.. py:function:: generate_embeddings(model, dataloader, trainer)
+
+.. py:function:: get_full_data_split(data_module, stage)
+
+.. py:function:: get_split_dataloader(stage, data_module)
+

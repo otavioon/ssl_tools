@@ -1,0 +1,89 @@
+ssl_tools.benchmarks.main_supervised
+====================================
+
+.. py:module:: ssl_tools.benchmarks.main_supervised
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.benchmarks.main_supervised.ExperimentArgs
+   ssl_tools.benchmarks.main_supervised.SupervisedConfigParser
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.benchmarks.main_supervised._run_experiment_wrapper
+   ssl_tools.benchmarks.main_supervised.cli_main
+   ssl_tools.benchmarks.main_supervised.hack_to_avoid_lightning_cli_sys_argv_warning
+   ssl_tools.benchmarks.main_supervised.main
+   ssl_tools.benchmarks.main_supervised.run
+   ssl_tools.benchmarks.main_supervised.run_serial
+   ssl_tools.benchmarks.main_supervised.run_using_ray
+
+
+Module Contents
+---------------
+
+.. py:class:: ExperimentArgs
+
+   .. py:attribute:: data
+      :type:  Dict[str, Any]
+
+
+   .. py:attribute:: model
+      :type:  Dict[str, Any]
+
+
+   .. py:attribute:: num_classes
+      :type:  int
+      :value: 7
+
+
+
+   .. py:attribute:: seed
+      :type:  int
+      :value: 42
+
+
+
+   .. py:attribute:: test_data
+      :type:  Dict[str, Any]
+
+
+   .. py:attribute:: trainer
+      :type:  Dict[str, Any]
+
+
+.. py:class:: SupervisedConfigParser(data_path, default_trainer_config, data_module_configs, model_configs, output_dir = 'benchmarks/', skip_existing = True, seed = 42, leave_one_out = False, data_shapes_file = None, num_classes = 7)
+
+   .. py:method:: __call__()
+
+
+   .. py:method:: filter_experiments(experiments)
+
+
+   .. py:method:: scan_configs(configs_path)
+      :staticmethod:
+
+
+
+.. py:function:: _run_experiment_wrapper(experiment_args)
+
+.. py:function:: cli_main(experiment)
+
+.. py:function:: hack_to_avoid_lightning_cli_sys_argv_warning(func, *args, **kwargs)
+
+.. py:function:: main(data_path, default_trainer_config_file, data_module_configs_path, model_configs_path, output_path = 'benchmarks/', skip_existing = True, ray_address = None, use_ray = True, seed = 42, dry_run = False, dry_run_limit = 5, leave_one_out = False, data_shapes_file = None, num_classes = 7)
+
+.. py:function:: run(config_parser, use_ray, ray_address = None, dry_run = False, dry_run_limit = 3)
+
+.. py:function:: run_serial(experiments)
+
+.. py:function:: run_using_ray(experiments, ray_address = None)
+

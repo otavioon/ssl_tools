@@ -1,0 +1,152 @@
+ssl_tools.pipelines.har_classification.evaluator
+================================================
+
+.. py:module:: ssl_tools.pipelines.har_classification.evaluator
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.har_classification.evaluator.options
+   ssl_tools.pipelines.har_classification.evaluator.transforms_map
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.har_classification.evaluator.CSVGenerator
+   ssl_tools.pipelines.har_classification.evaluator.EmbeddingEvaluator
+   ssl_tools.pipelines.har_classification.evaluator.EvaluateAll
+   ssl_tools.pipelines.har_classification.evaluator.HAREmbeddingEvaluator
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   ssl_tools.pipelines.har_classification.evaluator.full_dataset_from_dataloader
+   ssl_tools.pipelines.har_classification.evaluator.generate_embeddings
+   ssl_tools.pipelines.har_classification.evaluator.get_full_data_split
+   ssl_tools.pipelines.har_classification.evaluator.get_split_dataloader
+   ssl_tools.pipelines.har_classification.evaluator.run_evaluator_wrapper
+
+
+Module Contents
+---------------
+
+.. py:class:: CSVGenerator(experiments, log_dir = './mlruns', results_file = 'results.csv')
+
+   Bases: :py:obj:`ssl_tools.pipelines.base.Pipeline`
+
+
+   .. py:property:: client
+
+
+   .. py:method:: run()
+
+
+.. py:class:: EmbeddingEvaluator(experiment_name, registered_model_name, registered_model_tags = None, experiment_tags = None, n_classes = 7, run_name = None, accelerator = 'cpu', devices = 1, num_nodes = 1, num_workers = None, strategy = 'auto', batch_size = 1, limit_predict_batches = 1.0, log_dir = './mlruns', results_file = 'results.csv', confusion_matrix_file = 'confusion_matrix.csv', confusion_matrix_image_file = 'confusion_matrix.png', tsne_plot_file = 'tsne_embeddings.png', embedding_file = 'embeddings.csv', predictions_file = 'predictions.csv', add_epoch_info = False)
+
+   Bases: :py:obj:`ssl_tools.pipelines.base.Pipeline`
+
+
+   .. py:method:: _compute_classification_metrics(y_hat_logits, y, n_classes)
+
+
+   .. py:method:: _confusion_matrix(y_hat, y, n_classes)
+
+
+   .. py:method:: _evaluate_embeddings(model, y_hat, y, n_classes, run_id, artifact_path)
+
+
+   .. py:method:: _plot_confusion_matrix(cm, classes)
+
+
+   .. py:method:: _plot_tnse_embeddings(embeddings, y, y_hat, n_components = 2)
+
+
+   .. py:property:: client
+
+
+   .. py:method:: evaluate_embeddings(model, data_module, trainer)
+
+
+   .. py:method:: evaluate_model_performance(model, data_module, trainer)
+
+
+   .. py:method:: get_callbacks()
+
+
+   .. py:method:: get_data_module()
+      :abstractmethod:
+
+
+
+   .. py:method:: get_logger()
+
+
+   .. py:method:: get_trainer(logger, callbacks)
+
+
+   .. py:method:: load_model()
+
+
+   .. py:method:: predict(model, dataloader, trainer)
+
+
+   .. py:method:: run()
+
+
+   .. py:method:: run_task(model, data_module, trainer)
+
+
+.. py:class:: EvaluateAll(root_dataset_dir, experiment_id, experiment_names, config_dir = None, log_dir = './mlruns', skip_existing = True, accelerator = 'cpu', devices = 1, num_nodes = 1, num_workers = None, strategy = 'auto', batch_size = 1, use_ray = False, ray_address = None)
+
+   Bases: :py:obj:`ssl_tools.pipelines.base.Pipeline`
+
+
+   .. py:property:: client
+
+
+   .. py:method:: filter_runs(runs)
+
+
+   .. py:method:: get_runs(experiment_ids, search_string = '')
+
+
+   .. py:method:: locate_config(model_name)
+
+
+   .. py:method:: run()
+
+
+   .. py:method:: summarize(runs)
+
+
+.. py:class:: HAREmbeddingEvaluator(data, transforms = 'identity', **kwargs)
+
+   Bases: :py:obj:`EmbeddingEvaluator`
+
+
+   .. py:method:: get_data_module()
+
+
+.. py:function:: full_dataset_from_dataloader(dataloader)
+
+.. py:function:: generate_embeddings(model, dataloader, trainer)
+
+.. py:function:: get_full_data_split(data_module, stage)
+
+.. py:function:: get_split_dataloader(stage, data_module)
+
+.. py:data:: options
+
+.. py:function:: run_evaluator_wrapper(evaluator)
+
+.. py:data:: transforms_map
+

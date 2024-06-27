@@ -1,14 +1,11 @@
-:py:mod:`ssl_tools.models.nets.convnet`
-=======================================
+ssl_tools.models.nets.convnet
+=============================
 
 .. py:module:: ssl_tools.models.nets.convnet
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -16,113 +13,96 @@ Classes
    ssl_tools.models.nets.convnet.Simple2DConvNetwork
 
 
+Module Contents
+---------------
+
+.. py:class:: Simple1DConvNetwork(input_shape = (6, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
 
 
-.. py:class:: Simple1DConvNetwork(input_channels = 6, num_classes = 6, time_steps = 60, learning_rate = 0.001)
+   
+   Create a simple 1D Convolutional Network with 3 layers and 2 fully
+   connected layers.
+
+   Parameters
+   ----------
+   input_shape : Tuple[int, int], optional
+       A 2-tuple containing the number of input channels and the number of
+       features, by default (6, 60).
+   num_classes : int, optional
+       Number of output classes, by default 6
+   learning_rate : float, optional
+       Learning rate for Adam optimizer, by default 1e-3
 
 
-   Bases: :py:obj:`lightning.LightningModule`
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
 
-   Model for human-activity-recognition.
-
-   .. py:method:: _calculate_fc_input_features(input_channels)
-
-
-   .. py:method:: _common_step(batch, batch_idx, prefix)
-
-
-   .. py:method:: _compute_metrics(y_hat, y, stage)
-
-      Compute the metrics.
-
-      Parameters
-      ----------
-      y_hat : torch.Tensor
-          The predictions of the model
-      y : _type_
-          The ground truth labels
-      stage : str
-          The stage of the training loop (train, val or test)
-
-      Returns
-      -------
-      Dict[str, float]
-          A dictionary containing the metrics. The keys are the names of the
-          metrics, and the values are the values of the metrics.
-
-
-   .. py:method:: configure_optimizers()
-
-
-   .. py:method:: forward(x)
-
-
-   .. py:method:: loss_function(X, y)
-
-
-   .. py:method:: predict_step(batch, batch_idx, dataloader_idx=None)
-
-
-   .. py:method:: test_step(batch, batch_idx)
-
-
-   .. py:method:: training_step(batch, batch_idx)
-
-
-   .. py:method:: validation_step(batch, batch_idx)
-
-
-
-.. py:class:: Simple2DConvNetwork(input_channels = 10, num_classes = 6, time_steps = 60, learning_rate = 0.001)
-
-
-   Bases: :py:obj:`lightning.LightningModule`
-
-   .. py:method:: _calculate_fc_input_features(input_channels)
-
-
-   .. py:method:: _common_step(batch, batch_idx, prefix)
-
-
-   .. py:method:: _compute_metrics(y_hat, y, stage)
-
-      Compute the metrics.
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
 
       Parameters
       ----------
-      y_hat : torch.Tensor
-          The predictions of the model
-      y : _type_
-          The ground truth labels
-      stage : str
-          The stage of the training loop (train, val or test)
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int]
+          The input shape of the network.
 
       Returns
       -------
-      Dict[str, float]
-          A dictionary containing the metrics. The keys are the names of the
-          metrics, and the values are the values of the metrics.
+      int
+          The number of features after the convolutional layers.
 
 
-   .. py:method:: configure_optimizers()
+
+   .. py:method:: _create_backbone(input_channels)
 
 
-   .. py:method:: forward(x)
+   .. py:method:: _create_fc(input_features, num_classes)
 
 
-   .. py:method:: loss_function(X, y)
+.. py:class:: Simple2DConvNetwork(input_shape = (6, 1, 60), num_classes = 6, learning_rate = 0.001)
+
+   Bases: :py:obj:`ssl_tools.models.nets.simple.SimpleClassificationNet`
 
 
-   .. py:method:: predict_step(batch, batch_idx, dataloader_idx=None)
+   
+   Create a simple 2D Convolutional Network with 3 layers and 2 fully
+   connected layers.
+
+   Parameters
+   ----------
+   input_shape : Tuple[int, int, int], optional
+       A 3-tuple containing the number of input channels, and the number of
+       the 2D input shape, by default (6, 1, 60).
+   num_classes : int, optional
+       Number of output classes, by default 6
+   learning_rate : float, optional
+       Learning rate for Adam optimizer, by default 1e-3
 
 
-   .. py:method:: test_step(batch, batch_idx)
+   .. py:method:: _calculate_fc_input_features(backbone, input_shape)
+
+      Run a single forward pass with a random input to get the number of
+      features after the convolutional layers.
+
+      Parameters
+      ----------
+      backbone : torch.nn.Module
+          The backbone of the network
+      input_shape : Tuple[int, int, int]
+          The input shape of the network.
+
+      Returns
+      -------
+      int
+          The number of features after the convolutional layers.
 
 
-   .. py:method:: training_step(batch, batch_idx)
+
+   .. py:method:: _create_backbone(input_channels)
 
 
-   .. py:method:: validation_step(batch, batch_idx)
-
+   .. py:method:: _create_fc(input_features, num_classes)
 
 
