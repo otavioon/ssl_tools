@@ -11,3 +11,4 @@ Tutorials
     notebooks/02_training_model.ipynb
     notebooks/03_training_ssl_model.ipynb
     notebooks/04_using_experiments.ipynb
+    notebooks/05_covid_anomaly_detection.ipynb
