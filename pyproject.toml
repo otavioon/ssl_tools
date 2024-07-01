@@ -18,23 +18,29 @@ requires-python = ">=3.8"
 version = "0.0.1-dev"
 
 dependencies = [
-    "imbalanced-learn",
     "ipywidgets",
-    "jsonargparse[all]",
     "librep@git+https://github.com/discovery-unicamp/hiaac-librep.git@0.0.4-dev",
     "lightly",
-    "lightning",
+    "lightning>=2.1.9",
     "mlflow",
-    "numpy",
+    "numpy>=1.23.5",
     "omegaconf",
-    "pandas",
-    "plotly",
-    "PyYAML",
-    "rich",
-    "scipy",
-    "statsmodels",
-    "torch",
-    "zarr",
+    "pandas>=2.2.2",
+    "perlin-noise>=1.12",
+    "plotly>=5.18",
+    "PyYAML>=6.0",
+    "rich>=13.0",
+    "scipy>=1.10",
+    "statsmodels>=0.13",
+    "tifffile>=2024",
+    "timm>=0.9",
+    "torch>=2.0.8",
+    "torchmetrics>=1.3.0",
+    "torchvision>=0.15",
+    "zarr>=2.17",
+    "imbalanced-learn",
+    "gitpython",
+    "jsonargparse[all]>=4.27"
 ]
 
 [project.optional-dependencies]
